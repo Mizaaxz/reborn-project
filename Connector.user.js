@@ -11,8 +11,13 @@
     window.location.protocol = "http:";
     return;
   } // ensures http protocol (won't connect otherwise)
-  if (window.location.href.includes("?server="))
-    window.history.pushState({}, "", window.location.href.split("?")[0]); // ensures on first load theres no server selected. this is to prevent "server full" messages
+  if (
+    window.location.href.includes("?server=") &&
+    !window.location.href.includes("?server=12:0:0")
+  ) {
+    window.onbeforeunload = null;
+    window.location = "//" + window.location.host;
+  } // ensures on first load theres no server selected. this is to prevent "server full" messages
 
   let ws = window.WebSocket;
   class Sanctuary extends ws {
