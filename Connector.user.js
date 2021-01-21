@@ -30,7 +30,7 @@
         {
           ip: "_",
           scheme: "mm_prod",
-          region: "vultr:69",
+          region: "vultr:12",
           index: 0,
           games: [
             {
