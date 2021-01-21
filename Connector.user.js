@@ -66,6 +66,9 @@
     return open.apply(this, arguments);
   };
 
+  document.querySelectorAll(".menuHeader").forEach((mh) => {
+    if (mh.innerHTML == "Servers") mh.style.display = "none";
+  });
   document.getElementById("altServer").style.display = "none";
   document.getElementById("serverBrowser").style.display = "none";
   let links = document.getElementById("linksContainer2");
