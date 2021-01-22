@@ -1,7 +1,0 @@
-{
-  "bannedIPs": [],
-  "moderatorIPs": [
-    "::1",
-    "::ffff:10.190.1.116"
-  ]
-}
