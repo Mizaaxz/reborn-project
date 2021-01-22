@@ -2,7 +2,7 @@
 // @name         Meow Sanctuary Connector
 // @description  Connects to Meow's private moomoo server.
 // @namespace    http://meow.moomoo.io/
-// @version      0.2
+// @version      0.3
 // @match        http://meow.moomoo.io/*
 // @author       Meow
 // @grant        none
@@ -80,4 +80,13 @@
 
   links.innerHTML = " | " + links.innerHTML;
   links.prepend(loaded); // adds a green checkmark to the bottom
+
+  window.addEventListener("keypress", function (e) {
+    if (e.key == "/") {
+      let inp = document.getElementById("chatHolder");
+      inp.style.display = "block";
+      //inp.firstElementChild.value = "/";
+      inp.firstElementChild.focus();
+    }
+  });
 })();
