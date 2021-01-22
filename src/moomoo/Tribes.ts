@@ -1,7 +1,7 @@
 interface Tribe {
-    name: string;
-    ownerSID: number;
-    membersSIDs: number[];
+  name: string;
+  ownerSID: number;
+  membersSIDs: number[];
 }
 
 export { Tribe };

@@ -8,7 +8,7 @@ interface Mapping {
   side: Side;
 }
 
-type ReverseMapping = { value: string, type: PacketType, side: Side };
+type ReverseMapping = { value: string; type: PacketType; side: Side };
 
 interface PacketTypeMapping {
   [key: string]: Mapping;
@@ -74,7 +74,11 @@ packetTypeMapping[PacketType.UPDATE_PROJECTILES] = { value: "19", side: Side.Cli
 let reversePacketTypeMapping: ReverseMapping[] = [];
 
 for (let key of Object.keys(packetTypeMapping)) {
-  reversePacketTypeMapping.push({ type: parseInt(key) as PacketType, side: packetTypeMapping[key].side, value: packetTypeMapping[key].value })
+  reversePacketTypeMapping.push({
+    type: parseInt(key) as PacketType,
+    side: packetTypeMapping[key].side,
+    value: packetTypeMapping[key].value,
+  });
 }
 
 /**
@@ -88,17 +92,20 @@ class PacketFactory {
    * @returns {PacketFactory} An instance of PacketFactory
    */
   public static getInstance(): PacketFactory {
-    return PacketFactory.instance ? PacketFactory.instance : PacketFactory.instance = new PacketFactory();
+    return PacketFactory.instance
+      ? PacketFactory.instance
+      : (PacketFactory.instance = new PacketFactory());
   }
 
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Serializes a Packet to an ArrayBuffer suitable for transmission
    * @param packet the packet to serialize
    */
   public serializePacket(packet: Packet): ArrayBuffer {
-    if (!Object.values(PacketType).includes(packet.type)) throw new Error("Packet is missing a type.");
+    if (!Object.values(PacketType).includes(packet.type))
+      throw new Error("Packet is missing a type.");
 
     let type: string;
 
@@ -130,7 +137,10 @@ class PacketFactory {
     }
 
     let packetType: string;
-    let mapping = reversePacketTypeMapping.find(mapping => (mapping.side === side || mapping.side === Side.Both) && mapping.value === array[0]);
+    let mapping = reversePacketTypeMapping.find(
+      (mapping) =>
+        (mapping.side === side || mapping.side === Side.Both) && mapping.value === array[0]
+    );
 
     if (mapping) {
       return new Packet(mapping.type, array[1], timeStamp);

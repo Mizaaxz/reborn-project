@@ -1,5 +1,5 @@
 import Vec2 from "vec2";
-import { GameObjectType } from './gameobjects';
+import { GameObjectType } from "./gameobjects";
 import Player from "../moomoo/Player";
 import { Tribe } from "../moomoo/Tribes";
 
@@ -19,26 +19,27 @@ export default class GameObject {
 
   getData() {
     return [
-			this.id,
-			this.location.x,
-			this.location.y,
-			this.angle,
-			this.scale,
-			this.type,
-			this.data,
-			this.ownerSID
-		];
+      this.id,
+      this.location.x,
+      this.location.y,
+      this.angle,
+      this.scale,
+      this.type,
+      this.data,
+      this.ownerSID,
+    ];
   }
 
   isPlayerGameObject() {
-    return this.type === -1 && typeof this.data === 'number';
+    return this.type === -1 && typeof this.data === "number";
   }
 
   isEnemy(player: Player, tribes: Tribe[]) {
     if (this.ownerSID === player.id) return false;
 
     for (let tribe of tribes) {
-      if (tribe.membersSIDs.includes(player.id) && tribe.membersSIDs.includes(this.ownerSID)) return false;
+      if (tribe.membersSIDs.includes(player.id) && tribe.membersSIDs.includes(this.ownerSID))
+        return false;
     }
 
     return true;

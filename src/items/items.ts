@@ -1,7 +1,7 @@
-import weapons from './weapons.json';
-import items from './items.json';
-import { ItemType } from './UpgradeItems';
-import { WeaponVariant } from '../moomoo/Weapons';
+import weapons from "./weapons.json";
+import items from "./items.json";
+import { ItemType } from "./UpgradeItems";
+import { WeaponVariant } from "../moomoo/Weapons";
 
 enum PrimaryWeapons {
   ToolHammer = 0,
@@ -12,7 +12,7 @@ enum PrimaryWeapons {
   Daggers = 7,
   Stick = 8,
   Katana = 4,
-  GreatAxe = 2
+  GreatAxe = 2,
 }
 
 enum SecondaryWeapons {
@@ -22,7 +22,7 @@ enum SecondaryWeapons {
   RepeaterCrossbow = 13,
   McGrabby = 14,
   Musket = 15,
-  Bow = 9
+  Bow = 9,
 }
 
 interface AttackDetails {
@@ -33,9 +33,9 @@ interface AttackDetails {
 const Weapons = {
   ...PrimaryWeapons,
   ...SecondaryWeapons,
-}
+};
 
-type Weapons = PrimaryWeapons | SecondaryWeapons
+type Weapons = PrimaryWeapons | SecondaryWeapons;
 
 function getHitTime(weapon: Weapons) {
   let speed = weapons[weapon].speed || -1;
@@ -59,12 +59,12 @@ function getRecoil(weapon: Weapons) {
 }
 
 function getWeaponAttackDetails(item: Weapons): AttackDetails {
-  let weapon = weapons.find(weapon => weapon.id == item);
+  let weapon = weapons.find((weapon) => weapon.id == item);
   return { kbMultiplier: weapon?.knock || 1, attackRange: weapon?.range || 10 };
 }
 
 function getWeaponDamage(item: Weapons, weaponVariant: WeaponVariant) {
-  let weapon = weapons.find(weapon => weapon.id == item);
+  let weapon = weapons.find((weapon) => weapon.id == item);
   let baseDamage = weapon?.dmg || 0;
 
   switch (weaponVariant) {
@@ -79,7 +79,7 @@ function getWeaponDamage(item: Weapons, weaponVariant: WeaponVariant) {
 }
 
 function getWeaponGatherAmount(item: Weapons) {
-  let weapon = weapons.find(weapon => weapon.id == item);
+  let weapon = weapons.find((weapon) => weapon.id == item);
   return weapon?.gather || 0;
 }
 
@@ -127,8 +127,7 @@ function getStructureDamage(weapon: Weapons) {
   let weaponData = weapons[weapon];
 
   if (weaponData.dmg) {
-    if (weaponData.sDmg)
-      return weaponData.dmg * weaponData.sDmg;
+    if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg;
 
     return weaponData.dmg;
   }
@@ -182,5 +181,5 @@ export {
   isRangedWeapon,
   getProjectileType,
   getWeaponLength,
-  getRecoil
+  getRecoil,
 };

@@ -20,7 +20,7 @@ import {
   getGameObjPlaceLimit,
   getGroupID,
   shouldHideFromEnemy,
-  getGameObjDamage
+  getGameObjDamage,
 } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 import GameObject from "../gameobjects/GameObject";
@@ -92,7 +92,12 @@ export default class Player extends Entity {
   public secondaryWeaponVariant = WeaponVariant.Normal;
 
   public buildItem = -1;
-  public items: ItemType[] = [ItemType.Apple, ItemType.WoodWall, ItemType.Spikes, ItemType.Windmill];
+  public items: ItemType[] = [
+    ItemType.Apple,
+    ItemType.WoodWall,
+    ItemType.Spikes,
+    ItemType.Windmill,
+  ];
 
   public clanName: string | null = null;
   public isClanLeader = false;
@@ -108,9 +113,7 @@ export default class Player extends Entity {
   public set kills(newKills: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1]))
     );
     this._kills = newKills;
   }
@@ -125,10 +128,12 @@ export default class Player extends Entity {
       if (healthRegen > 0) {
         this.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(
-              PacketType.HEALTH_CHANGE,
-              [this.location.x, this.location.y, -Math.min(100 - this.health, healthRegen), 1]
-            )
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -Math.min(100 - this.health, healthRegen),
+              1,
+            ])
           )
         );
       }
@@ -140,10 +145,12 @@ export default class Player extends Entity {
       if (100 - this.health > 0) {
         this.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(
-              PacketType.HEALTH_CHANGE,
-              [this.location.x, this.location.y, -Math.min(100 - this.health, this.foodHealOverTime), 1]
-            )
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -Math.min(100 - this.health, this.foodHealOverTime),
+              1,
+            ])
           )
         );
         this.health = Math.min(this.health + this.foodHealOverTime, 100);
@@ -155,8 +162,7 @@ export default class Player extends Entity {
     }
 
     if (this.bleedAmt < this.maxBleedAmt) {
-      if (!hat?.poisonRes)
-        this.health -= this.bleedDmg;
+      if (!hat?.poisonRes) this.health -= this.bleedDmg;
       this.bleedAmt++;
     } else {
       this.maxBleedAmt = -1;
@@ -228,9 +234,7 @@ export default class Player extends Entity {
   public set food(newFood: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1]))
     );
     this._food = newFood;
   }
@@ -244,9 +248,7 @@ export default class Player extends Entity {
   public set stone(newStone: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1]))
     );
     this._stone = newStone;
   }
@@ -260,9 +262,7 @@ export default class Player extends Entity {
   public set points(newPoints: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1]))
     );
     this._points = newPoints;
     this.game.sendLeaderboardUpdates();
@@ -277,9 +277,7 @@ export default class Player extends Entity {
   public set wood(newWood: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1]))
     );
     this._wood = newWood;
   }
@@ -294,9 +292,7 @@ export default class Player extends Entity {
 
       for (let client of this.game.clients) {
         client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth])
-          )
+          packetFactory.serializePacket(new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth]))
         );
       }
 
@@ -345,11 +341,17 @@ export default class Player extends Entity {
 
     if (getPlaceable(item) && gameState && gameObjectID) {
       let placeLimit = getGameObjPlaceLimit(item);
-      let placedAmount = gameState.gameObjects.filter(gameObj => gameObj.data === item && gameObj.ownerSID == this.id).length
+      let placedAmount = gameState.gameObjects.filter(
+        (gameObj) => gameObj.data === item && gameObj.ownerSID == this.id
+      ).length;
       if (placedAmount >= placeLimit) return;
 
       let offset = 35 + getScale(item) + (getPlaceOffset(item) || 0);
-      let location = this.location.add(offset * Math.cos(this.angle), offset * Math.sin(this.angle), true);
+      let location = this.location.add(
+        offset * Math.cos(this.angle),
+        offset * Math.sin(this.angle),
+        true
+      );
 
       let newGameObject = new GameObject(
         gameObjectID,
@@ -365,17 +367,13 @@ export default class Player extends Entity {
       );
 
       for (let gameObject of gameState.gameObjects) {
-        if (collideGameObjects(gameObject, newGameObject))
-          return false;
+        if (collideGameObjects(gameObject, newGameObject)) return false;
       }
 
       gameState?.gameObjects.push(newGameObject);
       this.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(
-            PacketType.UPDATE_PLACE_LIMIT,
-            [getGroupID(item), placedAmount + 1]
-          )
+          new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(item), placedAmount + 1])
         )
       );
 
@@ -386,17 +384,18 @@ export default class Player extends Entity {
 
     switch (item) {
       case ItemType.Cookie:
-        if (this.health >= 100)
-          return false;
+        if (this.health >= 100) return false;
 
         healedAmount = Math.min(100 - this.health, 40);
 
         this.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(
-              PacketType.HEALTH_CHANGE,
-              [this.location.x, this.location.y, -healedAmount, 1]
-            )
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -healedAmount,
+              1,
+            ])
           )
         );
 
@@ -404,17 +403,18 @@ export default class Player extends Entity {
         return true;
 
       case ItemType.Cheese:
-        if (this.health >= 100)
-          return false;
+        if (this.health >= 100) return false;
 
         healedAmount = Math.min(100 - this.health, 30);
 
         this.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(
-              PacketType.HEALTH_CHANGE,
-              [this.location.x, this.location.y, -healedAmount, 1]
-            )
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -healedAmount,
+              1,
+            ])
           )
         );
 
@@ -426,17 +426,18 @@ export default class Player extends Entity {
         return true;
 
       case ItemType.Apple:
-        if (this.health >= 100)
-          return false;
+        if (this.health >= 100) return false;
 
         healedAmount = Math.min(100 - this.health, 20);
 
         this.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(
-              PacketType.HEALTH_CHANGE,
-              [this.location.x, this.location.y, -healedAmount, 1]
-            )
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -healedAmount,
+              1,
+            ])
           )
         );
 
@@ -458,10 +459,13 @@ export default class Player extends Entity {
         ) < RADIUS
       ) {
         if (
-          !(gameObject.isPlayerGameObject() &&
+          !(
+            gameObject.isPlayerGameObject() &&
             shouldHideFromEnemy(gameObject.data) &&
             gameObject.isEnemy(this, state.tribes) &&
-            !this.client?.seenGameObjects.includes(gameObject.id)) || includeHidden
+            !this.client?.seenGameObjects.includes(gameObject.id)
+          ) ||
+          includeHidden
         ) {
           gameObjects.push(gameObject);
         }
@@ -498,11 +502,7 @@ export default class Player extends Entity {
     this.wood = 0;
     this.stone = 0;
 
-    this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.DEATH, [])
-      )
-    );
+    this.client?.socket.send(packetFactory.serializePacket(new Packet(PacketType.DEATH, [])));
   }
 
   move(direction: number) {
@@ -529,9 +529,7 @@ export default class Player extends Entity {
       this.angle,
       this.buildItem,
       this.selectedWeapon,
-      this.selectedWeapon == this.weapon ?
-        this.primaryWeaponVariant :
-        this.secondaryWeaponVariant,
+      this.selectedWeapon == this.weapon ? this.primaryWeaponVariant : this.secondaryWeaponVariant,
       this.clanName,
       this.isClanLeader ? 1 : 0,
       this.hatID,
@@ -549,10 +547,8 @@ export default class Player extends Entity {
     for (let player of state.players) {
       if (player !== this && !player.dead) {
         if (
-          eucDistance(
-            [this.location.x, this.location.y],
-            [player.location.x, player.location.y]
-          ) < RADIUS
+          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
+          RADIUS
         ) {
           players.push(player);
         }

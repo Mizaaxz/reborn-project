@@ -11,7 +11,7 @@ type PacketData = any[];
 enum Side {
   Server,
   Client,
-  Both
+  Both,
 }
 
 /**

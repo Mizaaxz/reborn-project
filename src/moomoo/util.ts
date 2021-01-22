@@ -10,7 +10,7 @@ enum SkinColor {
   Black,
   Purple,
   Blue,
-  Green
+  Green,
 }
 
 function eucDistance(a: number[], b: number[]) {
@@ -18,7 +18,7 @@ function eucDistance(a: number[], b: number[]) {
 }
 
 function randomPos(width: number, height: number) {
-  return new Vec2(Math.random() * (width + 1), Math.random() * (height + 1))
+  return new Vec2(Math.random() * (width + 1), Math.random() * (height + 1));
 }
 
 function chunk<T>(arr: T[], len: number) {
@@ -27,14 +27,14 @@ function chunk<T>(arr: T[], len: number) {
     n = arr.length;
 
   while (i < n) {
-    chunks.push(arr.slice(i, i += len));
+    chunks.push(arr.slice(i, (i += len)));
   }
 
   return chunks;
 }
 
 interface Comparator<T> {
-  (a: T, b: T): number
+  (a: T, b: T): number;
 }
 
 interface Array<T> {
@@ -45,7 +45,7 @@ let defaultCmp: Comparator<any> = (a, b) => {
   if (a < b) return -1;
   if (a > b) return 1;
   return 0;
-}
+};
 
 function stableSort<T>(array: T[], cmp: Comparator<T> = defaultCmp): T[] {
   let stabilized = array.map((el, index) => <[T, number]>[el, index]);
@@ -53,7 +53,7 @@ function stableSort<T>(array: T[], cmp: Comparator<T> = defaultCmp): T[] {
     let order = cmp(a[0], b[0]);
     if (order != 0) return order;
     return a[1] - b[1];
-  }
+  };
 
   stabilized.sort(stableCmp);
   for (let i = 0; i < array.length; i++) {

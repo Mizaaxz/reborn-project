@@ -21,19 +21,41 @@ export default class GameState {
     this.game = game;
   }
 
-  addProjectile(type: number, location: Vec2, player?: Player, angle = player?.angle, layer = player?.layer) {
+  addProjectile(
+    type: number,
+    location: Vec2,
+    player?: Player,
+    angle = player?.angle,
+    layer = player?.layer
+  ) {
     let packetFactory = PacketFactory.getInstance();
-    let newProjectile = new Projectile(this.projectiles.length > 0 ? Math.max(...this.projectiles.map((projectile) => projectile.id)) + 1 : 0, location, type, getProjectileSpeed(type) || 1, angle || 0, layer || 0, player?.id || -1);
+    let newProjectile = new Projectile(
+      this.projectiles.length > 0
+        ? Math.max(...this.projectiles.map((projectile) => projectile.id)) + 1
+        : 0,
+      location,
+      type,
+      getProjectileSpeed(type) || 1,
+      angle || 0,
+      layer || 0,
+      player?.id || -1
+    );
 
     this.projectiles.push(newProjectile);
 
-    this.getPlayersNearProjectile(newProjectile).forEach(player => {
+    this.getPlayersNearProjectile(newProjectile).forEach((player) => {
       player.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(
-            PacketType.ADD_PROJECTILE,
-            [location.x, location.y, angle, getProjectileRange(type), getProjectileSpeed(type), type, layer, newProjectile.id]
-          )
+          new Packet(PacketType.ADD_PROJECTILE, [
+            location.x,
+            location.y,
+            angle,
+            getProjectileRange(type),
+            getProjectileSpeed(type),
+            type,
+            layer,
+            newProjectile.id,
+          ])
         )
       );
 
@@ -49,7 +71,9 @@ export default class GameState {
 
   getPlayersNearProjectile(projectile: Projectile) {
     const RADIUS = process.env.PLAYER_NEARBY_RADIUS || 1250;
-    return this.players.filter(player => !player.dead && player.location.distance(projectile.location) < RADIUS);
+    return this.players.filter(
+      (player) => !player.dead && player.location.distance(projectile.location) < RADIUS
+    );
   }
 
   removeGameObject(gameObject: GameObject) {
@@ -58,22 +82,19 @@ export default class GameState {
 
     for (let player of this.players) {
       if (player.client && player.client.seenGameObjects.includes(gameObject.id)) {
-        player.client.seenGameObjects.splice(player.client.seenGameObjects.indexOf(gameObject.id), 1);
+        player.client.seenGameObjects.splice(
+          player.client.seenGameObjects.indexOf(gameObject.id),
+          1
+        );
         player.client.socket.send(
-          packetFactory.serializePacket(
-            new Packet(
-              PacketType.REMOVE_GAME_OBJ,
-              [gameObject.id]
-            )
-          )
+          packetFactory.serializePacket(new Packet(PacketType.REMOVE_GAME_OBJ, [gameObject.id]))
         );
       }
     }
   }
 
   joinClan(player: Player, tribe: Tribe) {
-    if (!tribe.membersSIDs.includes(player.id))
-      tribe.membersSIDs.push(player.id);
+    if (!tribe.membersSIDs.includes(player.id)) tribe.membersSIDs.push(player.id);
 
     this.updateClanPlayers(tribe);
   }
@@ -83,20 +104,17 @@ export default class GameState {
     let data: (string | number)[] = [];
 
     for (let memberSID of tribe.membersSIDs) {
-      let player = this.players.find(player => player.id == memberSID);
-      if (player)
-        data.push(player.id, player.name);
+      let player = this.players.find((player) => player.id == memberSID);
+      if (player) data.push(player.id, player.name);
     }
 
     for (let memberSID of tribe.membersSIDs) {
-      let player = this.players.find(player => player.id == memberSID);
+      let player = this.players.find((player) => player.id == memberSID);
       let client = player?.client;
 
       if (client) {
         client.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.SET_CLAN_PLAYERS, [data])
-          )
+          packetFactory.serializePacket(new Packet(PacketType.SET_CLAN_PLAYERS, [data]))
         );
       }
     }
@@ -109,13 +127,14 @@ export default class GameState {
   }
 
   addTribe(name: string, ownerSID: number) {
-    if (this.tribes.find(tribe => tribe.name == name || tribe.ownerSID == ownerSID))
-      return false;
+    if (this.tribes.find((tribe) => tribe.name == name || tribe.ownerSID == ownerSID)) return false;
 
     let packetFactory = PacketFactory.getInstance();
 
     for (let client of this.game.clients) {
-      client.socket?.send(packetFactory.serializePacket(new Packet(PacketType.CLAN_ADD, [{ sid: name }])));
+      client.socket?.send(
+        packetFactory.serializePacket(new Packet(PacketType.CLAN_ADD, [{ sid: name }]))
+      );
     }
 
     return this.tribes[
@@ -129,25 +148,23 @@ export default class GameState {
 
     if (tribe) {
       for (let client of this.game.clients) {
-        client.socket?.send(packetFactory.serializePacket(new Packet(PacketType.CLAN_DEL, [tribe.name])));
+        client.socket?.send(
+          packetFactory.serializePacket(new Packet(PacketType.CLAN_DEL, [tribe.name]))
+        );
       }
 
       for (let memberSID of tribe.membersSIDs) {
-        let player = this.players.find(player => player.id == memberSID);
+        let player = this.players.find((player) => player.id == memberSID);
         let client = player?.client;
 
-        if (player)
-          player.clanName = null;
+        if (player) player.clanName = null;
 
         if (client) {
           client.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.PLAYER_SET_CLAN, [null, 0])
-            )
+            packetFactory.serializePacket(new Packet(PacketType.PLAYER_SET_CLAN, [null, 0]))
           );
 
-          if (client.player)
-            client.player.isClanLeader = false;
+          if (client.player) client.player.isClanLeader = false;
         }
       }
 
@@ -160,21 +177,17 @@ export default class GameState {
     let client = player?.client;
 
     this.tribes[tribeIndex].membersSIDs = this.tribes[tribeIndex].membersSIDs.filter(
-      memberSID => memberSID != player.id
+      (memberSID) => memberSID != player.id
     );
 
-    if (player)
-      player.clanName = null;
+    if (player) player.clanName = null;
 
     if (client) {
       client.socket.send(
-        packetFactory.serializePacket(
-          new Packet(PacketType.PLAYER_SET_CLAN, [null, 0])
-        )
+        packetFactory.serializePacket(new Packet(PacketType.PLAYER_SET_CLAN, [null, 0]))
       );
 
-      if (client.player)
-        client.player.isClanLeader = false;
+      if (client.player) client.player.isClanLeader = false;
     }
 
     this.updateClanPlayers(this.tribes[tribeIndex]);

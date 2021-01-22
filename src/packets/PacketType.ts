@@ -51,7 +51,7 @@ enum PacketType {
   REMOVE_GAME_OBJ,
   UPDATE_PLACE_LIMIT,
   ADD_PROJECTILE,
-  UPDATE_PROJECTILES
+  UPDATE_PROJECTILES,
 }
 
 export { PacketType };
