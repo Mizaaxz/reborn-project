@@ -26,6 +26,7 @@ import { ItemType } from "../items/UpgradeItems";
 import GameObject from "../gameobjects/GameObject";
 import { collideGameObjects } from "./Physics";
 import { getHat } from "./Hats";
+import * as config from "../config.json";
 
 export default class Player extends Entity {
   public name: string;
@@ -447,7 +448,7 @@ export default class Player extends Entity {
   }
 
   public getNearbyGameObjects(state: GameState, includeHidden = false) {
-    const RADIUS = process.env.GAMEOBJECT_NEARBY_RADIUS || 1250;
+    const RADIUS = config.gameObjectNearbyRadius || 1250;
 
     let gameObjects = [];
 
@@ -540,7 +541,7 @@ export default class Player extends Entity {
   }
 
   getNearbyPlayers(state: GameState) {
-    const RADIUS = process.env.PLAYER_NEARBY_RADIUS || 1250;
+    const RADIUS = config.playerNearbyRadius || 1250;
 
     let players = [];
 

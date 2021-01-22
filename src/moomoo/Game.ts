@@ -40,12 +40,13 @@ import { getHat } from "./Hats";
 import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
+import * as config from "../config.json";
 
 let currentGame: Game | null = null;
 
 const DEFAULT_MAX_CPS = 25;
 
-let MAX_CPS = (process.env.MAX_CPS && parseInt(process.env.MAX_CPS, 10)) || DEFAULT_MAX_CPS;
+let MAX_CPS = (config.maxCPS && parseInt(config.maxCPS, 10)) || DEFAULT_MAX_CPS;
 if (isNaN(MAX_CPS)) MAX_CPS = DEFAULT_MAX_CPS;
 
 interface DBSchema {
@@ -170,6 +171,7 @@ export default class Game {
       }
     }
     if (!process.env.NO_MODERATORS) {
+      // not sure
       let modIPs = this.db?.get("moderatorIPs");
       if (modIPs) {
         if (modIPs.includes(ip).value()) {
@@ -566,7 +568,7 @@ export default class Game {
 
     let packetFactory = PacketFactory.getInstance();
 
-    const TICK_INTERVAL = process.env.TICK_INTERVAL || 0;
+    const TICK_INTERVAL = process.env.TICK_INTERVAL || 0; // not sure
 
     if (Date.now() - this.lastTick >= TICK_INTERVAL) {
       this.lastTick = Date.now();

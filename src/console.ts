@@ -14,6 +14,7 @@ import {
 } from "node-brigadier";
 import Player from "./moomoo/Player";
 import { WeaponVariant } from "./moomoo/Weapons";
+import * as config from "./config.json";
 
 let command = "";
 let lastMessage = "";
@@ -159,8 +160,8 @@ dispatcher.register(
 
       if (game) {
         if (thisPlayer && thisPlayer.client) {
-          if (!process.env.MODERATOR_PASSWORD) return 1;
-          if (context.getArgument("password", String) == process.env.MODERATOR_PASSWORD) {
+          if (!config.moderatorPassword) return 1;
+          if (context.getArgument("password", String) == config.moderatorPassword) {
             // temporary admin
             thisPlayer.client.admin = true;
           }

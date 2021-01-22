@@ -37,6 +37,7 @@ export function startServer(server: WSServer) {
     let ip = "";
 
     if (process.env.BEHIND_PROXY) {
+      // not sure
       ip = (req.headers["x-forwarded-for"] as string).split(/\s*,\s*/)[0];
     } else if (req.socket.remoteAddress) {
       ip = req.socket.remoteAddress;

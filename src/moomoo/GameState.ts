@@ -9,6 +9,7 @@ import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packets/PacketType";
 import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
+import * as config from "../config.json";
 
 export default class GameState {
   public game: Game;
@@ -70,7 +71,7 @@ export default class GameState {
   }
 
   getPlayersNearProjectile(projectile: Projectile) {
-    const RADIUS = process.env.PLAYER_NEARBY_RADIUS || 1250;
+    const RADIUS = config.playerNearbyRadius || 1250;
     return this.players.filter(
       (player) => !player.dead && player.location.distance(projectile.location) < RADIUS
     );

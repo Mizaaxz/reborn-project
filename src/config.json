@@ -1,3 +1,6 @@
 {
-  "port": 6500
+  "port": 6500,
+  "moderatorPassword": "",
+  "gameObjectNearbyRadius": null,
+  "playerNearbyRadius": null
 }
