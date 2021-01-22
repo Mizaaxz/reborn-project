@@ -83,9 +83,9 @@
 
   window.addEventListener("keypress", function (e) {
     if (e.key == "/") {
+      // allows opening of the chat using the "/" key (similar to minecraft)
       let inp = document.getElementById("chatHolder");
       inp.style.display = "block";
-      //inp.firstElementChild.value = "/";
       inp.firstElementChild.focus();
     }
   });
