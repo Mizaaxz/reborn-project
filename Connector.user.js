@@ -2,27 +2,14 @@
 // @name         Meow Sanctuary Connector
 // @version      0.1
 // @match        http://meow.moomoo.io/*
-// @match        https://meow.moomoo.io/*
+// @grant        none
 // ==/UserScript==
 
 (function () {
-  if (window.location.protocol !== "http:") {
-    window.onbeforeunload = null;
-    window.location.protocol = "http:";
-    return;
-  } // ensures http protocol (won't connect otherwise)
-  if (
-    window.location.href.includes("?server=") &&
-    !window.location.href.includes("?server=12:0:0")
-  ) {
-    window.onbeforeunload = null;
-    window.location = "//" + window.location.host;
-  } // ensures on first load theres no server selected. this is to prevent "server full" messages
-
   let ws = window.WebSocket;
   class Sanctuary extends ws {
     constructor() {
-      super("ws://10.190.1.116:3000/moomoo"); // change the websocket to the custom server
+      super("ws://10.190.1.116:3000/moomoo");
     }
   }
   window.WebSocket = Sanctuary;
@@ -65,6 +52,13 @@
 
     return open.apply(this, arguments);
   };
+
+  if (
+    window.location.href.includes("?server=") &&
+    !window.location.href.includes("?server=12:0:0")
+  ) {
+    window.location = "//" + window.location.host;
+  }
 
   document.querySelectorAll(".menuHeader").forEach((mh) => {
     if (mh.innerHTML == "Servers") mh.style.display = "none";
