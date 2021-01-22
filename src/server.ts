@@ -53,8 +53,8 @@ app.get("/sanctuary", (req, res) => {
   res.send("Sanctuary v${VERSION}");
 });
 
-app.get("/uptime", (req, res) => {
-  res.json({ uptime: format(process.uptime()) });
+app.get("/status", (req, res) => {
+  res.json({ uptime: format(process.uptime()), ver: VERSION, node: process.version });
 });
 
 app.get("/", (req, res) => {

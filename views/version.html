@@ -49,7 +49,7 @@
       window.onload = () => {
         let uptimeElem = document.getElementById("uptime");
         setInterval(function () {
-          fetch("/uptime")
+          fetch("/status")
             .then((res) => res.json())
             .then((msg) => {
               uptimeElem.textContent = "Uptime: " + msg.uptime;
