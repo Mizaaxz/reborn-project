@@ -2,7 +2,7 @@
 // @name         Meow Sanctuary Connector
 // @description  Connects to Meow's private moomoo server.
 // @namespace    http://meow.moomoo.io/
-// @version      0.1
+// @version      0.2
 // @match        http://meow.moomoo.io/*
 // @author       Meow
 // @grant        none
@@ -12,7 +12,7 @@
   let ws = window.WebSocket;
   class Sanctuary extends ws {
     constructor() {
-      super("ws://http://107.167.84.99:6500/moomoo"); // change the socket to the custom server
+      super("ws://107.167.84.99:6500/moomoo"); // change the socket to the custom server
     }
   }
   window.WebSocket = Sanctuary;
