@@ -1,7 +1,10 @@
 // ==UserScript==
 // @name         Meow Sanctuary Connector
+// @description  Connects to Meow's private moomoo server.
+// @namespace    http://meow.moomoo.io/
 // @version      0.1
 // @match        http://meow.moomoo.io/*
+// @author       Meow
 // @grant        none
 // ==/UserScript==
 
