@@ -30,7 +30,6 @@
         left: 50%;
 
         transform: translate(-50%, -50%);
-        /* font-size: 3vmin; */
 
         padding: 20px;
         background: white;
@@ -49,11 +48,13 @@
     <script>
       window.onload = () => {
         let uptimeElem = document.getElementById("uptime");
-        let uptimeSocket = new WebSocket(`ws://${window.location.host}/uptime`);
-
-        uptimeSocket.onmessage = (msg) => {
-          uptimeElem.textContent = "Uptime: " + msg;
-        };
+        setInterval(function () {
+          fetch(`${window.location.host}/uptime`)
+            .then((res) => res.json())
+            .then((msg) => {
+              uptimeElem.textContent = "Uptime: " + msg.uptime;
+            });
+        });
       };
     </script>
   </head>

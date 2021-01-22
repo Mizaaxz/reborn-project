@@ -59,7 +59,7 @@ app.get("/uptime", (req, res) => {
     return;
   }
 
-  res.send(format(process.uptime()));
+  res.send({ uptime: format(process.uptime()) });
 });
 
 app.get("/", (req, res) => {
