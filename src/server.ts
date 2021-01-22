@@ -54,12 +54,7 @@ app.get("/sanctuary", (req, res) => {
 });
 
 app.get("/uptime", (req, res) => {
-  if (req.accepts("html")) {
-    res.redirect("/sanctuary");
-    return;
-  }
-
-  res.send({ uptime: format(process.uptime()) });
+  res.json({ uptime: format(process.uptime()) });
 });
 
 app.get("/", (req, res) => {
