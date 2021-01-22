@@ -15,7 +15,7 @@ import { TextEncoder } from "util";
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT;
+const port = 6500;
 
 dotenv.config();
 
@@ -121,6 +121,4 @@ server.on("upgrade", function upgrade(request, socket, head) {
 
 console.startConsole();
 
-server.listen(port || 6500, () =>
-  console.log(`Sanctuary listening at https://localhost:${port || 3000}`)
-);
+server.listen(port, () => console.log(`Sanctuary listening at https://localhost:${port}`));

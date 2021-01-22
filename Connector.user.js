@@ -12,7 +12,7 @@
   let ws = window.WebSocket;
   class Sanctuary extends ws {
     constructor() {
-      super("ws://10.190.1.116:3000/moomoo"); // change the socket to the custom server
+      super("ws://http://107.167.84.99:6500/moomoo"); // change the socket to the custom server
     }
   }
   window.WebSocket = Sanctuary;
