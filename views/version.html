@@ -49,7 +49,7 @@
     <script>
       window.onload = () => {
         let uptimeElem = document.getElementById("uptime");
-        let uptimeSocket = new WebSocket(`ws://${window.location.host}/uptimeSocket`);
+        let uptimeSocket = new WebSocket(`ws://${window.location.host}/uptime`);
 
         uptimeSocket.onmessage = (msg) => {
           uptimeElem.textContent = "Uptime: " + msg;
