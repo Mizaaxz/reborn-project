@@ -3,5 +3,5 @@
   "moderatorPassword": "",
   "gameObjectNearbyRadius": 1250,
   "playerNearbyRadius": 1250,
-  "maxCPS": 25
+  "maxCPS": "25"
 }
