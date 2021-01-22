@@ -37,28 +37,22 @@ dispatcher.register(
         for (let client of game.clients) {
           client.socket.send(
             packetFactory.serializePacket(
-              new Packet(
-                PacketType.UPDATE_AGE,
-                [
-                  0,
-                  1,
-                  `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`
-                ]
-              )
+              new Packet(PacketType.UPDATE_AGE, [
+                0,
+                1,
+                `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
+              ])
             )
           );
 
           if (client.player) {
             client.socket.send(
               packetFactory.serializePacket(
-                new Packet(
-                  PacketType.UPDATE_AGE,
-                  [
-                    client.player.xp,
-                    client.player.maxXP,
-                    client.player.age
-                  ]
-                )
+                new Packet(PacketType.UPDATE_AGE, [
+                  client.player.xp,
+                  client.player.maxXP,
+                  client.player.age,
+                ])
               )
             );
           }
@@ -77,9 +71,7 @@ dispatcher.register(
       let game = getGame();
 
       if (game) {
-        let player = game.state.players.find(
-          (player) => player.id == playerSID
-        );
+        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
         if (player) {
           game.killPlayer(player);
@@ -99,9 +91,7 @@ dispatcher.register(
       let game = getGame();
 
       if (game) {
-        let player = game.state.players.find(
-          (player) => player.id == playerSID
-        );
+        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
         if (player) {
           thisPlayer.location = player.location.add(0, 0, true);
@@ -145,43 +135,47 @@ dispatcher.register(
 );
 
 dispatcher.register(
-  literal("speed").then(argument("speedMultiplier", integer()).executes((context) => {
-    let thisPlayer = context.getSource() as Player;
-    let game = getGame();
+  literal("speed").then(
+    argument("speedMultiplier", integer()).executes((context) => {
+      let thisPlayer = context.getSource() as Player;
+      let game = getGame();
 
-    if (game) {
-      if (thisPlayer) {
-        thisPlayer.spdMult = context.getArgument("speedMultiplier", Number);
+      if (game) {
+        if (thisPlayer) {
+          thisPlayer.spdMult = context.getArgument("speedMultiplier", Number);
+        }
       }
-    }
 
-    return 0;
-  }))
+      return 0;
+    })
+  )
 );
 
 dispatcher.register(
-  literal("login").then(argument("password", string()).executes((context) => {
-    let thisPlayer = context.getSource() as Player;
-    let game = getGame();
+  literal("login").then(
+    argument("password", string()).executes((context) => {
+      let thisPlayer = context.getSource() as Player;
+      let game = getGame();
 
-    if (game) {
-      if (thisPlayer && thisPlayer.client) {
-        if (!process.env.MODERATOR_PASSWORD) return 1;
-        if (context.getArgument("password", String) == process.env.MODERATOR_PASSWORD) {
-          // temporary admin
-          thisPlayer.client.admin = true;
+      if (game) {
+        if (thisPlayer && thisPlayer.client) {
+          if (!process.env.MODERATOR_PASSWORD) return 1;
+          if (context.getArgument("password", String) == process.env.MODERATOR_PASSWORD) {
+            // temporary admin
+            thisPlayer.client.admin = true;
+          }
         }
       }
-    }
 
-    return 0;
-  }))
+      return 0;
+    })
+  )
 );
 
 dispatcher.register(
   literal("weaponVariant").then(
-    argument("variant", string()).executes(
-      (context) => {
+    argument("variant", string())
+      .executes((context) => {
         let thisPlayer = context.getSource() as Player;
         let game = getGame();
         let variant = context.getArgument("variant", String);
@@ -190,19 +184,27 @@ dispatcher.register(
           if (thisPlayer) {
             switch (variant) {
               case "ruby":
-                thisPlayer.selectedWeapon === thisPlayer.weapon ? thisPlayer.primaryWeaponVariant = WeaponVariant.Ruby : thisPlayer.secondaryWeaponVariant = WeaponVariant.Ruby;
+                thisPlayer.selectedWeapon === thisPlayer.weapon
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Ruby)
+                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Ruby);
                 break;
 
               case "diamond":
-                thisPlayer.selectedWeapon === thisPlayer.weapon ? thisPlayer.primaryWeaponVariant = WeaponVariant.Diamond : thisPlayer.secondaryWeaponVariant = WeaponVariant.Diamond;
+                thisPlayer.selectedWeapon === thisPlayer.weapon
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Diamond)
+                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Diamond);
                 break;
 
               case "gold":
-                thisPlayer.selectedWeapon === thisPlayer.weapon ? thisPlayer.primaryWeaponVariant = WeaponVariant.Gold : thisPlayer.secondaryWeaponVariant = WeaponVariant.Gold;
+                thisPlayer.selectedWeapon === thisPlayer.weapon
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Gold)
+                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Gold);
                 break;
 
               case "normal":
-                thisPlayer.selectedWeapon === thisPlayer.weapon ? thisPlayer.primaryWeaponVariant = WeaponVariant.Normal : thisPlayer.secondaryWeaponVariant = WeaponVariant.Normal;
+                thisPlayer.selectedWeapon === thisPlayer.weapon
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Normal)
+                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Normal);
                 break;
 
               default:
@@ -212,35 +214,40 @@ dispatcher.register(
           }
         }
         return 0;
-      }
-    ).then(argument("playerSID", integer())
-      .executes(
-        (context) => {
+      })
+      .then(
+        argument("playerSID", integer()).executes((context) => {
           let playerSID = context.getArgument("playerSID", Number);
           let game = getGame();
           let variant = context.getArgument("variant", String);
 
           if (game) {
-            let player = game.state.players.find(
-              (player) => player.id == playerSID
-            );
+            let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
             if (player) {
               switch (variant) {
                 case "ruby":
-                  player.selectedWeapon === player.weapon ? player.primaryWeaponVariant = WeaponVariant.Ruby : player.secondaryWeaponVariant = WeaponVariant.Ruby;
+                  player.selectedWeapon === player.weapon
+                    ? (player.primaryWeaponVariant = WeaponVariant.Ruby)
+                    : (player.secondaryWeaponVariant = WeaponVariant.Ruby);
                   break;
 
                 case "diamond":
-                  player.selectedWeapon === player.weapon ? player.primaryWeaponVariant = WeaponVariant.Diamond : player.secondaryWeaponVariant = WeaponVariant.Diamond;
+                  player.selectedWeapon === player.weapon
+                    ? (player.primaryWeaponVariant = WeaponVariant.Diamond)
+                    : (player.secondaryWeaponVariant = WeaponVariant.Diamond);
                   break;
 
                 case "gold":
-                  player.selectedWeapon === player.weapon ? player.primaryWeaponVariant = WeaponVariant.Gold : player.secondaryWeaponVariant = WeaponVariant.Gold;
+                  player.selectedWeapon === player.weapon
+                    ? (player.primaryWeaponVariant = WeaponVariant.Gold)
+                    : (player.secondaryWeaponVariant = WeaponVariant.Gold);
                   break;
 
                 case "normal":
-                  player.selectedWeapon === player.weapon ? player.primaryWeaponVariant = WeaponVariant.Normal : player.secondaryWeaponVariant = WeaponVariant.Normal;
+                  player.selectedWeapon === player.weapon
+                    ? (player.primaryWeaponVariant = WeaponVariant.Normal)
+                    : (player.secondaryWeaponVariant = WeaponVariant.Normal);
                   break;
 
                 default:
@@ -250,9 +257,8 @@ dispatcher.register(
             }
           }
           return 0;
-        }
+        })
       )
-    )
   )
 );
 
@@ -263,9 +269,7 @@ dispatcher.register(
       let game = getGame();
 
       if (game) {
-        let player = game.state.players.find(
-          (player) => player.id == playerSID
-        );
+        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
         if (player && player.client && !player.client.admin) {
           game.banClient(player.client);
@@ -284,9 +288,7 @@ dispatcher.register(
       let game = getGame();
 
       if (game) {
-        let player = game.state.players.find(
-          (player) => player.id == playerSID
-        );
+        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
         if (player && player.client) {
           game.addModerator(player.client);
@@ -309,9 +311,7 @@ dispatcher.register(
           let game = getGame();
 
           if (game) {
-            let player = game.state.players.find(
-              (player) => player.id == playerSID
-            );
+            let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
             if (player) {
               switch (resourceType) {
@@ -368,12 +368,9 @@ dispatcher.register(
       let game = getGame();
 
       if (game) {
-        let player = game.state.players.find(
-          (player) => player.id == playerSID
-        );
+        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        if (player && player.client)
-          game.kickClient(player.client, "Kicked by a moderator");
+        if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
       }
 
       return 0;
@@ -382,9 +379,7 @@ dispatcher.register(
 );
 
 function logMethod(text: string) {
-  process.stdout.write(
-    ansiEscapes.eraseLines(lastMessage.split("\n").length) + text
-  );
+  process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;
 }
 
@@ -403,7 +398,6 @@ function log(text: any) {
   process.stdout.write("\n");
   logMethod("> " + coloredCommand);
 }
-
 
 function error(text: string) {
   process.stderr.write(ansiEscapes.eraseLines(lastMessage.split("\n").length));
