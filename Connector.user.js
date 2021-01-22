@@ -9,7 +9,7 @@
   let ws = window.WebSocket;
   class Sanctuary extends ws {
     constructor() {
-      super("ws://10.190.1.116:3000/moomoo");
+      super("ws://10.190.1.116:3000/moomoo"); // change the socket to the custom server
     }
   }
   window.WebSocket = Sanctuary;
@@ -57,9 +57,11 @@
     window.location.href.includes("?server=") &&
     !window.location.href.includes("?server=12:0:0")
   ) {
+    // ensures on first load theres no server selected. this is to prevent "server full" messages
     window.location = "//" + window.location.host;
   }
 
+  // removes the server selector
   document.querySelectorAll(".menuHeader").forEach((mh) => {
     if (mh.innerHTML == "Servers") mh.style.display = "none";
   });
@@ -74,5 +76,5 @@
   loaded.style.color = "#7ee559";
 
   links.innerHTML = " | " + links.innerHTML;
-  links.prepend(loaded);
+  links.prepend(loaded); // adds a green checkmark to the bottom
 })();
