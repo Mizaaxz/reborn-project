@@ -2,5 +2,6 @@
   "port": 6500,
   "moderatorPassword": "",
   "gameObjectNearbyRadius": null,
-  "playerNearbyRadius": null
+  "playerNearbyRadius": null,
+  "maxCPS": null
 }
