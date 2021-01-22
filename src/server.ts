@@ -1,11 +1,11 @@
 import url from "url";
 import http from "http";
-import dotenv from "dotenv";
 import express from "express";
 import nunjucks from "nunjucks";
 import SHA256 from "fast-sha256";
 import arrayBufferToHex from "array-buffer-to-hex";
 
+import * as config from "./config.json";
 import * as console from "./console";
 import { Server as WSServer } from "ws";
 import UptimeWSServer from "./uptimeWS";
@@ -15,9 +15,6 @@ import { TextEncoder } from "util";
 
 const app = express();
 const server = http.createServer(app);
-const port = 6500;
-
-dotenv.config();
 
 nunjucks.configure("views", {
   autoescape: true,
@@ -116,4 +113,6 @@ server.on("upgrade", function upgrade(request, socket, head) {
 
 console.startConsole();
 
-server.listen(port, () => console.log(`Sanctuary listening at https://localhost:${port}`));
+server.listen(config.port, () =>
+  console.log(`Sanctuary listening at https://localhost:${config.port}`)
+);
