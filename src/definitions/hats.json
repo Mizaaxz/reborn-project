@@ -5,7 +5,7 @@
     "dontSell": true,
     "price": 0,
     "scale": 120,
-    "desc": "hacks are for losers"
+    "desc": "Hacks are for losers..."
   },
   { "id": 51, "name": "Moo Cap", "price": 0, "scale": 120, "desc": "coolest mooer around" },
   { "id": 50, "name": "Apple Cap", "price": 0, "scale": 120, "desc": "apple farms remembers" },
@@ -28,7 +28,7 @@
     "name": "Winter Cap",
     "price": 600,
     "scale": 120,
-    "desc": "allows you to move at normal speed in snow",
+    "desc": "Allows you to move at normal speed in snow,",
     "coldM": 1
   },
   { "id": 5, "name": "Cowboy Hat", "price": 1000, "scale": 120, "desc": "no effect" },
@@ -39,7 +39,7 @@
     "name": "Flipper Hat",
     "price": 2500,
     "scale": 120,
-    "desc": "have more control while in water",
+    "desc": "Have more control while in water.",
     "watrImm": true
   },
   {
@@ -47,7 +47,7 @@
     "name": "Marksman Cap",
     "price": 3000,
     "scale": 120,
-    "desc": "increases arrow speed and range",
+    "desc": "Increases arrow speed and range.",
     "aMlt": 1.3
   },
   {
@@ -55,7 +55,7 @@
     "name": "Bush Gear",
     "price": 3000,
     "scale": 160,
-    "desc": "allows you to disguise yourself as a bush"
+    "desc": "Allows you to disguise yourself as a bush."
   },
   { "id": 48, "name": "Halo", "price": 3000, "scale": 120, "desc": "no effect" },
   {
@@ -63,7 +63,7 @@
     "name": "Soldier Helmet",
     "price": 4000,
     "scale": 120,
-    "desc": "reduces damage taken but slows movement",
+    "desc": "Reduces damage taken but slows movement.",
     "spdMult": 0.94,
     "dmgMult": 0.75
   },
@@ -72,7 +72,7 @@
     "name": "Anti Venom Gear",
     "price": 4000,
     "scale": 120,
-    "desc": "makes you immune to poison",
+    "desc": "Makes you immune to poison.",
     "poisonRes": 1
   },
   {
@@ -80,7 +80,7 @@
     "name": "Medic Gear",
     "price": 5000,
     "scale": 110,
-    "desc": "slowly regenerates health over time",
+    "desc": "Slowly regenerates health over time.",
     "healthRegen": 3
   },
   {
@@ -88,7 +88,7 @@
     "name": "Miners Helmet",
     "price": 5000,
     "scale": 120,
-    "desc": "earn 1 extra gold per resource",
+    "desc": "Earn 1 extra gold per resource.",
     "extraGold": 1
   },
   {
@@ -96,7 +96,7 @@
     "name": "Musketeer Hat",
     "price": 5000,
     "scale": 120,
-    "desc": "reduces cost of projectiles",
+    "desc": "Reduces cost of projectiles.",
     "projCost": 0.5
   },
   {
@@ -104,7 +104,7 @@
     "name": "Bull Helmet",
     "price": 6000,
     "scale": 120,
-    "desc": "increases damage done but drains health",
+    "desc": "Increases damage done but drains health.",
     "healthRegen": -5,
     "dmgMultO": 1.5,
     "spdMult": 0.96
@@ -114,7 +114,7 @@
     "name": "Emp Helmet",
     "price": 6000,
     "scale": 120,
-    "desc": "turrets won't attack but you move slower",
+    "desc": "Turrets won't attack but you move slower.",
     "antiTurret": 1,
     "spdMult": 0.7
   },
@@ -123,7 +123,7 @@
     "name": "Booster Hat",
     "price": 6000,
     "scale": 120,
-    "desc": "increases your movement speed",
+    "desc": "Increases your movement speed.",
     "spdMult": 1.16
   },
   {
@@ -131,7 +131,7 @@
     "name": "Barbarian Armor",
     "price": 8000,
     "scale": 120,
-    "desc": "knocks back enemies that attack you",
+    "desc": "Knocks back enemies that attack you.",
     "dmgK": 0.6
   },
   {
@@ -139,7 +139,7 @@
     "name": "Plague Mask",
     "price": 10000,
     "scale": 120,
-    "desc": "melee attacks deal poison damage",
+    "desc": "Melee attacks deal poison damage.",
     "poisonDmg": 5,
     "poisonTime": 6
   },
@@ -148,7 +148,7 @@
     "name": "Bull Mask",
     "price": 10000,
     "scale": 120,
-    "desc": "bulls won't target you unless you attack them",
+    "desc": "Bulls won't target you unless you attack them.",
     "bullRepel": 1
   },
   {
@@ -157,7 +157,7 @@
     "topSprite": true,
     "price": 10000,
     "scale": 120,
-    "desc": "generates points while worn",
+    "desc": "Generates points while worn.",
     "pps": 1.5
   },
   {
@@ -166,7 +166,7 @@
     "topSprite": true,
     "price": 10000,
     "scale": 120,
-    "desc": "deal damage to players that damage you",
+    "desc": "Deal damage to players that damage you.",
     "dmg": 0.45
   },
   {
@@ -175,7 +175,7 @@
     "topSprite": true,
     "price": 10000,
     "scale": 120,
-    "desc": "you become a walking turret",
+    "desc": "You become a walking turret.",
     "turret": { "proj": 1, "range": 700, "rate": 2500 },
     "spdMult": 0.7
   },
@@ -184,7 +184,7 @@
     "name": "Samurai Armor",
     "price": 12000,
     "scale": 120,
-    "desc": "increased attack speed and fire rate",
+    "desc": "Increased attack speed and fire rate.",
     "atkSpd": 0.78
   },
   {
@@ -192,7 +192,7 @@
     "name": "Dark Knight",
     "price": 12000,
     "scale": 120,
-    "desc": "restores health when you deal damage",
+    "desc": "Restores health when you deal damage.",
     "healD": 0.4
   },
   {
@@ -200,7 +200,7 @@
     "name": "Scavenger Gear",
     "price": 15000,
     "scale": 120,
-    "desc": "earn double points for each kill",
+    "desc": "Earn double points for each kill.",
     "kScrM": 2
   },
   {
@@ -208,7 +208,7 @@
     "name": "Tank Gear",
     "price": 15000,
     "scale": 120,
-    "desc": "increased damage to buildings but slower movement",
+    "desc": "Increased damage to buildings but slower movement.",
     "spdMult": 0.3,
     "bDmg": 3.3
   },
@@ -217,7 +217,7 @@
     "name": "Thief Gear",
     "price": 15000,
     "scale": 120,
-    "desc": "steal half of a players gold when you kill them",
+    "desc": "Steal half of a players gold when you kill them.",
     "goldSteal": 0.5
   },
   {
@@ -225,7 +225,7 @@
     "name": "Bloodthirster",
     "price": 20000,
     "scale": 120,
-    "desc": "Restore Health when dealing damage. And increased damage",
+    "desc": "Restore Health when dealing damage, and increased damage.",
     "healD": 0.25,
     "dmgMultO": 1.2
   },
@@ -234,7 +234,7 @@
     "name": "Assassin Gear",
     "price": 20000,
     "scale": 120,
-    "desc": "Go invisible when not moving. Can't eat. Increased speed",
+    "desc": "Go invisible when not moving, can't eat, increased speed.",
     "noEat": true,
     "spdMult": 1.1,
     "invisTimer": 1000
