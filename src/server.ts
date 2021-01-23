@@ -21,7 +21,7 @@ nunjucks.configure("views", {
   express: app,
 });
 
-const VERSION = "0.0.0a";
+const VERSION = "0.0.1b";
 
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));
@@ -36,6 +36,11 @@ function format(timestamp: number) {
     seconds.toString().padStart(2, "0")
   );
 }
+
+app.use((req, res, next) => {
+  if (req.headers.origin) res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  next();
+});
 
 app.get("/sanctuary", (req, res) => {
   if (req.accepts("html")) {
