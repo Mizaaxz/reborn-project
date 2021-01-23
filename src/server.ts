@@ -13,6 +13,12 @@ import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 
+import * as accessories from "./definitions/accessories.json";
+import * as hats from "./definitions/hats.json";
+import * as items from "./definitions/items.json";
+import * as projectiles from "./definitions/projectiles.json";
+import * as weapons from "./definitions/weapons.json";
+
 const app = express();
 const server = http.createServer(app);
 
@@ -61,6 +67,10 @@ app.get("/status", (req, res) => {
 
 app.get("/", (req, res) => {
   res.redirect(`${req.protocol}://moomoo.io`);
+});
+
+app.get("/api/v1/def", (req, res) => {
+  res.json({ accessories, hats, items, projectiles, weapons });
 });
 
 app.get("/api/v1/playerCount", (_req, res) => {
