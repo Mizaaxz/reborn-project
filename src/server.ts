@@ -19,7 +19,7 @@ let items = require("./definitions/items.json");
 let projectiles = require("./definitions/projectiles.json");
 let weapons = require("./definitions/weapons.json");
 accessories = Object.values(accessories);
-hats = Object.values(hats);
+const hats2 = Object.values(hats);
 items = Object.values(items);
 projectiles = Object.values(projectiles);
 weapons = Object.values(weapons);
@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/v1/def", (req, res) => {
-  res.json({ accessories, hats, items, projectiles, weapons });
+  res.json({ accessories, hats: hats2, items, projectiles, weapons });
 });
 
 app.get("/api/v1/playerCount", (_req, res) => {
