@@ -13,11 +13,11 @@ import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 
-let accessories = require("./definitions/accessories.json");
-let hats = require("./definitions/hats.json");
-let items = require("./definitions/items.json");
-let projectiles = require("./definitions/projectiles.json");
-let weapons = require("./definitions/weapons.json");
+let accessories = require("../../definitions/accessories.json");
+let hats = require("../definitions/hats.json");
+let items = require("../definitions/items.json");
+let projectiles = require("../definitions/projectiles.json");
+let weapons = require("../definitions/weapons.json");
 accessories = Object.values(accessories);
 hats = Object.values(hats);
 items = Object.values(items);
