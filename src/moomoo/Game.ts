@@ -9,7 +9,6 @@ import msgpack from "msgpack-lite";
 import GameState from "./GameState";
 import * as Physics from "./Physics";
 import * as console from "../console";
-import badWords from "../badWords.json";
 import { Packet, Side } from "../packets/Packet";
 import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packets/PacketType";
@@ -43,6 +42,7 @@ import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectil
 import * as config from "../config.json";
 
 let currentGame: Game | null = null;
+let badWords = config.badWords;
 
 const DEFAULT_MAX_CPS = 25;
 
