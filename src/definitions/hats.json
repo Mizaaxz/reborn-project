@@ -28,7 +28,7 @@
     "name": "Winter Cap",
     "price": 600,
     "scale": 120,
-    "desc": "Allows you to move at normal speed in snow,",
+    "desc": "Allows you to move at normal speed in snow.",
     "coldM": 1
   },
   { "id": 5, "name": "Cowboy Hat", "price": 1000, "scale": 120, "desc": "no effect" },
@@ -57,7 +57,7 @@
     "scale": 160,
     "desc": "Allows you to disguise yourself as a bush."
   },
-  { "id": 48, "name": "Halo", "price": 3000, "scale": 120, "desc": "no effect" },
+  { "id": 48, "name": "Halo", "price": 3000, "scale": 120, "desc": "Slowly regenerates 1 health every so often.", "healthRegen": 1 },
   {
     "id": 6,
     "name": "Soldier Helmet",
@@ -80,7 +80,7 @@
     "name": "Medic Gear",
     "price": 5000,
     "scale": 110,
-    "desc": "Slowly regenerates health over time.",
+    "desc": "Slowly regenerates 3 health every so often.",
     "healthRegen": 3
   },
   {
