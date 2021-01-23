@@ -14,7 +14,7 @@ import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 
 let accessories = require("./definitions/accessories.json");
-let hats = require("./definitions/hats.json");
+import hats from "./definitions/hats";
 let items = require("./definitions/items.json");
 let projectiles = require("./definitions/projectiles.json");
 let weapons = require("./definitions/weapons.json");
