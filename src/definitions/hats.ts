@@ -1,4 +1,4 @@
-[
+const hats = [
   {
     "id": 45,
     "name": "Shame!",
@@ -240,3 +240,4 @@
     "invisTimer": 1000
   }
 ]
+export default hats;
