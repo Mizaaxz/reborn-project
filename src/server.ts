@@ -13,11 +13,11 @@ import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 
-const accessories = require("./definitions/accessories.json");
-const hats = require("./definitions/hats.json");
-const items = require("./definitions/items.json");
-const projectiles = require("./definitions/projectiles.json");
-const weapons = require("./definitions/weapons.json");
+import * as accessories from "./definitions/accessories.json";
+import * as hats from "./definitions/hats.json";
+import * as items from "./definitions/items.json";
+import * as projectiles from "./definitions/projectiles.json";
+import * as weapons from "./definitions/weapons.json";
 
 const app = express();
 const server = http.createServer(app);
