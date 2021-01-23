@@ -1,5 +1,5 @@
-import weapons from "./weapons.json";
-import items from "./items.json";
+import weapons from "../definitions/weapons.json";
+import items from "../definitions/items.json";
 import { ItemType } from "./UpgradeItems";
 import { WeaponVariant } from "../moomoo/Weapons";
 
