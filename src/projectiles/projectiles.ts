@@ -1,4 +1,4 @@
-import projectiles from "./projectiles.json";
+import projectiles from "../definitions/projectiles.json";
 import e from "express";
 
 enum Layer {
