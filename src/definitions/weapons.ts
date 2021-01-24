@@ -1,4 +1,4 @@
-[
+const weapons = [
   {
     "id": 0,
     "type": 0,
@@ -289,3 +289,4 @@
     "speed": 1500
   }
 ]
+export default weapons;
