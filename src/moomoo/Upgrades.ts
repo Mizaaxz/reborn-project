@@ -1,4 +1,4 @@
-import weapons from "../definitions/weapons.json";
+import weapons from "../definitions/weapons";
 import items from "../definitions/items.json";
 
 function getUpgrades(age: number): number[] {
