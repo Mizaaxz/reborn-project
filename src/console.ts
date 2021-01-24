@@ -184,6 +184,12 @@ dispatcher.register(
         if (game) {
           if (thisPlayer) {
             switch (variant) {
+              case "emerald":
+                thisPlayer.selectedWeapon === thisPlayer.weapon
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Emerald)
+                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Emerald);
+                break;
+                
               case "ruby":
                 thisPlayer.selectedWeapon === thisPlayer.weapon
                   ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Ruby)
@@ -192,7 +198,7 @@ dispatcher.register(
 
               case "diamond":
                 thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Diamond)
+                  ? (thisPlayer.primaryWeaponVariant = Weap
                   : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Diamond);
                 break;
 
