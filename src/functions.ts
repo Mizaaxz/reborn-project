@@ -43,4 +43,4 @@ const setWeaponVariant = function(player, variant) {
                 return 1;
             }
 }
-export default setWeaponVariant
+export { setWeaponVariant };
