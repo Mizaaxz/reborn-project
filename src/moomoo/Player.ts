@@ -74,7 +74,8 @@ export default class Player extends Entity {
   }
 
   public set primaryWeaponExp(value) {
-    if (value >= 12000) this.primaryWeaponVariant = WeaponVariant.Ruby;
+    if (value >= 18000) this.primaryWeaponVariant = WeaponVariant.Emerald;
+    else if (value >= 12000) this.primaryWeaponVariant = WeaponVariant.Ruby;
     else if (value >= 7000) this.primaryWeaponVariant = WeaponVariant.Diamond;
     else if (value >= 3000) this.primaryWeaponVariant = WeaponVariant.Gold;
 
@@ -82,7 +83,8 @@ export default class Player extends Entity {
   }
 
   public set secondaryWeaponExp(value) {
-    if (value >= 12000) this.secondaryWeaponVariant = WeaponVariant.Ruby;
+    if (value >= 18000) this.secondaryWeaponVariant = WeaponVariant.Emerald;
+    else if (value >= 12000) this.secondaryWeaponVariant = WeaponVariant.Ruby;
     else if (value >= 7000) this.secondaryWeaponVariant = WeaponVariant.Diamond;
     else if (value >= 3000) this.secondaryWeaponVariant = WeaponVariant.Gold;
 
