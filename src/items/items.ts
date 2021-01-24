@@ -75,6 +75,8 @@ function getWeaponDamage(item: Weapons, weaponVariant: WeaponVariant) {
     case WeaponVariant.Diamond:
     case WeaponVariant.Ruby:
       return baseDamage * 1.18;
+    case WeaponVariant.Emerald:
+      return baseDamage * 1.3;
   }
 }
 
