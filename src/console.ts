@@ -184,11 +184,11 @@ dispatcher.register(
 
         if (game) {
           if (thisPlayer) {
-            let setted = setWeaponVariant(thisPlayer, variant)
-            if(setted == 1) {
+            let setted = setWeaponVariant(thisPlayer, variant);
+            if (setted == 1) {
               error("Invalid weapon variant " + variant);
-              return 1
-            };
+              return 1;
+            }
           }
         }
         return 0;
@@ -203,8 +203,8 @@ dispatcher.register(
             let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
             if (player) {
-              let setted = setWeaponVariant(player, variant)
-              if(setted == 1) {
+              let setted = setWeaponVariant(player, variant);
+              if (setted == 1) {
                 error("Invalid weapon variant " + variant);
                 return 1;
               }
