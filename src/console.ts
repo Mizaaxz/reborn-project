@@ -152,7 +152,7 @@ dispatcher.register(
   )
 );
 
-dispatcher.register(
+/*dispatcher.register(
   literal("login").then(
     argument("password", string()).executes((context) => {
       let thisPlayer = context.getSource() as Player;
@@ -171,7 +171,7 @@ dispatcher.register(
       return 0;
     })
   )
-);
+);*/ //TODO: change to tempmod command
 
 dispatcher.register(
   literal("weaponVariant").then(
