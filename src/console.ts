@@ -198,7 +198,7 @@ dispatcher.register(
 
               case "diamond":
                 thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = Weap
+                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Diamond)
                   : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Diamond);
                 break;
 
@@ -207,7 +207,7 @@ dispatcher.register(
                   ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Gold)
                   : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Gold);
                 break;
-
+m
               case "normal":
                 thisPlayer.selectedWeapon === thisPlayer.weapon
                   ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Normal)
