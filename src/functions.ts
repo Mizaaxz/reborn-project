@@ -1,6 +1,6 @@
 import { WeaponVariant } from "./moomoo/Weapons";
 
-const setWeaponVariant = function(player, variant) {
+const setWeaponVariant = function(thisPlayer, variant) {
   switch (variant) {
               case "emerald":
               case "em":
