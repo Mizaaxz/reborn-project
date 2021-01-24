@@ -11,7 +11,7 @@ const weapons = [
     "yOff": 18,
     "dmg": 25,
     "range": 65,
-    "gather": 1000,
+    "gather": 1,
     "speed": 300
   },
   {
