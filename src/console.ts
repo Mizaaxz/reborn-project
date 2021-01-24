@@ -14,6 +14,7 @@ import {
 } from "node-brigadier";
 import Player from "./moomoo/Player";
 import { WeaponVariant } from "./moomoo/Weapons";
+import { setWeaponVariant } from "./functions";
 import * as config from "./config.json";
 
 let command = "";
@@ -183,41 +184,11 @@ dispatcher.register(
 
         if (game) {
           if (thisPlayer) {
-            switch (variant) {
-              case "emerald":
-                thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Emerald)
-                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Emerald);
-                break;
-                
-              case "ruby":
-                thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Ruby)
-                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Ruby);
-                break;
-
-              case "diamond":
-                thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Diamond)
-                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Diamond);
-                break;
-
-              case "gold":
-                thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Gold)
-                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Gold);
-                break;
-
-              case "normal":
-                thisPlayer.selectedWeapon === thisPlayer.weapon
-                  ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Normal)
-                  : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Normal);
-                break;
-
-              default:
-                error("Invalid weapon variant " + variant);
-                return 1;
-            }
+            let setted = setWeaponVariant(thisPlayer, variant)
+            if(setted == 1) {
+              error("Invalid weapon variant " + variant);
+              return 1
+            };
           }
         }
         return 0;
@@ -232,34 +203,10 @@ dispatcher.register(
             let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
             if (player) {
-              switch (variant) {
-                case "ruby":
-                  player.selectedWeapon === player.weapon
-                    ? (player.primaryWeaponVariant = WeaponVariant.Ruby)
-                    : (player.secondaryWeaponVariant = WeaponVariant.Ruby);
-                  break;
-
-                case "diamond":
-                  player.selectedWeapon === player.weapon
-                    ? (player.primaryWeaponVariant = WeaponVariant.Diamond)
-                    : (player.secondaryWeaponVariant = WeaponVariant.Diamond);
-                  break;
-
-                case "gold":
-                  player.selectedWeapon === player.weapon
-                    ? (player.primaryWeaponVariant = WeaponVariant.Gold)
-                    : (player.secondaryWeaponVariant = WeaponVariant.Gold);
-                  break;
-
-                case "normal":
-                  player.selectedWeapon === player.weapon
-                    ? (player.primaryWeaponVariant = WeaponVariant.Normal)
-                    : (player.secondaryWeaponVariant = WeaponVariant.Normal);
-                  break;
-
-                default:
-                  error("Invalid weapon variant " + variant);
-                  return 1;
+              let setted = setWeaponVariant(player, variant)
+              if(setted == 1) {
+                error("Invalid weapon variant " + variant);
+                return 1;
               }
             }
           }
