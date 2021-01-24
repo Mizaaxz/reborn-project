@@ -207,7 +207,7 @@ dispatcher.register(
                   ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Gold)
                   : (thisPlayer.secondaryWeaponVariant = WeaponVariant.Gold);
                 break;
-m
+
               case "normal":
                 thisPlayer.selectedWeapon === thisPlayer.weapon
                   ? (thisPlayer.primaryWeaponVariant = WeaponVariant.Normal)
