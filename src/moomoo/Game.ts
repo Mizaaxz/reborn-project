@@ -568,7 +568,7 @@ export default class Game {
 
     let packetFactory = PacketFactory.getInstance();
 
-    const TICK_INTERVAL = process.env.TICK_INTERVAL || 1; // not sure
+    const TICK_INTERVAL = process.env.TICK_INTERVAL || 0; // not sure
 
     if (Date.now() - this.lastTick >= TICK_INTERVAL) {
       this.lastTick = Date.now();
