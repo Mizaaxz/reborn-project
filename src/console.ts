@@ -12,6 +12,7 @@ import {
   argument,
   greedyString,
 } from "node-brigadier";
+import { Command, GetCommand } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { WeaponVariant } from "./moomoo/Weapons";
 import { setWeaponVariant } from "./functions";
@@ -22,49 +23,46 @@ let lastMessage = "";
 
 const dispatcher = new CommandDispatcher();
 
-dispatcher.register(
-  literal("restart").executes(() => {
-    process.exit();
-  })
-);
+Command("restart", (args: any[]) => {
+  //Broadcast("Restarting server in 10 seconds...")
+  //setTimeout(function() {process.exit()}, 10000)
+  process.exit();
+  return true;
+});
 
-dispatcher.register(
-  literal("broadcast").then(
-    argument("message", greedyString()).executes((context) => {
-      let packetFactory = PacketFactory.getInstance();
-      let message = context.getArgument("message", String);
-      let game = getGame();
+Command("broadcast", (args: any[]) => {
+  let packetFactory = PacketFactory.getInstance();
+  let message = args.slice(1);
+  let game = getGame();
 
-      if (game) {
-        for (let client of game.clients) {
-          client.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.UPDATE_AGE, [
-                0,
-                1,
-                `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
-              ])
-            )
-          );
+  if (game) {
+    for (let client of game.clients) {
+      client.socket.send(
+        packetFactory.serializePacket(
+          new Packet(PacketType.UPDATE_AGE, [
+            0,
+            1,
+            `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
+          ])
+        )
+      );
 
-          if (client.player) {
-            client.socket.send(
-              packetFactory.serializePacket(
-                new Packet(PacketType.UPDATE_AGE, [
-                  client.player.xp,
-                  client.player.maxXP,
-                  client.player.age,
-                ])
-              )
-            );
-          }
-        }
+      if (client.player) {
+        client.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_AGE, [
+              client.player.xp,
+              client.player.maxXP,
+              client.player.age,
+            ])
+          )
+        );
       }
-
-      return 0;
-    })
-  )
-);
+      return true;
+    }
+  }
+  return false;
+});
 
 dispatcher.register(
   literal("kill").then(
@@ -151,7 +149,7 @@ dispatcher.register(
       return 0;
     })
   )
-);
+); //TODO: change to tempmod command
 
 /*dispatcher.register(
   literal("login").then(
@@ -172,9 +170,7 @@ dispatcher.register(
       return 0;
     })
   )
-);*/ //TODO: change to tempmod command
-
-dispatcher.register(
+);*/ dispatcher.register(
   literal("weaponVariant").then(
     argument("variant", string())
       .executes((context) => {
@@ -365,8 +361,12 @@ function runCommand(command: string, source?: Player) {
     const parsedCommand = dispatcher.parse(command, source);
     dispatcher.execute(parsedCommand);
   } catch (_) {
-    log(_);
-    return false;
+    try {
+      GetCommand(command).execute(command, source);
+    } catch (__) {
+      log(__);
+      return false;
+    }
   }
   return true;
 }
@@ -393,7 +393,9 @@ function startConsole() {
       command = command.substr(0, command.length - 1);
     } else if (char === "\x0D") {
       if (!runCommand(command)) {
-        error("Invalid command.");
+        if (!runCommand(command)) {
+          error("Invalid command.");
+        }
       }
 
       command = "";
