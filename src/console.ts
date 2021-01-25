@@ -64,45 +64,36 @@ Command("broadcast", (args: any[]) => {
   return false;
 });
 
-dispatcher.register(
-  literal("kill").then(
-    argument("playerSID", integer()).executes((context) => {
-      let playerSID = context.getArgument("playerSID", Number);
-      let game = getGame();
+Command("kill", (args: any[]) => {
+  let playerSID = Number(args[1]);
+  if (!playerSID) return false;
+  let game = getGame();
 
-      if (game) {
-        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        if (player) {
-          game.killPlayer(player);
-        }
-      }
+    if (player) {
+      game.killPlayer(player);
+      return true;
+    }
+  }
+});
 
-      return 0;
-    })
-  )
-);
+Command("tp", (args: any[], source: Player) => {
+  let playerSID = Number(args[1]);
+  let thisPlayer = source;
+  let game = getGame();
 
-dispatcher.register(
-  literal("tp").then(
-    argument("playerSID", integer()).executes((context) => {
-      let playerSID = context.getArgument("playerSID", Number);
-      let thisPlayer = context.getSource() as Player;
-      let game = getGame();
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-      if (game) {
-        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
-        if (player) {
-          thisPlayer.location = player.location.add(0, 0, true);
-          game.sendGameObjects(thisPlayer);
-        }
-      }
-
-      return 0;
-    })
-  )
-);
+    if (player) {
+      thisPlayer.location = player.location.add(0, 0, true);
+      game.sendGameObjects(thisPlayer);
+      return true;
+    } else return false;
+  }
+});
 
 dispatcher.register(
   literal("invisible").executes((context) => {
