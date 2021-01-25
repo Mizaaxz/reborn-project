@@ -218,66 +218,60 @@ Command("promote", (args: any[]) => {
   }
 });
 
-dispatcher.register(
-  literal("set").then(
-    argument("playerSID", integer()).then(
-      argument("resourceType", string()).then(
-        argument("resourceAmount", integer()).executes((context) => {
-          let playerSID = context.getArgument("playerSID", Number);
-          let resourceType = context.getArgument("resourceType", String);
-          let resourceAmount = context.getArgument("resourceAmount", Number);
-          let game = getGame();
+Command("set", (args: any[]) => {
+  let playerSID = Number(args[1]);
+  let resourceType = args[2] || "xp";
+  let resourceAmount = Number(args[3]) || 0;
+  let game = getGame();
 
-          if (game) {
-            let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-            if (player) {
-              switch (resourceType) {
-                case "points":
-                case "gold":
-                case "money":
-                  player.points = resourceAmount;
-                  break;
+    if (player) {
+      switch (resourceType) {
+        case "points":
+        case "gold":
+        case "money":
+        case "g":
+          player.points = resourceAmount;
+          break;
 
-                case "food":
-                  player.food = resourceAmount;
-                  break;
+        case "food":
+        case "f":
+          player.food = resourceAmount;
+          break;
 
-                case "stone":
-                  player.stone = resourceAmount;
-                  break;
+        case "stone":
+        case "s":
+          player.stone = resourceAmount;
+          break;
 
-                case "wood":
-                  player.wood = resourceAmount;
-                  break;
+        case "wood":
+        case "w":
+          player.wood = resourceAmount;
+          break;
 
-                case "health":
-                case "hp":
-                case "hitpoints":
-                  player.health = resourceAmount;
-                  break;
+        case "health":
+        case "hp":
+        case "hitpoints":
+          player.health = resourceAmount;
+          break;
 
-                case "kills":
-                  player.kills = resourceAmount;
-                  break;
+        case "kills":
+        case "kills":
+          player.kills = resourceAmount;
+          break;
 
-                case "xp":
-                  player.xp = resourceAmount;
-                  break;
+        case "xp":
+          player.xp = resourceAmount;
+          break;
 
-                default:
-                  error("Invalid resource type " + resourceType);
-                  break;
-              }
-            }
-          }
-
-          return 0;
-        })
-      )
-    )
-  )
-);
+        default:
+          return "Invalid resource type " + resourceType;
+      }
+    } else return "Invalid Player ID";
+  }
+});
 
 dispatcher.register(
   literal("kick").then(
