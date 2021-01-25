@@ -80,18 +80,24 @@ Command("kill", (args: any[]) => {
 
 Command("tp", (args: any[], source: Player) => {
   let playerSID = Number(args[1]);
-  if (!playerSID) return false;
+  let tpTo = Number(args[2]);
   let thisPlayer = source;
   let game = getGame();
 
   if (game) {
     let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+    let otherPlayer = game.state.players.find((plyr: { id: any }) => plyr.id == tpTo);
 
     if (player) {
-      thisPlayer.location = player.location.add(0, 0, true);
-      game.sendGameObjects(thisPlayer);
-      return true;
-    } else return false;
+      if (tpTo) {
+        thisPlayer.location = player.location.add(0, 0, true);
+        game.sendGameObjects(thisPlayer);
+      } else if (otherPlayer) {
+        player.location = otherPlayer.location.add(0, 0, true);
+        game.sendGameObjects(player);
+      } else return "Invalid Player ID(s)";
+      return false;
+    }
   }
 });
 
