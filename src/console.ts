@@ -4,24 +4,13 @@ import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
 import { Packet } from "./packets/Packet";
 import { PacketType } from "./packets/PacketType";
-import {
-  CommandDispatcher,
-  literal,
-  string,
-  integer,
-  argument,
-  greedyString,
-} from "node-brigadier";
 import { Command, GetCommand } from "./commandHandler";
 import Player from "./moomoo/Player";
-import { WeaponVariant } from "./moomoo/Weapons";
 import { setWeaponVariant } from "./functions";
 import * as config from "./config.json";
 
 let command = "";
 let lastMessage = "";
-
-const dispatcher = new CommandDispatcher();
 
 Command("stop", (args: any[]) => {
   //Broadcast("Restarting server in 10 seconds...")
@@ -315,15 +304,11 @@ let specialChars = ["\b", "\n", "\r"];
 
 function runCommand(command: string, source?: Player) {
   try {
-    const parsedCommand = dispatcher.parse(command, source);
-    dispatcher.execute(parsedCommand);
+    GetCommand(command).execute(command, source);
   } catch (_) {
-    try {
-      GetCommand(command).execute(command, source);
-    } catch (__) {
-      log(__);
-      return false;
-    }
+    error(_);
+    //Broadcast(`Error: ${_}`)
+    return false;
   }
   return true;
 }
