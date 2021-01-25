@@ -89,12 +89,12 @@ Command("tp", (args: any[], source: Player) => {
     let otherPlayer = game.state.players.find((plyr: { id: any }) => plyr.id == tpTo);
 
     if (player) {
-      if (tpTo) {
+      if (!tpTo) {
         thisPlayer.location = player.location.add(0, 0, true);
         game.sendGameObjects(thisPlayer);
       } else if (otherPlayer) {
-        player.location = otherPlayer.location.add(0, 0, true);
-        game.sendGameObjects(player);
+        otherPlayer.location = player.location.add(0, 0, true);
+        game.sendGameObjects(otherPlayer);
       } else return "Invalid Player ID(s)";
       return false;
     }
