@@ -23,8 +23,8 @@ See [Issue #16](https://github.com/Picoseconds/sanctuary/issues/16) for a list o
 | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | set \<player id> \<health/food/wood/stone/kills/xp/gold> \<number>           | Sets the specified numerical attribute of a player to the specified number.                                          |
 | tp \<1st player id> \<2nd player id>                                         | Teleports you to the first player specified. If second player specified, teleports the 1st player to teh 2nd player. |
-| invisible                                                                    | Toggles invisibility. You can see yourself, but others cannot see you.                                               |
-| invincible                                                                   | Toggles invincibility.                                                                                               |
+| invisible [player id (defaults to yourself)]                                 | Toggles invisibility. You can see yourself, but others cannot see you.                                               |
+| invincible [player id (defaults to yourself)]                                | Toggles invincibility.                                                                                               |
 | promote \<player id>                                                         | Makes someone else a moderator.                                                                                      |
 | ban \<player id>                                                             | Bans someone by IP address. Moderators cannot be banned.                                                             |
 | kick \<player id>                                                            | Kicks a user.                                                                                                        |
