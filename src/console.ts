@@ -112,7 +112,7 @@ Command("invisible", (args: any[], source: Player | undefined) => {
     if (game) {
       if (player) {
         player.invisible = !player.invisible;
-      }
+      } else return "Invalid Player ID";
     }
   }
 });
@@ -128,7 +128,7 @@ Command("invincible", (args: any[], source: Player | undefined) => {
     if (game) {
       if (player) {
         player.invincible = !player.invincible;
-      }
+      } else return "Invalid Player ID";
     }
   }
 });
@@ -144,7 +144,7 @@ Command("speed", (args: any[], source: Player | undefined) => {
     if (game) {
       if (player) {
         player.spdMult = Number(args[1]) || 1;
-      }
+      } else return "Invalid Player ID";
     }
   }
 });
@@ -169,47 +169,28 @@ Command("speed", (args: any[], source: Player | undefined) => {
       return 0;
     })
   )
-);*/ dispatcher.register(
-  literal("weaponVariant").then(
-    argument("variant", string())
-      .executes((context) => {
-        let thisPlayer = context.getSource() as Player;
-        let game = getGame();
-        let variant = context.getArgument("variant", String);
+);*/
 
-        if (game) {
-          if (thisPlayer) {
-            let setted = setWeaponVariant(thisPlayer, variant);
-            if (setted == 1) {
-              error("Invalid weapon variant " + variant);
-              return 1;
-            }
-          }
-        }
-        return 0;
-      })
-      .then(
-        argument("playerSID", integer()).executes((context) => {
-          let playerSID = context.getArgument("playerSID", Number);
-          let game = getGame();
-          let variant = context.getArgument("variant", String);
+Command("weaponVariant", (args: any[], source: Player | undefined) => {
+  let game = getGame();
+  let playerSID = Number(args[2]);
+  let player = source;
+  let variant = args[1] || "normal";
 
-          if (game) {
-            let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    if (playerSID)
+      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-            if (player) {
-              let setted = setWeaponVariant(player, variant);
-              if (setted == 1) {
-                error("Invalid weapon variant " + variant);
-                return 1;
-              }
-            }
-          }
-          return 0;
-        })
-      )
-  )
-);
+    if (game) {
+      if (player) {
+        let variantSet = setWeaponVariant(player, variant);
+        if (variantSet == 1) {
+          return "Invalid weapon variant " + variant;
+        } else return false;
+      } else return "Invalid Player ID";
+    }
+  }
+});
 
 dispatcher.register(
   literal("ban").then(
