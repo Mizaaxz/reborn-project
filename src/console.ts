@@ -101,20 +101,21 @@ Command("tp", (args: any[], source: Player) => {
   }
 });
 
-dispatcher.register(
-  literal("invisible").executes((context) => {
-    let thisPlayer = context.getSource() as Player;
-    let game = getGame();
+Command("invisible", (args: any[], source: Player | undefined) => {
+  let game = getGame();
+  let playerSID = Number(args[1]);
+  let player = source;
+  if (game) {
+    if (playerSID)
+      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
     if (game) {
-      if (thisPlayer) {
-        thisPlayer.invisible = !thisPlayer.invisible;
+      if (player) {
+        player.invisible = !player.invisible;
       }
     }
-
-    return 0;
-  })
-);
+  }
+});
 
 dispatcher.register(
   literal("invincible").executes((context) => {
