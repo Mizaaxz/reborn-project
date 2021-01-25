@@ -273,22 +273,17 @@ Command("set", (args: any[]) => {
   }
 });
 
-dispatcher.register(
-  literal("kick").then(
-    argument("playerSID", integer()).executes((context) => {
-      let playerSID = context.getArgument("playerSID", Number);
-      let game = getGame();
+Command("kick", (args: any[]) => {
+  let playerSID = Number(args[1]);
+  let game = getGame();
 
-      if (game) {
-        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
-      }
-
-      return 0;
-    })
-  )
-);
+    if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
+    else return "Invalid Player ID";
+  }
+});
 
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
