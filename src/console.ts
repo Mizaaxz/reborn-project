@@ -93,8 +93,8 @@ Command("tp", (args: any[], source: Player) => {
         thisPlayer.location = player.location.add(0, 0, true);
         game.sendGameObjects(thisPlayer);
       } else if (otherPlayer) {
-        otherPlayer.location = player.location.add(0, 0, true);
-        game.sendGameObjects(otherPlayer);
+        player.location = otherPlayer.location.add(0, 0, true);
+        game.sendGameObjects(player);
       } else return "Invalid Player ID(s)";
       return false;
     }
