@@ -192,24 +192,18 @@ Command("weaponVariant", (args: any[], source: Player | undefined) => {
   }
 });
 
-dispatcher.register(
-  literal("ban").then(
-    argument("playerSID", integer()).executes((context) => {
-      let playerSID = context.getArgument("playerSID", Number);
-      let game = getGame();
+Command("ban", (args: any[]) => {
+  let playerSID = Number(args[1]);
+  let game = getGame();
 
-      if (game) {
-        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        if (player && player.client && !player.client.admin) {
-          game.banClient(player.client);
-        }
-      }
-
-      return 0;
-    })
-  )
-);
+    if (player && player.client && !player.client.admin) {
+      game.banClient(player.client);
+    } else return "Invalid Player ID";
+  }
+});
 
 dispatcher.register(
   literal("promote").then(
