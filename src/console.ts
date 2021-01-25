@@ -81,6 +81,7 @@ Command("kill", (args: any[]) => {
 
 Command("tp", (args: any[], source: Player) => {
   let playerSID = Number(args[1]);
+  if (!playerSID) return false;
   let thisPlayer = source;
   let game = getGame();
 
