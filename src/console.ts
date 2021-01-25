@@ -133,23 +133,23 @@ Command("invincible", (args: any[], source: Player | undefined) => {
   }
 });
 
-dispatcher.register(
-  literal("speed").then(
-    argument("speedMultiplier", integer()).executes((context) => {
-      let thisPlayer = context.getSource() as Player;
-      let game = getGame();
+Command("speed", (args: any[], source: Player | undefined) => {
+  let game = getGame();
+  let playerSID = Number(args[2]);
+  let player = source;
+  if (game) {
+    if (playerSID)
+      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-      if (game) {
-        if (thisPlayer) {
-          thisPlayer.spdMult = context.getArgument("speedMultiplier", Number);
-        }
+    if (game) {
+      if (player) {
+        player.spdMult = Number(args[2]) || 1;
       }
+    }
+  }
+});
 
-      return 0;
-    })
-  )
-); //TODO: change to tempmod command
-
+//TODO: change to tempmod command
 /*dispatcher.register(
   literal("login").then(
     argument("password", string()).executes((context) => {

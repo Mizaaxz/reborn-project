@@ -30,7 +30,7 @@ See [Issue #16](https://github.com/Picoseconds/sanctuary/issues/16) for a list o
 | kick \<player id>                                                            | Kicks a user.                                                                                                        |
 | broadcast \<message>                                                         | Displays a message in the top left of everyone's screen (including yours).                                           |
 | stop                                                                         | Stops the server.                                                                                                    |
-| speed \<speed multiplier>                                                    | Changes your speed.                                                                                                  |
+| speed \<speed multiplier> [player id (defaults to yourself)]                 | Changes your speed.                                                                                                  |
 | weaponVariant \<ruby/gold/diamond/normal> [player id (defaults to yourself)] | Changes the variant of the currently selected weapon of the player.                                                  |
 | login \<password>                                                            | See [Password Login System](#password-login-system)                                                                  |
 
