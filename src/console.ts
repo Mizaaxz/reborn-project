@@ -32,7 +32,7 @@ Command("restart", (args: any[]) => {
 
 Command("broadcast", (args: any[]) => {
   let packetFactory = PacketFactory.getInstance();
-  let message = args.slice(1);
+  let message = args.slice(1).join(" ");
   let game = getGame();
 
   if (game) {
