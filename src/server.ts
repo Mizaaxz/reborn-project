@@ -17,7 +17,7 @@ let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
 let items = require("./definitions/items.json");
 let projectiles = require("./definitions/projectiles.json");
-let weapons = require("./definitions/weapons.json");
+let weapons = require("./definitions/weapons");
 accessories = Object.values(accessories);
 const hats2 = Object.values(hats);
 items = Object.values(items);
