@@ -3,10 +3,11 @@ interface cmdIndex {
 }
 const commandIndex: cmdIndex = {};
 
-const Command = function (name: string, callback: Function) {
+const Command = function (name: string, callback: Function, aliases: any[]) {
   let cmd = {
     name,
     callback,
+    aliases,
     execute: (text: string, source: any) => {
       if (text.startsWith("/")) text = text.replace("/", "");
       let parsed = text.split(/ +/g);

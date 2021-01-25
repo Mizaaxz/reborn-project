@@ -12,131 +12,159 @@ import * as config from "./config.json";
 let command = "";
 let lastMessage = "";
 
-Command("stop", (args: any[]) => {
-  //Broadcast("Restarting server in 10 seconds...")
-  //setTimeout(function() {process.exit()}, 10000)
-  process.exit();
-  return true;
-});
+Command(
+  "stop",
+  (args: any[]) => {
+    //Broadcast("Restarting server in 10 seconds...")
+    //setTimeout(function() {process.exit()}, 10000)
+    process.exit();
+    return true;
+  },
+  ["kill"]
+);
 
-Command("broadcast", (args: any[]) => {
-  let packetFactory = PacketFactory.getInstance();
-  let message = args.slice(1).join(" ");
-  let game = getGame();
+Command(
+  "broadcast",
+  (args: any[]) => {
+    let packetFactory = PacketFactory.getInstance();
+    let message = args.slice(1).join(" ");
+    let game = getGame();
 
-  if (game) {
-    for (let client of game.clients) {
-      client.socket.send(
-        packetFactory.serializePacket(
-          new Packet(PacketType.UPDATE_AGE, [
-            0,
-            1,
-            `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
-          ])
-        )
-      );
-
-      if (client.player) {
+    if (game) {
+      for (let client of game.clients) {
         client.socket.send(
           packetFactory.serializePacket(
             new Packet(PacketType.UPDATE_AGE, [
-              client.player.xp,
-              client.player.maxXP,
-              client.player.age,
+              0,
+              1,
+              `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
             ])
           )
         );
+
+        if (client.player) {
+          client.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.UPDATE_AGE, [
+                client.player.xp,
+                client.player.maxXP,
+                client.player.age,
+              ])
+            )
+          );
+        }
+        return false;
       }
-      return false;
     }
-  }
-});
+  },
+  ["bc", "send"]
+);
 
-Command("kill", (args: any[]) => {
-  let playerSID = Number(args[1]);
-  if (!playerSID) return "Invalid Player ID";
-  let game = getGame();
-
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
-    if (player) {
-      game.killPlayer(player);
-      return false;
-    }
-  }
-});
-
-Command("tp", (args: any[], source: Player) => {
-  let playerSID = Number(args[1]);
-  let tpTo = Number(args[2]);
-  let thisPlayer = source;
-  let game = getGame();
-
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-    let otherPlayer = game.state.players.find((plyr: { id: any }) => plyr.id == tpTo);
-
-    if (player) {
-      if (!tpTo) {
-        thisPlayer.location = player.location.add(0, 0, true);
-        game.sendGameObjects(thisPlayer);
-      } else if (otherPlayer) {
-        player.location = otherPlayer.location.add(0, 0, true);
-        game.sendGameObjects(player);
-      } else return "Invalid Player ID(s)";
-      return false;
-    }
-  }
-});
-
-Command("invisible", (args: any[], source: Player | undefined) => {
-  let game = getGame();
-  let playerSID = Number(args[1]);
-  let player = source;
-  if (game) {
-    if (playerSID)
-      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+Command(
+  "kill",
+  (args: any[]) => {
+    let playerSID = Number(args[1]);
+    if (!playerSID) return "Invalid Player ID";
+    let game = getGame();
 
     if (game) {
-      if (player) {
-        player.invisible = !player.invisible;
-      } else return "Invalid Player ID";
-    }
-  }
-});
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-Command("invincible", (args: any[], source: Player | undefined) => {
-  let game = getGame();
-  let playerSID = Number(args[1]);
-  let player = source;
-  if (game) {
-    if (playerSID)
-      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      if (player) {
+        game.killPlayer(player);
+        return false;
+      }
+    }
+  },
+  ["k"]
+);
+
+Command(
+  "tp",
+  (args: any[], source: Player) => {
+    let playerSID = Number(args[1]);
+    let tpTo = Number(args[2]);
+    let thisPlayer = source;
+    let game = getGame();
 
     if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let otherPlayer = game.state.players.find((plyr: { id: any }) => plyr.id == tpTo);
+
       if (player) {
-        player.invincible = !player.invincible;
-      } else return "Invalid Player ID";
+        if (!tpTo) {
+          thisPlayer.location = player.location.add(0, 0, true);
+          game.sendGameObjects(thisPlayer);
+        } else if (otherPlayer) {
+          player.location = otherPlayer.location.add(0, 0, true);
+          game.sendGameObjects(player);
+        } else return "Invalid Player ID(s)";
+        return false;
+      }
     }
-  }
-});
+  },
+  ["teleport"]
+);
 
-Command("speed", (args: any[], source: Player | undefined) => {
-  let game = getGame();
-  let playerSID = Number(args[2]);
-  let player = source;
-  if (game) {
-    if (playerSID)
-      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
+Command(
+  "invisible",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[1]);
+    let player = source;
     if (game) {
-      if (player) {
-        player.spdMult = Number(args[1]) || 1;
-      } else return "Invalid Player ID";
+      if (playerSID)
+        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      if (game) {
+        if (player) {
+          player.invisible = !player.invisible;
+        } else return "Invalid Player ID";
+      }
     }
-  }
-});
+  },
+  ["invis", "vanish"]
+);
+
+Command(
+  "invincible",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[1]);
+    let player = source;
+    if (game) {
+      if (playerSID)
+        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      if (game) {
+        if (player) {
+          player.invincible = !player.invincible;
+        } else return "Invalid Player ID";
+      }
+    }
+  },
+  ["invinc", "nokill"]
+);
+
+Command(
+  "speed",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[2]);
+    let player = source;
+    if (game) {
+      if (playerSID)
+        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      if (game) {
+        if (player) {
+          player.spdMult = Number(args[1]) || 1;
+        } else return "Invalid Player ID";
+      }
+    }
+  },
+  ["movespeed", "s"]
+);
 
 //TODO: change to tempmod command
 /*dispatcher.register(
@@ -160,119 +188,139 @@ Command("speed", (args: any[], source: Player | undefined) => {
   )
 );*/
 
-Command("weaponVariant", (args: any[], source: Player | undefined) => {
-  let game = getGame();
-  let playerSID = Number(args[2]);
-  let player = source;
-  let variant = args[1] || "normal";
-
-  if (game) {
-    if (playerSID)
-      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+Command(
+  "weaponvariant",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[2]);
+    let player = source;
+    let variant = args[1] || "normal";
 
     if (game) {
-      if (player) {
-        let variantSet = setWeaponVariant(player, variant);
-        if (variantSet == 1) {
-          return "Invalid weapon variant " + variant;
-        } else return false;
+      if (playerSID)
+        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      if (game) {
+        if (player) {
+          let variantSet = setWeaponVariant(player, variant);
+          if (variantSet == 1) {
+            return "Invalid weapon variant " + variant;
+          } else return false;
+        } else return "Invalid Player ID";
+      }
+    }
+  },
+  ["variant", "wv"]
+);
+
+Command(
+  "ban",
+  (args: any[]) => {
+    let playerSID = Number(args[1]);
+    let game = getGame();
+
+    if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      if (player && player.client && !player.client.admin) {
+        game.banClient(player.client);
       } else return "Invalid Player ID";
     }
-  }
-});
+  },
+  ["b"]
+);
 
-Command("ban", (args: any[]) => {
-  let playerSID = Number(args[1]);
-  let game = getGame();
+Command(
+  "promote",
+  (args: any[]) => {
+    let playerSID = Number(args[1]);
+    let game = getGame();
 
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+    if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-    if (player && player.client && !player.client.admin) {
-      game.banClient(player.client);
-    } else return "Invalid Player ID";
-  }
-});
+      if (player && player.client) {
+        game.addModerator(player.client);
+      } else return "Invalid Player ID";
+    }
+  },
+  ["mod", "admin", "promo"]
+);
 
-Command("promote", (args: any[]) => {
-  let playerSID = Number(args[1]);
-  let game = getGame();
+Command(
+  "set",
+  (args: any[]) => {
+    let playerSID = Number(args[1]);
+    let resourceType = args[2];
+    let resourceAmount = Number(args[3]) || 0;
+    let game = getGame();
 
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+    if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-    if (player && player.client) {
-      game.addModerator(player.client);
-    } else return "Invalid Player ID";
-  }
-});
+      if (player) {
+        switch (resourceType) {
+          case "points":
+          case "gold":
+          case "money":
+          case "g":
+            player.points = resourceAmount;
+            break;
 
-Command("set", (args: any[]) => {
-  let playerSID = Number(args[1]);
-  let resourceType = args[2];
-  let resourceAmount = Number(args[3]) || 0;
-  let game = getGame();
+          case "food":
+          case "f":
+            player.food = resourceAmount;
+            break;
 
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+          case "stone":
+          case "s":
+            player.stone = resourceAmount;
+            break;
 
-    if (player) {
-      switch (resourceType) {
-        case "points":
-        case "gold":
-        case "money":
-        case "g":
-          player.points = resourceAmount;
-          break;
+          case "wood":
+          case "w":
+            player.wood = resourceAmount;
+            break;
 
-        case "food":
-        case "f":
-          player.food = resourceAmount;
-          break;
+          case "health":
+          case "hp":
+          case "hitpoints":
+            player.health = resourceAmount;
+            break;
 
-        case "stone":
-        case "s":
-          player.stone = resourceAmount;
-          break;
+          case "kills":
+          case "kills":
+            player.kills = resourceAmount;
+            break;
 
-        case "wood":
-        case "w":
-          player.wood = resourceAmount;
-          break;
+          case "xp":
+            player.xp = resourceAmount;
+            break;
 
-        case "health":
-        case "hp":
-        case "hitpoints":
-          player.health = resourceAmount;
-          break;
+          default:
+            return "Invalid resource type " + resourceType;
+        }
+      } else return "Invalid Player ID";
+    }
+  },
+  ["setresource", "change"]
+);
 
-        case "kills":
-        case "kills":
-          player.kills = resourceAmount;
-          break;
+Command(
+  "kick",
+  (args: any[]) => {
+    let playerSID = Number(args[1]);
+    let game = getGame();
 
-        case "xp":
-          player.xp = resourceAmount;
-          break;
+    if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        default:
-          return "Invalid resource type " + resourceType;
-      }
-    } else return "Invalid Player ID";
-  }
-});
-
-Command("kick", (args: any[]) => {
-  let playerSID = Number(args[1]);
-  let game = getGame();
-
-  if (game) {
-    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
-    if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
-    else return "Invalid Player ID";
-  }
-});
+      if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
+      else return "Invalid Player ID";
+    }
+  },
+  ["k"]
+);
 
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
