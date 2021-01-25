@@ -58,15 +58,14 @@ Command("broadcast", (args: any[]) => {
           )
         );
       }
-      return true;
+      return false;
     }
   }
-  return false;
 });
 
 Command("kill", (args: any[]) => {
   let playerSID = Number(args[1]);
-  if (!playerSID) return false;
+  if (!playerSID) return "Invalid Player ID";
   let game = getGame();
 
   if (game) {
@@ -74,7 +73,7 @@ Command("kill", (args: any[]) => {
 
     if (player) {
       game.killPlayer(player);
-      return true;
+      return false;
     }
   }
 });
