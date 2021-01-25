@@ -143,7 +143,7 @@ Command("speed", (args: any[], source: Player | undefined) => {
 
     if (game) {
       if (player) {
-        player.spdMult = Number(args[2]) || 1;
+        player.spdMult = Number(args[1]) || 1;
       }
     }
   }
