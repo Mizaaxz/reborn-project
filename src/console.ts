@@ -23,7 +23,7 @@ let lastMessage = "";
 
 const dispatcher = new CommandDispatcher();
 
-Command("restart", (args: any[]) => {
+Command("stop", (args: any[]) => {
   //Broadcast("Restarting server in 10 seconds...")
   //setTimeout(function() {process.exit()}, 10000)
   process.exit();
