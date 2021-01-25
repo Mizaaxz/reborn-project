@@ -220,7 +220,7 @@ Command("promote", (args: any[]) => {
 
 Command("set", (args: any[]) => {
   let playerSID = Number(args[1]);
-  let resourceType = args[2] || "xp";
+  let resourceType = args[2];
   let resourceAmount = Number(args[3]) || 0;
   let game = getGame();
 
