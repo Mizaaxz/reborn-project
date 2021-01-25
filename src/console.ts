@@ -205,24 +205,18 @@ Command("ban", (args: any[]) => {
   }
 });
 
-dispatcher.register(
-  literal("promote").then(
-    argument("playerSID", integer()).executes((context) => {
-      let playerSID = context.getArgument("playerSID", Number);
-      let game = getGame();
+Command("promote", (args: any[]) => {
+  let playerSID = Number(args[1]);
+  let game = getGame();
 
-      if (game) {
-        let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+  if (game) {
+    let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-        if (player && player.client) {
-          game.addModerator(player.client);
-        }
-      }
-
-      return 0;
-    })
-  )
-);
+    if (player && player.client) {
+      game.addModerator(player.client);
+    } else return "Invalid Player ID";
+  }
+});
 
 dispatcher.register(
   literal("set").then(
