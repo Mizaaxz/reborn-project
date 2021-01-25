@@ -117,20 +117,21 @@ Command("invisible", (args: any[], source: Player | undefined) => {
   }
 });
 
-dispatcher.register(
-  literal("invincible").executes((context) => {
-    let thisPlayer = context.getSource() as Player;
-    let game = getGame();
+Command("invincible", (args: any[], source: Player | undefined) => {
+  let game = getGame();
+  let playerSID = Number(args[1]);
+  let player = source;
+  if (game) {
+    if (playerSID)
+      player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
     if (game) {
-      if (thisPlayer) {
-        thisPlayer.invincible = !thisPlayer.invincible;
+      if (player) {
+        player.invincible = !player.invincible;
       }
     }
-
-    return 0;
-  })
-);
+  }
+});
 
 dispatcher.register(
   literal("speed").then(
