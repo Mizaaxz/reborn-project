@@ -78,6 +78,10 @@ app.get("/api/v1/def", (req, res) => {
   res.json({ accessories, hats: hats2, items, projectiles, weapons });
 });
 
+app.post("/api/v1/login", (req, res) => {
+  res.json({});
+});
+
 app.get("/api/v1/playerCount", (_req, res) => {
   let game = getGame();
 
