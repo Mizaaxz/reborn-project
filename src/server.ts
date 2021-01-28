@@ -4,6 +4,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import SHA256 from "fast-sha256";
 import arrayBufferToHex from "array-buffer-to-hex";
+import bodyParser from "body-parser";
 
 import * as config from "./config.json";
 import * as console from "./console";
@@ -26,6 +27,7 @@ weapons = Object.values(weapons);
 
 const app = express();
 const server = http.createServer(app);
+app.use(bodyParser.json());
 
 nunjucks.configure("views", {
   autoescape: true,
