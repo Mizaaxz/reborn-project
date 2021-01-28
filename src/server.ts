@@ -104,6 +104,18 @@ app.post("/api/v1/create", (req, res) => {
   let exists = db.get(`account_${username}`);
   if (exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
 
+  let notAllowed: any[] = [];
+  username.split("").forEach((a: any) => {
+    if (!config.allowedUsername.includes(a)) notAllowed.push(a);
+  });
+  if (notAllowed.length)
+    return res.json({
+      error: "INVALID_USERNAME",
+      text: errCodes.create.INVALID_USERNAME,
+      notAllowed,
+    });
+
+  if (username.length > config.usernameLength.max) return res.json({});
   res.json({ error: "", text: "Account created!" });
 });
 

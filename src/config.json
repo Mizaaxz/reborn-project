@@ -6,5 +6,7 @@
   "maxCPS": "25",
   "badWords": ["faggot", "nigger", "nigga"],
   "allowedUsername": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_ ",
-  "allowedPassword": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+`~,<.>;:?/|[]{}' "
+  "usernameLength": { "min": 4, "max": 16 },
+  "allowedPassword": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+`~,<.>;:?/|[]{}' ",
+  "passwordLength": { "min": 8, "max": 30 }
 }
