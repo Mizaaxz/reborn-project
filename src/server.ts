@@ -14,6 +14,7 @@ import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 import errCodes from "./definitions/errorCodes";
+import db from "./database";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -86,6 +87,10 @@ app.post("/api/v1/login", (req, res) => {
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.login.NO_USERNAME });
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
+
+  let account = db.get(`account_${username}`);
+  if (!account)
+    return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
   res.json({});
 });
