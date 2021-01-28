@@ -29,6 +29,7 @@ weapons = Object.values(weapons);
 
 const app = express();
 const server = http.createServer(app);
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 nunjucks.configure("views", {
@@ -89,10 +90,22 @@ app.post("/api/v1/login", (req, res) => {
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
   let account = db.get(`account_${username}`);
-  if (!account)
+  if (Object.keys(account).length == 1)
     return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
-  res.json({});
+  res.json(account);
+});
+app.post("/api/v1/create", (req, res) => {
+  let username = req.body.username;
+  if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
+  let password = req.body.password;
+  if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
+
+  let exists = db.get(`account_${username}`);
+  if (Object.keys(exists).length > 1)
+    return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
+
+  res.json({ error: "", text: "Account created!" });
 });
 
 app.get("/api/v1/playerCount", (_req, res) => {

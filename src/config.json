@@ -4,5 +4,7 @@
   "gameObjectNearbyRadius": 1250,
   "playerNearbyRadius": 1250,
   "maxCPS": "25",
-  "badWords": ["faggot", "nigger", "nigga"]
+  "badWords": ["faggot", "nigger", "nigga"],
+  "allowedUsername": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_ ",
+  "allowedPassword": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+`~,<.>;:?/|[]{}' "
 }
