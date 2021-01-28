@@ -13,6 +13,7 @@ import UptimeWSServer from "./uptimeWS";
 import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
+import errCodes from "./definitions/errorCodes";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -81,6 +82,11 @@ app.get("/api/v1/def", (req, res) => {
 });
 
 app.post("/api/v1/login", (req, res) => {
+  let username = req.body.username;
+  if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.login.NO_USERNAME });
+  let password = req.body.password;
+  if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
+
   res.json({});
 });
 
