@@ -1007,7 +1007,7 @@ export default class Game {
             }
 
             newPlayer.location = randomPos(14400, 14400);
-            newPlayer.name = packet.data[0].name.split("").slice(0, 15) || "unknown";
+            newPlayer.name = packet.data[0].name.split("").slice(0, 16).join("") || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;
