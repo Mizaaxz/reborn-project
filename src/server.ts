@@ -102,7 +102,7 @@ app.post("/api/v1/create", (req, res) => {
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
 
   let exists = db.get(`account_${username}`);
-  if (!exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
+  if (exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
 
   res.json({ error: "", text: "Account created!" });
 });
