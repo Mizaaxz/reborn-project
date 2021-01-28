@@ -115,11 +115,20 @@ app.post("/api/v1/create", (req, res) => {
       notAllowed,
     });
 
-  if (username.length > config.usernameLength.max) return res.json({});
+  if (username.length > config.usernameLength.max)
+    return res.json({ error: "USERNAME_TOO_LONG", text: errCodes.create.USERNAME_TOO_LONG });
+  if (username.length < config.usernameLength.min)
+    return res.json({ error: "USERNAME_TOO_SHORT", text: errCodes.create.USERNAME_TOO_SHORT });
+
+  if (password.length > config.passwordLength.max)
+    return res.json({ error: "PASSWORD_TOO_LONG", text: errCodes.create.PASSWORD_TOO_LONG });
+  if (password.length < config.passwordLength.min)
+    return res.json({ error: "PASSWORD_TOO_SHORT", text: errCodes.create.PASSWORD_TOO_SHORT });
+
   res.json({ error: "", text: "Account created!" });
 });
 
-app.get("/api/v1/playerCount", (_req, res) => {
+app.get("/api/v1/playerCount", (req, res) => {
   let game = getGame();
 
   if (!game) {
