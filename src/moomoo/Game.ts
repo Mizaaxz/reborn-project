@@ -1008,7 +1008,7 @@ export default class Game {
 
             newPlayer.location = randomPos(14400, 14400);
             newPlayer.name =
-              packet.data[0].name > 15 || packet.data[0].name === ""
+              packet.data[0].name > 16 || packet.data[0].name === ""
                 ? "unknown"
                 : packet.data[0].name;
             newPlayer.skinColor = packet.data[0].skin;
