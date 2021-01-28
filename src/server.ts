@@ -90,7 +90,7 @@ app.post("/api/v1/login", (req, res) => {
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
   let account = db.get(`account_${username}`);
-  if (Object.keys(account).length == 1)
+  if (!account)
     return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
   res.json(account);
@@ -102,8 +102,7 @@ app.post("/api/v1/create", (req, res) => {
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
 
   let exists = db.get(`account_${username}`);
-  if (Object.keys(exists).length > 1)
-    return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
+  if (!exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
 
   res.json({ error: "", text: "Account created!" });
 });

@@ -36,6 +36,6 @@ let db = {
   get: Function(),
   sub: Function(),
 };
-db.get = db.set;
+db.get = db.fetch;
 db.sub = db.subtract;
 export default db;
