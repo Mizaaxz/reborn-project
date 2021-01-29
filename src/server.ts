@@ -60,19 +60,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/sanctuary", (req, res) => {
-  if (req.accepts("html")) {
-    res.render("version.html", {
-      version: VERSION,
-      nodeVersion: process.version,
-      uptime: format(process.uptime()),
-    });
-    return;
-  }
-
-  res.send("Sanctuary v${VERSION}");
-});
-
 app.get("/status", (req, res) => {
   res.json({ uptime: format(process.uptime()), ver: VERSION, node: process.version });
 });
