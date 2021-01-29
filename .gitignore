@@ -1,3 +1,4 @@
 node_modules
 lib
 data/sanctuary.json
+.db.json
