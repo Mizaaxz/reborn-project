@@ -16,6 +16,7 @@ const errCodes = {
     USERNAME_TOO_SHORT: `Your username is too short! Try using more than ${config.usernameLength.min} characters.`,
     PASSWORD_TOO_LONG: `Your password is too long! Try using less than ${config.passwordLength.max} characters.`,
     PASSWORD_TOO_SHORT: `Your password is too short! Try using more than ${config.passwordLength.min} characters.`,
+    HASH_ERROR: "Error when hashing your password.",
   },
 };
 export default errCodes;

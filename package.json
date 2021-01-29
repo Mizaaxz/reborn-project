@@ -11,6 +11,7 @@
   "author": "Picoseconds",
   "license": "WTFPL",
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/node": "^14.0.24",
     "cz-conventional-changelog": "3.2.0",
     "standard-version": "^8.0.2",

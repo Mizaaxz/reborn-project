@@ -5,6 +5,7 @@ import nunjucks from "nunjucks";
 import SHA256 from "fast-sha256";
 import arrayBufferToHex from "array-buffer-to-hex";
 import bodyParser from "body-parser";
+import bcrypt from "bcrypt";
 
 import * as config from "./config.json";
 import * as console from "./console";
@@ -132,7 +133,16 @@ app.post("/api/v1/create", (req, res) => {
   if (password.length < config.passwordLength.min)
     return res.json({ error: "PASSWORD_TOO_SHORT", text: errCodes.create.PASSWORD_TOO_SHORT });
 
-  res.json({ error: "", text: "Account created!" });
+  bcrypt.hash(password, 5, (err, hash) => {
+    if (err) return res.json({ error: "HASH_ERROR", text: errCodes.create.HASH_ERROR, err });
+
+    db.set(`account_${username}`, {
+      username,
+      password: hash,
+    });
+
+    res.json({ error: "", text: "Account created!" });
+  });
 });
 
 app.get("/api/v1/playerCount", (req, res) => {
