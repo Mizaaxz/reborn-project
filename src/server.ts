@@ -16,6 +16,7 @@ import { getGame } from "./moomoo/Game";
 import { TextEncoder } from "util";
 import errCodes from "./definitions/errorCodes";
 import db from "./database";
+import b64 from "./base64";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -93,6 +94,7 @@ app.post("/api/v1/login", (req, res) => {
   bcrypt.compare(password, account.password, function (err, match) {
     if (err) return res.json({ error: "COMPARE_ERROR", text: errCodes.login.COMPARE_ERROR });
     if (match === true) {
+      account.token = b64.btoa(`${username}:${password}`);
       res.json(account);
     } else {
       res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD });
