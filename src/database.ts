@@ -1,36 +1,36 @@
 import fs from "fs";
 let db = {
   fetch: (key: string) => {
-    return require("../.db.json")[key];
+    return require(__dirname + "\\..\\.db.json")[key];
   },
   add: (key: string, value: any) => {
-    let data = require("../.db.json");
+    let data = require(__dirname + "\\..\\.db.json");
     data[key] = data[key] || 0;
     data[key] += value;
-    fs.writeFileSync("../.db.json", JSON.stringify(data));
+    fs.writeFile(__dirname + "\\..\\.db.json", JSON.stringify(data), function () {});
     return data;
   },
   subtract: (key: string, value: any) => {
-    let data = require("../.db.json");
+    let data = require(__dirname + "\\..\\.db.json");
     data[key] = data[key] || 0;
     data[key] -= value;
-    fs.writeFileSync("../.db.json", JSON.stringify(data));
+    fs.writeFile(__dirname + "\\..\\.db.json", JSON.stringify(data), function () {});
     return data;
   },
   set: (key: string, value: any) => {
-    let data = require("../.db.json");
+    let data = require(__dirname + "\\..\\.db.json");
     data[key] = value;
-    fs.writeFileSync("../.db.json", JSON.stringify(data));
+    fs.writeFile(__dirname + "\\..\\.db.json", JSON.stringify(data), function () {});
     return data;
   },
   delete: (key: string) => {
-    let data = require("../.db.json");
+    let data = require(__dirname + "\\..\\.db.json");
     delete data[key];
-    fs.writeFileSync("../.db.json", JSON.stringify(data));
+    fs.writeFile(__dirname + "\\..\\.db.json", JSON.stringify(data), function () {});
     return data;
   },
   all: () => {
-    let data = require("../.db.json");
+    let data = require(__dirname + "\\..\\.db.json");
     return data;
   },
   get: Function(),
