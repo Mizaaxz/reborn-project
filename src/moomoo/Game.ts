@@ -216,20 +216,10 @@ export default class Game {
             )
           );
         } else {
-          if (client.player)
-            this.kickClient(
-              client,
-              "Kicked for hacks. MessagePacket related issue. " + client.player.name
-            );
-          else this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
         }
       } catch (e) {
-        if (client.player)
-          this.kickClient(
-            client,
-            "Kicked for hacks. MessagePacket related issue. " + client.player.name
-          );
-        else this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
       }
     });
 
