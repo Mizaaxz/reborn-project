@@ -5,6 +5,7 @@ const errCodes = {
     NO_PASSWORD: "Please enter a password.",
     INVALID_USERNAME: "That username was not found.",
     INCORRECT_PASSWORD: "Incorrect password.",
+    COMPARE_ERROR: "There was an error comparing your password.",
   },
   create: {
     NO_USERNAME: "Please enter a username.",
