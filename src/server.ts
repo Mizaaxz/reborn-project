@@ -20,12 +20,14 @@ let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
 let items = require("./definitions/items.json");
 let projectiles = require("./definitions/projectiles.json");
-let weapons = require("./definitions/weapons");
+import weapons from "./definitions/weapons";
+import weaponVariants from "./definitions/weaponVariants";
 accessories = Object.values(accessories);
 const hats2 = Object.values(hats);
 items = Object.values(items);
 projectiles = Object.values(projectiles);
-weapons = Object.values(weapons);
+const weapons2 = Object.values(weapons);
+const weaponVariants2 = Object.values(weaponVariants);
 
 const app = express();
 const server = http.createServer(app);
@@ -80,7 +82,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/v1/def", (req, res) => {
-  res.json({ accessories, hats: hats2, items, projectiles, weapons });
+  res.json({
+    accessories,
+    hats: hats2,
+    items,
+    projectiles,
+    weapons: weapons2,
+    weaponVariants: weaponVariants2,
+  });
 });
 
 app.post("/api/v1/login", (req, res) => {
