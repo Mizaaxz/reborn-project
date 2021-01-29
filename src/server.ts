@@ -120,6 +120,17 @@ app.post("/api/v1/create", (req, res) => {
   if (username.length < config.usernameLength.min)
     return res.json({ error: "USERNAME_TOO_SHORT", text: errCodes.create.USERNAME_TOO_SHORT });
 
+  notAllowed = [];
+  password.split("").forEach((a: any) => {
+    if (!config.allowedPassword.includes(a)) notAllowed.push(a);
+  });
+  if (notAllowed.length)
+    return res.json({
+      error: "INVALID_PASSWORD",
+      text: errCodes.create.INVALID_PASSWORD,
+      notAllowed,
+    });
+
   if (password.length > config.passwordLength.max)
     return res.json({ error: "PASSWORD_TOO_LONG", text: errCodes.create.PASSWORD_TOO_LONG });
   if (password.length < config.passwordLength.min)
