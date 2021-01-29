@@ -236,6 +236,8 @@ export default class Game {
         ])
       )
     );
+
+    console.log(`Added player ${id} with name ${client.player?.name}.`);
   }
 
   kickClient(client: Client, reason: string = "Kicked by a moderator.") {
