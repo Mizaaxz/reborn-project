@@ -90,7 +90,14 @@ app.post("/api/v1/login", (req, res) => {
   if (!account)
     return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
-  res.json(account);
+  bcrypt.compare(password, account.password, function (err, match) {
+    if (err) return res.json({ error: "COMPARE_ERROR", text: errCodes.login.COMPARE_ERROR });
+    if (match === true) {
+      res.json(account);
+    } else {
+      res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD });
+    }
+  });
 });
 app.post("/api/v1/create", (req, res) => {
   let username = req.body.username;
