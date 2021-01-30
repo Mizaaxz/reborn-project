@@ -134,13 +134,25 @@ function getWeaponSpeedMultiplier(weapon: Weapons) {
   return weapons[weapon].spdMult || 1;
 }
 
-function getStructureDamage(weapon: Weapons) {
+function getStructureDamage(weapon: Weapons, weaponVariant: WeaponVariant) {
   let weaponData = weapons[weapon];
 
-  if (weaponData.dmg) {
-    if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg;
+  switch (weaponVariant) {
+    case WeaponVariant.Normal:
+    case WeaponVariant.Gold:
+    case WeaponVariant.Diamond:
+    case WeaponVariant.Ruby:
+      if (weaponData.dmg) {
+        if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg;
 
-    return weaponData.dmg;
+        return weaponData.dmg;
+      }
+    case WeaponVariant.Emerald:
+      if (weaponData.dmg) {
+        if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg * 2;
+
+        return weaponData.dmg * 2;
+      }
   }
 
   return 0;
