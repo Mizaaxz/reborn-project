@@ -17,6 +17,7 @@ import { TextEncoder } from "util";
 import errCodes from "./definitions/errorCodes";
 import db from "./database";
 import b64 from "./base64";
+import startBot from "./bot";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -30,6 +31,8 @@ items = Object.values(items);
 projectiles = Object.values(projectiles);
 const weapons2 = Object.values(weapons);
 const weaponVariants2 = Object.values(weaponVariants);
+
+startBot();
 
 const app = express();
 const server = http.createServer(app);
