@@ -40,6 +40,7 @@ import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
 import * as config from "../config.json";
+import weaponVariants from "../definitions/weaponVariants";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -653,7 +654,11 @@ export default class Game {
 
               this.damageFrom(hitPlayer, player, dmg);
 
-              if (weaponVariant === WeaponVariant.Ruby) {
+              if (weaponVariant == WeaponVariant.Emerald) {
+                hitPlayer.bleedDmg = 5;
+                hitPlayer.bleedAmt = 0;
+                hitPlayer.maxBleedAmt = 10;
+              } else if (weaponVariant === WeaponVariant.Ruby) {
                 hitPlayer.bleedDmg = 5;
                 hitPlayer.bleedAmt = 0;
                 hitPlayer.maxBleedAmt = 5;
