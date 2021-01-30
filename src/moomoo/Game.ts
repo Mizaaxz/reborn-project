@@ -752,7 +752,7 @@ export default class Game {
                 );
               }
 
-              let gather = getWeaponGatherAmount(player.selectedWeapon);
+              let gather = getWeaponGatherAmount(player.selectedWeapon, weaponVariant);
 
               switch (hitGameObject.type) {
                 case GameObjectType.Bush:

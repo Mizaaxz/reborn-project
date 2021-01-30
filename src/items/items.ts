@@ -80,9 +80,18 @@ function getWeaponDamage(item: Weapons, weaponVariant: WeaponVariant) {
   }
 }
 
-function getWeaponGatherAmount(item: Weapons) {
+function getWeaponGatherAmount(item: Weapons, weaponVariant: WeaponVariant) {
   let weapon = weapons.find((weapon) => weapon.id == item);
-  return weapon?.gather || 0;
+  let defaultGather = weapon?.gather || 0;
+  switch (weaponVariant) {
+    case WeaponVariant.Normal:
+    case WeaponVariant.Gold:
+    case WeaponVariant.Diamond:
+    case WeaponVariant.Ruby:
+      return defaultGather;
+    case WeaponVariant.Emerald:
+      return defaultGather * 2;
+  }
 }
 
 function getItemCost(item: ItemType) {
