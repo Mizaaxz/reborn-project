@@ -346,8 +346,9 @@ export default class Game {
                 [
                   peer.id,
                   peer.player.id,
-                  (client.admin ? `\u3010${peer.player.id}\u3011 ` : `[${peer.player.id}] `) +
-                    peer.player.name,
+                  client.admin
+                    ? `\u3010${peer.player.id}\u3011 ${peer.player.name}`
+                    : peer.player.name,
                   peer.player.location.x,
                   peer.player.location.y,
                   0,
@@ -935,8 +936,9 @@ export default class Game {
           [
             client.id,
             client.player.id,
-            (client.admin ? `\u3010${client.player.id}\u3011 ` : `[${client.player.id}] `) +
-              client.player.name,
+            client.admin
+              ? `\u3010${client.player.id}\u3011 ${client.player.name}`
+              : client.player.name,
             client.player.location.x,
             client.player.location.y,
             0,
@@ -1037,9 +1039,9 @@ export default class Game {
                   [
                     client.id,
                     newPlayer.id,
-                    (newPlayer.client && newPlayer.client.admin
-                      ? `\u3010${newPlayer.id}\u3011 `
-                      : `[${newPlayer.id}] `) + newPlayer.name,
+                    newPlayer.client && newPlayer.client.admin
+                      ? `\u3010${newPlayer.id}\u3011 ${newPlayer.name}`
+                      : newPlayer.name,
                     newPlayer.location.x,
                     newPlayer.location.y,
                     0,
