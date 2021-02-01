@@ -46,7 +46,7 @@ function moveTowards(
       Math.sin(angle) * speed * 0.0016 * deltaTime
     );
   } catch (e) {
-    console.error(e);
+    console.log("Error: " + e);
   }
 }
 
