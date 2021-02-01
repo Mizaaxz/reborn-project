@@ -40,10 +40,14 @@ function moveTowards(
     Math.cos(angle) * speed * 0.1528, Math.sin(angle) * speed * 0.1528,
     state
   ); */
-  player.velocity.add(
-    Math.cos(angle) * speed * 0.0016 * deltaTime,
-    Math.sin(angle) * speed * 0.0016 * deltaTime
-  );
+  try {
+    player.velocity.add(
+      Math.cos(angle) * speed * 0.0016 * deltaTime,
+      Math.sin(angle) * speed * 0.0016 * deltaTime
+    );
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /**
