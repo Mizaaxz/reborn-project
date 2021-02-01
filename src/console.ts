@@ -8,6 +8,10 @@ import { Command, GetCommand } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import * as config from "./config.json";
+import Vec2 from "vec2";
+import GameObject from "./gameobjects/GameObject";
+import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
+import { ItemType } from "./items/UpgradeItems";
 
 let command = "";
 let lastMessage = "";
@@ -329,6 +333,35 @@ Command(
     game?.generateStructure(args[1] || "stone", source?.location.x || 1, source?.location.y || 1);
   },
   ["create"]
+);
+
+Command(
+  "trap",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[1]);
+
+    if (game) {
+      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+
+      let location = new Vec2(player?.location.x || 1, player?.location.y || 1);
+
+      let newGameObject = new GameObject(
+        game.getNextGameObjectID(),
+        location,
+        source?.angle,
+        getScale(5),
+        -1,
+        undefined,
+        ItemType.PitTrap,
+        source?.id,
+        getGameObjHealth(5),
+        getGameObjDamage(5)
+      );
+      game.state?.gameObjects.push(newGameObject);
+    }
+  },
+  []
 );
 
 function logMethod(text: string) {
