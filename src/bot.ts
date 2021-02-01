@@ -18,6 +18,8 @@ const startBot = function () {
   });
   bot.on("message", (message) => {
     let args = message.content.substring(config.prefix.length).split(/ +/g);
+
+if(message.content.includes("pogopog")) message.delete()
   });
 
   bot.login(token);
