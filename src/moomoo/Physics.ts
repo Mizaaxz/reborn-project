@@ -36,18 +36,16 @@ function moveTowards(
   deltaTime: number,
   state: GameState
 ) {
-  /* tryMovePlayer(player,
-    deltaTime,
-    Math.cos(angle) * speed * 0.1528, Math.sin(angle) * speed * 0.1528,
-    state
-  ); */
   try {
     player.velocity.add(
       Math.cos(angle) * speed * 0.0016 * deltaTime,
       Math.sin(angle) * speed * 0.0016 * deltaTime
     );
   } catch (e) {
-    console.log("Error: " + e);
+    if (e == "Error: Infinity detected") {
+      console.log("Infinity Error");
+      player.spdMult = config.defaultSpeed || 1;
+    } else console.log("Error: " + e);
   }
 }
 
