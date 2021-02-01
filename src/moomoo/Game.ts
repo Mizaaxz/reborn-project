@@ -41,6 +41,7 @@ import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
 import * as config from "../config.json";
 import weaponVariants from "../definitions/weaponVariants";
+import Vec2 from "vec2";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -149,6 +150,54 @@ export default class Game {
         }
         this.state.gameObjects.push(newGameObject);
       }
+    }
+  }
+
+  generateStructure(objType: string, x: number, y: number) {
+    let type = GameObjectType.Mine;
+    switch (objType) {
+      case "tree":
+      case "wood":
+      case "w":
+        type = GameObjectType.Tree;
+        break;
+      case "bush":
+      case "food":
+      case "f":
+        type = GameObjectType.Bush;
+        break;
+      case "mine":
+      case "stone":
+      case "s":
+        type = GameObjectType.Mine;
+        break;
+      case "goldmine":
+      case "gold":
+      case "g":
+        type = GameObjectType.GoldMine;
+        break;
+    }
+
+    let sizes = gameObjectSizes[type];
+    let location = new Vec2(x, y);
+
+    if (sizes) {
+      let size = sizes[Math.floor(Math.random() * sizes.length)];
+
+      let newGameObject = new GameObject(
+        this.getNextGameObjectID(),
+        location,
+        0,
+        size,
+        type,
+        type == GameObjectType.Tree || type == GameObjectType.Bush ? size * 0.6 : size,
+        {},
+        -1,
+        -1,
+        type == GameObjectType.Bush && location.y >= 12e3 ? 35 : 0
+      );
+
+      this.state.gameObjects.push(newGameObject);
     }
   }
 

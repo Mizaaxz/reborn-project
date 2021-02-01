@@ -322,6 +322,15 @@ Command(
   ["k"]
 );
 
+Command(
+  "generate",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    game?.generateStructure(args[1] || "stone", source?.location.x || 1, source?.location.y || 1);
+  },
+  ["create"]
+);
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;
