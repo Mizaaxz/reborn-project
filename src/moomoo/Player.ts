@@ -41,7 +41,7 @@ export default class Player extends Entity {
   public accID: number = 0;
 
   public ownerID: string;
-  public spdMult: number = 1.7;
+  public spdMult: number = config.defaultSpeed || 1;
 
   public upgradeAge = 2;
   public invincible = false;

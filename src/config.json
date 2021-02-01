@@ -9,5 +9,6 @@
   "usernameLength": { "min": 4, "max": 16 },
   "allowedPassword": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+`~,<.>;?/|[]{}' ",
   "passwordLength": { "min": 8, "max": 30 },
-  "prefix": "!"
+  "prefix": "!",
+  "defaultSpeed": 1.7
 }

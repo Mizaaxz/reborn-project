@@ -158,7 +158,7 @@ Command(
 
       if (game) {
         if (player) {
-          player.spdMult = Number(args[1]) || 1;
+          player.spdMult = Number(args[1]) || config.defaultSpeed || 1;
         } else return "Invalid Player ID";
       }
     }
