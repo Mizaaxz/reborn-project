@@ -18,8 +18,6 @@ const startBot = function () {
   });
   bot.on("message", (message) => {
     let args = message.content.substring(config.prefix.length).split(/ +/g);
-
-if((message.content.includes("<a:") || message.content.includes("<:")) && message.author.id == "601445697362984970") message.delete()
   });
 
   bot.login(token);
