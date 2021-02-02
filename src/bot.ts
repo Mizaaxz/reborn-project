@@ -17,7 +17,12 @@ const startBot = function () {
     });
   });
   bot.on("message", (message) => {
-    let args = message.content.substring(config.prefix.length).split(/ +/g);
+    if (message.author.bot) return;
+    if (message.content.startsWith(config.prefix)) {
+      let args = message.content.substring(config.prefix.length).split(/ +/g);
+      let cmd = require(`./commands/${args[0]}.js`);
+      cmd.execute(bot, message, args);
+    }
   });
 
   bot.login(token);

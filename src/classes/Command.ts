@@ -28,4 +28,5 @@ class Command {
     this.execute();
   }
 }
+
 export default Command;

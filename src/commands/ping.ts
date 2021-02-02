@@ -13,4 +13,4 @@ const cmd = new Command(
     message.channel.send("P0nG");
   }
 );
-export default cmd;
+module.exports = cmd;
