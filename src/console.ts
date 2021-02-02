@@ -343,6 +343,7 @@ Command(
 
     if (game) {
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      if (!player) player = source;
 
       let location = new Vec2(player?.location.x || 1, player?.location.y || 1);
 
