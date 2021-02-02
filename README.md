@@ -15,7 +15,6 @@ See [Issue #16](https://github.com/Picoseconds/sanctuary/issues/16) for a list o
 | MAX_CPS                  | The CPS cap to use, defaults to 25.                                                                                       |
 | PLAYER_NEARBY_RADIUS     | The radius that players can see other players in.                                                                         |
 | GAMEOBJECT_NEARBY_RADIUS | The radius that players can see structures (this includes trees, bushes and all other naturally generated structures) in. |
-| MODERATOR_PASSWORD       | See [Password Login System](#password-login-system)                                                                       |
 
 ## Moderation Commands
 
