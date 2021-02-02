@@ -20,8 +20,15 @@ const startBot = function () {
     if (message.author.bot) return;
     if (message.content.startsWith(config.prefix)) {
       let args = message.content.substring(config.prefix.length).split(/ +/g);
-      let cmd = require(`./commands/${args[0]}.js`);
-      cmd.execute(bot, message, args);
+      let cmd;
+      try {
+        cmd = require(`./commands/${args[0]}.js`);
+      } catch (e) {
+        return;
+      }
+      try {
+        cmd.execute(bot, message, args);
+      } catch (e) {}
     }
   });
 
