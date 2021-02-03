@@ -165,7 +165,7 @@ function tryMovePlayer(
   if (inTrap) return;
 
   // River
-  if (player.location.y > 6850 && player.location.y < 7550) {
+  if (player.location.y > 6850 && player.location.y < 7550 && player.layer < 1) {
     if (getHat(player.hatID)?.watrImm) {
       xVel *= 0.75;
       yVel *= 0.75;
