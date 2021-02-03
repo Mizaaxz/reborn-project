@@ -183,25 +183,24 @@ export default class Player extends Entity {
 
   public set xp(newXP: number) {
     let packetFactory = PacketFactory.getInstance();
+    let plr = this;
 
-    if (newXP >= this.maxXP) {
-      this.age++;
-      this.maxXP *= 1.2;
-      newXP = newXP - this.maxXP;
-
-      this.client?.socket.send(
-        packetFactory.serializePacket(
-          new Packet(PacketType.UPGRADES, [this.age - this.upgradeAge + 1, this.upgradeAge])
-        )
-      );
-    }
-
-    this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_AGE, [newXP, this.maxXP, this.age])
-      )
-    );
-    this._xp = newXP;
+    let setXP = function () {
+      if (newXP >= plr.maxXP) {
+        plr.age++;
+        plr.maxXP *= 1.2;
+        newXP -= plr.maxXP;
+        setXP();
+      } else {
+        plr.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_AGE, [newXP, plr.maxXP, plr.age])
+          )
+        );
+        plr._xp = newXP;
+      }
+    };
+    setXP();
   }
 
   public dead = false;
