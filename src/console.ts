@@ -318,6 +318,11 @@ Command(
             player.xp = resourceAmount;
             break;
 
+          case "age":
+            player.age = resourceAmount - 1;
+            player.xp = Infinity;
+            break;
+
           default:
             return "Invalid resource type " + resourceType;
         }
