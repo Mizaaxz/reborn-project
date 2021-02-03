@@ -252,6 +252,22 @@ Command(
 );
 
 Command(
+  "god",
+  (args: any[], source: Player | undefined) => {
+    if (source) {
+      source.points = 1000000;
+      source.food = Infinity;
+      source.wood = Infinity;
+      source.stone = Infinity;
+      source.age = 30;
+      source.invincible = true;
+      source.spdMult = 2.5;
+    }
+  },
+  []
+);
+
+Command(
   "set",
   (args: any[]) => {
     let playerSID = Number(args[1]);
