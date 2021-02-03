@@ -2,8 +2,6 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
-import { Packet } from "./packets/Packet";
-import { PacketType } from "./packets/PacketType";
 import { Command, GetCommand } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
@@ -12,6 +10,7 @@ import Vec2 from "vec2";
 import GameObject from "./gameobjects/GameObject";
 import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
+import { Broadcast } from "./moomoo/util";
 
 let command = "";
 let lastMessage = "";
@@ -32,33 +31,12 @@ Command(
   (args: any[]) => {
     let packetFactory = PacketFactory.getInstance();
     let message = args.slice(1).join(" ");
+    if (!message) return "No message.";
     let game = getGame();
 
     if (game) {
-      for (let client of game.clients) {
-        client.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_AGE, [
-              0,
-              1,
-              `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${message}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
-            ])
-          )
-        );
-
-        if (client.player) {
-          client.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.UPDATE_AGE, [
-                client.player.xp,
-                client.player.maxXP,
-                client.player.age,
-              ])
-            )
-          );
-        }
-        return false;
-      }
+      Broadcast(message, undefined);
+      return false;
     }
   },
   ["bc", "send"]

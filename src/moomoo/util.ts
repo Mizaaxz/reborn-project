@@ -1,4 +1,9 @@
 import Vec2 from "vec2";
+import { Packet } from "../packets/Packet";
+import { PacketFactory } from "../packets/PacketFactory";
+import { PacketType } from "../packets/PacketType";
+import Client from "./Client";
+import { getGame } from "./Game";
 
 enum SkinColor {
   Light1 = 2,
@@ -63,4 +68,59 @@ function stableSort<T>(array: T[], cmp: Comparator<T> = defaultCmp): T[] {
   return array;
 }
 
-export { SkinColor, eucDistance, randomPos, chunk, stableSort };
+function Broadcast(text: string, to: Client | undefined) {
+  let game = getGame();
+  let packetFactory = PacketFactory.getInstance();
+  if (game) {
+    if (!to) {
+      for (let client of game.clients) {
+        client.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_AGE, [
+              0,
+              1,
+              `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${text}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
+            ])
+          )
+        );
+
+        if (client.player) {
+          client.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.UPDATE_AGE, [
+                client.player.xp,
+                client.player.maxXP,
+                client.player.age,
+              ])
+            )
+          );
+        }
+      }
+    } else {
+      let client = to;
+      client.socket.send(
+        packetFactory.serializePacket(
+          new Packet(PacketType.UPDATE_AGE, [
+            0,
+            1,
+            `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${text}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
+          ])
+        )
+      );
+
+      if (client.player) {
+        client.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_AGE, [
+              client.player.xp,
+              client.player.maxXP,
+              client.player.age,
+            ])
+          )
+        );
+      }
+    }
+  }
+}
+
+export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast };
