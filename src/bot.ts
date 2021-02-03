@@ -1,15 +1,17 @@
-import Discord, { Guild } from "discord.js";
+import Discord from "discord.js";
 import db from "./database";
 import fs from "fs";
 import * as config from "./config.json";
 
 const startBot = function () {
+  let startup = Date.now();
   let token = String(fs.readFileSync("token"));
   let mainGuild;
 
   const bot = new Discord.Client();
 
   bot.on("ready", () => {
+    module.exports.startup = Date.now() - startup;
     mainGuild = bot.guilds.cache.get("802660392605843476");
     bot.user?.setPresence({
       activity: { name: `MooMoo Reborn with ${mainGuild?.memberCount} people!`, type: "PLAYING" },
