@@ -187,7 +187,7 @@ export default class Player extends Entity {
     if (newXP >= this.maxXP) {
       this.age++;
       this.maxXP *= 1.2;
-      newXP = newXP - this.maxXP;
+      newXP = 0;
 
       this.client?.socket.send(
         packetFactory.serializePacket(
