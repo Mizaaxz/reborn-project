@@ -504,6 +504,9 @@ export default class Player extends Entity {
     this.food = 0;
     this.wood = 0;
     this.stone = 0;
+            
+    this.bleedAmt = 0;
+    this.maxBleedAmt = -1;
 
     this.client?.socket.send(packetFactory.serializePacket(new Packet(PacketType.DEATH, [])));
   }
