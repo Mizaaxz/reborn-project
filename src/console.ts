@@ -397,7 +397,7 @@ function runCommand(command: string, source?: Player) {
   try {
     GetCommand(command).execute(command, source);
   } catch (_) {
-    error(_);
+    //error(_);
     //Broadcast(`Error: ${_}`)
     return false;
   }
