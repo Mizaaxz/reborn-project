@@ -601,8 +601,8 @@ export default class Game {
       }
     }
 
-    if (to.health - dmg <= 0) {
       from.kills++;
+    if (to.health - dmg <= 0 && !to.invincible) {
       from.points += to.age * 100 * (attackerHat?.kScrM || 1);
 
       if (attackerHat?.goldSteal) {
