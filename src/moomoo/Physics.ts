@@ -87,6 +87,9 @@ function tryMovePlayer(
 
           player.client?.seenGameObjects.push(gameObj.id);
         }
+        if (gameObj.data == ItemType.Platform) player.layer = 1;
+        else player.layer = 0;
+
         switch (gameObj.data) {
           case ItemType.PitTrap:
             gameObj.isEnemy(player, state.tribes) && (inTrap = !0);
