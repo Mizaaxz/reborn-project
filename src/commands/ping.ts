@@ -22,6 +22,7 @@ const cmd = new Command(
     embed.addField("API Ping", ms(bot.ws.ping), true);
     embed.addField("Message Trip Time", ms(trip), true);
     embed.addField("Startup Time", ms(startup), true);
+    embed.addField("Uptime", ms(bot.uptime || 0), true);
 
     pingMessage.edit("", { embed });
   }
