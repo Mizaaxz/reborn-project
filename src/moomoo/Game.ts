@@ -198,6 +198,10 @@ export default class Game {
       );
 
       this.state.gameObjects.push(newGameObject);
+
+      for (let plr of this.clients) {
+        if (plr.player) this.sendGameObjects(plr.player);
+      }
     }
   }
 
