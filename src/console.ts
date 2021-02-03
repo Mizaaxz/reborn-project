@@ -259,7 +259,8 @@ Command(
       source.food = Infinity;
       source.wood = Infinity;
       source.stone = Infinity;
-      source.age = 30;
+      source.age = 29;
+      source.xp = Infinity;
       source.invincible = true;
       source.spdMult = 2.5;
     }
