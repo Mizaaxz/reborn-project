@@ -12,7 +12,7 @@ const Command = function (name: string, callback: Function, aliases: any[]) {
       if (text.startsWith("/")) text = text.replace("/", "");
       let parsed = text.split(/ +/g);
 
-      callback(parsed, source);
+      return callback(parsed, source);
     },
   };
   commandIndex[name.toLowerCase()] = cmd;

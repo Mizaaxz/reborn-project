@@ -395,7 +395,8 @@ let specialChars = ["\b", "\n", "\r"];
 
 function runCommand(command: string, source?: Player) {
   try {
-    GetCommand(command).execute(command, source);
+    let err = GetCommand(command).execute(command, source);
+    if (err && source?.client) Broadcast(err, source?.client);
   } catch (_) {
     //error(_);
     //Broadcast(`Error: ${_}`)
