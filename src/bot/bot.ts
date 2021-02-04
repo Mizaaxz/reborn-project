@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import db from "../database";
 import fs from "fs";
 import * as config from "../config.json";
+import { handleMessage } from "./modules/xp";
 
 const startBot = function () {
   let startup = Date.now();
@@ -19,6 +20,7 @@ const startBot = function () {
     });
   });
   bot.on("message", (message) => {
+    handleMessage(message);
     if (message.author.bot) return;
     if (message.content.startsWith(config.prefix)) {
       let args = message.content.substring(config.prefix.length).split(/ +/g);
