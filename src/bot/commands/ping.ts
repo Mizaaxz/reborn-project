@@ -1,4 +1,4 @@
-import Command from "../classes/Command";
+import Command from "../Command";
 import Discord from "discord.js";
 import ms from "ms";
 

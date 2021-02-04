@@ -1,7 +1,7 @@
 import Discord from "discord.js";
-import db from "./database";
+import db from "../database";
 import fs from "fs";
-import * as config from "./config.json";
+import * as config from "../config.json";
 
 const startBot = function () {
   let startup = Date.now();

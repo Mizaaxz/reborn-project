@@ -17,7 +17,7 @@ import { TextEncoder } from "util";
 import errCodes from "./definitions/errorCodes";
 import db from "./database";
 import b64 from "./base64";
-import startBot from "./bot";
+import startBot from "./bot/bot";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
