@@ -1134,6 +1134,8 @@ export default class Game {
       case PacketType.CHAT:
         if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
 
+        packet.data[0] = [...packet.data[0]].slice(0, 50).join("");
+
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
             packet.data[0] = packet.data[0].replace(
