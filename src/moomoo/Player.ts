@@ -332,7 +332,7 @@ export default class Player extends Entity {
     this.accID = accID;
     this.game = game;
 
-    console.log(`Added player ${ownerID} with name ${name}.`);
+    console.log(`Added player ${ownerID} with name ${name} and ID ${sid}.`);
   }
 
   public getWeaponHitTime() {
