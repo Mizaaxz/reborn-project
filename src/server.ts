@@ -2,8 +2,6 @@ import url from "url";
 import http from "http";
 import express from "express";
 import nunjucks from "nunjucks";
-import SHA256 from "fast-sha256";
-import arrayBufferToHex from "array-buffer-to-hex";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 
@@ -13,11 +11,11 @@ import { Server as WSServer } from "ws";
 import UptimeWSServer from "./uptimeWS";
 import { startServer } from "./moomoo/moomoo";
 import { getGame } from "./moomoo/Game";
-import { TextEncoder } from "util";
 import errCodes from "./definitions/errorCodes";
 import db from "./database";
 import b64 from "./base64";
 import startBot from "./bot/bot";
+import { GetSessions } from "./moomoo/util";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -169,22 +167,12 @@ app.get("/api/v1/playerCount", (req, res) => {
 });
 
 app.get("/api/v1/players", (req, res) => {
-  let game = getGame();
+  let clients = GetSessions();
 
-  if (!game) {
-    res.send(JSON.stringify({ type: "error", message: "No game active." }));
-  } else {
-    let clients: { clientIPHash: string; playerName: string; playerID: number }[] = [];
-
-    for (let client of game.clients) {
-      clients.push({
-        clientIPHash: arrayBufferToHex(SHA256(new TextEncoder().encode(client.ip))),
-        playerName: client.player?.name || "unknown",
-        playerID: client.player?.id || -1,
-      });
-    }
-
+  if (clients) {
     res.send(JSON.stringify({ type: "success", clients: clients }));
+  } else {
+    res.send(JSON.stringify({ type: "error", message: "No game active." }));
   }
 });
 

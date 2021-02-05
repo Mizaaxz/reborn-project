@@ -1,3 +1,6 @@
+import arrayBufferToHex from "array-buffer-to-hex";
+import { TextEncoder } from "util";
+import SHA256 from "fast-sha256";
 import Vec2 from "vec2";
 import { Packet } from "../packets/Packet";
 import { PacketFactory } from "../packets/PacketFactory";
@@ -123,4 +126,20 @@ function Broadcast(text: string, to: Client | undefined) {
   }
 }
 
-export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast };
+function GetSessions() {
+  let game = getGame();
+
+  if (game) {
+    let clients: { clientIPHash: string; playerName: string; playerID: number }[] = [];
+
+    for (let client of game.clients) {
+      clients.push({
+        clientIPHash: arrayBufferToHex(SHA256(new TextEncoder().encode(client.ip))),
+        playerName: client.player?.name || "unknown",
+        playerID: client.player?.id || -1,
+      });
+    }
+  } else return false;
+}
+
+export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast, GetSessions };
