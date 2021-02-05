@@ -228,10 +228,10 @@ export default class Player extends Entity {
     this._attack = val;
   }
 
-  private _food: number = Infinity;
+  private _food: number = 0;
 
   public get food(): number {
-    return this._food;
+    return Infinity;
   }
 
   public set food(newFood: number) {
@@ -242,10 +242,10 @@ export default class Player extends Entity {
     this._food = newFood;
   }
 
-  private _stone: number = Infinity;
+  private _stone: number = 0;
 
   public get stone(): number {
-    return this._stone;
+    return Infinity;
   }
 
   public set stone(newStone: number) {
@@ -271,10 +271,10 @@ export default class Player extends Entity {
     this.game.sendLeaderboardUpdates();
   }
 
-  private _wood: number = Infinity;
+  private _wood: number = 0;
 
   public get wood(): number {
-    return this._wood;
+    return Infinity;
   }
 
   public set wood(newWood: number) {
