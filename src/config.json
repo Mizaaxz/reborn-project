@@ -1,14 +1,14 @@
 {
-  "port": 6500,
-  "moderatorPassword": "",
-  "gameObjectNearbyRadius": 1250,
-  "playerNearbyRadius": 1250,
-  "maxCPS": "25",
-  "badWords": ["faggot", "nigger", "nigga"],
-  "allowedUsername": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_ ",
-  "usernameLength": { "min": 4, "max": 16 },
   "allowedPassword": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+`~,<.>;?/|[]{}' ",
+  "allowedUsername": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_ ",
+  "badWords": ["faggot", "nigger", "nigga"],
+  "defaultSpeed": 1.7,
+  "gameObjectNearbyRadius": 1250,
+  "maxCPS": "25",
+  "moderatorPassword": "",
   "passwordLength": { "min": 8, "max": 30 },
+  "playerNearbyRadius": 1250,
+  "port": 6500,
   "prefix": "!",
-  "defaultSpeed": 1.7
+  "usernameLength": { "min": 4, "max": 16 }
 }
