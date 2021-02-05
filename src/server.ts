@@ -16,6 +16,7 @@ import db from "./database";
 import b64 from "./base64";
 import startBot from "./bot/bot";
 import { GetSessions } from "./moomoo/util";
+import startSandbox from "./_sandbox/server";
 
 let accessories = require("./definitions/accessories.json");
 import hats from "./definitions/hats";
@@ -31,6 +32,8 @@ const weapons2 = Object.values(weapons);
 const weaponVariants2 = Object.values(weaponVariants);
 
 startBot();
+
+startSandbox();
 
 const app = express();
 const server = http.createServer(app);
