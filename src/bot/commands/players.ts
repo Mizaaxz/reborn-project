@@ -21,12 +21,12 @@ const cmd = new Command(
       message.guild?.iconURL() || undefined
     );
 
-    let players = "";
+    let players: string[] = [];
     clients.forEach((c) => {
-      players += `**Name:** ${c.playerName}
-**ID:** ${c.playerID == -1 ? "In Lobby" : c.playerID}`;
+      players.push(`**Name:** ${c.playerName}
+**ID:** ${c.playerID == -1 ? "In Lobby" : c.playerID}`);
     });
-    embed.setDescription(players || "No Players Online");
+    embed.setDescription(players.join("\n") || "No Players Online");
 
     message.channel.send(embed);
   }
