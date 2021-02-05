@@ -337,7 +337,11 @@ Command(
   "generate",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
-    game?.generateStructure(args[1] || "stone", source?.location.x || 1, source?.location.y || 1);
+    game?.generateStructure(
+      `${args[1] || "stone"}:${args[2] || "normal"}`,
+      source?.location.x || 1,
+      source?.location.y || 1
+    );
   },
   ["create"]
 );

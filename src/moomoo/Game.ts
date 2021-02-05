@@ -154,8 +154,11 @@ export default class Game {
   }
 
   generateStructure(objType: string, x: number, y: number) {
+    let obj = objType.split(":")[0];
+    let params = objType.split(":")[1];
+
     let type = GameObjectType.Mine;
-    switch (objType) {
+    switch (obj) {
       case "tree":
       case "wood":
       case "w":
@@ -181,6 +184,9 @@ export default class Game {
     let sizes = gameObjectSizes[type];
     let location = new Vec2(x, y);
 
+    let damage = type == GameObjectType.Bush && location.y >= 12e3 ? 35 : 0;
+    if (params == "dmg") damage = 35;
+
     if (sizes) {
       let size = sizes[Math.floor(Math.random() * sizes.length)];
 
@@ -194,7 +200,7 @@ export default class Game {
         {},
         -1,
         -1,
-        type == GameObjectType.Bush && location.y >= 12e3 ? 35 : 0
+        damage
       );
 
       this.state.gameObjects.push(newGameObject);
