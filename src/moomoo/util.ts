@@ -139,6 +139,7 @@ function GetSessions() {
         playerID: client.player?.id || -1,
       });
     }
+    return clients;
   } else return false;
 }
 
