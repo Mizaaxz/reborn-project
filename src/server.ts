@@ -33,7 +33,7 @@ const weaponVariants2 = Object.values(weaponVariants);
 
 startBot();
 
-startSandbox();
+//startSandbox();
 
 const app = express();
 const server = http.createServer(app);
