@@ -18,13 +18,13 @@ import startBot from "./bot/bot";
 import { GetSessions } from "./moomoo/util";
 import startSandbox from "./_sandbox/server";
 
-let accessories = require("./definitions/accessories.json");
+import accessories from "./definitions/accessories";
 import hats from "./definitions/hats";
 let items = require("./definitions/items.json");
 let projectiles = require("./definitions/projectiles.json");
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
-accessories = Object.values(accessories);
+const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 items = Object.values(items);
 projectiles = Object.values(projectiles);
@@ -76,7 +76,7 @@ app.get("/", (req, res) => {
 
 app.get("/api/v1/def", (req, res) => {
   res.json({
-    accessories,
+    accessories: accessories2,
     hats: hats2,
     items,
     projectiles,
