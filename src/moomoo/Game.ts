@@ -1077,6 +1077,24 @@ export default class Game {
             } else {
               newPlayer.location = client.spawnPos;
               client.spawnPos = false;
+
+              let placed = this.state.gameObjects.filter(
+                (gameObj) => gameObj.data === 20 && gameObj.ownerSID == newPlayer.id
+              );
+              client.socket.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(20), placed.length - 1])
+                )
+              );
+
+              for (let pad of placed) {
+                this.state.removeGameObject(pad);
+              }
+              this.sendGameObjects(newPlayer);
+
+              for (let otherPlayer of this.clients.map((c) => c.player)) {
+                if (otherPlayer) this.sendGameObjects(otherPlayer);
+              }
             }
             newPlayer.name = [...packet.data[0].name].slice(0, 16).join("") || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
