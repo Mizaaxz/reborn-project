@@ -42,6 +42,7 @@ import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectil
 import * as config from "../config.json";
 import weaponVariants from "../definitions/weaponVariants";
 import Vec2 from "vec2";
+import Item from "../_sandbox/items/Item";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -790,6 +791,8 @@ export default class Game {
                     else player.secondaryWeaponExp += cost[1] as number;
                   }
 
+                  console.log(JSON.stringify(hitGameObject)); // data == 20
+
                   this.state.removeGameObject(hitGameObject);
                   this.sendGameObjects(player);
 
@@ -1057,7 +1060,12 @@ export default class Game {
               newPlayer = player;
             }
 
-            newPlayer.location = randomPos(14400, 14400);
+            if (typeof client.spawnPos == "boolean") {
+              newPlayer.location = randomPos(14400, 14400);
+            } else {
+              newPlayer.location = client.spawnPos;
+              client.spawnPos = false;
+            }
             newPlayer.name = [...packet.data[0].name].slice(0, 16).join("") || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;

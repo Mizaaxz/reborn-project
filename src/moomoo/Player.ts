@@ -402,6 +402,8 @@ export default class Player extends Entity {
         )
       );
 
+      if (this.client && item == ItemType.SpawnPad) this.client.spawnPos = location;
+
       return true;
     }
 
