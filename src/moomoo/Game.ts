@@ -795,7 +795,10 @@ export default class Game {
                     else player.secondaryWeaponExp += cost[1] as number;
                   }
 
-                  console.log(JSON.stringify(hitGameObject)); // data == 20
+                  if (hitGameObject.data == 20 && hitGameObjectOwner && hitGameObjectOwner.client) {
+                    hitGameObjectOwner.client.spawnPos = false;
+                  }
+
                   if (hitGameObjectOwner) {
                     let placedAmount = this.state.gameObjects.filter(
                       (gameObj) =>
