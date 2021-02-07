@@ -16,7 +16,6 @@ import db from "./database";
 import b64 from "./base64";
 import startBot from "./bot/bot";
 import { GetSessions } from "./moomoo/util";
-import startSandbox from "./_sandbox/server";
 
 import accessories from "./definitions/accessories";
 import hats from "./definitions/hats";

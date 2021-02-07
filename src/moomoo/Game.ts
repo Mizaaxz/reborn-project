@@ -40,9 +40,7 @@ import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
 import * as config from "../config.json";
-import weaponVariants from "../definitions/weaponVariants";
 import Vec2 from "vec2";
-import Item from "../_sandbox/items/Item";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
