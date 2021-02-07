@@ -1047,18 +1047,8 @@ export default class Game {
           let player = this.state.players.find((plr) => plr.ownerID === client.id);
 
           if (!player || (player && player.dead)) {
-            let newPlayer;
-
-            if (!player) {
-              newPlayer = client.player = this.state.addPlayer(
-                this.genSID(),
-                client.id,
-                client,
-                this
-              );
-            } else {
-              newPlayer = player;
-            }
+            let newPlayer = (client.player =
+              player || this.state.addPlayer(this.genSID(), client.id, client, this));
 
             if (typeof client.spawnPos == "boolean") {
               newPlayer.location = randomPos(14400, 14400);
