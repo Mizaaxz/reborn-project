@@ -51,6 +51,7 @@ export default class Player extends Entity {
   public foodHealOverTime = 0;
   public foodHealOverTimeAmt = 0;
   public maxFoodHealOverTime = -1;
+  public padHeal = 0;
 
   public bleedDmg = 5;
   public bleedAmt = 0;
@@ -162,6 +163,25 @@ export default class Player extends Entity {
       this.foodHealOverTimeAmt++;
     } else {
       this.foodHealOverTime = -1;
+    }
+
+    if (this.padHeal) {
+      if (this.health < 100) {
+        let healedAmount = Math.min(100 - this.health, this.padHeal);
+
+        this.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -healedAmount,
+              1,
+            ])
+          )
+        );
+
+        this.health = Math.min(this.health + this.padHeal, 100);
+      }
     }
 
     if (this.bleedAmt < this.maxBleedAmt) {

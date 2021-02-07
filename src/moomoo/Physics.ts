@@ -75,6 +75,7 @@ function tryMovePlayer(
 
   player.spikeHit > 0 && --player.spikeHit < 0 && (player.spikeHit = 0);
   player.layer = 0;
+  player.padHeal = 0;
 
   let newLocation = new Vec2(player.location.x, player.location.y);
 
@@ -96,6 +97,9 @@ function tryMovePlayer(
             break;
           case ItemType.BoostPad:
             player.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
+            break;
+          case ItemType.HealingPad:
+            player.padHeal = 15;
             break;
           case ItemType.Teleporter:
             player.location = randomPos(14400 + 35, 14400 - 35);
