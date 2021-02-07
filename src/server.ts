@@ -19,20 +19,18 @@ import { GetSessions } from "./moomoo/util";
 
 import accessories from "./definitions/accessories";
 import hats from "./definitions/hats";
-let items = require("./definitions/items.json");
+import items from "./definitions/items";
 let projectiles = require("./definitions/projectiles.json");
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
-items = Object.values(items);
-projectiles = Object.values(projectiles);
+const items2 = Object.values(items);
+const projectiles2 = Object.values(projectiles);
 const weapons2 = Object.values(weapons);
 const weaponVariants2 = Object.values(weaponVariants);
 
 startBot();
-
-//startSandbox();
 
 const app = express();
 const server = http.createServer(app);
@@ -77,8 +75,8 @@ app.get("/api/v1/def", (req, res) => {
   res.json({
     accessories: accessories2,
     hats: hats2,
-    items,
-    projectiles,
+    items: items2,
+    projectiles: projectiles2,
     weapons: weapons2,
     weaponVariants: weaponVariants2,
     yt: config.featuredYT,

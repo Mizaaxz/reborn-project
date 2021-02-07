@@ -1,5 +1,5 @@
 import weapons from "../definitions/weapons";
-import items from "../definitions/items.json";
+import items from "../definitions/items";
 
 function getUpgrades(age: number): number[] {
   return items.map((_item, index) => index).filter((item) => items[item].age == age);
