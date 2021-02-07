@@ -68,7 +68,7 @@ app.get("/status", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect(`${req.protocol}://moomoo.io`);
+  res.redirect("http://moomooreborn.io");
 });
 
 app.get("/api/v1/def", (req, res) => {
