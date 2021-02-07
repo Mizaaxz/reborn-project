@@ -20,7 +20,7 @@ import { GetSessions } from "./moomoo/util";
 import accessories from "./definitions/accessories";
 import hats from "./definitions/hats";
 import items from "./definitions/items";
-let projectiles = require("./definitions/projectiles.json");
+import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
 const accessories2 = Object.values(accessories);
