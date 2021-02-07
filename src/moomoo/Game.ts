@@ -762,6 +762,10 @@ export default class Game {
 
             for (let hitGameObject of hitGameObjects) {
               if (hitGameObject.health !== -1) {
+                let hitGameObjectOwner = this.state.players.find(
+                  (player: { id: any }) => player.id == hitGameObject.ownerSID
+                );
+
                 let dmgMult = 1;
 
                 if (hat && hat.bDmg) dmgMult *= hat.bDmg;
@@ -792,6 +796,21 @@ export default class Game {
                   }
 
                   console.log(JSON.stringify(hitGameObject)); // data == 20
+                  if (hitGameObjectOwner) {
+                    let placedAmount = this.state.gameObjects.filter(
+                      (gameObj) =>
+                        gameObj.data === hitGameObject.data &&
+                        gameObj.ownerSID == hitGameObject.ownerSID
+                    ).length;
+                    hitGameObjectOwner.client?.socket.send(
+                      packetFactory.serializePacket(
+                        new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+                          getGroupID(hitGameObject.data),
+                          placedAmount - 1,
+                        ])
+                      )
+                    );
+                  }
 
                   this.state.removeGameObject(hitGameObject);
                   this.sendGameObjects(player);
