@@ -36,6 +36,6 @@ const startBot = function () {
     }
   });
 
-  bot.login(token);
+  if (token) bot.login(token);
 };
 export default startBot;
