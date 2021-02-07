@@ -82,6 +82,7 @@ app.get("/api/v1/def", (req, res) => {
     projectiles,
     weapons: weapons2,
     weaponVariants: weaponVariants2,
+    yt: config.featuredYT,
   });
 });
 
