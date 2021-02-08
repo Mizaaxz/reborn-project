@@ -1207,7 +1207,10 @@ export default class Game {
           Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
 
         if (client.player) {
-          let tribe = this.state.addTribe(packet.data[0], client.player.id);
+          let tribe = this.state.addTribe(
+            [...packet.data[0]].slice(0, 10).join(""),
+            client.player.id
+          );
 
           if (tribe) {
             client.player.clanName = tribe.name;
