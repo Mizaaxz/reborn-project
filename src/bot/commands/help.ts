@@ -20,15 +20,18 @@ const cmd = new Command(
 
     if (!command) {
       helpEmbed.setAuthor(`${bot.user?.username} Help`, bot.user?.displayAvatarURL());
+      helpEmbed.setDescription(`\`${commands.join("`, `")}\``);
+      helpEmbed.setFooter(`Listing ${commands.length} commands.`);
+      helpEmbed.setTimestamp();
       message.channel.send(helpEmbed);
     } else if (commands.includes(command)) {
+      let cmd = require(`${__dirname}\\${commands[command]}`);
       helpEmbed.setAuthor(`${bot.user?.username} Help | ${command}`, bot.user?.displayAvatarURL());
+      helpEmbed.setDescription(cmd.description);
       message.channel.send(helpEmbed);
     } else {
       message.channel.send("That command was not found.");
     }
-
-    message.channel.send(JSON.stringify(commands));
   }
 );
 module.exports = cmd;
