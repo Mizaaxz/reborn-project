@@ -29,7 +29,7 @@ const cmd = new Command(
     if (!run) return message.channel.send("Command not found.");
 
     try {
-      let done = run.execute() || "Command executed successfully.";
+      let done = run.execute(command) || "Command executed successfully.";
     } catch (e) {
       done = e;
     }
