@@ -1,6 +1,5 @@
 import Command from "../Command";
 import Discord from "discord.js";
-import ms from "ms";
 import fs from "fs";
 
 const cmd = new Command(

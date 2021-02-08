@@ -1,6 +1,5 @@
 import Command from "../Command";
 import Discord from "discord.js";
-import * as config from "../../config.json";
 import { GetSessions } from "../../moomoo/util";
 
 const cmd = new Command(
