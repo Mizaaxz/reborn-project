@@ -276,9 +276,11 @@ export default class Game {
           );
         } else {
           this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          socket.close();
         }
       } catch (e) {
         this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        socket.close();
       }
     });
 
