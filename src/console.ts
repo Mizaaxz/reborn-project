@@ -21,7 +21,6 @@ Command(
     //Broadcast("Restarting server in 10 seconds...")
     //setTimeout(function() {process.exit()}, 10000)
     process.exit();
-    return true;
   },
   ["kill"]
 );
@@ -55,7 +54,7 @@ Command(
       if (player) {
         game.killPlayer(player);
         return false;
-      }
+      } else return "Invalid Player ID";
     }
   },
   ["k"]
@@ -64,6 +63,8 @@ Command(
 Command(
   "tp",
   (args: any[], source: Player) => {
+    if (!source) return "You need to be in the game to run this command!";
+
     let playerSID = Number(args[1]);
     let tpTo = Number(args[2]);
     let thisPlayer = source;
@@ -77,11 +78,12 @@ Command(
         if (!tpTo) {
           thisPlayer.location = player.location.add(0, 0, true);
           game.sendGameObjects(thisPlayer);
+          return false;
         } else if (otherPlayer) {
           player.location = otherPlayer.location.add(0, 0, true);
           game.sendGameObjects(player);
+          return false;
         } else return "Invalid Player ID(s)";
-        return false;
       }
     }
   },
@@ -97,10 +99,12 @@ Command(
     if (game) {
       if (playerSID)
         player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      if (!player && !source) return "You need to be in the game to run this command.";
 
       if (game) {
         if (player) {
           player.invisible = !player.invisible;
+          return false;
         } else return "Invalid Player ID";
       }
     }
@@ -117,10 +121,12 @@ Command(
     if (game) {
       if (playerSID)
         player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      if (!player && !source) return "You need to be in the game to run this command.";
 
       if (game) {
         if (player) {
           player.invincible = !player.invincible;
+          return false;
         } else return "Invalid Player ID";
       }
     }
@@ -138,9 +144,12 @@ Command(
       if (playerSID)
         player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
+      if (!player && !source) return "You need to be in the game to run this command!";
+
       if (game) {
         if (player) {
           player.spdMult = Number(args[1]) || config.defaultSpeed || 1;
+          return false;
         } else return "Invalid Player ID";
       }
     }
@@ -182,6 +191,8 @@ Command(
       if (playerSID)
         player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
+      if (!player || !source) return "You need to be in the game to run this command.";
+
       if (game) {
         if (player) {
           let variantSet = setWeaponVariant(player, variant);
@@ -206,6 +217,7 @@ Command(
 
       if (player && player.client && !player.client.admin) {
         game.banClient(player.client);
+        return false;
       } else return "Invalid Player ID";
     }
   },
@@ -223,6 +235,7 @@ Command(
 
       if (player && player.client) {
         game.addModerator(player.client);
+        return true;
       } else return "Invalid Player ID";
     }
   },
@@ -238,6 +251,7 @@ Command(
     if (game) {
       let player =
         game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+
       if (player) {
         player.points = 1000000;
         player.food = Infinity;
@@ -247,7 +261,8 @@ Command(
         player.xp = Infinity;
         player.invincible = true;
         player.spdMult = 2.5;
-      }
+        return false;
+      } else return "You need to be in the game to run this command!";
     }
   },
   []
@@ -336,12 +351,15 @@ Command(
 Command(
   "generate",
   (args: any[], source: Player | undefined) => {
+    if (!source) return "You must be in the game to run this command.";
+
     let game = getGame();
     game?.generateStructure(
       `${args[1] || "stone"}:${args[2] || "normal"}`,
       source?.location.x || 1,
       source?.location.y || 1
     );
+    return false;
   },
   ["create"]
 );
@@ -355,6 +373,7 @@ Command(
     if (game) {
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
       if (!player) player = source;
+      if (!player) return "You need to be in the game to run that!";
 
       let location = new Vec2(player?.location.x || 1, player?.location.y || 1);
 
@@ -371,6 +390,7 @@ Command(
         getGameObjDamage(5)
       );
       game.state?.gameObjects.push(newGameObject);
+      return false;
     }
   },
   []
