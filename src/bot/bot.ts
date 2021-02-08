@@ -31,7 +31,7 @@ const startBot = function () {
         return;
       }
       try {
-        cmd.execute(bot, message, args);
+        if (cmd.required(message.member)) cmd.execute(bot, message, args);
       } catch (e) {}
     }
   });

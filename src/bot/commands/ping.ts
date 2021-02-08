@@ -8,7 +8,9 @@ const cmd = new Command(
     description: "Gets the bot's ping.",
     usage: "ping",
     aliases: ["botinfo", "bot"],
-    adminOnly: false,
+    required: (mem: Discord.GuildMember) => {
+      return true;
+    },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
     let startup = require("../bot").startup;

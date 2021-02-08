@@ -1,6 +1,5 @@
 import Command from "../Command";
 import Discord from "discord.js";
-import fetch from "node-fetch";
 import * as config from "../../config.json";
 import { GetSessions } from "../../moomoo/util";
 
@@ -10,7 +9,9 @@ const cmd = new Command(
     description: "Shows who's online.",
     usage: "players",
     aliases: ["online"],
-    adminOnly: false,
+    required: (mem: Discord.GuildMember) => {
+      return true;
+    },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
     let clients = GetSessions() || [];

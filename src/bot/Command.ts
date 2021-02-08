@@ -3,7 +3,7 @@ class Command {
   description: string;
   usage: string;
   aliases: any[];
-  adminOnly: boolean;
+  required: Function;
   execute: Function;
 
   constructor(
@@ -12,7 +12,7 @@ class Command {
       description: string;
       usage: string;
       aliases: any[];
-      adminOnly: boolean;
+      required: Function;
     },
     execute: Function
   ) {
@@ -20,12 +20,8 @@ class Command {
     this.description = options.description;
     this.usage = options.usage;
     this.aliases = options.aliases;
-    this.adminOnly = options.adminOnly;
+    this.required = options.required;
     this.execute = execute;
-  }
-
-  run() {
-    this.execute();
   }
 }
 
