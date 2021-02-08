@@ -63,8 +63,6 @@ Command(
 Command(
   "tp",
   (args: any[], source: Player) => {
-    if (!source) return "You need to be in the game to run this command!";
-
     let playerSID = Number(args[1]);
     let tpTo = Number(args[2]);
     let thisPlayer = source;
@@ -76,6 +74,7 @@ Command(
 
       if (player) {
         if (!tpTo) {
+          if (!source) return "You need to be in the game to run this command!";
           thisPlayer.location = player.location.add(0, 0, true);
           game.sendGameObjects(thisPlayer);
           return false;
