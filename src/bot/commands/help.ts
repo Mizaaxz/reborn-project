@@ -25,7 +25,7 @@ const cmd = new Command(
       helpEmbed.setTimestamp();
       message.channel.send(helpEmbed);
     } else if (commands.includes(command)) {
-      let cmd = require(`${__dirname}\\${commands[command]}`);
+      let cmd = require(`${__dirname}\\${command}`);
       helpEmbed.setAuthor(`${bot.user?.username} Help | ${command}`, bot.user?.displayAvatarURL());
       helpEmbed.setDescription(cmd.description);
       message.channel.send(helpEmbed);
