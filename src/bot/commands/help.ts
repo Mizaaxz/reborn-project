@@ -13,8 +13,7 @@ const cmd = new Command(
     },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
-    message.channel.send(__dirname);
-    let commands = fs.readdirSync("./");
+    let commands = fs.readdirSync(__dirname);
     message.channel.send(JSON.stringify(commands));
   }
 );
