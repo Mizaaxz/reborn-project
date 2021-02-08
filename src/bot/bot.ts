@@ -32,6 +32,7 @@ const startBot = function () {
       }
       try {
         if (cmd.required(message.member)) cmd.execute(bot, message, args);
+        else message.channel.send("You do not have sufficient permissions to run this command!");
       } catch (e) {}
     }
   });
