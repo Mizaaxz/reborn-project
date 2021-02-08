@@ -12,8 +12,6 @@ let Levels = {
 
 function levelUp(user: Discord.User) {
   let messages = db.get(`messages_${user.id}`);
-  if (messages > 50000) {
-  }
 }
 
 function handleMessage(message: Discord.Message) {
