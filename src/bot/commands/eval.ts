@@ -14,7 +14,26 @@ const cmd = new Command(
     },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
-    message.channel.send("hi");
+    let code = args.slice(1).join(" ");
+    if (!code) return message.channel.send("bruh");
+    let done = "You fucked it up.";
+
+    try {
+      done = eval(code);
+    } catch (err) {
+      done = err;
+    }
+
+    let evalEmbed = new Discord.MessageEmbed();
+    evalEmbed.setAuthor(
+      `Code Eval by ${message.member?.nickname || message.author.username}`,
+      message.author.displayAvatarURL()
+    );
+    evalEmbed.addField("Input", "```js\n" + code + "```");
+    evalEmbed.addField("Output", "```js\n" + done + "```");
+    evalEmbed.setTimestamp();
+
+    message.channel.send(evalEmbed);
   }
 );
 module.exports = cmd;
