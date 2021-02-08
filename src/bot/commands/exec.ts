@@ -4,11 +4,11 @@ import { isStaff } from "../modules/permissionTests";
 import { GetCommand } from "../../commandHandler";
 
 const cmd = new Command(
-  "eval",
+  "exec",
   {
-    description: "Evaluates JS code.",
-    usage: "eval [code] <--silent>",
-    aliases: [],
+    description: "Executes an in-game command.",
+    usage: "exec [command] <--silent>",
+    aliases: ["cmd"],
     required: (mem: Discord.GuildMember) => {
       return isStaff(mem);
     },
