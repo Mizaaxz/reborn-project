@@ -275,12 +275,14 @@ export default class Game {
             )
           );
         } else {
-          this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
-          socket.close();
+          console.log("MessagePacket issue. Not a buffer.");
+          //this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          socket.terminate();
         }
       } catch (e) {
-        this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
-        socket.close();
+        console.log("MessagePacket issue.");
+        //this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        socket.terminate();
       }
     });
 
