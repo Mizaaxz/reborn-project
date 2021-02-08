@@ -18,6 +18,7 @@ const cmd = new Command(
     if (args[args.length - 1] == "--silent") {
       args.pop();
       silent = true;
+      message.delete();
     }
 
     let code = args.slice(1).join(" ");
