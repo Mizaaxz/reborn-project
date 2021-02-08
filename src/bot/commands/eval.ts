@@ -7,13 +7,19 @@ const cmd = new Command(
   "eval",
   {
     description: "Evaluates JS code.",
-    usage: "eval [code]",
+    usage: "eval [code] <--silent>",
     aliases: [],
     required: (mem: Discord.GuildMember) => {
       return isAdmin(mem);
     },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
+    let silent = false;
+    if (args[args.length - 1] == "--silent") {
+      args.pop();
+      silent = true;
+    }
+
     let code = args.slice(1).join(" ");
     if (!code) return message.channel.send("bruh");
     let done = "You fucked it up.";
@@ -33,7 +39,7 @@ const cmd = new Command(
     evalEmbed.addField("Output", "```js\n" + done + "```");
     evalEmbed.setTimestamp();
 
-    message.channel.send(evalEmbed);
+    if (!silent) message.channel.send(evalEmbed);
   }
 );
 module.exports = cmd;
