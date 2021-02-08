@@ -14,16 +14,18 @@ const cmd = new Command(
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
     let commands = fs.readdirSync(__dirname).map((cmd) => cmd.split(".")[0]);
-    let command = args[1];
+    let command = (args[1] || "").toLowerCase();
 
     let helpEmbed = new Discord.MessageEmbed();
 
     if (!command) {
       helpEmbed.setAuthor(`${bot.user?.username} Help`, bot.user?.displayAvatarURL());
       message.channel.send(helpEmbed);
-    } else {
+    } else if (commands.includes(command)) {
       helpEmbed.setAuthor(`${bot.user?.username} Help | ${command}`, bot.user?.displayAvatarURL());
       message.channel.send(helpEmbed);
+    } else {
+      message.channel.send("That command was not found.");
     }
 
     message.channel.send(JSON.stringify(commands));
