@@ -7,6 +7,7 @@ import { PacketFactory } from "../packets/PacketFactory";
 import { PacketType } from "../packets/PacketType";
 import Client from "./Client";
 import { getGame } from "./Game";
+import * as config from "../config.json";
 
 enum SkinColor {
   Light1 = 2,
@@ -141,6 +142,12 @@ function GetSessions() {
     }
     return clients;
   } else return false;
+}
+
+function filter(text: string) {
+  let allowed = config.alphabet.split("");
+  let newtext = "";
+  text.split("").forEach((char) => {});
 }
 
 export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast, GetSessions };
