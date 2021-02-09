@@ -20,7 +20,8 @@ const cmd = new Command(
     switch (type) {
       case "moderator":
         sendApp(message.author, "moderator").then((responses) => {
-          message.channel.send(responses.join(" "));
+          let res = new Array(responses);
+          message.channel.send(res.join(" "));
         });
         break;
       default:

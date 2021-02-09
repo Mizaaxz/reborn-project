@@ -1,3 +1,4 @@
+import { ImprovedStreamingClient } from "@google-cloud/speech/build/src/helpers";
 import Discord from "discord.js";
 
 type Application = "moderator";
@@ -33,7 +34,7 @@ function sendApp(user: Discord.User, type: Application) {
     user.send(appEmbed);
 
     let current = 0;
-    let responses: any = [];
+    let responses: any[] = [];
     function sendNext(q: string) {
       user.dmChannel
         ?.awaitMessages((m) => m, { max: 1 })
