@@ -27,10 +27,9 @@ const cmd = new Command(
           .join()
           .then((connection) => {
             connection
-              .play(ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg"), {
-                bitrate: "auto",
-                type: "opus",
-              })
+              .play(
+                ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg", { quality: "highestaudio" })
+              )
               .on("end", () => {
                 connection.channel.leave();
               });
