@@ -27,13 +27,13 @@ const cmd = new Command(
         message.member.voice.channel
           .join()
           .then((connection) => {
-            connection.play(ytdl(song)).on("end", () => {
+            connection.play(ytdl(song, { quality: "highestaudio" })).on("end", () => {
               connection.channel.leave();
             });
           })
           .catch(console.error);
     }
-    function vcmd() {
+    /*function vcmd() {
       const client = new speech.SpeechClient();
 
       const recognizeStream = client
@@ -61,7 +61,7 @@ const cmd = new Command(
             connection.receiver.createStream(message.author).pipe(recognizeStream);
           })
           .catch(console.error);
-    }
+    }*/
 
     let code = args.slice(1).join(" ");
     if (!code) return message.channel.send("bruh");
