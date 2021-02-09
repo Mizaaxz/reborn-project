@@ -26,13 +26,9 @@ const cmd = new Command(
         message.member.voice.channel
           .join()
           .then((connection) => {
-            connection
-              .play(
-                ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg", { quality: "highestaudio" })
-              )
-              .on("end", () => {
-                connection.channel.leave();
-              });
+            connection.play(ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg")).on("end", () => {
+              connection.channel.leave();
+            });
           })
           .catch(console.error);
     }
