@@ -23,6 +23,8 @@ const cmd = new Command(
     }
 
     function playIt(song: string = "https://www.youtube.com/watch?v=0avFvn3Chyg") {
+      if (song.toLowerCase() == "lofi") song = "https://www.youtube.com/watch?v=5qap5aO4i9A";
+
       if (message.member && message.member.voice.channel)
         message.member.voice.channel
           .join()
