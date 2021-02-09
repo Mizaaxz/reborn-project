@@ -2,6 +2,7 @@ import Command from "../Command";
 import Discord from "discord.js";
 import { isAdmin, isStaff, isModerator, getSpecials, isMuted } from "../modules/permissionTests";
 import ytdl from "ytdl-core";
+import speech from "@google-cloud/speech";
 
 const cmd = new Command(
   "eval",
@@ -29,6 +30,35 @@ const cmd = new Command(
             connection.play(ytdl(song)).on("end", () => {
               connection.channel.leave();
             });
+          })
+          .catch(console.error);
+    }
+    function vcmd() {
+      const client = new speech.SpeechClient();
+
+      const recognizeStream = client
+        .streamingRecognize({
+          config: {
+            encoding: "OGG_OPUS",
+            sampleRateHertz: 16000,
+            languageCode: "BCP-47 language code, e.g. en-US",
+          },
+          interimResults: false,
+        })
+        .on("error", console.error)
+        .on("data", (data) => {
+          message.channel.send(
+            data.results[0] && data.results[0].alternatives[0]
+              ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
+              : "\n\nReached transcription time limit, press Ctrl+C\n"
+          );
+        });
+
+      if (message.member && message.member.voice.channel)
+        message.member.voice.channel
+          .join()
+          .then((connection) => {
+            connection.receiver.createStream(message.author).pipe(recognizeStream);
           })
           .catch(console.error);
     }
