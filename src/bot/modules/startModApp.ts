@@ -6,7 +6,7 @@ type Application = "moderator";
 let Applications = {
   moderator: {
     name: "Moderator Application",
-    start: "Please answer all questions truthfully.",
+    start: 'Please answer all questions truthfully. Say "start" when you are ready.',
     finish: "Thank you for applying! Your application has been sent off for review!",
     questions: [
       "Why do you want to be a moderator?",

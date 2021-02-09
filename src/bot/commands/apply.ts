@@ -1,6 +1,6 @@
 import Command from "../Command";
 import Discord from "discord.js";
-import { isModerator } from "../modules/permissionTests";
+import { isAdmin, isModerator } from "../modules/permissionTests";
 import { sendApp } from "../modules/startModApp";
 
 const cmd = new Command(
@@ -10,7 +10,7 @@ const cmd = new Command(
     usage: "apply [type]",
     aliases: [],
     required: (mem: Discord.GuildMember) => {
-      return !isModerator(mem);
+      return isAdmin(mem) || !isModerator(mem);
     },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
