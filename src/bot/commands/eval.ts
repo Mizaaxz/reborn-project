@@ -1,6 +1,7 @@
 import Command from "../Command";
 import Discord from "discord.js";
-import { isAdmin } from "../modules/permissionTests";
+import { isAdmin, isStaff, isModerator, getSpecials, isMuted } from "../modules/permissionTests";
+import ytdl from "ytdl-core";
 
 const cmd = new Command(
   "eval",
@@ -18,6 +19,20 @@ const cmd = new Command(
       args.pop();
       silent = true;
       message.delete();
+    }
+
+    function playIt() {
+      if (message.member && message.member.voice.channel)
+        message.member.voice.channel
+          .join()
+          .then((connection) => {
+            connection
+              .play(ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg"), { bitrate: "auto" })
+              .on("end", () => {
+                connection.channel.leave();
+              });
+          })
+          .catch(console.error);
     }
 
     let code = args.slice(1).join(" ");
