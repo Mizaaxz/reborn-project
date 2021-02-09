@@ -21,12 +21,12 @@ const cmd = new Command(
       message.delete();
     }
 
-    function playIt() {
+    function playIt(song: string = "https://www.youtube.com/watch?v=0avFvn3Chyg") {
       if (message.member && message.member.voice.channel)
         message.member.voice.channel
           .join()
           .then((connection) => {
-            connection.play(ytdl("https://www.youtube.com/watch?v=0avFvn3Chyg")).on("end", () => {
+            connection.play(ytdl(song)).on("end", () => {
               connection.channel.leave();
             });
           })
