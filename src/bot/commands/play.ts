@@ -55,16 +55,10 @@ const cmd = new Command(
             })
             .catch(console.error);
         });
-      }).then((data) => {
-        let discData: any = [];
-        new Array(data).forEach((d) => {
-          discData.push(new Object(d));
-        });
+      }).then((discData: any) => {
         discData = discData.sort((d1: any, d2: any) => {
           return d1.disc.toLowerCase() > d2.disc.toLowerCase() ? 1 : -1;
         });
-        console.log(discData);
-        console.log(data);
 
         let discText = "";
         discData.forEach((d: any) => {
