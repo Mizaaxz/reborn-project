@@ -34,6 +34,9 @@ const cmd = new Command(
 
     function playIt(song: string = "https://www.youtube.com/watch?v=0avFvn3Chyg") {
       if (song.toLowerCase() == "lofi") song = "https://www.youtube.com/watch?v=5qap5aO4i9A";
+      if (song.toLowerCase() == "tetris") song = "https://www.youtube.com/watch?v=h-lkp-JcL-A";
+      if (song.toLowerCase() == "pigstep") song = "https://www.youtube.com/watch?v=8aZ7oB2chEU";
+      if (song.toLowerCase() == "morshu") song = "https://www.youtube.com/watch?v=cJs7r0TLfx0";
 
       if (message.member && message.member.voice.channel)
         message.member.voice.channel
