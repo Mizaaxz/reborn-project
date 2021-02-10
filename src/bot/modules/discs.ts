@@ -18,6 +18,7 @@ const discs: any = {
   morshu: "https://www.youtube.com/watch?v=cJs7r0TLfx0",
   mrmoneybags: "https://www.youtube.com/watch?v=FY_Iq5Xkpt0",
   nintendhoes: "https://www.youtube.com/watch?v=PL5SVfDFGQQ",
+  oreo: "https://www.youtube.com/watch?v=10S4sBSZnGA",
   pigstep_remix: "https://www.youtube.com/watch?v=r_a4Zg3PyA0",
   pigstep: "https://www.youtube.com/watch?v=8aZ7oB2chEU",
   pissbaby: "https://www.youtube.com/watch?v=0avFvn3Chyg",
