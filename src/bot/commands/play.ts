@@ -23,6 +23,8 @@ const cmd = new Command(
       message.delete();
     }
 
+    let alldiscs = Object.keys(discs);
+
     function play(song: string) {
       if (message.member && message.member.voice.channel)
         message.member.voice.channel
@@ -46,10 +48,12 @@ const cmd = new Command(
 
     if (song.toLowerCase() == "-list")
       return message.channel.send(
-        `There are ${Object.keys(discs).length} discs: \`${Object.keys(discs).join("`, `")}\``
+        `There are ${alldiscs.length} discs: \`${alldiscs.join("`, `")}\``
       );
+    if (song.toLowerCase() == "-random")
+      song = alldiscs[Math.floor(Math.random() * alldiscs.length)];
 
-    Object.keys(discs).forEach((d) => {
+    alldiscs.forEach((d) => {
       if (song.toLowerCase() == d.toLowerCase()) song = discs[d];
     });
 
@@ -77,7 +81,7 @@ const cmd = new Command(
 👁 ${Number(dt.viewCount).toLocaleString()}`
         );
         playing.setThumbnail(dt.thumbnails[0].url);
-        playing.setFooter(`${bot.user?.username} Music`, "https://imgur.com/0Z3gn9A");
+        playing.setFooter(`${bot.user?.username} Music`, "https://i.imgur.com/0Z3gn9A.gif");
         playing.setTimestamp();
 
         if (!silent) message.channel.send(playing);
