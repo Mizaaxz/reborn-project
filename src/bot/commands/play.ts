@@ -60,23 +60,22 @@ const cmd = new Command(
           return d1.disc.toLowerCase() > d2.disc.toLowerCase() ? 1 : -1;
         });
 
-        let discText = "";
+        let discText: any = [];
         discData.forEach((d: any) => {
           let len = ms(Number(d.data.lengthSeconds) * 1000);
           if (len == "0ms") len = "Live";
 
-          discText += `> ${d.data.title} - \`${d.disc}\`\n**Length:** ${len}\n`;
+          discText.push([`> ${d.data.title} - \`${d.disc}\``, `**Length:** ${len}\n`]);
         });
+        discText = discText.slice(0, 24);
 
         let discDataEmbed = new Discord.MessageEmbed();
         discDataEmbed.setAuthor(
           `Disc List Requested by ${message.member?.nickname || message.author.username}`
         );
-        try {
-          discDataEmbed.setDescription(discText || "Failed to load discs.");
-        } catch (e) {
-          discDataEmbed.setDescription("You dumbass, too many disks!");
-        }
+        discText.forEach((dt: any) => {
+          discDataEmbed.addField(dt[0], dt[1]);
+        });
         discDataEmbed.setFooter(
           `Listing ${alldiscs.length} discs.`,
           "https://i.imgur.com/zMunRBI.gif"
