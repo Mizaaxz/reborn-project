@@ -28,7 +28,11 @@ const cmd = new Command(
         message.member.voice.channel
           .join()
           .then((connection) => {
-            connection.play(ytdl(song, { quality: "highestaudio" }));
+            try {
+              connection.play(ytdl(song, { quality: "highestaudio" }));
+            } catch (e) {
+              message.channel.send("Invalid Song URL");
+            }
           })
           .catch(console.error);
       else {
@@ -51,30 +55,33 @@ const cmd = new Command(
 
     play(song);
 
-    ytdl.getBasicInfo(song).then((info) => {
-      let dt = info.videoDetails;
-      let len = ms(Number(dt.lengthSeconds) * 1000);
-      if (len == "0ms") len = "Live";
+    ytdl
+      .getBasicInfo(song)
+      .then((info) => {
+        let dt = info.videoDetails;
+        let len = ms(Number(dt.lengthSeconds) * 1000);
+        if (len == "0ms") len = "Live";
 
-      let playing = new Discord.MessageEmbed();
-      playing.setAuthor(
-        `Song Requested by ${message.member?.nickname || message.author.username}`,
-        message.author.displayAvatarURL()
-      );
-      playing.setTitle(info.videoDetails.title || "Unknown Video");
-      playing.setURL(info.videoDetails.video_url);
-      playing.addField(
-        "Details",
-        `**Length:** ${len}
+        let playing = new Discord.MessageEmbed();
+        playing.setAuthor(
+          `Song Requested by ${message.member?.nickname || message.author.username}`,
+          message.author.displayAvatarURL()
+        );
+        playing.setTitle(info.videoDetails.title || "Unknown Video");
+        playing.setURL(info.videoDetails.video_url);
+        playing.addField(
+          "Details",
+          `**Length:** ${len}
 **Posted By:** [${dt.author.name}](${dt.author.channel_url})
 👍 ${dt.likes?.toLocaleString()} / 👎 ${dt.dislikes?.toLocaleString()}
 👁 ${Number(dt.viewCount).toLocaleString()}`
-      );
-      playing.setThumbnail(dt.thumbnails[0].url);
-      playing.setTimestamp();
+        );
+        playing.setThumbnail(dt.thumbnails[0].url);
+        playing.setTimestamp();
 
-      if (!silent) message.channel.send(playing);
-    });
+        if (!silent) message.channel.send(playing);
+      })
+      .catch(console.error);
   }
 );
 module.exports = cmd;
