@@ -25,6 +25,8 @@ function getSpecials(mem: GuildMember) {
     smallpp: mem.roles.cache.has("807685559346528276"),
     beta: mem.roles.cache.has("806250186401120337"),
     secret: mem.roles.cache.has("805629613803307018"),
+    est: mem.roles.cache.has("809055141630050334"),
+    dj: mem.roles.cache.has("809093332797358101"),
   };
 }
 
