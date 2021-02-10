@@ -21,7 +21,7 @@ const cmd = new Command(
       case "moderator":
         sendApp(message.author, "moderator").then((responses) => {
           let res = new Array(responses);
-          message.channel.send(res.join(" "));
+          message.channel.send(res.join(" ").replace(/@/g, "hah"));
         });
         break;
       default:
