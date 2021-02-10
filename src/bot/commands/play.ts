@@ -9,7 +9,7 @@ const cmd = new Command(
   "play",
   {
     description: "Plays a song in your voice channel.",
-    usage: "play [song] --silent",
+    usage: "play [song/-list/-random] <--silent>",
     aliases: [],
     required: (mem: Discord.GuildMember) => {
       return isStaff(mem) || getSpecials(mem).dj;
