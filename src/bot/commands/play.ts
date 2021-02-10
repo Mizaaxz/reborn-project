@@ -31,9 +31,9 @@ const cmd = new Command(
           .join()
           .then((connection) => {
             try {
-              let dl = ytdl(song, { quality: "highestaudio" });
-              connection.play(dl);
+              connection.play(ytdl(song, { quality: "highestaudio" }));
             } catch (e) {
+              console.error(e);
               message.channel.send("Invalid Song URL");
             }
           })
@@ -45,6 +45,7 @@ const cmd = new Command(
     }
 
     function listTracks() {
+      return;
       new Promise((res, rej) => {
         let discData: any = [];
         alldiscs.forEach((d) => {
