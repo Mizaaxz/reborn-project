@@ -31,7 +31,10 @@ const cmd = new Command(
             connection.play(ytdl(song, { quality: "highestaudio" }));
           })
           .catch(console.error);
-      else message.channel.send("Join a VC!");
+      else {
+        message.channel.send("Join a VC!");
+        silent = true;
+      }
     }
 
     let song = args.slice(1).join(" ");
@@ -58,8 +61,8 @@ const cmd = new Command(
         "Details",
         `Length: ${ms(len)}
 Posted By: [${dt.author.name}](${dt.author.channel_url})
-👍${dt.likes?.toLocaleString()} 👎${dt.dislikes?.toLocaleString()}
-👁${Number(dt.viewCount).toLocaleString()}`
+👍 ${dt.likes?.toLocaleString()} / 👎 ${dt.dislikes?.toLocaleString()}
+👁 ${Number(dt.viewCount).toLocaleString()}`
       );
       playing.setThumbnail(dt.thumbnails[0].url);
       playing.setTimestamp();
