@@ -48,7 +48,7 @@ function sendApp(user: Discord.User, type: Application) {
             return user.send("Canceled your application!");
           responses.push(message.content);
           current++;
-          if (current > app.questions.length) {
+          if (current >= app.questions.length) {
             appEmbed.setAuthor(`${app.name} Finished!`, user.displayAvatarURL());
             appEmbed.setDescription(app.finish);
             user.send(appEmbed);
