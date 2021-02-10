@@ -11,6 +11,7 @@ const discs: any = {
   corpse_missyou: "https://www.youtube.com/watch?v=clnIeauiVDM",
   corpse_neversatisfied: "https://www.youtube.com/watch?v=cCc7yTpRGcI",
   corpse_whitetee: "https://www.youtube.com/watch?v=yS6aXxdL6M8",
+  gotbitches: "https://www.youtube.com/watch?v=mdqU6Erw3kk",
   lofi: "https://www.youtube.com/watch?v=5qap5aO4i9A",
   morshu: "https://www.youtube.com/watch?v=cJs7r0TLfx0",
   pigstep_remix: "https://www.youtube.com/watch?v=r_a4Zg3PyA0",
