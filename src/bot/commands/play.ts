@@ -77,7 +77,7 @@ const cmd = new Command(
 👁 ${Number(dt.viewCount).toLocaleString()}`
         );
         playing.setThumbnail(dt.thumbnails[0].url);
-        playing.setFooter("", "https://imgur.com/0Z3gn9A");
+        playing.setFooter("\xa0", "https://imgur.com/0Z3gn9A");
         playing.setTimestamp();
 
         if (!silent) message.channel.send(playing);
