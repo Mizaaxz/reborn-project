@@ -65,7 +65,7 @@ const cmd = new Command(
           let len = ms(Number(d.data.lengthSeconds) * 1000);
           if (len == "0ms") len = "Live";
 
-          discText.push([`${d.data.title}`, `**Disc:** \`${d.disc}\`\n**Length:** ${len}\n`]);
+          discText.push([`${d.data.title}`, `💿 \`${d.disc}\` ⏰ ${len}\n`]);
         });
         discText = discText.slice(0, 24);
 
