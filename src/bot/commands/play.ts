@@ -42,7 +42,7 @@ const cmd = new Command(
 
     play(song);
 
-    ytdl.getInfo(song).then((info) => {
+    ytdl.getBasicInfo(song).then((info) => {
       let dt = info.videoDetails;
       let len = Number(dt.lengthSeconds) * 1000;
 
@@ -56,8 +56,9 @@ const cmd = new Command(
       playing.addField(
         "Details",
         `Length: ${ms(len)}
-Posted By: (${dt.author.name})[${dt.author.channel_url}]
-👍${dt.likes} 👎${dt.dislikes} 👁${dt.viewCount}`
+Posted By: [${dt.author.name}](${dt.author.channel_url})
+👍${dt.likes?.toLocaleString()} 👎${dt.dislikes?.toLocaleString()}
+👁${Number(dt.viewCount).toLocaleString()}`
       );
       playing.setThumbnail(dt.thumbnails[0].url);
       playing.setTimestamp();
