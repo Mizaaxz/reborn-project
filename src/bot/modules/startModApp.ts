@@ -34,14 +34,14 @@ function sendApp(user: Discord.User, type: Application) {
 
     let current = 0;
     let responses: any[] = [];
-    function sendNext(q: string) {
+    function sendNext() {
       user.dmChannel
         ?.awaitMessages((m) => m, { max: 1 })
         .then(async (m) => {
           let message = m.first();
           if (!message || !message.content) {
             await user.send("You need to answer the question!");
-            sendNext(app.questions[current]);
+            sendNext();
             return;
           }
           if (message.content.toLowerCase() == "cancel")
@@ -55,16 +55,15 @@ function sendApp(user: Discord.User, type: Application) {
             return resolve(responses);
           }
           appEmbed.setAuthor(`${app.name} Question ${current + 1}`, user.displayAvatarURL());
-          appEmbed.setDescription(q.replace(/{username}/g, user.username));
+          appEmbed.setDescription(app.questions[current].replace(/{username}/g, user.username));
           await user.send(appEmbed);
-          sendNext(app.questions[current]);
+          sendNext();
         });
     }
     appEmbed.setAuthor(`${app.name} Question ${current + 1}`, user.displayAvatarURL());
     appEmbed.setDescription(app.questions[current].replace(/{username}/g, user.username));
     await user.send(appEmbed);
-    current++;
-    sendNext(app.questions[current]);
+    sendNext();
   });
 }
 
