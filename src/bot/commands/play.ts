@@ -81,7 +81,7 @@ const cmd = new Command(
 👁 ${Number(dt.viewCount).toLocaleString()}`
         );
         playing.setThumbnail(dt.thumbnails[0].url);
-        playing.setFooter(`${bot.user?.username} Music`, "https://i.imgur.com/0Z3gn9A.gif");
+        playing.setFooter(`${bot.user?.username} Music`, "https://i.imgur.com/zMunRBI.gif");
         playing.setTimestamp();
 
         if (!silent) message.channel.send(playing);
