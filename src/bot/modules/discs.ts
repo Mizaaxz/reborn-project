@@ -20,6 +20,7 @@ const discs: any = {
   saywhat: "https://www.youtube.com/watch?v=Om9uuRZy8cQ",
   seesomeass: "https://www.youtube.com/watch?v=3lETiCCe8ng",
   tetris: "https://www.youtube.com/watch?v=h-lkp-JcL-A",
+  trapanthem: "https://www.youtube.com/watch?v=EeIfEVnmzUc",
   tylerherro: "https://www.youtube.com/watch?v=np9Ub1LilKU",
   wurtz_daygoeson: "https://www.youtube.com/watch?v=NHZr6P1csiY",
   wurtz_mightquit: "https://www.youtube.com/watch?v=mpkf_p71rKY",
