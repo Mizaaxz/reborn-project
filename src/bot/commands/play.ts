@@ -41,7 +41,7 @@ const cmd = new Command(
     if (!song) return message.channel.send("Something to play?");
 
     if (song.toLowerCase() == "-list")
-      message.channel.send(
+      return message.channel.send(
         `There are ${Object.keys(discs).length} discs: \`${Object.keys(discs).join("`, `")}\``
       );
 
