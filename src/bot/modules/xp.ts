@@ -16,7 +16,7 @@ function levelUp(user: Discord.User) {
 
 function handleMessage(message: Discord.Message) {
   if (message.author.bot) return;
-  db.add(`messages_${message.author.id}`, 1);
+  //db.add(`messages_${message.author.id}`, 1);
   levelUp(message.author);
 }
 
