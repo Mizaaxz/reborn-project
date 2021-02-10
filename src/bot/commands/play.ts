@@ -26,24 +26,25 @@ const cmd = new Command(
     let alldiscs = Object.keys(discs);
 
     function play(song: string) {
-      if (message.member && message.member.voice.channel)
+      if (message.member && message.member.voice.channel) {
         message.member.voice.channel
           .join()
           .then((connection) => {
             try {
-              connection.play(ytdl(song, { quality: "highestaudio" }));
+              let dl = ytdl(song, { quality: "highestaudio" });
+              connection.play(dl);
             } catch (e) {
               message.channel.send("Invalid Song URL");
             }
           })
           .catch(console.error);
-      else {
+      } else {
         message.channel.send("Join a VC!");
         silent = true;
       }
     }
 
-    /*function listTracks() {
+    function listTracks() {
       new Promise((res, rej) => {
         let discData: any = [];
         alldiscs.forEach((d) => {
@@ -82,12 +83,12 @@ const cmd = new Command(
         );
         message.channel.send(discDataEmbed);
       });
-    }*/
+    }
 
     let song = args.slice(1).join(" ");
     if (!song) return message.channel.send("Something to play?");
 
-    //if (song.toLowerCase() == "-list") return listTracks();
+    if (song.toLowerCase() == "-list") return listTracks();
     if (song.toLowerCase() == "-random")
       song = alldiscs[Math.floor(Math.random() * alldiscs.length)];
 
