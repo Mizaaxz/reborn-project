@@ -53,7 +53,8 @@ const cmd = new Command(
 
     ytdl.getBasicInfo(song).then((info) => {
       let dt = info.videoDetails;
-      let len = Number(dt.lengthSeconds) * 1000;
+      let len = ms(Number(dt.lengthSeconds) * 1000);
+      if (!len) len = "Live";
 
       let playing = new Discord.MessageEmbed();
       playing.setAuthor(
@@ -64,8 +65,8 @@ const cmd = new Command(
       playing.setURL(info.videoDetails.video_url);
       playing.addField(
         "Details",
-        `Length: ${ms(len)}
-Posted By: [${dt.author.name}](${dt.author.channel_url})
+        `**Length:** ${len}
+**Posted By:** [${dt.author.name}](${dt.author.channel_url})
 👍 ${dt.likes?.toLocaleString()} / 👎 ${dt.dislikes?.toLocaleString()}
 👁 ${Number(dt.viewCount).toLocaleString()}`
       );
