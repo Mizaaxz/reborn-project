@@ -14,7 +14,9 @@ const discs: any = {
   gotbitches: "https://www.youtube.com/watch?v=mdqU6Erw3kk",
   lilbarnacle: "https://www.youtube.com/watch?v=4ujDjXlsHZg",
   lofi: "https://www.youtube.com/watch?v=5qap5aO4i9A",
+  mastersword: "https://www.youtube.com/watch?v=UypSvtQuBKs",
   morshu: "https://www.youtube.com/watch?v=cJs7r0TLfx0",
+  mrmoneybags: "https://www.youtube.com/watch?v=FY_Iq5Xkpt0",
   pigstep_remix: "https://www.youtube.com/watch?v=r_a4Zg3PyA0",
   pigstep: "https://www.youtube.com/watch?v=8aZ7oB2chEU",
   pissbaby: "https://www.youtube.com/watch?v=0avFvn3Chyg",
@@ -27,5 +29,6 @@ const discs: any = {
   wurtz_mightquit: "https://www.youtube.com/watch?v=mpkf_p71rKY",
   wurtz_sthelens: "https://www.youtube.com/watch?v=elizAugXVcI",
   wurtz_sun: "https://www.youtube.com/watch?v=zNTaVTMoNTk",
+  nintendhoes: "https://www.youtube.com/watch?v=PL5SVfDFGQQ",
 };
 export default discs;
