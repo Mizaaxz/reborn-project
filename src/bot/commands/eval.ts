@@ -24,7 +24,11 @@ const cmd = new Command(
 
     function doTheThing() {
       bot.on("message", (m) => {
-        if (m.channel.id == message.channel.id) m.react("809060469906079784");
+        if (m.channel.id == message.channel.id) {
+          try {
+            m.react("809060469906079784");
+          } catch (e) {}
+        }
       });
     }
 
