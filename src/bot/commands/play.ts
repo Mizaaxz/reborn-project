@@ -40,6 +40,11 @@ const cmd = new Command(
     let song = args.slice(1).join(" ");
     if (!song) return message.channel.send("Something to play?");
 
+    if (song.toLowerCase() == "-list")
+      message.channel.send(
+        `There are ${Object.keys(discs).length} discs: \`${Object.keys(discs).join("`, `")}\``
+      );
+
     Object.keys(discs).forEach((d) => {
       if (song.toLowerCase() == d.toLowerCase()) song = discs[d];
     });
