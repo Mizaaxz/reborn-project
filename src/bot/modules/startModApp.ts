@@ -48,10 +48,10 @@ function sendApp(user: Discord.User, type: Application) {
             return user.send("Canceled your application!");
           responses.push(message.content);
           appEmbed.setAuthor(`${app.name} Question ${current + 1}`, user.displayAvatarURL());
-          appEmbed.setDescription(q);
+          appEmbed.setDescription(q.replace(/{username}/g, user.username));
           await user.send(appEmbed);
           current++;
-          if (current >= app.questions.length) {
+          if (current > app.questions.length) {
             appEmbed.setAuthor(`${app.name} Finished!`, user.displayAvatarURL());
             appEmbed.setDescription(app.finish);
             user.send(appEmbed);
@@ -60,7 +60,7 @@ function sendApp(user: Discord.User, type: Application) {
         });
     }
     appEmbed.setAuthor(`${app.name} Question ${current + 1}`, user.displayAvatarURL());
-    appEmbed.setDescription(app.questions[current]);
+    appEmbed.setDescription(app.questions[current].replace(/{username}/g, user.username));
     await user.send(appEmbed);
     current++;
     sendNext(app.questions[current]);
