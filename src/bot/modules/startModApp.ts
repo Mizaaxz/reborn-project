@@ -1,4 +1,3 @@
-import { ImprovedStreamingClient } from "@google-cloud/speech/build/src/helpers";
 import Discord from "discord.js";
 
 type Application = "moderator";
@@ -6,7 +5,7 @@ type Application = "moderator";
 let Applications = {
   moderator: {
     name: "Moderator Application",
-    start: 'Please answer all questions truthfully. Say "start" when you are ready.',
+    start: "Please answer all questions truthfully.",
     finish: "Thank you for applying! Your application has been sent off for review!",
     questions: [
       "Why do you want to be a moderator?",
@@ -24,14 +23,14 @@ let Applications = {
 };
 
 function sendApp(user: Discord.User, type: Application) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let app = Applications[type];
 
     let appEmbed = new Discord.MessageEmbed();
     appEmbed.setAuthor(`${app.name} - ${user.username}`, user.displayAvatarURL());
     appEmbed.setDescription(app.start);
     appEmbed.setFooter("Say `cancel` at any time to cancel the application.");
-    user.send(appEmbed);
+    await user.send(appEmbed);
 
     let current = 0;
     let responses: any[] = [];
@@ -56,6 +55,9 @@ function sendApp(user: Discord.User, type: Application) {
           } else sendNext(app.questions[current]);
         });
     }
+    appEmbed.setDescription(app.questions[current]);
+    await user.send(appEmbed);
+    current++;
     sendNext(app.questions[current]);
   });
 }
