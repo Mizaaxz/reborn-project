@@ -54,7 +54,7 @@ const cmd = new Command(
     ytdl.getBasicInfo(song).then((info) => {
       let dt = info.videoDetails;
       let len = ms(Number(dt.lengthSeconds) * 1000);
-      if (!len) len = "Live";
+      if (len == "0ms") len = "Live";
 
       let playing = new Discord.MessageEmbed();
       playing.setAuthor(
