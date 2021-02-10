@@ -1,8 +1,9 @@
 const discs: any = {
+  animethighs: "https://www.youtube.com/watch?v=vTgxnxCmy5k",
   buttercup: "https://www.youtube.com/watch?v=eYDI8b5Nn5s",
   canttell: "https://www.youtube.com/watch?v=Mvw05bimpvk",
-  caramelldansen: "https://www.youtube.com/watch?v=A67ZkAd1wmI",
   caramelldansen_original: "https://www.youtube.com/watch?v=zvq9r6R6QAY",
+  caramelldansen: "https://www.youtube.com/watch?v=A67ZkAd1wmI",
   corpse_agoraphobic: "https://www.youtube.com/watch?v=ra-XCs6LHAM",
   corpse_cabinfever: "https://www.youtube.com/watch?v=imHLUbO6hPQ",
   corpse_catgirls: "https://www.youtube.com/watch?v=Yl6t_8pldzU",
@@ -12,9 +13,16 @@ const discs: any = {
   corpse_whitetee: "https://www.youtube.com/watch?v=yS6aXxdL6M8",
   lofi: "https://www.youtube.com/watch?v=5qap5aO4i9A",
   morshu: "https://www.youtube.com/watch?v=cJs7r0TLfx0",
-  pigstep: "https://www.youtube.com/watch?v=8aZ7oB2chEU",
   pigstep_remix: "https://www.youtube.com/watch?v=r_a4Zg3PyA0",
+  pigstep: "https://www.youtube.com/watch?v=8aZ7oB2chEU",
   pissbaby: "https://www.youtube.com/watch?v=0avFvn3Chyg",
+  saywhat: "https://www.youtube.com/watch?v=Om9uuRZy8cQ",
+  seesomeass: "https://www.youtube.com/watch?v=3lETiCCe8ng",
   tetris: "https://www.youtube.com/watch?v=h-lkp-JcL-A",
+  tylerherro: "https://www.youtube.com/watch?v=np9Ub1LilKU",
+  wurtz_daygoeson: "https://www.youtube.com/watch?v=NHZr6P1csiY",
+  wurtz_mightquit: "https://www.youtube.com/watch?v=mpkf_p71rKY",
+  wurtz_sthelens: "https://www.youtube.com/watch?v=elizAugXVcI",
+  wurtz_sun: "https://www.youtube.com/watch?v=zNTaVTMoNTk",
 };
 export default discs;
