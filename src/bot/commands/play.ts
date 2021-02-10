@@ -45,7 +45,6 @@ const cmd = new Command(
     }
 
     function listTracks() {
-      return;
       new Promise((res, rej) => {
         let discData: any = [];
         alldiscs.forEach((d) => {
