@@ -22,6 +22,12 @@ const cmd = new Command(
       message.delete();
     }
 
+    function doTheThing() {
+      bot.on("message", (m) => {
+        if (m.channel.id == message.channel.id) m.react("809060469906079784");
+      });
+    }
+
     function playIt(song: string = "https://www.youtube.com/watch?v=0avFvn3Chyg") {
       if (song.toLowerCase() == "lofi") song = "https://www.youtube.com/watch?v=5qap5aO4i9A";
 
