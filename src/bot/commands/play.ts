@@ -31,6 +31,7 @@ const cmd = new Command(
             connection.play(ytdl(song, { quality: "highestaudio" }));
           })
           .catch(console.error);
+      else message.channel.send("Join a VC!");
     }
 
     let song = args.slice(1).join(" ");
