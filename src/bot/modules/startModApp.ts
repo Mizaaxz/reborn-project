@@ -29,7 +29,7 @@ function sendApp(user: Discord.User, type: Application) {
     let appEmbed = new Discord.MessageEmbed();
     appEmbed.setAuthor(`${app.name} - ${user.username}`, user.displayAvatarURL());
     appEmbed.setDescription(app.start);
-    appEmbed.setFooter("Say `cancel` at any time to cancel the application.");
+    appEmbed.setFooter('Say "cancel" at any time to cancel the application.');
     await user.send(appEmbed);
 
     let current = 0;
@@ -44,7 +44,10 @@ function sendApp(user: Discord.User, type: Application) {
             sendNext(app.questions[current]);
             return;
           }
+          if (message.content.toLowerCase() == "cancel")
+            return user.send("Canceled your application!");
           responses.push(message.content);
+          appEmbed.setAuthor(`${app.name} Question ${current + 1}`);
           appEmbed.setDescription(q);
           await user.send(appEmbed);
           current++;
@@ -55,6 +58,7 @@ function sendApp(user: Discord.User, type: Application) {
           } else sendNext(app.questions[current]);
         });
     }
+    appEmbed.setAuthor(`${app.name} Question ${current + 1}`);
     appEmbed.setDescription(app.questions[current]);
     await user.send(appEmbed);
     current++;
