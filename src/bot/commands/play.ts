@@ -16,11 +16,11 @@ const cmd = new Command(
     },
   },
   async function (bot: Discord.Client, message: Discord.Message, args: any[]) {
+    message.delete();
     let silent = false;
     if (args[args.length - 1] == "--silent") {
       args.pop();
       silent = true;
-      message.delete();
     }
 
     let alldiscs = Object.keys(discs);
