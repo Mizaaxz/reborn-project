@@ -63,6 +63,8 @@ const cmd = new Command(
         discData = discData.sort((d1: any, d2: any) => {
           return d1.disc.toLowerCase() > d2.disc.toLowerCase() ? 1 : -1;
         });
+        console.log(discData);
+        console.log(data);
 
         let discText = "";
         discData.forEach((d: any) => {
@@ -114,8 +116,8 @@ const cmd = new Command(
           `Song Requested by ${message.member?.nickname || message.author.username}`,
           message.author.displayAvatarURL()
         );
-        playing.setTitle(info.videoDetails.title || "Unknown Video");
-        playing.setURL(info.videoDetails.video_url);
+        playing.setTitle(dt.title || "Unknown Video");
+        playing.setURL(dt.video_url);
         playing.addField(
           "Details",
           `**Length:** ${len}
