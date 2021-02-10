@@ -43,7 +43,7 @@ const cmd = new Command(
       }
     }
 
-    function listTracks() {
+    /*function listTracks() {
       new Promise((res, rej) => {
         let discData: any = [];
         alldiscs.forEach((d) => {
@@ -82,12 +82,12 @@ const cmd = new Command(
         );
         message.channel.send(discDataEmbed);
       });
-    }
+    }*/
 
     let song = args.slice(1).join(" ");
     if (!song) return message.channel.send("Something to play?");
 
-    if (song.toLowerCase() == "-list") return listTracks();
+    //if (song.toLowerCase() == "-list") return listTracks();
     if (song.toLowerCase() == "-random")
       song = alldiscs[Math.floor(Math.random() * alldiscs.length)];
 
