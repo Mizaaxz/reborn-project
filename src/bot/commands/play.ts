@@ -43,13 +43,56 @@ const cmd = new Command(
       }
     }
 
+    function listTracks() {
+      new Promise((res, rej) => {
+        let discData: any = [];
+        alldiscs.forEach((d) => {
+          ytdl
+            .getBasicInfo(discs[d])
+            .then((dd) => {
+              discData.push({ disc: d, data: dd.videoDetails });
+              if (discData.length == alldiscs.length) res(discData);
+            })
+            .catch(console.error);
+        });
+      }).then((data) => {
+        let discData: any = [];
+        new Array(data).forEach((d) => {
+          discData.push(new Object(d));
+        });
+        discData = discData.sort((d1: any, d2: any) => {
+          return d1.disc.toLowerCase() > d2.disc.toLowerCase() ? 1 : -1;
+        });
+
+        let discText = "";
+        discData.forEach((d: any) => {
+          let len = ms(Number(d.data.lengthSeconds) * 1000);
+          if (len == "0ms") len = "Live";
+
+          discText += `> ${d.data.title} - \`${d.disc}\`\n**Length:** ${len}\n`;
+        });
+
+        let discDataEmbed = new Discord.MessageEmbed();
+        discDataEmbed.setAuthor(
+          `Disc List Requested by ${message.member?.nickname || message.author.username}`
+        );
+        try {
+          discDataEmbed.setDescription(discText || "Failed to load discs.");
+        } catch (e) {
+          discDataEmbed.setDescription("You dumbass, too many disks!");
+        }
+        discDataEmbed.setFooter(
+          `Listing ${alldiscs.length} discs.`,
+          "https://i.imgur.com/zMunRBI.gif"
+        );
+        message.channel.send(discDataEmbed);
+      });
+    }
+
     let song = args.slice(1).join(" ");
     if (!song) return message.channel.send("Something to play?");
 
-    if (song.toLowerCase() == "-list")
-      return message.channel.send(
-        `There are ${alldiscs.length} discs: \`${alldiscs.join("`, `")}\``
-      );
+    if (song.toLowerCase() == "-list") return listTracks();
     if (song.toLowerCase() == "-random")
       song = alldiscs[Math.floor(Math.random() * alldiscs.length)];
 
