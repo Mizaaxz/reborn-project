@@ -3,5 +3,6 @@ const discs: any = {
   tetris: "https://www.youtube.com/watch?v=h-lkp-JcL-A",
   pigstep: "https://www.youtube.com/watch?v=8aZ7oB2chEU",
   morshu: "https://www.youtube.com/watch?v=cJs7r0TLfx0",
+  pissbaby: "https://www.youtube.com/watch?v=0avFvn3Chyg",
 };
 export default discs;
