@@ -3,6 +3,7 @@ import Discord from "discord.js";
 import { getSpecials, isStaff } from "../modules/permissionTests";
 import ytdl from "ytdl-core";
 import discs from "../modules/discs";
+import ms from "ms";
 
 const cmd = new Command(
   "play",
@@ -42,6 +43,8 @@ const cmd = new Command(
     play(song);
 
     ytdl.getInfo(song).then((info) => {
+      let len = Number(info.videoDetails.lengthSeconds) * 1000;
+
       let playing = new Discord.MessageEmbed();
       playing.setAuthor(
         `Song Requested by ${message.member?.nickname || message.author.username}`,
@@ -51,7 +54,8 @@ const cmd = new Command(
       playing.setURL(info.videoDetails.video_url);
       playing.addField(
         "Details",
-        `Length: ${info.videoDetails.lengthSeconds}s\nPosted By: ${info.videoDetails.author}`
+        `Length: ${ms(len)}s
+Posted By: ${info.videoDetails.author.name}`
       );
       playing.setTimestamp();
 
