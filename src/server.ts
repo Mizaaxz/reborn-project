@@ -14,7 +14,6 @@ import { getGame } from "./moomoo/Game";
 import errCodes from "./definitions/errorCodes";
 import db from "./database";
 import b64 from "./base64";
-import startBot from "./bot/bot";
 import { GetSessions } from "./moomoo/util";
 
 import accessories from "./definitions/accessories";
@@ -29,8 +28,6 @@ const items2 = Object.values(items);
 const projectiles2 = Object.values(projectiles);
 const weapons2 = Object.values(weapons);
 const weaponVariants2 = Object.values(weaponVariants);
-
-startBot();
 
 const app = express();
 const server = http.createServer(app);
