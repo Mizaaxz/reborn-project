@@ -15,5 +15,6 @@
   "playerNearbyRadius": 1250,
   "port": 80,
   "prefix": "!",
-  "usernameLength": { "min": 4, "max": 16 }
+  "usernameLength": { "min": 4, "max": 16 },
+  "mode": "normal"
 }
