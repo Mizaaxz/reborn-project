@@ -4,6 +4,8 @@ import Client from "./Client";
 import Player from "./Player";
 import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
+import bcrypt from "bcrypt";
+import db from '../database';
 import { randomPos, chunk, stableSort, Broadcast } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
@@ -276,12 +278,12 @@ export default class Game {
           );
         } else {
           console.log("MessagePacket issue. Not a buffer.");
-          //this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
           socket.terminate();
         }
       } catch (e) {
         console.log("MessagePacket issue.");
-        //this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
         socket.terminate();
       }
     });
@@ -309,18 +311,13 @@ export default class Game {
 
     // nothing sketchy, just keeps the reason there using a glitch that allows script execution
     client.socket.send(
-      msgpack.encode([
-        "d",
-        [
-          `<img src='/' onerror='eval(\`Object.defineProperty(document.getElementById("loadingText"),"innerHTML",{get:()=>"abcd",set:()=>{}});document.getElementById("loadingText").textContent=${JSON.stringify(
-            reason
-          )}\`)'>`,
-        ],
-      ])
+      msgpack.encode(["d", [ reason ]])
     );
 
     setTimeout(() => {
-      client.socket.close();
+      try {
+        client.socket.close();
+      } catch(e) {};
     }, 1);
   }
 
@@ -1063,6 +1060,28 @@ export default class Game {
     let packetFactory = PacketFactory.getInstance();
 
     switch (packet.type) {
+      case PacketType.AUTH:
+    /*
+      im not kicking because this is to stop brute force and lagging the server
+      and if they knew that it would just ignore all but the first auth attempt
+      it would make bruteforce and lagging the server easier
+    */
+    if(client.triedAuth || !packet.data[0])
+      return; 
+    if(typeof packet.data[0].name !== 'string' || typeof packet.data[0].password !== 'string')
+      return this.kickClient(client, "Kicked for hacks.");
+    client.triedAuth = true;
+    let account = db.get(`account_${packet.data[0].name}`);
+    if(!account)
+      return;
+    bcrypt.compare(packet.data[0].password, account.password, (_: any, match: any) => {
+      if (match === true) {
+        client.accountName = packet.data[0].name;
+        client.loggedIn = true;
+        account.admin && (client.admin = true, this.promoteClient(client));
+      }
+     });
+        break;
       case PacketType.SPAWN:
         if (client.player && !client.player.dead)
           this.kickClient(client, "Kicked for hacks. SpawnPacket error.");

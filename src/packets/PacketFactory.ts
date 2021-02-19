@@ -70,6 +70,11 @@ packetTypeMapping[PacketType.JOIN_REQUEST] = { value: "an", side: Side.Client };
 packetTypeMapping[PacketType.REMOVE_GAME_OBJ] = { value: "12", side: Side.Client };
 packetTypeMapping[PacketType.ADD_PROJECTILE] = { value: "18", side: Side.Client };
 packetTypeMapping[PacketType.UPDATE_PROJECTILES] = { value: "19", side: Side.Client };
+/* reborn packets */
+packetTypeMapping[PacketType.AUTH] = { value: 'AUTH', side: Side.Server};
+packetTypeMapping[PacketType.ANTI_CHEAT] = { value: 'ac', side: Side.Both};
+packetTypeMapping[PacketType.ANTI_CHEAT_ERROR] = { value: 'ace', side: Side.Server};
+packetTypeMapping[PacketType.BROADCAST] = { value: 'bc', side: Side.Client};
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
 

@@ -80,49 +80,17 @@ function Broadcast(text: string, to: Client | undefined) {
       for (let client of game.clients) {
         client.socket.send(
           packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_AGE, [
-              0,
-              1,
-              `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${text}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
-            ])
+            new Packet(PacketType.BROADCAST, [text])
           )
         );
-
-        if (client.player) {
-          client.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.UPDATE_AGE, [
-                client.player.xp,
-                client.player.maxXP,
-                client.player.age,
-              ])
-            )
-          );
-        }
       }
     } else {
       let client = to;
       client.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.UPDATE_AGE, [
-            0,
-            1,
-            `<img src='/' onerror='eval(\`document.getElementById("itemInfoHolder").textContent="${text}";document.getElementById("itemInfoHolder").className="uiElement visible"\`)'>`,
-          ])
+          new Packet(PacketType.BROADCAST, [text])
         )
       );
-
-      if (client.player) {
-        client.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_AGE, [
-              client.player.xp,
-              client.player.maxXP,
-              client.player.age,
-            ])
-          )
-        );
-      }
     }
   }
 }

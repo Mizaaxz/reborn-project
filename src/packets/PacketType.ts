@@ -52,6 +52,11 @@ enum PacketType {
   UPDATE_PLACE_LIMIT,
   ADD_PROJECTILE,
   UPDATE_PROJECTILES,
+  /* reborn packets */
+  AUTH,
+  BROADCAST,
+  ANTI_CHEAT,
+  ANTI_CHEAT_ERROR,
 }
 
 export { PacketType };

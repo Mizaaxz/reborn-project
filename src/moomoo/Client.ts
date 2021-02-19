@@ -7,7 +7,9 @@ export default class Client {
   public seenProjectiles: number[] = [];
   public lastAttackTime = 0;
   public spawnPos: Vec2 | boolean = false;
-
+  public triedAuth: boolean = false;
+  public loggedIn: boolean = false;
+  public accountName: string = '';
   constructor(
     public id: string,
     public socket: WebSocket,
