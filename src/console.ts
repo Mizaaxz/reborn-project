@@ -234,7 +234,7 @@ Command(
 
       if (player && player.client) {
         game.addModerator(player.client);
-        return true;
+        return false;
       } else return "Invalid Player ID";
     }
   },
