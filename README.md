@@ -5,16 +5,7 @@ The MooMoo Reborn server-side utilizes a modified version of [sanctuary](https:/
 
 ## Features
 
-See [Issue #16](https://github.com/Picoseconds/sanctuary/issues/16) for a list of current features supported.
-
-### Config Values
-
-| Variable name            | Effect                                                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| PORT                     | The port that the server binds on, defaults to 3000.                                                                      |
-| MAX_CPS                  | The CPS cap to use, defaults to 25.                                                                                       |
-| PLAYER_NEARBY_RADIUS     | The radius that players can see other players in.                                                                         |
-| GAMEOBJECT_NEARBY_RADIUS | The radius that players can see structures (this includes trees, bushes and all other naturally generated structures) in. |
+See [Issue #16](https://github.com/Picoseconds/sanctuary/issues/16) for a list of current features supported.                                                                                                                        
 
 ## Moderation Commands
 
