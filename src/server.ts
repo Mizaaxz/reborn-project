@@ -155,12 +155,13 @@ app.post("/api/v1/create", (req, res) => {
 });
 
 app.get("/api/v1/playerCount", (req, res) => {
-  let game = getGame();
+  let clients = GetSessions();
 
-  if (!game) {
-    res.send(JSON.stringify({ type: "error", message: "No game active." }));
+  if (clients) {
+    clients = clients.filter((c) => c.playerID !== -1);
+    res.send(JSON.stringify({ type: "success", playerCount: clients.length }));
   } else {
-    res.send(JSON.stringify({ type: "success", playerCount: game.clients.length }));
+    res.send(JSON.stringify({ type: "error", message: "No game active." }));
   }
 });
 
