@@ -5,12 +5,12 @@ import Player from "./Player";
 import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
 import bcrypt from "bcrypt";
-import db from '../database';
+import db from "../database";
 import { randomPos, chunk, stableSort, Broadcast } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
 import * as Physics from "./Physics";
-import * as console from "../console";
+import * as consoleTS from "../console";
 import { Packet, Side } from "../packets/Packet";
 import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packets/PacketType";
@@ -302,6 +302,10 @@ export default class Game {
       )
     );
 
+    socket.on("error", (err) => {
+      console.error(err);
+    });
+
     console.log(`Added player ${id} with ip ${ip}.`);
   }
 
@@ -310,14 +314,12 @@ export default class Game {
     console.log(`Kicked ${client.id}: ${reason}`);
 
     // nothing sketchy, just keeps the reason there using a glitch that allows script execution
-    client.socket.send(
-      msgpack.encode(["d", [ reason ]])
-    );
+    client.socket.send(msgpack.encode(["d", [reason]]));
 
     setTimeout(() => {
       try {
         client.socket.close();
-      } catch(e) {};
+      } catch (e) {}
     }, 1);
   }
 
@@ -1061,26 +1063,24 @@ export default class Game {
 
     switch (packet.type) {
       case PacketType.AUTH:
-    /*
+        /*
       im not kicking because this is to stop brute force and lagging the server
       and if they knew that it would just ignore all but the first auth attempt
       it would make bruteforce and lagging the server easier
     */
-    if(client.triedAuth || !packet.data[0])
-      return; 
-    if(typeof packet.data[0].name !== 'string' || typeof packet.data[0].password !== 'string')
-      return this.kickClient(client, "Kicked for hacks.");
-    client.triedAuth = true;
-    let account = db.get(`account_${packet.data[0].name}`);
-    if(!account)
-      return;
-    bcrypt.compare(packet.data[0].password, account.password, (_: any, match: any) => {
-      if (match === true) {
-        client.accountName = packet.data[0].name;
-        client.loggedIn = true;
-        account.admin && (client.admin = true, this.promoteClient(client));
-      }
-     });
+        if (client.triedAuth || !packet.data[0]) return;
+        if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
+          return this.kickClient(client, "Kicked for hacks.");
+        client.triedAuth = true;
+        let account = db.get(`account_${packet.data[0].name}`);
+        if (!account) return;
+        bcrypt.compare(packet.data[0].password, account.password, (_: any, match: any) => {
+          if (match === true) {
+            client.accountName = packet.data[0].name;
+            client.loggedIn = true;
+            account.admin && ((client.admin = true), this.promoteClient(client));
+          }
+        });
         break;
       case PacketType.SPAWN:
         if (client.player && !client.player.dead)
@@ -1210,7 +1210,7 @@ export default class Game {
         }
 
         if (packet.data[0].startsWith("/") && client.admin) {
-          console.runCommand(packet.data[0].substring(1), client.player || undefined);
+          consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
         } else {
           let chatPacket = packetFactory.serializePacket(
             new Packet(PacketType.CHAT, [client.player?.id, packet.data[0]])
