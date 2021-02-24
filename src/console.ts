@@ -11,6 +11,7 @@ import GameObject from "./gameobjects/GameObject";
 import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
+import { GameModes } from "./moomoo/GameMode";
 
 let command = "";
 let lastMessage = "";
@@ -391,6 +392,19 @@ Command(
       game.state?.gameObjects.push(newGameObject);
       return false;
     }
+  },
+  []
+);
+
+Command(
+  "gamemode",
+  function (args: any[]) {
+    let mode: GameModes = args[1].toLowerCase();
+    if (mode && GameModes[mode]) {
+      let game = getGame();
+      if (game) game.mode = mode;
+      return false;
+    } else return "Invalid GameMode.";
   },
   []
 );

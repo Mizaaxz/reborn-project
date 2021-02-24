@@ -2,6 +2,8 @@ import weapons from "../definitions/weapons";
 import items from "../definitions/items";
 import { ItemType } from "./UpgradeItems";
 import { WeaponVariant } from "../moomoo/Weapons";
+import { getGame } from "../moomoo/Game";
+import { GameModes } from "../moomoo/GameMode";
 
 enum PrimaryWeapons {
   ToolHammer = 0,
@@ -95,7 +97,9 @@ function getWeaponGatherAmount(item: Weapons, weaponVariant: WeaponVariant) {
 }
 
 function getItemCost(item: ItemType) {
-  return items[item].req;
+  let game = getGame();
+  if (game?.mode == GameModes.sandbox) return [];
+  else return items[item].req;
 }
 
 function getPlaceable(item: ItemType) {
@@ -167,7 +171,9 @@ function getGameObjDamage(item: ItemType) {
 }
 
 function getGameObjPlaceLimit(item: ItemType) {
-  return items[item].group.limit || Infinity;
+  let game = getGame();
+  if (game?.mode == GameModes.sandbox) return Infinity;
+  else return items[item].group.limit || Infinity;
 }
 
 function shouldHideFromEnemy(item: ItemType) {
