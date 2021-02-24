@@ -44,6 +44,7 @@ import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
 import * as config from "../config.json";
 import Vec2 from "vec2";
+import { GameModes } from "./GameMode";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -64,6 +65,7 @@ export default class Game {
   public clients: Client[] = [];
   public lastTick: number = 0;
   public started: boolean = false;
+  public mode: GameModes = GameModes.normal;
   lastUpdate: number = 0;
   physTimer: NanoTimer | undefined;
 
