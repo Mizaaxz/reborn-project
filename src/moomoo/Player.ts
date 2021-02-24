@@ -27,6 +27,7 @@ import GameObject from "../gameobjects/GameObject";
 import { collideGameObjects } from "./Physics";
 import { getHat } from "./Hats";
 import * as config from "../config.json";
+import { getAccessory } from "./Accessories";
 
 export default class Player extends Entity {
   public name: string;
@@ -125,11 +126,30 @@ export default class Player extends Entity {
   public damageOverTime() {
     let packetFactory = PacketFactory.getInstance();
     let hat = getHat(this.hatID);
+    let acc = getAccessory(this.accID);
 
     if (hat) {
       let healthRegen = hat.healthRegen || 0;
 
-      if (healthRegen > 0) {
+      if (healthRegen > 0 && this.health < 100) {
+        this.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.HEALTH_CHANGE, [
+              this.location.x,
+              this.location.y,
+              -Math.min(100 - this.health, healthRegen),
+              1,
+            ])
+          )
+        );
+      }
+
+      this.health = Math.min(this.health + healthRegen, 100);
+    }
+    if (acc) {
+      let healthRegen = acc.healthRegen || 0;
+
+      if (healthRegen > 0 && this.health < 100) {
         this.client?.socket.send(
           packetFactory.serializePacket(
             new Packet(PacketType.HEALTH_CHANGE, [
