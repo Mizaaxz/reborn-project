@@ -37,6 +37,7 @@ import {
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
+import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
 import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
@@ -1382,61 +1383,121 @@ export default class Game {
 
         let isAcc = packet.data[2];
 
-        // TODO: actually implement accessories
-        if (isAcc) return Broadcast("Accessories aren't enabled!", client);
+        if (isAcc) {
+          if (!getAccessory(packet.data[1]) && packet.data[1] !== 0) {
+            this.kickClient(
+              client,
+              "Kicked for invalid accessory. (you are probably using hacks, cmon man)"
+            );
+            return;
+          }
 
-        if ((!getHat(packet.data[1]) || getHat(packet.data[1])?.dontSell) && packet.data[1] !== 0) {
-          this.kickClient(
-            client,
-            "Kicked for invalid hat. (you are probably using hacks, cmon man)"
-          );
-          return;
-        }
-
-        if (client.player) {
-          if (packet.data[0]) {
-            if (client.ownedHats.includes(packet.data[1])) {
-              Broadcast("Error: ALREADY_BOUGHT", client);
+          if (client.player) {
+            if (packet.data[0]) {
+              if (client.ownedAccs.includes(packet.data[1])) {
+                Broadcast("Error: ALREADY_BOUGHT", client);
+              } else {
+                if (client.player.points >= (getAccessory(packet.data[1])?.price || 0)) {
+                  client.player.points -= getAccessory(packet.data[1])?.price || 0;
+                  client.ownedAccs.push(packet.data[1]);
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                    )
+                  );
+                }
+              }
             } else {
-              if (client.player.points >= (getHat(packet.data[1])?.price || 0)) {
-                client.player.points -= getHat(packet.data[1])?.price || 0;
-                client.ownedHats.push(packet.data[1]);
-                client.socket.send(
-                  packetFactory.serializePacket(
-                    new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
-                  )
+              if (
+                client.ownedAccs.includes(packet.data[1]) ||
+                getAccessory(packet.data[1])?.price === 0 ||
+                packet.data[1] === 0
+              ) {
+                if (client.player.accID === packet.data[1]) {
+                  client.player.accID = 0;
+
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc])
+                    )
+                  );
+                } else {
+                  client.player.accID = packet.data[1];
+
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                    )
+                  );
+                }
+              } else {
+                this.kickClient(
+                  client,
+                  "Kicked for equipping an accessory not bought. (you are probably using hacks, cmon man...)"
                 );
               }
             }
-          } else {
-            if (
-              client.ownedHats.includes(packet.data[1]) ||
-              getHat(packet.data[1])?.price === 0 ||
-              packet.data[1] === 0
-            ) {
-              if (client.player.hatID === packet.data[1]) {
-                client.player.hatID = 0;
+          }
+        } else {
+          if (
+            (!getHat(packet.data[1]) || getHat(packet.data[1])?.dontSell) &&
+            packet.data[1] !== 0
+          ) {
+            this.kickClient(
+              client,
+              "Kicked for invalid hat. (you are probably using hacks, cmon man)"
+            );
+            return;
+          }
 
-                client.socket.send(
-                  packetFactory.serializePacket(new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc]))
-                );
+          if (client.player) {
+            if (packet.data[0]) {
+              if (client.ownedHats.includes(packet.data[1])) {
+                Broadcast("Error: ALREADY_BOUGHT", client);
               } else {
-                client.player.hatID = packet.data[1];
-
-                client.socket.send(
-                  packetFactory.serializePacket(
-                    new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
-                  )
-                );
+                if (client.player.points >= (getHat(packet.data[1])?.price || 0)) {
+                  client.player.points -= getHat(packet.data[1])?.price || 0;
+                  client.ownedHats.push(packet.data[1]);
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                    )
+                  );
+                }
               }
             } else {
-              this.kickClient(
-                client,
-                "Kicked for equipping a hat not bought. (you are probably using hacks, cmon man...)"
-              );
+              if (
+                client.ownedHats.includes(packet.data[1]) ||
+                getHat(packet.data[1])?.price === 0 ||
+                packet.data[1] === 0
+              ) {
+                if (client.player.hatID === packet.data[1]) {
+                  client.player.hatID = 0;
+
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc])
+                    )
+                  );
+                } else {
+                  client.player.hatID = packet.data[1];
+
+                  client.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                    )
+                  );
+                }
+              } else {
+                this.kickClient(
+                  client,
+                  "Kicked for equipping a hat not bought. (you are probably using hacks, cmon man...)"
+                );
+              }
             }
           }
         }
+
         break;
       case PacketType.CLAN_KICK:
         if (!client.player || client.player.dead) Broadcast("Error: KICK_WHILE_DEAD", client);
