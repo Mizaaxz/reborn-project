@@ -45,6 +45,7 @@ import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectil
 import * as config from "../config.json";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
+import { readdirSync } from "fs";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -70,6 +71,11 @@ export default class Game {
   physTimer: NanoTimer | undefined;
 
   constructor() {
+    let defaultMode = (
+      readdirSync("data").filter((f) => f.startsWith("DEFAULT_GAMEMODE="))[0] || ""
+    ).split("=")[1] as GameModes;
+    if (defaultMode && GameModes[defaultMode]) this.mode = defaultMode;
+
     this.state = new GameState(this);
     this.update = this.update.bind(this);
 
