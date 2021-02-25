@@ -1213,7 +1213,7 @@ export default class Game {
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
             packet.data[0] = packet.data[0].replace(
-              new RegExp(`\\b${badWord.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"),
+              new RegExp(`\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`, "g"),
               "M" + "o".repeat(badWord.length - 1)
             );
         }
