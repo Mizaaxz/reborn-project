@@ -96,7 +96,7 @@ export default class Game {
     this.started = true;
     this.lastUpdate = Date.now();
     this.physTimer = new NanoTimer();
-    this.physTimer.setInterval(this.physUpdate.bind(this), "", "100u");
+    this.physTimer.setInterval(this.physUpdate.bind(this), "", "33ms");
     this.generateStructures();
 
     setInterval(this.updateWindmills.bind(this), 1000);
