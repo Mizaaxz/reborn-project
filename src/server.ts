@@ -38,7 +38,7 @@ nunjucks.configure("views", {
   express: app,
 });
 
-const VERSION = "1.8.11a";
+const VERSION = "1.9.1a";
 
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));
