@@ -948,10 +948,10 @@ export default class Game {
     });
 
     this.lastUpdate = Date.now();
-    setTimeout(this.update, 33);
   }
 
   physUpdate() {
+    this.update();
     this.updateProjectiles(0.1);
   }
 
