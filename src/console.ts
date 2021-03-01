@@ -12,6 +12,7 @@ import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
+import { gameObjectSizes, GameObjectType } from "./gameobjects/gameobjects";
 
 let command = "";
 let lastMessage = "";
@@ -369,6 +370,111 @@ Command(
     return false;
   },
   ["create"]
+);
+
+Command(
+  "generatebase",
+  (args: any[], source: Player | undefined) => {
+    if (!source) return "You must be in the game to run this command.";
+    let game = getGame();
+    if (!game) return;
+
+    let loc = new Vec2(source.location.x || 1, source.location.y || 1);
+    let wallPos = 125;
+    let lastWallPos = 0;
+    let wallCount = 0;
+    let totalWalls = 10;
+
+    let pos = {
+      topleft: new Vec2(0, 0),
+      topright: new Vec2(0, 0),
+      bottomleft: new Vec2(0, 0),
+      bottomright: new Vec2(0, 0),
+    };
+    let wallGen = [];
+
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos += 100;
+    }
+    pos.bottomright = new Vec2(loc.x + wallPos - 100, loc.y);
+
+    lastWallPos = wallPos;
+    wallPos = 0;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + lastWallPos, loc.y + wallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.topright = new Vec2(loc.x + lastWallPos, loc.y + wallPos + 100);
+
+    wallPos = -125;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.bottomright = new Vec2(loc.x + wallPos + 100, loc.y);
+
+    lastWallPos = wallPos;
+    wallPos = 0;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + lastWallPos, loc.y + wallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.topleft = new Vec2(loc.x + lastWallPos, loc.y + wallPos + 100);
+
+    lastWallPos = wallPos;
+    wallPos = -totalWalls * 100 - 100;
+    wallCount = -3;
+    while (wallCount < totalWalls * 2) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y + lastWallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos += 100;
+    }
+
+    let between = function (x: number, a: number, b: number) {
+      var min = Math.min.apply(Math, [a, b]),
+        max = Math.max.apply(Math, [a, b]);
+      return x > min && x < max;
+    };
+
+    game.state.gameObjects
+      .filter(
+        (o) =>
+          between(o.location.x, pos.topleft.x, pos.topright.x) &&
+          between(o.location.y, pos.topleft.y, pos.bottomright.y)
+      )
+      .forEach((o) => {
+        if (!game || !o) return;
+        game.state.gameObjects.splice(game.state.gameObjects.indexOf(o), 1);
+
+        for (let plr of game.clients) {
+          if (plr.player) game.sendGameObjects(plr.player);
+        }
+      });
+
+    wallGen.forEach((wall: any[]) => {
+      game?.generateStructure("stone:normal", wall[0], wall[1], 90);
+    });
+
+    game.generateStructure("tree:normal", pos.topleft.x + 270, pos.topleft.y + 140, 120);
+    game.generateStructure("stone:normal", pos.topleft.x + 200, pos.topleft.y + 200, 90);
+
+    game.generateStructure("tree:normal", pos.topright.x - 270, pos.topright.y + 140, 120);
+    game.generateStructure("stone:normal", pos.topright.x - 200, pos.topright.y + 200, 90);
+  },
+  ["genbase"]
 );
 
 Command(
