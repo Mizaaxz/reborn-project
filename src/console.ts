@@ -473,6 +473,31 @@ Command(
 
     game.generateStructure("tree:normal", pos.topright.x - 270, pos.topright.y + 140, 120);
     game.generateStructure("stone:normal", pos.topright.x - 200, pos.topright.y + 200, 90);
+
+    //TODO: make this automatic
+    game.generateStructure("food:normal", loc.x - 210, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x - 140, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x - 70, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x + 70, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x + 140, pos.topleft.y + 100, 70);
+    game.generateStructure("food:normal", loc.x + 210, pos.topleft.y + 100, 70);
+
+    game.generateStructure("food:normal", loc.x - 210, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x - 140, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x - 70, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x + 70, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x + 140, pos.topleft.y + 170, 70);
+    game.generateStructure("food:normal", loc.x + 210, pos.topleft.y + 170, 70);
+
+    game.generateStructure("food:normal", loc.x - 210, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x - 140, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x - 70, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x + 70, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x + 140, pos.topleft.y + 240, 70);
+    game.generateStructure("food:normal", loc.x + 210, pos.topleft.y + 240, 70);
   },
   ["genbase"]
 );
