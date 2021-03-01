@@ -163,7 +163,7 @@ export default class Game {
     }
   }
 
-  generateStructure(objType: string, x: number, y: number) {
+  generateStructure(objType: string, x: number, y: number, objSize?: number | undefined) {
     let obj = objType.split(":")[0];
     let params = objType.split(":")[1];
 
@@ -181,6 +181,7 @@ export default class Game {
         break;
       case "mine":
       case "stone":
+      case "rock":
       case "s":
         type = GameObjectType.Mine;
         break;
@@ -198,7 +199,7 @@ export default class Game {
     if (params == "dmg") damage = 35;
 
     if (sizes) {
-      let size = sizes[Math.floor(Math.random() * sizes.length)];
+      let size = objSize || sizes[Math.floor(Math.random() * sizes.length)];
 
       let newGameObject = new GameObject(
         this.getNextGameObjectID(),
