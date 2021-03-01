@@ -85,6 +85,16 @@ Command(
           game.sendGameObjects(player);
           return false;
         } else return "Invalid Player ID(s)";
+      } else if (args[1] == "*") {
+        if (!tpTo) return "You can not use the * selector without a second argument.";
+        else if (otherPlayer) {
+          game.state.players.forEach((p) => {
+            if (!game || !otherPlayer) return;
+            p.location = otherPlayer.location.add(0, 0, true);
+            game.sendGameObjects(p);
+          });
+          return false;
+        } else return "Invalid Player ID(s)";
       }
     }
   },
