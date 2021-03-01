@@ -363,7 +363,8 @@ Command(
     game?.generateStructure(
       `${args[1] || "stone"}:${args[2] || "normal"}`,
       source?.location.x || 1,
-      source?.location.y || 1
+      source?.location.y || 1,
+      Number(args[2]) || undefined
     );
     return false;
   },
