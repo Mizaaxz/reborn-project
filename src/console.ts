@@ -430,7 +430,7 @@ Command(
       wallCount++;
       wallPos -= 100;
     }
-    pos.bottomright = new Vec2(loc.x + wallPos + 100, loc.y);
+    pos.bottomleft = new Vec2(loc.x + wallPos + 100, loc.y);
 
     lastWallPos = wallPos;
     wallPos = 0;
