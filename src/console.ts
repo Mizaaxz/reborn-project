@@ -334,7 +334,7 @@ Command(
 
 Command(
   "kick",
-  (args: any[]) => {
+  (args: any[], source: Player | undefined) => {
     let playerSID = Number(args[1]);
     let reason = args.slice(2).join(" ") || "Kicked by a moderator.";
     let game = getGame();
@@ -343,7 +343,12 @@ Command(
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
       if (player && player.client) game.kickClient(player.client, reason);
-      else return "Invalid Player ID";
+      else if (args[1] == "*") {
+        game.state.players.forEach((p) => {
+          if (source && p.id == source.id) return;
+          if (p && p.client) game?.kickClient(p.client, reason);
+        });
+      } else return "Invalid Player ID";
     }
   },
   ["k"]
