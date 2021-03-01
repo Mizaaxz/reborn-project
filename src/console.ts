@@ -452,16 +452,11 @@ Command(
     game.state.gameObjects
       .filter(
         (o) =>
-          between(o.location.x, pos.topleft.x, pos.topright.x) &&
-          between(o.location.y, pos.topleft.y, pos.bottomright.y)
+          between(o.location.x, pos.topleft.x - 150, pos.topright.x + 150) &&
+          between(o.location.y, pos.topleft.y - 150, pos.bottomright.y + 150)
       )
       .forEach((o) => {
-        if (!game || !o) return;
-        game.state.gameObjects.splice(game.state.gameObjects.indexOf(o), 1);
-
-        for (let plr of game.clients) {
-          if (plr.player) game.sendGameObjects(plr.player);
-        }
+        if (game && o) game.state.removeGameObject(o);
       });
 
     wallGen.forEach((wall: any[]) => {
