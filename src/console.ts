@@ -498,6 +498,22 @@ Command(
     game.generateStructure("food:normal", loc.x + 70, pos.topleft.y + 240, 70);
     game.generateStructure("food:normal", loc.x + 140, pos.topleft.y + 240, 70);
     game.generateStructure("food:normal", loc.x + 210, pos.topleft.y + 240, 70);
+
+    game.generateStructure("gold:normal", loc.x - 700, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 650, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 600, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 550, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 500, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 450, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x - 400, pos.topleft.y + 650, 65);
+
+    game.generateStructure("gold:normal", loc.x + 700, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 650, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 600, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 550, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 500, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
+    game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
   ["genbase"]
 );
