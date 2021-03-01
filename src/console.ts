@@ -336,12 +336,13 @@ Command(
   "kick",
   (args: any[]) => {
     let playerSID = Number(args[1]);
+    let reason = args.slice(2).join(" ") || "Kicked by a moderator.";
     let game = getGame();
 
     if (game) {
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
-      if (player && player.client) game.kickClient(player.client, "Kicked by a moderator");
+      if (player && player.client) game.kickClient(player.client, reason);
       else return "Invalid Player ID";
     }
   },

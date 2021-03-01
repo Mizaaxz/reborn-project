@@ -318,7 +318,7 @@ export default class Game {
     console.log(`Added player ${id} with ip ${ip}.`);
   }
 
-  kickClient(client: Client, reason: string = "Kicked by a moderator.") {
+  kickClient(client: Client, reason: string) {
     this.clients.splice(this.clients.indexOf(client), 1);
     console.log(`Kicked ${client.id}: ${reason}`);
 
