@@ -382,6 +382,7 @@ Command(
       if (args[1] == "*") {
         game.state.players.forEach((p) => {
           if (!game) return;
+          if (p.id == source?.id) return;
           let location = new Vec2(p?.location.x || 1, p?.location.y || 1);
 
           let newGameObject = new GameObject(
