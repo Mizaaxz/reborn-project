@@ -585,7 +585,8 @@ export default class Player extends Entity {
       this.hatID,
       this.accID,
       this.kills === leadKills && this.kills > 0 ? 1 : 0,
-      0,
+      this.layer,
+      this.invincible,
     ];
   }
 
