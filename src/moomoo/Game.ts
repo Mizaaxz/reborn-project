@@ -315,8 +315,6 @@ export default class Game {
     socket.on("error", (err) => {
       console.error(err);
     });
-
-    console.log(`Added player ${id} with ip ${ip}.`);
   }
 
   kickClient(client: Client, reason: string) {
