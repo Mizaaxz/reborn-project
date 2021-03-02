@@ -21,6 +21,7 @@ import items from "./definitions/items";
 import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
+import { Account } from "./moomoo/Account";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -86,15 +87,14 @@ app.post("/api/v1/login", (req, res) => {
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
-  let account = db.fetch(`account_${username}`);
+  let account = db.fetch(`account_${username}`) as Account;
   if (!account)
     return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
-  bcrypt.compare(password, account.password, function (err: any, match: any) {
+  bcrypt.compare(password, account.password || "", function (err: any, match: any) {
     if (err) return res.json({ error: "COMPARE_ERROR", text: errCodes.login.COMPARE_ERROR });
     if (match === true) {
-      account.token = b64.btoa(`${username}:${password}`);
-      res.json(account);
+      res.json({ ...account, ...{ token: b64.btoa(`${username}:${password}`) } });
     } else {
       res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD });
     }
