@@ -329,7 +329,12 @@ export default class Game {
     setTimeout(() => {
       try {
         client.socket.close();
-      } catch (e) {}
+        setTimeout(() => {
+          client.socket.terminate();
+        }, 1000);
+      } catch (e) {
+        client.socket.terminate();
+      }
     }, 1);
   }
 
