@@ -597,7 +597,7 @@ export default class Game {
     let attackerAcc = getAccessory(from.accID);
     let recieverAcc = getAccessory(to.accID);
 
-    let healAmount = (attackerHat?.healD || 0) * dmg;
+    let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
     from.health += healAmount;
 
     if (healAmount) {
