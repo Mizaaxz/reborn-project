@@ -81,8 +81,7 @@ app.get("/api/v1/def", (req, res) => {
 });
 
 app.post("/api/v1/login", (req, res) => {
-  return res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD }); // disabled
-  /*let username = req.body.username;
+  let username = req.body.username;
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.login.NO_USERNAME });
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
@@ -99,9 +98,10 @@ app.post("/api/v1/login", (req, res) => {
     } else {
       res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD });
     }
-  });*/
+  });
 });
 app.post("/api/v1/create", (req, res) => {
+  return res.json({ error: "DISABLED", text: "Accounts are disabled." }); //disabled
   let username = req.body.username;
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
   let password = req.body.password;
