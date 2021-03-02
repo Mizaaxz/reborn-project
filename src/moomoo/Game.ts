@@ -594,6 +594,9 @@ export default class Game {
     let attackerHat = getHat(from.hatID);
     let recieverHat = getHat(to.hatID);
 
+    let attackerAcc = getAccessory(from.accID);
+    let recieverAcc = getAccessory(to.accID);
+
     let healAmount = (attackerHat?.healD || 0) * dmg;
     from.health += healAmount;
 
@@ -625,6 +628,12 @@ export default class Game {
           knockback * Math.cos((from.angle - Math.PI) % (2 * Math.PI)),
           knockback * Math.sin((from.angle - Math.PI) % (2 * Math.PI))
         );
+      }
+    }
+
+    if (recieverAcc) {
+      if (recieverAcc.dmg) {
+        from.health -= recieverAcc.dmg * dmg;
       }
     }
 
