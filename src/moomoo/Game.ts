@@ -1212,6 +1212,9 @@ export default class Game {
       case PacketType.CHAT:
         if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
 
+        if (packet.data[0].startsWith("/") && client.admin)
+          return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
+
         packet.data[0] = [...packet.data[0]].slice(0, 50).join("");
 
         for (let badWord of badWords) {
@@ -1222,21 +1225,18 @@ export default class Game {
             );
         }
 
-        if (packet.data[0].startsWith("/") && client.admin) {
-          consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
-        } else {
-          let chatPacket = packetFactory.serializePacket(
-            new Packet(PacketType.CHAT, [client.player?.id, packet.data[0]])
-          );
+        let chatPacket = packetFactory.serializePacket(
+          new Packet(PacketType.CHAT, [client.player?.id, packet.data[0]])
+        );
 
-          client.socket?.send(chatPacket);
+        client.socket?.send(chatPacket);
 
-          if (client.player) {
-            for (let player of client.player.getNearbyPlayers(this.state)) {
-              player.client?.socket.send(chatPacket);
-            }
+        if (client.player) {
+          for (let player of client.player.getNearbyPlayers(this.state)) {
+            player.client?.socket.send(chatPacket);
           }
         }
+
         break;
       case PacketType.CLAN_CREATE:
         if (!client.player || client.player.dead)
