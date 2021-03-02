@@ -622,7 +622,7 @@ function runCommand(command: string, source?: Player) {
   try {
     let err = GetCommand(command).execute(command, source);
     if (err && source?.client) Broadcast(err, source.client);
-    console.log(`Ran "${command} from ${source?.name} (${source?.id}).`);
+    console.log(`Ran "${command}" from ${source?.name} (${source?.id}).`);
   } catch (_) {
     if (source?.client) Broadcast(`Error: ${_}`, source.client);
     return false;
