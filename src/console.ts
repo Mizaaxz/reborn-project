@@ -84,11 +84,12 @@ Command(
           game.sendGameObjects(player);
           return false;
         } else return "Invalid Player ID(s)";
-      } else if (args[1] == "*") {
-        if (!tpTo) return "You can not use the * selector without a second argument.";
+      } else if (args[1] == "*" || args[1] == "**") {
+        if (!tpTo) return "You can not use the */** selector without a second argument.";
         else if (otherPlayer) {
           game.state.players.forEach((p) => {
             if (!game || !otherPlayer) return;
+            if (args[1] == "**" && p.id == source.id) return;
             p.location = otherPlayer.location.add(0, 0, true);
             game.sendGameObjects(p);
           });
@@ -353,9 +354,9 @@ Command(
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
       if (player && player.client) game.kickClient(player.client, reason);
-      else if (args[1] == "*") {
+      else if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
-          if (source && p.id == source.id) return;
+          if (source && p.id == source.id && args[1] == "**") return;
           if (p && p.client) game?.kickClient(p.client, reason);
         });
       } else return "Invalid Player ID";
@@ -531,10 +532,10 @@ Command(
     if (game) {
       let player =
         game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
-      if (args[1] == "*") {
+      if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
           if (!game) return;
-          if (p.id == source?.id) return;
+          if (p.id == source?.id && args[1] == "**") return;
           let location = new Vec2(p?.location.x || 1, p?.location.y || 1);
 
           let newGameObject = new GameObject(
