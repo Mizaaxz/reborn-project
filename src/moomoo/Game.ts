@@ -1215,7 +1215,8 @@ export default class Game {
         if (packet.data[0].startsWith("/") && client.admin)
           return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
 
-        packet.data[0] = [...packet.data[0]].slice(0, 50).join("");
+        packet.data[0] = [...packet.data[0]].slice(0, 50).join("").trim();
+        if (!packet.data[0]) return;
 
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
@@ -1243,7 +1244,7 @@ export default class Game {
           Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
 
         if (client.player) {
-          let tribeName = [...packet.data[0]].slice(0, 10).join("");
+          let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
           if (!tribeName) return;
           let tribe = this.state.addTribe(tribeName, client.player.id);
 
