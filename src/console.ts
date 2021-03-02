@@ -30,7 +30,6 @@ Command(
 Command(
   "broadcast",
   (args: any[]) => {
-    let packetFactory = PacketFactory.getInstance();
     let message = args.slice(1).join(" ");
     if (!message) return "No message.";
     let game = getGame();

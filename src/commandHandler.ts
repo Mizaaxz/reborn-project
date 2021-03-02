@@ -16,6 +16,9 @@ const Command = function (name: string, callback: Function, aliases: any[]) {
     },
   };
   commandIndex[name.toLowerCase()] = cmd;
+  aliases.forEach((a) => {
+    commandIndex[a.toLowerCase()] = cmd;
+  });
   return cmd;
 };
 const GetCommand = function (name: string) {
