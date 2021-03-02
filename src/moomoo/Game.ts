@@ -272,6 +272,8 @@ export default class Game {
 
       let clientIndex = this.clients.indexOf(client);
       if (clientIndex > -1) this.clients.splice(clientIndex, 1);
+
+      this.sendLeaderboardUpdates();
     });
 
     socket.addListener("message", (msg) => {
