@@ -24,7 +24,7 @@ Command(
     //setTimeout(function() {process.exit()}, 10000)
     process.exit();
   },
-  ["kill"]
+  []
 );
 
 Command(
@@ -39,7 +39,7 @@ Command(
       return false;
     }
   },
-  ["bc", "send"]
+  ["bc", "send", "echo"]
 );
 
 Command(
@@ -164,7 +164,7 @@ Command(
       }
     }
   },
-  ["movespeed", "s"]
+  ["movespeed", "s", "spd"]
 );
 
 //TODO: change to tempmod command
@@ -249,7 +249,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  ["mod", "admin", "promo"]
+  ["mod", "admin"]
 );
 
 Command(
@@ -339,7 +339,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  ["setresource", "change"]
+  []
 );
 
 Command(
@@ -378,7 +378,7 @@ Command(
     );
     return false;
   },
-  ["create"]
+  ["create", "createnode", "gen"]
 );
 
 Command(
@@ -519,7 +519,7 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  ["genbase"]
+  ["genbase", "base"]
 );
 
 Command(
@@ -572,7 +572,7 @@ Command(
       return false;
     }
   },
-  []
+  ["rap", "t", "trp", "tr"]
 );
 
 Command(
@@ -585,7 +585,7 @@ Command(
       return false;
     } else return "Invalid GameMode.";
   },
-  []
+  ["gm"]
 );
 
 function logMethod(text: string) {
