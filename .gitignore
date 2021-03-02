@@ -5,3 +5,4 @@ data/DEFAULT_GAMEMODE=*
 data.json
 token
 package-lock.json
+enhanced.sqlite
