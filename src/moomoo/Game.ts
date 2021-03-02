@@ -1268,7 +1268,7 @@ export default class Game {
           let ownerClient = this.state.players.find((player) => player.id === tribe?.ownerSID)
             ?.client;
 
-          if (tribe && ownerClient?.tribeJoinQueue[0] != client.player) {
+          if (tribe && !ownerClient?.tribeJoinQueue.includes(client.player)) {
             ownerClient?.tribeJoinQueue.push(client.player);
             ownerClient?.socket.send(
               packetFactory.serializePacket(
