@@ -75,6 +75,7 @@ packetTypeMapping[PacketType.AUTH] = { value: 'AUTH', side: Side.Server};
 packetTypeMapping[PacketType.ANTI_CHEAT] = { value: 'ac', side: Side.Both};
 packetTypeMapping[PacketType.ANTI_CHEAT_ERROR] = { value: 'ace', side: Side.Server};
 packetTypeMapping[PacketType.BROADCAST] = { value: 'bc', side: Side.Client};
+packetTypeMapping[PacketType.TRADE_REQ] = { value: "trq", side: Side.Server };
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
 

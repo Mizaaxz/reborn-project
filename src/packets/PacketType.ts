@@ -57,6 +57,7 @@ enum PacketType {
   BROADCAST,
   ANTI_CHEAT,
   ANTI_CHEAT_ERROR,
+  TRADE_REQ,
 }
 
 export { PacketType };
