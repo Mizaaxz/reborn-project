@@ -531,7 +531,9 @@ export default class Player extends Entity {
     this.secondaryWeapon = -1;
     this.selectedWeapon = 0;
     this.primaryWeaponVariant = WeaponVariant.Normal;
+    this.primaryWeaponExp = 0;
     this.secondaryWeaponVariant = WeaponVariant.Normal;
+    this.secondaryWeaponExp = 0;
     this.age = 1;
     this.xp = 0;
     this.inTrap = false;
