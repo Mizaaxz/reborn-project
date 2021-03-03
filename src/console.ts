@@ -335,6 +335,14 @@ Command(
             player.xp = Infinity;
             break;
 
+          case "name":
+            player.name = args[3];
+            break;
+
+          case "tribe":
+            player.clanName = args[3];
+            break;
+
           default:
             return "Invalid resource type " + resourceType;
         }
