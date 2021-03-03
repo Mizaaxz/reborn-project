@@ -1565,14 +1565,10 @@ export default class Game {
                 if (client.player.selectedWeapon == client.player.weapon)
                   client.player.selectedWeapon = item;
                 client.player.weapon = item;
-                client.player.primaryWeaponVariant = WeaponVariant.Normal;
-                client.player.primaryWeaponExp = 0;
               } else {
                 if (client.player.selectedWeapon == client.player.secondaryWeapon)
                   client.player.selectedWeapon = item;
                 client.player.secondaryWeapon = item;
-                client.player.secondaryWeaponVariant = WeaponVariant.Normal;
-                client.player.secondaryWeaponExp = 0;
               }
             } else {
               Broadcast("Error: NOT_EARNED_FROM_TIERS", client);
