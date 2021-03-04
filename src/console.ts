@@ -540,6 +540,7 @@ Command(
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
+    let protect = args[2] == "-p";
 
     if (game) {
       let player =
@@ -560,7 +561,8 @@ Command(
             ItemType.PitTrap,
             source?.id,
             getGameObjHealth(5),
-            getGameObjDamage(5)
+            getGameObjDamage(5),
+            protect
           );
           game.state?.gameObjects.push(newGameObject);
         });
@@ -579,7 +581,8 @@ Command(
         ItemType.PitTrap,
         source?.id,
         getGameObjHealth(5),
-        getGameObjDamage(5)
+        getGameObjDamage(5),
+        protect
       );
       game.state?.gameObjects.push(newGameObject);
       return false;
@@ -593,6 +596,7 @@ Command(
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
+    let protect = args[2] == "-p";
 
     if (game) {
       let player =
@@ -613,7 +617,8 @@ Command(
             ItemType.BoostPad,
             source?.id,
             getGameObjHealth(6),
-            getGameObjDamage(6)
+            getGameObjDamage(6),
+            protect
           );
           game.state?.gameObjects.push(newGameObject);
         });
@@ -632,7 +637,8 @@ Command(
         ItemType.BoostPad,
         source?.id,
         getGameObjHealth(6),
-        getGameObjDamage(6)
+        getGameObjDamage(6),
+        protect
       );
       game.state?.gameObjects.push(newGameObject);
       return false;

@@ -14,7 +14,8 @@ export default class GameObject {
     public data: any = null,
     public ownerSID: number = -1,
     public health: number = -1,
-    public dmg: number = 0
+    public dmg: number = 0,
+    public protect: boolean = false
   ) {}
 
   getData() {
