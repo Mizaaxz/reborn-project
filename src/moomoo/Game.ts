@@ -797,8 +797,12 @@ export default class Game {
 
                 if (hat && hat.bDmg) dmgMult *= hat.bDmg;
 
-                if (!hitGameObject.protect && hitGameObjectOwner == player) hitGameObject.health -=
-                  getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
+                if (!hitGameObject.protect)
+                  hitGameObject.health -=
+                    getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
+                else if (hitGameObjectOwner == player)
+                  hitGameObject.health -=
+                    getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
 
                 if (hitGameObject.health <= 0) {
                   let itemCost = getItemCost(hitGameObject.data);
