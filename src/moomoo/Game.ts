@@ -793,7 +793,7 @@ export default class Game {
                   (player: { id: any }) => player.id == hitGameObject.ownerSID
                 );
 
-                if(hitGameObject.protect && hitGameObjectOwner != player) return;
+                if (hitGameObject.protect && hitGameObjectOwner != player) return;
 
                 let dmgMult = 1;
 
