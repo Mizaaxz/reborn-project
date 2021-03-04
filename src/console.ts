@@ -478,7 +478,7 @@ Command(
           between(o.location.y, pos.topleft.y - 150, pos.bottomright.y + 150)
       )
       .forEach((o) => {
-        if (game && o) game.state.removeGameObject(o);
+        if (game && o && !o.protect) game.state.removeGameObject(o);
       });
 
     wallGen.forEach((wall: any[]) => {
