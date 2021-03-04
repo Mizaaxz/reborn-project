@@ -793,13 +793,11 @@ export default class Game {
                   (player: { id: any }) => player.id == hitGameObject.ownerSID
                 );
 
-                if (hitGameObject.protect && hitGameObjectOwner != player) return;
-
                 let dmgMult = 1;
 
                 if (hat && hat.bDmg) dmgMult *= hat.bDmg;
 
-                hitGameObject.health -=
+                if (!hitGameObject.protect && hitGameObjectOwner == player) hitGameObject.health -=
                   getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
 
                 if (hitGameObject.health <= 0) {
