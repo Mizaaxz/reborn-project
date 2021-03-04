@@ -592,7 +592,7 @@ Command(
 );
 
 Command(
-  "trap",
+  "pad",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
@@ -644,7 +644,7 @@ Command(
       return false;
     }
   },
-  ["pad", "p", "ad", "speedpad"]
+  ["p", "ad", "speedpad"]
 );
 
 Command(
