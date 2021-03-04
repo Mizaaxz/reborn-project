@@ -589,6 +589,59 @@ Command(
 );
 
 Command(
+  "trap",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    let playerSID = Number(args[1]);
+
+    if (game) {
+      let player =
+        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+      if (args[1] == "*" || args[1] == "**") {
+        game.state.players.forEach((p) => {
+          if (!game) return;
+          if (p.id == source?.id && args[1] == "**") return;
+          let location = new Vec2(p?.location.x || 1, p?.location.y || 1);
+
+          let newGameObject = new GameObject(
+            game.getNextGameObjectID(),
+            location,
+            p?.angle,
+            getScale(6),
+            -1,
+            undefined,
+            ItemType.BoostPad,
+            source?.id,
+            getGameObjHealth(6),
+            getGameObjDamage(6)
+          );
+          game.state?.gameObjects.push(newGameObject);
+        });
+        return false;
+      } else if (!player) return "You need to be in the game to run that!";
+
+      let location = new Vec2(player?.location.x || 1, player?.location.y || 1);
+
+      let newGameObject = new GameObject(
+        game.getNextGameObjectID(),
+        location,
+        source?.angle,
+        getScale(6),
+        -1,
+        undefined,
+        ItemType.BoostPad,
+        source?.id,
+        getGameObjHealth(6),
+        getGameObjDamage(6)
+      );
+      game.state?.gameObjects.push(newGameObject);
+      return false;
+    }
+  },
+  ["pad", "p", "ad", "speedpad"]
+);
+
+Command(
   "gamemode",
   function (args: any[]) {
     let mode: GameModes = args[1].toLowerCase();
