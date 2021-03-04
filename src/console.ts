@@ -565,6 +565,7 @@ Command(
             protect
           );
           game.state?.gameObjects.push(newGameObject);
+          game.sendGameObjects(p);
         });
         return false;
       } else if (!player) return "You need to be in the game to run that!";
@@ -585,6 +586,7 @@ Command(
         protect
       );
       game.state?.gameObjects.push(newGameObject);
+      game.state.players.map((p) => game?.sendGameObjects(p));
       return false;
     }
   },
@@ -621,6 +623,7 @@ Command(
             protect
           );
           game.state?.gameObjects.push(newGameObject);
+          game.sendGameObjects(p);
         });
         return false;
       } else if (!player) return "You need to be in the game to run that!";
@@ -641,6 +644,7 @@ Command(
         protect
       );
       game.state?.gameObjects.push(newGameObject);
+      game.state.players.map((p) => game?.sendGameObjects(p));
       return false;
     }
   },
