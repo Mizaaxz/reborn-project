@@ -10,6 +10,7 @@ import { PacketType } from "../packets/PacketType";
 import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
 import config from "../config";
+import { Broadcast } from "./util";
 
 export default class GameState {
   public game: Game;
@@ -29,6 +30,8 @@ export default class GameState {
     angle = player?.angle,
     layer = player?.layer
   ) {
+    if (player?.client) Broadcast("Projectiles have been disabled due to abuse.", player.client);
+    return;
     let packetFactory = PacketFactory.getInstance();
     let newProjectile = new Projectile(
       this.projectiles.length > 0
