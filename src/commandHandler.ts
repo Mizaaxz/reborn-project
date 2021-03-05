@@ -58,9 +58,11 @@ function boolSelector(bool: string) {
   switch (bool) {
     case "true":
     case "yes":
+    case "on":
       return true;
     case "false":
     case "no":
+    case "off":
       return false;
     default:
       return null;
