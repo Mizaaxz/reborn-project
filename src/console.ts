@@ -360,8 +360,20 @@ Command(
             let tribe = game.state.tribes.filter(
               (t) => t.name.toLowerCase() == args.slice(3).join(" ")
             )[0];
-            if (tribe) game.state.joinClan(player, tribe);
-            else player.clanName = args.slice(3).join(" ");
+            if (tribe) {
+              let tribeIndex = game.state.tribes.findIndex((t) =>
+                t.membersSIDs.includes(player?.id as number)
+              );
+              let inTribe = game.state.tribes[tribeIndex];
+
+              if (inTribe && inTribe.ownerSID == player.id) {
+                game.state.removeTribe(tribeIndex);
+                if (player.client) player.client.tribeJoinQueue = [];
+              } else {
+                game.state.leaveClan(player, tribeIndex);
+              }
+              game.state.joinClan(player, tribe);
+            } else player.clanName = args.slice(3).join(" ");
             break;
 
           default:
