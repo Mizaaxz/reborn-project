@@ -40,10 +40,10 @@ const playerSelector = function (
 
   let player: Player | Player[] | undefined;
 
-  player =
-    game.state.players.find((p) => p.id == Number(plr)) ||
-    game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
-  if (!allowMultiple && !(player instanceof Player)) player = player[0];
+  player = game.state.players.find((p) => p.id == Number(plr));
+  if (player) return player || null;
+  player = game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
+  if (player.length == 1 || !allowMultiple) player = player[0];
 
   if (player instanceof Player || (player || []).length) return player || null;
   if (!allowMultiple) return null;
