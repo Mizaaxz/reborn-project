@@ -370,6 +370,18 @@ export default class Game {
       }
     }
   }
+  async remModerator(client: Client) {
+    client.admin = false;
+    this.kickClient(client, "Demoted.");
+    if (this.db) {
+      if (this.db.get("moderatorIPs").includes(client.ip).value()) {
+        await this.db
+          .get("moderatorIPs")
+          .splice(await this.db.get("moderatorIPs").indexOf(client.ip).value(), 1)
+          .write();
+      }
+    }
+  }
 
   killPlayer(player: Player) {
     let packetFactory = PacketFactory.getInstance();
