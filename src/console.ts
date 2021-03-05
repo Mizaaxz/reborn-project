@@ -357,9 +357,7 @@ Command(
             break;
 
           case "tribe":
-            let tribe = game.state.tribes.filter(
-              (t) => t.name.toLowerCase() == args.slice(3).join(" ")
-            )[0];
+            let tribe = game.state.tribes.filter((t) => t.name == args.slice(3).join(" "))[0];
             if (tribe) {
               let tribeIndex = game.state.tribes.findIndex((t) => {
                 if (t) t.membersSIDs.includes(player?.id as number);
@@ -377,7 +375,10 @@ Command(
                 }
               } else console.log("no tribe");
               setTimeout(function () {
-                if (game && player) game.state.joinClan(player, tribe);
+                if (game && player) {
+                  game.state.joinClan(player, tribe);
+                  console.log("joined" + tribe.name);
+                }
               }, 5);
             } else player.clanName = args.slice(3).join(" ");
             break;
