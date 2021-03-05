@@ -38,7 +38,7 @@ const playerSelector = function (plr: string, source: Player | undefined) {
   player =
     game.state.players.find((p) => p.id == Number(plr)) ||
     game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
-  if (player) return player;
+  if (player && (player as Player[]).length) return player;
 
   if (plr == "*") return game.state.players;
   if (plr == "**" && source) return game.state.players.filter((p) => p.id != source.id);
