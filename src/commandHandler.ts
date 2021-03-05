@@ -55,15 +55,17 @@ const playerSelector = function (
 };
 
 function boolSelector(bool: string | undefined) {
-  switch (bool) {
+  switch (bool?.toLowerCase()) {
     case "true":
     case "yes":
     case "on":
       return true;
+
     case "false":
     case "no":
     case "off":
       return false;
+
     default:
       return null;
   }

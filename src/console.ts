@@ -106,13 +106,17 @@ Command(
       if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
-        if (player == source) player.invisible = boolSelector(args[1]) || !player.invisible;
-        if (player instanceof Player) player.invisible = boolSelector(args[2]) || !player.invisible;
+        let bool = boolSelector(args[2]);
+        let bool1 = boolSelector(args[1]);
+        if (player == source) player.invisible = bool1 == null ? !player.invisible : bool1;
+        else if (player instanceof Player)
+          player.invisible = bool == null ? !player.invisible : bool;
         else if (player.length) {
           player.forEach((p) => {
-            p.invisible = boolSelector(args[2]) || !p.invisible;
+            p.invisible = bool == null ? !p.invisible : bool;
           });
         } else return "Invalid Player ID";
+        game.sendLeaderboardUpdates();
       }
     }
   },
@@ -129,12 +133,14 @@ Command(
       if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
-        if (player == source) player.invincible = boolSelector(args[1]) || !player.invincible;
-        if (player instanceof Player)
-          player.invincible = boolSelector(args[2]) || !player.invincible;
+        let bool = boolSelector(args[2]);
+        let bool1 = boolSelector(args[1]);
+        if (player == source) player.invincible = bool1 == null ? !player.invincible : bool1;
+        else if (player instanceof Player)
+          player.invincible = bool == null ? !player.invincible : bool;
         else if (player.length) {
           player.forEach((p) => {
-            p.invincible = boolSelector(args[2]) || !p.invincible;
+            p.invincible = bool == null ? !p.invincible : bool;
           });
         } else return "Invalid Player ID";
       }
