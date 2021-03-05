@@ -106,6 +106,7 @@ Command(
       if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
+        if (player == source) player.invisible = boolSelector(args[1]) || !player.invisible;
         if (player instanceof Player) player.invisible = boolSelector(args[2]) || !player.invisible;
         else if (player.length) {
           player.forEach((p) => {
@@ -128,6 +129,7 @@ Command(
       if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
+        if (player == source) player.invincible = boolSelector(args[1]) || !player.invincible;
         if (player instanceof Player)
           player.invincible = boolSelector(args[2]) || !player.invincible;
         else if (player.length) {
