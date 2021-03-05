@@ -42,7 +42,7 @@ import { getHat } from "./Hats";
 import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
-import * as config from "../config.json";
+import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";

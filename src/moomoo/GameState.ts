@@ -9,7 +9,7 @@ import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packets/PacketType";
 import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
-import * as config from "../config.json";
+import config from "../config";
 
 export default class GameState {
   public game: Game;

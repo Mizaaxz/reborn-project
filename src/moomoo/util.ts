@@ -7,7 +7,7 @@ import { PacketFactory } from "../packets/PacketFactory";
 import { PacketType } from "../packets/PacketType";
 import Client from "./Client";
 import { getGame } from "./Game";
-import * as config from "../config.json";
+import config from "../config";
 
 enum SkinColor {
   Light1 = 2,
@@ -78,19 +78,11 @@ function Broadcast(text: string, to: Client | undefined) {
   if (game) {
     if (!to) {
       for (let client of game.clients) {
-        client.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.BROADCAST, [text])
-          )
-        );
+        client.socket.send(packetFactory.serializePacket(new Packet(PacketType.BROADCAST, [text])));
       }
     } else {
       let client = to;
-      client.socket.send(
-        packetFactory.serializePacket(
-          new Packet(PacketType.BROADCAST, [text])
-        )
-      );
+      client.socket.send(packetFactory.serializePacket(new Packet(PacketType.BROADCAST, [text])));
     }
   }
 }

@@ -5,7 +5,7 @@ import { PacketFactory } from "./packets/PacketFactory";
 import { Command, GetCommand } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
-import * as config from "./config.json";
+import config from "./config";
 import Vec2 from "vec2";
 import GameObject from "./gameobjects/GameObject";
 import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";

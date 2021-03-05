@@ -26,7 +26,7 @@ import { ItemType } from "../items/UpgradeItems";
 import GameObject from "../gameobjects/GameObject";
 import { collideGameObjects } from "./Physics";
 import { getHat } from "./Hats";
-import * as config from "../config.json";
+import config from "../config";
 import { getAccessory } from "./Accessories";
 
 export default class Player extends Entity {

@@ -1,4 +1,4 @@
-import config from "../config.json";
+import config from "../config";
 const errCodes = {
   login: {
     NO_USERNAME: "Please enter a username.",

@@ -11,7 +11,7 @@ import { PacketFactory } from "../packets/PacketFactory";
 import Projectile from "../projectiles/Projectile";
 import { getGame } from "./Game";
 import { randomPos } from "./util";
-import * as config from "../config.json";
+import config from "../config";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;

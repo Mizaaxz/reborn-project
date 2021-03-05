@@ -4,7 +4,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
-import * as config from "./config.json";
+import config from "./config";
 import * as console from "./console";
 import { Server as WSServer } from "ws";
 import UptimeWSServer from "./uptimeWS";
