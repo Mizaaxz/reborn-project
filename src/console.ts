@@ -357,7 +357,11 @@ Command(
             break;
 
           case "tribe":
-            player.clanName = args.slice(3).join(" ");
+            let tribe = game.state.tribes.filter(
+              (t) => t.name.toLowerCase() == args.slice(3).join(" ")
+            )[0];
+            if (tribe) game.state.joinClan(player, tribe);
+            else player.clanName = args.slice(3).join(" ");
             break;
 
           default:
