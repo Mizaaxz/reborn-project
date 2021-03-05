@@ -2,7 +2,7 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
-import { Command, GetCommand, playerSelector } from "./commandHandler";
+import { boolSelector, Command, GetCommand, playerSelector } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
@@ -100,39 +100,40 @@ Command(
   "invisible",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
-    let playerSID = Number(args[1]);
-    let player = source;
+
     if (game) {
-      if (playerSID)
-        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-      if (!player && !source) return "You need to be in the game to run this command.";
+      let player = playerSelector(args[1], source) || source;
+      if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
-        if (player) {
-          player.invisible = !player.invisible;
-          return false;
+        if (player instanceof Player) player.invisible = boolSelector(args[2]) || !player.invisible;
+        else if (player.length) {
+          player.forEach((p) => {
+            p.invisible = boolSelector(args[2]) || !p.invisible;
+          });
         } else return "Invalid Player ID";
       }
     }
   },
-  ["invis", "vanish"]
+  ["invis", "vanish", "v"]
 );
 
 Command(
   "invincible",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
-    let playerSID = Number(args[1]);
-    let player = source;
+
     if (game) {
-      if (playerSID)
-        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-      if (!player && !source) return "You need to be in the game to run this command.";
+      let player = playerSelector(args[1], source) || source;
+      if (!player) return "You need to be in the game to run this command.";
 
       if (game) {
-        if (player) {
-          player.invincible = !player.invincible;
-          return false;
+        if (player instanceof Player)
+          player.invincible = boolSelector(args[2]) || !player.invincible;
+        else if (player.length) {
+          player.forEach((p) => {
+            p.invincible = boolSelector(args[2]) || !p.invincible;
+          });
         } else return "Invalid Player ID";
       }
     }
