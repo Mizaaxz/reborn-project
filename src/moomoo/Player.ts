@@ -354,14 +354,18 @@ export default class Player extends Entity {
     game: Game,
     client: Client | undefined = undefined,
     angle: number = 0,
-    name: string = "unknown",
+    name: any = "unknown",
     skinColor: SkinColor = SkinColor.Light2,
     hatID: number = -1,
     accID: number = -1
   ) {
     super(sid, location, angle, new Vec2(0, 0));
 
-    this.name = name;
+    let filteredName: any[] = [];
+    [...name].forEach((char) => {
+      if (config.allowedMax.split("").includes(char)) filteredName.push(char);
+    });
+    this.name = filteredName.slice(0, 15).join("").trim() || "unknown";
     this.skinColor = skinColor;
 
     this.client = client;
