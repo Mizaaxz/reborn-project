@@ -68,7 +68,7 @@ Command(
     if (game) {
       let player = playerSelector(args[1], source);
       let otherPlayer = playerSelector(args[2], source, false);
-      if (!player) return "Invalid Player ID(s)";
+      if (!player) return "Invalid Player ID";
 
       if (player instanceof Player) {
         if (otherPlayer && otherPlayer instanceof Player) {
