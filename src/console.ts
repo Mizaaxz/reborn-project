@@ -62,8 +62,6 @@ Command(
 Command(
   "tp",
   (args: any[], source: Player) => {
-    let playerSID = Number(args[1]);
-    let tpTo = Number(args[2]);
     let thisPlayer = source;
     let game = getGame();
 
