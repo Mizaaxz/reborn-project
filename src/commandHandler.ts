@@ -43,14 +43,14 @@ const playerSelector = function (
   player = game.state.players.find((p) => p.id == Number(plr));
   if (player) return player;
 
-  if (plr == "*") return game.state.players;
-  if (plr == "**" && source) return game.state.players.filter((p) => p.id != source.id);
+  if (plr == "*" && allowMultiple) return game.state.players;
+  if (plr == "**" && source && allowMultiple)
+    return game.state.players.filter((p) => p.id != source.id);
 
   player = game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
   if (player.length == 1 || !allowMultiple) player = player[0];
-
-  if (player instanceof Player || (player || []).length) return player || null;
-  if (!allowMultiple) return null;
+  if (player instanceof Player) return player;
+  if ((player || []).length) return player;
 
   return null;
 };
