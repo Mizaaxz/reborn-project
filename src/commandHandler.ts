@@ -54,7 +54,7 @@ const playerSelector = function (
   return null;
 };
 
-function boolSelector(bool: string) {
+function boolSelector(bool: string | undefined) {
   switch (bool) {
     case "true":
     case "yes":
