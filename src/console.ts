@@ -368,13 +368,17 @@ Command(
 
               if (inTribe) {
                 if (inTribe.ownerSID == player.id) {
+                  console.log("owner leave");
                   game.state.removeTribe(tribeIndex);
                   if (player.client) player.client.tribeJoinQueue = [];
                 } else {
+                  console.log("regular leave");
                   game.state.leaveClan(player, tribeIndex);
                 }
-              }
-              game.state.joinClan(player, tribe);
+              } else console.log("no tribe");
+              setTimeout(function () {
+                if (game && player) game.state.joinClan(player, tribe);
+              }, 5);
             } else player.clanName = args.slice(3).join(" ");
             break;
 
