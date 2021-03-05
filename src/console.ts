@@ -361,9 +361,9 @@ Command(
               (t) => t.name.toLowerCase() == args.slice(3).join(" ")
             )[0];
             if (tribe) {
-              let tribeIndex = game.state.tribes.findIndex((t) =>
-                t.membersSIDs.includes(player?.id as number)
-              );
+              let tribeIndex = game.state.tribes.findIndex((t) => {
+                if (t) t.membersSIDs.includes(player?.id as number);
+              });
               let inTribe = game.state.tribes[tribeIndex];
 
               if (inTribe && inTribe.ownerSID == player.id) {
