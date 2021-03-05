@@ -153,18 +153,18 @@ Command(
   "speed",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
-    let playerSID = Number(args[2]);
-    let player = source;
-    if (game) {
-      if (playerSID)
-        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+    let s = Number(args[2]) || Number(args[1]) || config.defaultSpeed || 1;
 
-      if (!player && !source) return "You need to be in the game to run this command!";
+    if (game) {
+      let player = playerSelector(args[1], source) || source;
+      if (!player) return "You need to be in the game to run this command!";
 
       if (game) {
-        if (player) {
-          player.spdMult = Number(args[1]) || config.defaultSpeed || 1;
-          return false;
+        if (player instanceof Player) player.spdMult = s;
+        else if (player.length) {
+          player.forEach((p) => {
+            p.spdMult = s;
+          });
         } else return "Invalid Player ID";
       }
     }
