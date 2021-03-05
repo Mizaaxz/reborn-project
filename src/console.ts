@@ -427,6 +427,7 @@ Command(
     let lastWallPos = 0;
     let wallCount = 0;
     let totalWalls = 10;
+    let removeRadius = 200;
 
     let pos = {
       topleft: new Vec2(0, 0),
@@ -495,8 +496,8 @@ Command(
     game.state.gameObjects
       .filter(
         (o) =>
-          between(o.location.x, pos.topleft.x - 150, pos.topright.x + 150) &&
-          between(o.location.y, pos.topleft.y - 150, pos.bottomright.y + 150)
+          between(o.location.x, pos.topleft.x - removeRadius, pos.topright.x + removeRadius) &&
+          between(o.location.y, pos.topleft.y - removeRadius, pos.bottomright.y + removeRadius)
       )
       .forEach((o) => {
         if (game && o && !o.protect) game.state.removeGameObject(o);
