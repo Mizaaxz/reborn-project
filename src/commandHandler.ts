@@ -36,6 +36,7 @@ const playerSelector = function (
 ) {
   let game = getGame();
   if (!game) process.exit();
+  if (!plr) return null;
 
   let player: Player | Player[] | undefined;
 
