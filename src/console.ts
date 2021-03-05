@@ -353,11 +353,11 @@ Command(
             break;
 
           case "name":
-            player.name = args[3];
+            player.name = args.slice(3).join(" ");
             break;
 
           case "tribe":
-            player.clanName = args[3];
+            player.clanName = args.slice(3).join(" ");
             break;
 
           default:
