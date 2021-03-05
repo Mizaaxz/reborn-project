@@ -54,4 +54,17 @@ const playerSelector = function (
   return null;
 };
 
-export { Command, GetCommand, playerSelector };
+function boolSelector(bool: string) {
+  switch (bool) {
+    case "true":
+    case "yes":
+      return true;
+    case "false":
+    case "no":
+      return false;
+    default:
+      return null;
+  }
+}
+
+export { Command, GetCommand, playerSelector, boolSelector };
