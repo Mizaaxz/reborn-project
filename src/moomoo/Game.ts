@@ -1162,7 +1162,12 @@ export default class Game {
                 if (otherPlayer) this.sendGameObjects(otherPlayer);
               }
             }
-            newPlayer.name = [...packet.data[0].name].slice(0, 16).join("") || "unknown";
+
+            let filteredName: any[] = [];
+            [...packet.data[0].name].forEach((char) => {
+              if (config.allowedMax.split("").includes(char)) filteredName.push(char);
+            });
+            newPlayer.name = filteredName.slice(0, 16).join("").trim() || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;
