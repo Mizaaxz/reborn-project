@@ -101,7 +101,7 @@ app.post("/api/v1/login", (req, res) => {
   });
 });
 app.post("/api/v1/create", (req, res) => {
-  return res.json({ error: "DISABLED", text: "Accounts are disabled." }); //disabled
+  //return res.json({ error: "DISABLED", text: "Accounts are disabled." }); //disabled
   let username = req.body.username;
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
   let password = req.body.password;
