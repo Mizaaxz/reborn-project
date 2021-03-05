@@ -2,7 +2,7 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
-import { Command, GetCommand } from "./commandHandler";
+import { Command, GetCommand, playerSelector } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
@@ -395,20 +395,20 @@ Command(
 Command(
   "kick",
   (args: any[], source: Player | undefined) => {
-    let playerSID = Number(args[1]);
     let reason = args.slice(2).join(" ") || "Kicked by a moderator.";
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = playerSelector(args[1], source);
+      if (!player) return "Invalid Player ID";
 
-      if (player && player.client) game.kickClient(player.client, reason);
-      else if (args[1] == "*" || args[1] == "**") {
-        game.state.players.forEach((p) => {
-          if (source && p.id == source.id && args[1] == "**") return;
-          if (p && p.client) game?.kickClient(p.client, reason);
+      if (player instanceof Player) {
+        if (player.client) game.kickClient(player.client, reason);
+      } else {
+        player.forEach((p) => {
+          if (p.client) game?.kickClient(p.client, reason);
         });
-      } else return "Invalid Player ID";
+      }
     }
   },
   ["k"]
