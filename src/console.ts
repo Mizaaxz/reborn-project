@@ -68,31 +68,30 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-      let otherPlayer = game.state.players.find((plyr: { id: any }) => plyr.id == tpTo);
+      let player = playerSelector(args[1], source);
+      let otherPlayer = playerSelector(args[2], source, false);
+      if (!player) return "Invalid Player ID(s)";
 
-      if (player) {
-        if (!tpTo) {
+      if (player instanceof Player) {
+        if (otherPlayer && otherPlayer instanceof Player) {
+          player.location = otherPlayer.location.add(0, 0, true);
+          game.sendGameObjects(player);
+          return false;
+        } else {
           if (!source) return "You need to be in the game to run this command!";
           thisPlayer.location = player.location.add(0, 0, true);
           game.sendGameObjects(thisPlayer);
           return false;
-        } else if (otherPlayer) {
-          player.location = otherPlayer.location.add(0, 0, true);
-          game.sendGameObjects(player);
-          return false;
-        } else return "Invalid Player ID(s)";
-      } else if (args[1] == "*" || args[1] == "**") {
-        if (!tpTo) return "You can not use the */** selector without a second argument.";
-        else if (otherPlayer) {
-          game.state.players.forEach((p) => {
-            if (!game || !otherPlayer) return;
-            if (args[1] == "**" && p.id == source.id) return;
-            p.location = otherPlayer.location.add(0, 0, true);
-            game.sendGameObjects(p);
-          });
-          return false;
-        } else return "Invalid Player ID(s)";
+        }
+      } else {
+        if (!otherPlayer || !(otherPlayer instanceof Player))
+          return "You must provide a second player!";
+        player.forEach((p) => {
+          if (!game || !(otherPlayer instanceof Player)) return;
+          p.location = otherPlayer.location.add(0, 0, true);
+          game.sendGameObjects(p);
+        });
+        return false;
       }
     }
   },

@@ -29,7 +29,11 @@ const GetCommand = function (name: string) {
   return commandIndex[name.toLowerCase()];
 };
 
-const playerSelector = function (plr: string, source: Player | undefined) {
+const playerSelector = function (
+  plr: string,
+  source: Player | undefined,
+  allowMultiple: boolean = true
+) {
   let game = getGame();
   if (!game) process.exit();
 
@@ -38,7 +42,10 @@ const playerSelector = function (plr: string, source: Player | undefined) {
   player =
     game.state.players.find((p) => p.id == Number(plr)) ||
     game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
+  if (!allowMultiple && !(player instanceof Player)) player = player[0];
+
   if (player && (player as Player[]).length) return player;
+  if (!allowMultiple) return null;
 
   if (plr == "*") return game.state.players;
   if (plr == "**" && source) return game.state.players.filter((p) => p.id != source.id);
