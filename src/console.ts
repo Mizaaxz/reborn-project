@@ -45,18 +45,15 @@ Command(
 
 Command(
   "kill",
-  (args: any[]) => {
-    let playerSID = Number(args[1]);
-    if (!playerSID) return "Invalid Player ID";
+  (args: any[], source: Player | undefined) => {
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = playerSelector(args[1], source);
+      if (!player) return "Invalid Player ID";
 
-      if (player) {
-        game.killPlayer(player);
-        return false;
-      } else return "Invalid Player ID";
+      if (player instanceof Player) game.killPlayer(player);
+      else player.map((p) => game?.killPlayer(p));
     }
   },
   ["k"]
