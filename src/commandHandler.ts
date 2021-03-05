@@ -48,9 +48,8 @@ const playerSelector = function (
     return game.state.players.filter((p) => p.id != source.id);
 
   player = game.state.players.filter((p) => p.name.toLowerCase() == plr.toLowerCase());
-  if (player.length == 1 || !allowMultiple) player = player[0];
-  if (player instanceof Player) return player;
-  if ((player || []).length) return player;
+  if (player.length == 1 || !allowMultiple) return player[0] || null;
+  if (player.length) return player;
 
   return null;
 };
