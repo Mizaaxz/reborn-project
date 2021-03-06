@@ -612,7 +612,7 @@ export default class Game {
     let recieverAcc = getAccessory(to.accID);
 
     let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
-    from.health += Math.min(healAmount, 100);
+    from.health = Math.min(from.health + healAmount, 100);
 
     if (healAmount) {
       from.client?.socket.send(
