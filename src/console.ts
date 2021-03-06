@@ -584,7 +584,7 @@ Command(
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
-    let protect = args[2] == "-p" || args[1] == "-p";
+    let protect = args[2] == "-lck" || args[1] == "-lck";
 
     if (game) {
       let player =
@@ -642,7 +642,7 @@ Command(
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
-    let protect = args[2] == "-p" || args[1] == "-p";
+    let protect = args[2] == "-lck" || args[1] == "-lck";
 
     if (game) {
       let player =
