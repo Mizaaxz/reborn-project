@@ -1650,7 +1650,7 @@ export default class Game {
         }
         break;
       case PacketType.TRADE_REQ:
-        if (!client.player || client.player.dead) Broadcast("Error: SELECT_WHILE_DEAD", client);
+        if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
 
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
@@ -1661,6 +1661,20 @@ export default class Game {
               packetFactory.serializePacket(
                 new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name])
               )
+            );
+          }
+        }
+        break;
+      case PacketType.ACCEPT_TRADE_REQ:
+        if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
+
+        if (client.player) {
+          let toUser = this.state.players.find((p) => p.id == packet.data[0]);
+          if (toUser) {
+            if (!client.tradeRequests.includes(toUser)) return;
+            client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
+            toUser.client?.socket.send(
+              packetFactory.serializePacket(new Packet(PacketType.SEND_TRADE_REQ, [0, ""]))
             );
           }
         }
