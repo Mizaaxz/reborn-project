@@ -4,12 +4,13 @@ import Player from "./Player";
 
 export default class Client {
   public tribeJoinQueue: Player[] = [];
+  public tradeRequests: Player[] = [];
   public seenProjectiles: number[] = [];
   public lastAttackTime = 0;
   public spawnPos: Vec2 | boolean = false;
   public triedAuth: boolean = false;
   public loggedIn: boolean = false;
-  public accountName: string = '';
+  public accountName: string = "";
   constructor(
     public id: string,
     public socket: WebSocket,

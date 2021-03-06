@@ -1649,6 +1649,22 @@ export default class Game {
           Broadcast("Error: SELECT_WHILE_DEAD", client);
         }
         break;
+      case PacketType.TRADE_REQ:
+        if (!client.player || client.player.dead) Broadcast("Error: SELECT_WHILE_DEAD", client);
+
+        if (client.player) {
+          let toUser = this.state.players.find((p) => p.id == packet.data[0]);
+          if (toUser) {
+            if (client.tradeRequests.includes(toUser)) return;
+            client.tradeRequests.push(toUser);
+            toUser.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name])
+              )
+            );
+          }
+        }
+        break;
     }
   }
 }

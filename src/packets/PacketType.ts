@@ -58,6 +58,7 @@ enum PacketType {
   ANTI_CHEAT,
   ANTI_CHEAT_ERROR,
   TRADE_REQ,
+  SEND_TRADE_REQ,
 }
 
 export { PacketType };
