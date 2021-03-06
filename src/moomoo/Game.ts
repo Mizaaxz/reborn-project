@@ -1659,7 +1659,7 @@ export default class Game {
             client.tradeRequests.push(toUser);
             toUser.client?.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name])
+                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 0])
               )
             );
           }
@@ -1675,7 +1675,7 @@ export default class Game {
             client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
             client.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.SEND_TRADE_REQ, [-client.player.id, client.player.name])
+                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 1])
               )
             );
           }
