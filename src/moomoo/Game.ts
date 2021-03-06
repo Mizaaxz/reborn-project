@@ -612,7 +612,7 @@ export default class Game {
     let recieverAcc = getAccessory(to.accID);
 
     let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
-    from.health += healAmount;
+    from.health += Math.min(healAmount, 100);
 
     if (healAmount) {
       from.client?.socket.send(
@@ -1671,7 +1671,8 @@ export default class Game {
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
           if (toUser) {
-            if (!client.tradeRequests.includes(toUser)) return Broadcast("Error: NOT_REQUESTED", client);
+            if (!client.tradeRequests.includes(toUser))
+              return Broadcast("Error: NOT_REQUESTED", client);
             client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
             client.socket.send(
               packetFactory.serializePacket(
