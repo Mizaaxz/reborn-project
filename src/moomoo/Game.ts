@@ -289,12 +289,12 @@ export default class Game {
             )
           );
         } else {
-          console.log("MessagePacket issue. Not a buffer. Data: " + msg);
+          console.log("MessagePacket issue. Not a buffer.");
           this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
           socket.terminate();
         }
       } catch (e) {
-        console.log("MessagePacket issue. Data: " + msg);
+        console.log("MessagePacket issue.");
         this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
         socket.terminate();
       }
