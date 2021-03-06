@@ -1671,7 +1671,7 @@ export default class Game {
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
           if (toUser) {
-            if (!client.tradeRequests.includes(toUser)) return;
+            if (!client.tradeRequests.includes(toUser)) return Broadcast("Error: NOT_REQUESTED", client);
             client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
             client.socket.send(
               packetFactory.serializePacket(
