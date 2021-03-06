@@ -18,7 +18,7 @@ let command = "";
 let lastMessage = "";
 
 Command(
-  "stop",
+  "_stop",
   (args: any[], source: Player | undefined) => {
     Broadcast("no", source?.client);
     //Broadcast("Restarting server in 10 seconds...")
@@ -195,7 +195,7 @@ Command(
 );*/
 
 Command(
-  "weaponvariant",
+  "_weaponvariant",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[2]);
@@ -218,7 +218,7 @@ Command(
       }
     }
   },
-  ["variant", "wv"]
+  ["_variant", "_wv"]
 );
 
 Command(
@@ -275,7 +275,7 @@ Command(
 );
 
 Command(
-  "god",
+  "_god",
   (args: any[], source: Player | undefined) => {
     let playerSID = Number(args[1]);
     let game = getGame();
@@ -301,7 +301,7 @@ Command(
 );
 
 Command(
-  "set",
+  "_set",
   (args: any[]) => {
     let playerSID = Number(args[1]);
     let resourceType = args[2];
@@ -418,7 +418,7 @@ Command(
 );
 
 Command(
-  "generate",
+  "_generate",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let size = Number(args[2]);
@@ -434,11 +434,11 @@ Command(
     );
     return false;
   },
-  ["create", "createnode", "gen"]
+  ["_create", "_createnode", "_gen"]
 );
 
 Command(
-  "generatebase",
+  "_generatebase",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let game = getGame();
@@ -576,11 +576,11 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  ["genbase", "base"]
+  ["_genbase", "_base"]
 );
 
 Command(
-  "trap",
+  "_trap",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
@@ -634,11 +634,11 @@ Command(
       return false;
     }
   },
-  ["rap", "t", "trp", "tr"]
+  ["_rap", "_t", "_trp", "_tr"]
 );
 
 Command(
-  "pad",
+  "_pad",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
@@ -692,7 +692,7 @@ Command(
       return false;
     }
   },
-  ["p", "ad", "speedpad"]
+  ["_p", "_ad", "_speedpad"]
 );
 
 Command(
