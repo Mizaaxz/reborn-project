@@ -2,6 +2,8 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
+import { Packet, Side } from "../packets/Packet";
+import { PacketType } from "../packets/PacketType";
 import { boolSelector, Command, GetCommand, playerSelector } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
@@ -712,6 +714,12 @@ Command("cr",
 function(args:any[], source:Player|undefined) {
 if(source) {
 source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall]
+
+if(source.client)source.client.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.UPDATE_ITEMS, [source.items, 0])
+            )
+          );
 }
 },[])
 
