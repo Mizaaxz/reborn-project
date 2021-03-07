@@ -57,7 +57,7 @@ function moveTowards(
 function collidePlayerGameObject(player: Player, gameObj: GameObject) {
   return collideCircles(
     player.location,
-    25,
+    35,
     gameObj.location,
     gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
@@ -102,7 +102,7 @@ function tryMovePlayer(
             player.padHeal = 15;
             break;
           case ItemType.Teleporter:
-            player.location = randomPos(14400 + 25, 14400 - 25);
+            player.location = randomPos(14400 + 35, 14400 - 35);
             return;
         }
         if (!hasCollision(gameObj.data)) continue;
@@ -141,8 +141,8 @@ function tryMovePlayer(
           ?.client?.socket.send(
             packetFactory.serializePacket(
               new Packet(PacketType.HEALTH_CHANGE, [
-                gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 25),
-                gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 25),
+                gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+                gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
                 dmg,
                 1,
               ])
@@ -159,8 +159,8 @@ function tryMovePlayer(
       );
 
       newLocation = new Vec2(
-        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 25),
-        gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 25)
+        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+        gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35)
       );
     }
   }
@@ -183,7 +183,7 @@ function tryMovePlayer(
     }
   }
 
-  newLocation.clamp(new Vec2(0 + 25, 0 + 25), new Vec2(14400 - 25, 14400 - 25));
+  newLocation.clamp(new Vec2(0 + 35, 0 + 35), new Vec2(14400 - 35, 14400 - 35));
   player.location = newLocation.add(delta * xVel, delta * yVel);
 }
 
@@ -226,7 +226,7 @@ function checkAttack(player: Player, players: Player[]) {
   let hitPlayers: Player[] = [];
 
   for (let hitPlayer of players) {
-    if (pointCircle(getAttackLocation(player), hitPlayer.location, 25 * 2))
+    if (pointCircle(getAttackLocation(player), hitPlayer.location, 35 * 2))
       hitPlayers.push(hitPlayer);
   }
 
@@ -264,7 +264,7 @@ function checkAttackGameObj(player: Player, gameObjects: GameObject[]) {
 }
 
 function collideProjectilePlayer(projectile: Projectile, player: Player) {
-  return collideCircles(projectile.location, 10, player.location, 25);
+  return collideCircles(projectile.location, 10, player.location, 35);
 }
 
 function collideProjectileGameObject(projectile: Projectile, gameObj: GameObject) {
