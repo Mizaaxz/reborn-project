@@ -391,7 +391,7 @@ export default class Player extends Entity {
       ).length;
       if (placedAmount >= placeLimit) return;
 
-      let offset = 45 + getScale(item) + (getPlaceOffset(item) || 0);
+      let offset = 35 + getScale(item) + (getPlaceOffset(item) || 0);
       let location = this.location.add(
         offset * Math.cos(this.angle),
         offset * Math.sin(this.angle),
