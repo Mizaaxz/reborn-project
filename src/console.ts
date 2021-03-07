@@ -2,8 +2,8 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
-import { Packet, Side } from "../packets/Packet";
-import { PacketType } from "../packets/PacketType";
+import { Packet, Side } from "./packets/Packet";
+import { PacketType } from "./packets/PacketType";
 import { boolSelector, Command, GetCommand, playerSelector } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
@@ -712,6 +712,8 @@ Command(
 
 Command("cr",
 function(args:any[], source:Player|undefined) {
+let packetFactory = PacketFactory.getInstance();
+
 if(source) {
 source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall]
 
