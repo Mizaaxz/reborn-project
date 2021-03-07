@@ -710,20 +710,22 @@ Command(
   ["gm"]
 );
 
-Command("cr",
-function(args:any[], source:Player|undefined) {
-let packetFactory = PacketFactory.getInstance();
+Command(
+  "cr",
+  function (args: any[], source: Player | undefined) {
+    let packetFactory = PacketFactory.getInstance();
 
-if(source) {
-source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall]
+    if (source) {
+      source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall];
 
-if(source.client)source.client.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.UPDATE_ITEMS, [source.items, 0])
-            )
-          );
-}
-},[])
+      if (source.client)
+        source.client.socket.send(
+          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]))
+        );
+    }
+  },
+  []
+);
 
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
