@@ -716,7 +716,31 @@ Command(
     let packetFactory = PacketFactory.getInstance();
 
     if (source) {
-      source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall];
+      source.items = [
+        ItemType.Apple,
+        ItemType.WoodWall,
+        ItemType.Spikes,
+        ItemType.Windmill,
+        ItemType.Cookie,
+        ItemType.StoneWall,
+        ItemType.PitTrap,
+        ItemType.BoostPad,
+        ItemType.GreaterSpikes,
+        ItemType.FasterWindmill,
+        ItemType.Mine,
+        ItemType.Sapling,
+        ItemType.Cheese,
+        ItemType.Turret,
+        ItemType.Platform,
+        ItemType.HealingPad,
+        ItemType.Blocker,
+        ItemType.Teleporter,
+        ItemType.CastleWall,
+        ItemType.PowerMill,
+        ItemType.PoisonSpikes,
+        ItemType.SpinningSpikes,
+        ItemType.SpawnPad,
+      ];
 
       if (source.client)
         source.client.socket.send(
