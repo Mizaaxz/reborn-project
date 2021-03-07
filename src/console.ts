@@ -195,7 +195,7 @@ Command(
 );*/
 
 Command(
-  "_weaponvariant",
+  "weaponvariant",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[2]);
@@ -218,7 +218,7 @@ Command(
       }
     }
   },
-  ["_variant", "_wv"]
+  ["variant", "wv"]
 );
 
 Command(
@@ -301,7 +301,7 @@ Command(
 );
 
 Command(
-  "_set",
+  "set",
   (args: any[]) => {
     let playerSID = Number(args[1]);
     let resourceType = args[2];
@@ -418,7 +418,7 @@ Command(
 );
 
 Command(
-  "_generate",
+  "generate",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let size = Number(args[2]);
@@ -434,10 +434,10 @@ Command(
     );
     return false;
   },
-  ["_create", "_createnode", "_gen"]
+  ["gen"]
 );
 
-Command(
+/*Command(
   "_generatebase",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
@@ -577,7 +577,7 @@ Command(
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
   ["_genbase", "_base"]
-);
+);*/
 
 Command(
   "_trap",
