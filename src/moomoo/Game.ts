@@ -124,7 +124,7 @@ export default class Game {
     ];
     const riverGameObjectTypes = [GameObjectType.Mine];
 
-    outerLoop: for (let i = 0; i < 500; i++) {
+    outerLoop: for (let i = 0; i < 400; i++) {
       let location = randomPos(14400, 14400);
       let gameObjectType =
         location.y >= 12e3
