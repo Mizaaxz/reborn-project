@@ -708,6 +708,13 @@ Command(
   ["gm"]
 );
 
+Command("cr",
+function(args:any[], source:Player|undefined) {
+if(source) {
+source.items = [ItemType.WoodWall, ItemType.StoneWall, ItemType.CastleWall]
+}
+},[])
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;
