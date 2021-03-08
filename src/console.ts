@@ -158,7 +158,7 @@ Command(
     let s = Number(args[2]) || Number(args[1]) || config.defaultSpeed || 1;
 
     if (game) {
-      let player = playerSelector(args[1], source) || source;
+      let player = args[2] ? playerSelector(args[1], source) : source;
       if (!player) return "You need to be in the game to run this command!";
 
       if (game) {
@@ -200,24 +200,18 @@ Command(
   "weaponvariant",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
-    let playerSID = Number(args[2]);
-    let player = source;
     let variant = args[1] || "normal";
 
     if (game) {
-      if (playerSID)
-        player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = playerSelector(args[2], source) || source;
+      if (!player) return "You need to be in the game to run this command.";
 
-      if (!player || !source) return "You need to be in the game to run this command.";
-
-      if (game) {
-        if (player) {
-          let variantSet = setWeaponVariant(player, variant);
-          if (variantSet == 1) {
-            return "Invalid weapon variant " + variant;
-          } else return false;
-        } else return "Invalid Player ID";
-      }
+      if (player instanceof Player) setWeaponVariant(player, variant);
+      else if (player.length)
+        player.forEach((p) => {
+          setWeaponVariant(p, variant);
+        });
+      else return "Invalid Player ID(s)";
     }
   },
   ["variant", "wv"]
