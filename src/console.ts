@@ -787,7 +787,7 @@ function runCommand(command: string, source?: Player) {
   try {
     let err = GetCommand(command).execute(command, source);
     if (err && source?.client) Broadcast(err, source.client);
-    logMethod(`Ran "${command}" from ${source?.name} (${source?.id}).`);
+    console.log(`Ran "${command}" from ${source?.name} (${source?.id}).`);
     logger.log(
       `Player "${source?.name || "CONSOLE"}" (ID: ${source?.id || 0}) ran command "${command}".`
     );
