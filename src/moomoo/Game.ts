@@ -47,6 +47,7 @@ import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
 import { pointCircle, getAttackLocation } from "./Physics";
+import * as logger from "../log";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1259,8 +1260,12 @@ export default class Game {
         if (packet.data[0].startsWith("/") && client.admin)
           return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
 
-        packet.data[0] = [...packet.data[0]].slice(0, 50).join("").trim();
+        packet.data[0] = String([...packet.data[0]].slice(0, 50).join("").trim());
         if (!packet.data[0]) return;
+
+        logger.log(
+          `Chat message by "${client.player?.name}" (ID: ${client.player?.id}): ${packet.data[0]}`
+        );
 
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
