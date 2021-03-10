@@ -22,6 +22,7 @@ import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
 import { Account } from "./moomoo/Account";
+import { initLogs } from "./log";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -200,6 +201,7 @@ server.on("upgrade", function upgrade(request, socket, head) {
 });
 
 console.startConsole();
+initLogs();
 
 server.listen(config.port, () =>
   console.log(`Sanctuary listening at https://localhost:${config.port}`)

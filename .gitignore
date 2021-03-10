@@ -2,6 +2,7 @@ node_modules
 lib
 data/sanctuary.json
 data/DEFAULT_GAMEMODE=*
+data/*.log
 data.json
 token
 package-lock.json

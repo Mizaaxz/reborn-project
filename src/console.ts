@@ -15,6 +15,7 @@ import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
 import { gameObjectSizes, GameObjectType } from "./gameobjects/gameobjects";
+import * as logger from "./log";
 
 let command = "";
 let lastMessage = "";
@@ -745,6 +746,15 @@ Command(
   []
 );
 
+Command(
+  "logs",
+  function (args: any[], source: Player | undefined) {
+    if (source?.client) return Broadcast("Must use in console.", source.client);
+    logMethod(logger.returnLogs(15));
+  },
+  []
+);
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;
@@ -777,7 +787,10 @@ function runCommand(command: string, source?: Player) {
   try {
     let err = GetCommand(command).execute(command, source);
     if (err && source?.client) Broadcast(err, source.client);
-    console.log(`Ran "${command}" from ${source?.name} (${source?.id}).`);
+    logMethod(`Ran "${command}" from ${source?.name} (${source?.id}).`);
+    logger.log(
+      `Player "${source?.name || "CONSOLE"}" (ID: ${source?.id || 0}) ran command "${command}".`
+    );
   } catch (_) {
     if (source?.client) Broadcast(`Error: ${_}`, source.client);
     return false;
@@ -796,7 +809,10 @@ function startConsole() {
     let char = key.toString("utf8");
 
     if (char === "\u0003") {
-      process.exit();
+      logger.log("Stopped Server.");
+      setTimeout(function () {
+        process.exit();
+      }, 20);
     }
 
     if (!specialChars.includes(char) && char.length === 1) {
