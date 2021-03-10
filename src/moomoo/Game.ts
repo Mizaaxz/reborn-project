@@ -1249,6 +1249,7 @@ export default class Game {
         break;
       case PacketType.WINDOW_FOCUS:
         if (client.player) client.player.stopMove();
+        break;
       case PacketType.SET_ANGLE:
         if (client.player) client.player.angle = packet.data[0];
         break;
