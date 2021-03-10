@@ -576,7 +576,7 @@ Command(
 );*/
 
 Command(
-  "_trap",
+  "trap",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
@@ -630,11 +630,11 @@ Command(
       return false;
     }
   },
-  ["_rap", "_t", "_trp", "_tr"]
+  ["rap", "t", "trp", "tr"]
 );
 
 Command(
-  "_pad",
+  "pad",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
     let playerSID = Number(args[1]);
@@ -688,7 +688,7 @@ Command(
       return false;
     }
   },
-  ["_p", "_ad", "_speedpad"]
+  ["p", "ad", "speedpad"]
 );
 
 Command(
