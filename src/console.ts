@@ -750,7 +750,7 @@ Command(
   "logs",
   function (args: any[], source: Player | undefined) {
     if (source?.client) return Broadcast("Must use in console.", source.client);
-    console.log(logger.returnLogs(15));
+    console.log("\n" + logger.returnLogs(15));
   },
   []
 );

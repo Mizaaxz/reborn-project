@@ -6,14 +6,16 @@ function getDate() {
   return new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
 }
 function log(data: string) {
-  fs.writeFileSync(logFilePath, `\n[${getDate()}] ${data}`);
+  let old = String(fs.readFileSync(logFilePath));
+  fs.writeFileSync(logFilePath, `${old}\n[${getDate()}] ${data}`);
 }
 function initLogs() {
   logFilePath = `data/server.log`;
   fs.writeFileSync(logFilePath, `[${getDate()}] Server Started.`);
 }
 function returnLogs(lines: number) {
-  return String(fs.readFileSync(logFilePath));
+  let content = String(fs.readFileSync(logFilePath)).split("\n");
+  return content.slice(content.length - lines, content.length).join("\n");
 }
 
 export { log, initLogs, returnLogs };
