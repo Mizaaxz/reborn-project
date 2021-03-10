@@ -282,4 +282,5 @@ export {
   getAttackLocation,
   collideProjectilePlayer,
   collideProjectileGameObject,
+  pointCircle,
 };

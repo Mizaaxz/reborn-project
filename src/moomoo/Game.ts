@@ -46,6 +46,7 @@ import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
+import { pointCircle, getAttackLocation } from "./Physics";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -629,6 +630,8 @@ export default class Game {
 
     if (attackerHat && attackerHat.dmgMultO) dmg *= attackerHat.dmgMultO;
 
+    if (to.selectedWeapon == Weapons.Shield) dmg *= 0.2;
+
     if (recieverHat) {
       dmg *= recieverHat.dmgMult || 1;
 
@@ -661,6 +664,7 @@ export default class Game {
     }
 
     to.health -= dmg;
+    return dmg;
   }
   /**
    * Called as often as possible for things like physics calculations
@@ -752,7 +756,7 @@ export default class Game {
 
               let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
 
-              this.damageFrom(hitPlayer, player, dmg);
+              dmg = this.damageFrom(hitPlayer, player, dmg);
 
               if (weaponVariant == WeaponVariant.Emerald) {
                 hitPlayer.bleedDmg = 5;
