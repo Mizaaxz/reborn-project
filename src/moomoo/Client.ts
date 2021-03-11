@@ -4,7 +4,7 @@ import Player from "./Player";
 
 export default class Client {
   public tribeJoinQueue: Player[] = [];
-  public tradeRequests: Player[] = [];
+  public tradeRequests: number[] = [];
   public seenProjectiles: number[] = [];
   public lastAttackTime = 0;
   public spawnPos: Vec2 | boolean = false;

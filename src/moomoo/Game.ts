@@ -1670,8 +1670,8 @@ export default class Game {
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
           if (toUser) {
-            if (client.tradeRequests.includes(toUser)) return;
-            client.tradeRequests.push(toUser);
+            if (client.tradeRequests.includes(toUser.id)) return;
+            client.tradeRequests.push(toUser.id);
             toUser.client?.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 0])
@@ -1686,9 +1686,9 @@ export default class Game {
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
           if (toUser) {
-            if (!client.tradeRequests.includes(toUser))
+            if (!client.tradeRequests.includes(toUser.id))
               return Broadcast("Error: NOT_REQUESTED", client);
-            client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
+            client.tradeRequests.splice(client.tradeRequests.indexOf(toUser.id), 1);
             client.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 1])
