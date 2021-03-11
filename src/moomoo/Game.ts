@@ -1267,7 +1267,8 @@ export default class Game {
           `Chat message by "${client.player?.name}" (ID: ${client.player?.id}): ${packet.data[0]}`
         );
 
-        if (packet.data[0].toLowerCase() == "!crash") return this.kickClient(client, "shut up");
+        if (packet.data[0].toLowerCase() == "!crash")
+          return this.kickClient(client, 'crashed <span style="font-size:16px">xd</span>');
 
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
