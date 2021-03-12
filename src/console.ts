@@ -747,6 +747,31 @@ Command(
 );
 
 Command(
+  "an",
+  function (args: any[], source: Player | undefined) {
+    let packetFactory = PacketFactory.getInstance();
+
+    if (source && source.client)
+      source.client.socket.send(
+        packetFactory.serializePacket(
+          new Packet(PacketType.UPDATE_ANIMALS, [
+            [
+              1, // sid
+              0, // animal index id
+              source.location.x, // locx
+              source.location.y, // locy
+              0, // angle (dir?)
+              100, // health
+              1, // cow name index
+            ],
+          ])
+        )
+      );
+  },
+  []
+);
+
+Command(
   "logs",
   function (args: any[], source: Player | undefined) {
     if (source?.client) return Broadcast("Must use in console.", source.client);
