@@ -750,23 +750,27 @@ Command(
   "an",
   function (args: any[], source: Player | undefined) {
     let packetFactory = PacketFactory.getInstance();
+    let game = getGame();
 
-    if (source && source.client)
-      source.client.socket.send(
-        packetFactory.serializePacket(
-          new Packet(PacketType.UPDATE_ANIMALS, [
-            [
-              1, // sid
-              0, // animal index id
-              source.location.x, // locx
-              source.location.y, // locy
-              0, // angle (dir?)
-              100, // health
-              1, // cow name index
-            ],
-          ])
-        )
-      );
+    if (source && source.client && game) {
+      game.state.players.forEach((plr) => {
+        plr.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_ANIMALS, [
+              [
+                1, // sid
+                0, // animal index id
+                source.location.x, // locx
+                source.location.y, // locy
+                0, // angle (dir?)
+                100, // health
+                1, // cow name index
+              ],
+            ])
+          )
+        );
+      });
+    }
   },
   []
 );
