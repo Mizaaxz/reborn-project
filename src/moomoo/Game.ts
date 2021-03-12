@@ -1387,17 +1387,11 @@ export default class Game {
           if (isWeapon) {
             client.player.buildItem = -1;
 
-            if (client.player.weapon == packet.data[0]) {
-              if (client.player.selectedWeapon != client.player.weapon)
-                client.player.lastHitTime = 0;
+            if (client.player.weapon == packet.data[0])
               client.player.selectedWeapon = client.player.weapon;
-            } else if (client.player.secondaryWeapon == packet.data[0]) {
-              if (client.player.selectedWeapon != client.player.secondaryWeapon)
-                client.player.lastHitTime = 0;
+            else if (client.player.secondaryWeapon == packet.data[0])
               client.player.selectedWeapon = client.player.secondaryWeapon;
-            } else {
-              Broadcast("Error: INVALID_WEAPON", client);
-            }
+            else Broadcast("Error: INVALID_WEAPON", client);
           } else {
             let itemCost = getItemCost(packet.data[0]);
             let costs = chunk(itemCost, 2);
