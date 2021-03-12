@@ -11,6 +11,7 @@ import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
 import config from "../config";
 import { Broadcast } from "./util";
+import Animal from "./Animal";
 
 export default class GameState {
   public game: Game;
@@ -18,6 +19,7 @@ export default class GameState {
   public players: Player[] = [];
   public tribes: Tribe[] = [];
   public projectiles: Projectile[] = [];
+  public animals: Animal[] = [];
 
   constructor(game: Game) {
     this.game = game;
@@ -128,6 +130,9 @@ export default class GameState {
     return this.players[
       this.players.push(new Player(sid, ownerID, new Vec2(0, 0), game, client)) - 1
     ];
+  }
+  addAnimal(sid: number, location: Vec2, type: number, name: string) {
+    return this.animals[this.animals.push(new Animal(sid, location, type, name)) - 1];
   }
 
   addTribe(name: string, ownerSID: number) {

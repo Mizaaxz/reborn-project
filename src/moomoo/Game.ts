@@ -48,6 +48,7 @@ import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
 import { pointCircle, getAttackLocation } from "./Physics";
 import * as logger from "../log";
+import Animal from "./Animal";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -464,6 +465,29 @@ export default class Game {
       );
     }
   }
+  sendAnimalUpdates() {
+    let packetFactory = PacketFactory.getInstance();
+
+    this.state.players.forEach((plr: Player) => {
+      this.state.animals.forEach((animal: Animal) => {
+        plr.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_ANIMALS, [
+              [
+                animal.id, // sid
+                animal.type, // animal index id
+                animal.location.x, // locx
+                animal.location.y, // locy
+                animal.angle, // angle (dir?)
+                animal.health, // health
+                1, // cow name index
+              ],
+            ])
+          )
+        );
+      });
+    });
+  }
 
   sendLeaderboardUpdates() {
     let packetFactory = PacketFactory.getInstance();
@@ -496,6 +520,7 @@ export default class Game {
    */
   tick() {
     this.sendPlayerUpdates();
+    this.sendAnimalUpdates();
   }
 
   /**
@@ -998,6 +1023,9 @@ export default class Game {
    */
   genSID() {
     return Math.max(0, ...this.state.players.map((plr) => plr.id)) + 1;
+  }
+  genAnimalSID() {
+    return Math.max(0, ...this.state.animals.map((anm) => anm.id)) + 1;
   }
 
   /**

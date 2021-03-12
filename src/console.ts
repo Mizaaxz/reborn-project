@@ -16,6 +16,7 @@ import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
 import { gameObjectSizes, GameObjectType } from "./gameobjects/gameobjects";
 import * as logger from "./log";
+import Animal from "./moomoo/Animal";
 
 let command = "";
 let lastMessage = "";
@@ -747,32 +748,22 @@ Command(
 );
 
 Command(
-  "an",
+  "summon",
   function (args: any[], source: Player | undefined) {
-    let packetFactory = PacketFactory.getInstance();
     let game = getGame();
+    let type = Number(args[1]);
 
-    if (source && source.client && game) {
-      game.state.players.forEach((plr) => {
-        plr.client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_ANIMALS, [
-              [
-                1, // sid
-                0, // animal index id
-                source.location.x, // locx
-                source.location.y, // locy
-                0, // angle (dir?)
-                100, // health
-                1, // cow name index
-              ],
-            ])
-          )
-        );
-      });
+    if (source && game) {
+      let ai = game.state.addAnimal(
+        game.genAnimalSID(),
+        source.location.add(0, 0, true),
+        type || 0,
+        "Steph"
+      );
+      console.log(ai);
     }
   },
-  []
+  ["an", "spawn"]
 );
 
 Command(
