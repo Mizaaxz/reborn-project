@@ -610,4 +610,20 @@ export default class Player extends Entity {
 
     return players;
   }
+  getNearbyAnimals(state: GameState) {
+    const RADIUS = config.playerNearbyRadius || 1250;
+
+    let animals = [];
+
+    for (let animal of state.animals) {
+      if (
+        eucDistance([this.location.x, this.location.y], [animal.location.x, animal.location.y]) <
+        RADIUS
+      ) {
+        animals.push(animal);
+      }
+    }
+
+    return animals;
+  }
 }

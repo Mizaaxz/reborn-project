@@ -12,6 +12,7 @@ import Projectile from "../projectiles/Projectile";
 import { getGame } from "./Game";
 import { randomPos } from "./util";
 import config from "../config";
+import Animal from "./Animal";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -232,6 +233,16 @@ function checkAttack(player: Player, players: Player[]) {
 
   return hitPlayers;
 }
+function checkAnimalAttack(player: Player, animals: Animal[]) {
+  let hitAnimals: Animal[] = [];
+
+  for (let hitAnimal of animals) {
+    if (pointCircle(getAttackLocation(player), hitAnimal.location, 25 * 2))
+      hitAnimals.push(hitAnimal);
+  }
+
+  return hitAnimals;
+}
 
 function collideGameObjects(gameObject1: GameObject, gameObject2: GameObject) {
   return collideCircles(
@@ -276,6 +287,7 @@ export {
   collideRectangles,
   moveTowards,
   checkAttack,
+  checkAnimalAttack,
   collideGameObjects,
   checkAttackGameObj,
   movePlayer,

@@ -49,6 +49,7 @@ import { readdirSync } from "fs";
 import { pointCircle, getAttackLocation } from "./Physics";
 import * as logger from "../log";
 import Animal from "./Animal";
+import animals from "../definitions/animals";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -692,6 +693,38 @@ export default class Game {
     to.health -= dmg;
     return dmg;
   }
+  damageFromAnimal(to: Animal, from: Player, dmg: number, direct = true) {
+    let packetFactory = PacketFactory.getInstance();
+
+    let attackerHat = getHat(from.hatID);
+    let attackerAcc = getAccessory(from.accID);
+
+    let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
+    from.health = Math.min(from.health + healAmount, 100);
+
+    if (healAmount) {
+      from.client?.socket.send(
+        packetFactory.serializePacket(
+          new Packet(PacketType.HEALTH_CHANGE, [
+            from.location.x,
+            from.location.y,
+            Math.round(-healAmount),
+            1,
+          ])
+        )
+      );
+    }
+
+    if (attackerHat && attackerHat.dmgMultO) dmg *= attackerHat.dmgMultO;
+
+    if (to.health - dmg <= 0) {
+      let drops = animals[to.type].drop;
+      //todo: drops
+    }
+
+    to.health -= dmg;
+    return dmg;
+  }
   /**
    * Called as often as possible for things like physics calculations
    */
@@ -766,8 +799,10 @@ export default class Game {
             let hat = getHat(player.hatID);
 
             let nearbyPlayers = player.getNearbyPlayers(this.state);
+            let nearbyAnimals = player.getNearbyAnimals(this.state);
 
             let hitPlayers = Physics.checkAttack(player, nearbyPlayers);
+            let hitAnimals = Physics.checkAnimalAttack(player, nearbyAnimals);
             let hitGameObjects = Physics.checkAttackGameObj(
               player,
               player.getNearbyGameObjects(this.state)
@@ -822,6 +857,48 @@ export default class Game {
                   new Packet(PacketType.HEALTH_CHANGE, [
                     hitPlayer.location.x,
                     hitPlayer.location.y,
+                    Math.round(dmg),
+                    1,
+                  ])
+                )
+              );
+            }
+
+            for (let hitAnimal of hitAnimals) {
+              let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
+
+              dmg = this.damageFromAnimal(hitAnimal, player, dmg);
+
+              /*if (weaponVariant == WeaponVariant.Emerald) {
+                hitPlayer.bleedDmg = 5;
+                hitPlayer.bleedAmt = 0;
+                hitPlayer.maxBleedAmt = 10;
+              } else if (weaponVariant === WeaponVariant.Ruby) {
+                hitPlayer.bleedDmg = 5;
+                hitPlayer.bleedAmt = 0;
+                hitPlayer.maxBleedAmt = 5;
+              } else if (hat?.poisonDmg) {
+                hitPlayer.bleedDmg = hat.poisonDmg;
+                hitPlayer.bleedAmt = 0;
+                hitPlayer.maxBleedAmt = hat.poisonTime;
+              }*/
+
+              if (hitAnimal.health <= 0) {
+                //this.killAnimal(hitAnimal);
+              } else {
+                let attackDetails = getWeaponAttackDetails(player.selectedWeapon);
+                let knockback = attackDetails.kbMultiplier * 0.3;
+                hitAnimal.velocity.add(
+                  knockback * Math.cos(player.angle),
+                  knockback * Math.sin(player.angle)
+                );
+              }
+
+              player.client?.socket.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.HEALTH_CHANGE, [
+                    hitAnimal.location.x,
+                    hitAnimal.location.y,
                     Math.round(dmg),
                     1,
                   ])
