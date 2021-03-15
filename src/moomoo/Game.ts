@@ -778,7 +778,7 @@ export default class Game {
           player.lastHitTime = now;
 
           if (isRangedWeapon(player.selectedWeapon)) {
-            let projectileDistance = 25 / 2;
+            let projectileDistance = 35 / 2;
 
             this.state.addProjectile(
               getProjectileType(player.selectedWeapon),
