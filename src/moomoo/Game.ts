@@ -406,7 +406,7 @@ export default class Game {
   }
 
   killAnimal(animal: Animal) {
-    //animal.die();
+    animal.die();
 
     this.sendAnimalUpdates();
   }
