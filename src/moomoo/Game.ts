@@ -405,6 +405,14 @@ export default class Game {
     this.sendLeaderboardUpdates();
   }
 
+  killAnimal(animal: Animal) {
+    let packetFactory = PacketFactory.getInstance();
+
+    //animal.die();
+
+    this.sendAnimalUpdates();
+  }
+
   makePlayerUpdateForClient(client: Client) {
     let playerUpdate: (number | string | null)[] = [];
 
@@ -717,11 +725,6 @@ export default class Game {
 
     if (attackerHat && attackerHat.dmgMultO) dmg *= attackerHat.dmgMultO;
 
-    if (to.health - dmg <= 0) {
-      let drops = animals[to.type].drop;
-      //todo: drops
-    }
-
     to.health -= dmg;
     return dmg;
   }
@@ -884,7 +887,13 @@ export default class Game {
               }*/
 
               if (hitAnimal.health <= 0) {
-                //this.killAnimal(hitAnimal);
+                let type = animals[hitAnimal.type];
+                this.killAnimal(hitAnimal);
+
+                if (type) {
+                  player.food += type.drop || 0;
+                  player.points += type.killScore || 0;
+                }
               } else {
                 let attackDetails = getWeaponAttackDetails(player.selectedWeapon);
                 let knockback = attackDetails.kbMultiplier * 0.3;

@@ -8,7 +8,7 @@ const animals = [
     speed: 0.00095,
     turnSpeed: 0.001,
     scale: 72,
-    drop: ["food", 50],
+    drop: 50,
   },
   {
     id: 1,
@@ -19,7 +19,7 @@ const animals = [
     speed: 0.00085,
     turnSpeed: 0.001,
     scale: 72,
-    drop: ["food", 80],
+    drop: 80,
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ const animals = [
     scale: 78,
     viewRange: 800,
     chargePlayer: !0,
-    drop: ["food", 100],
+    drop: 100,
   },
   {
     id: 3,
@@ -51,7 +51,7 @@ const animals = [
     scale: 90,
     viewRange: 900,
     chargePlayer: !0,
-    drop: ["food", 400],
+    drop: 400,
   },
   {
     id: 4,
@@ -67,7 +67,7 @@ const animals = [
     scale: 84,
     viewRange: 800,
     chargePlayer: !0,
-    drop: ["food", 200],
+    drop: 200,
   },
   {
     id: 5,
@@ -81,7 +81,7 @@ const animals = [
     speed: 0.0018,
     turnSpeed: 0.006,
     scale: 70,
-    drop: ["food", 100],
+    drop: 100,
   },
   {
     id: 6,
@@ -107,7 +107,7 @@ const animals = [
     hitRange: 210,
     hitDelay: 1000,
     chargePlayer: !0,
-    drop: ["food", 100],
+    drop: 100,
   },
   {
     id: 7,
@@ -125,6 +125,7 @@ const animals = [
     turnSpeed: 0,
     scale: 70,
     spriteMlt: 1,
+    drop: 0,
   },
   {
     id: 8,
@@ -147,7 +148,7 @@ const animals = [
     scale: 90,
     viewRange: 800,
     chargePlayer: !0,
-    drop: ["food", 1000],
+    drop: 1000,
   },
 ];
 
