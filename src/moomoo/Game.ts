@@ -406,8 +406,6 @@ export default class Game {
   }
 
   killAnimal(animal: Animal) {
-    let packetFactory = PacketFactory.getInstance();
-
     //animal.die();
 
     this.sendAnimalUpdates();
