@@ -428,6 +428,7 @@ export default class Player extends Entity {
 
       return true;
     }
+    if (getHat(this.hatID)?.noEat) return;
 
     let healedAmount: number;
 
