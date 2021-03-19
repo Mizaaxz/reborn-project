@@ -415,7 +415,7 @@ export default class Game {
     let playerUpdate: (number | string | null)[] = [];
 
     if (client.player) {
-      if (!client.player.dead) playerUpdate = client.player.getUpdateData(this.state);
+      if (!client.player.dead) playerUpdate = client.player.getUpdateData(this.state, true);
 
       for (let player of client.player.getNearbyPlayers(this.state)) {
         if (!player.invisible) {
@@ -501,7 +501,7 @@ export default class Game {
     let leaderboardUpdate: (string | number)[] = [];
 
     for (let player of stableSort(
-      this.state.players.filter((player) => !player.dead && !player.invisible),
+      this.state.players.filter((player) => !player.dead && !player.hideLeaderboard),
       (a, b) => {
         if (a.points < b.points) return -1;
         if (a.points > b.points) return 1;
@@ -772,6 +772,13 @@ export default class Game {
       if (Date.now() - player.lastDot >= 1000) {
         player.damageOverTime();
         player.lastDot = now;
+      }
+
+      if (getHat(player.hatID)?.invisTimer) {
+        let invisTimer = getHat(player.hatID)?.invisTimer || 0;
+        if (player.lastMove + invisTimer > Date.now()) player.invisible = false;
+        else player.invisible = true;
+        this.sendPlayerUpdates();
       }
 
       if (player.isAttacking && player.selectedWeapon != Weapons.Shield && player.buildItem == -1) {
@@ -1090,6 +1097,7 @@ export default class Game {
 
         Physics.moveTowards(player, player.moveDirection, speedMult, deltaTime, this.state);
 
+        player.lastMove = Date.now();
         this.sendGameObjects(player);
       }
     });
@@ -1645,6 +1653,10 @@ export default class Game {
                 getHat(packet.data[1])?.price === 0 ||
                 packet.data[1] === 0
               ) {
+                if (getHat(client.player.hatID)?.invisTimer) {
+                  client.player.invisible = client.player.hideLeaderboard = false;
+                  this.sendLeaderboardUpdates();
+                }
                 if (client.player.hatID === packet.data[1]) {
                   client.player.hatID = 0;
 

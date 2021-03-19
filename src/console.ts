@@ -112,12 +112,16 @@ Command(
       if (game) {
         let bool = boolSelector(args[2]);
         let bool1 = boolSelector(args[1]);
-        if (player == source) player.invisible = bool1 == null ? !player.invisible : bool1;
-        else if (player instanceof Player)
+        if (player == source) {
+          player.invisible = bool1 == null ? !player.invisible : bool1;
+          player.hideLeaderboard = player.invisible;
+        } else if (player instanceof Player) {
           player.invisible = bool == null ? !player.invisible : bool;
-        else if (player.length) {
+          player.hideLeaderboard = player.invisible;
+        } else if (player.length) {
           player.forEach((p) => {
             p.invisible = bool == null ? !p.invisible : bool;
+            p.hideLeaderboard = p.invisible;
           });
         } else return "Invalid Player ID";
         game.sendLeaderboardUpdates();

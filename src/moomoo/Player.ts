@@ -40,6 +40,7 @@ export default class Player extends Entity {
 
   public hatID: number = 0;
   public accID: number = 0;
+  public lastMove = Date.now();
 
   public ownerID: string;
   public spdMult: number = config.defaultSpeed || 1;
@@ -110,6 +111,7 @@ export default class Player extends Entity {
   private _kills: number = 0;
 
   public invisible = false;
+  public hideLeaderboard = false;
 
   public get kills(): number {
     return this._kills;
@@ -565,7 +567,7 @@ export default class Player extends Entity {
     this.moveDirection = null;
   }
 
-  getUpdateData(gameState: GameState) {
+  getUpdateData(gameState: GameState, exposeInvis: boolean = false) {
     let leadKills = 0;
 
     for (let player of gameState.players) {
@@ -589,6 +591,7 @@ export default class Player extends Entity {
       this.kills === leadKills && this.kills > 0 ? 1 : 0,
       this.layer,
       this.invincible ? 1 : 0,
+      this.invisible && exposeInvis ? 0 : 1,
     ];
   }
 
