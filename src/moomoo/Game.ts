@@ -1058,7 +1058,7 @@ export default class Game {
                 }
               }
 
-              if (hitGameObject.type !== GameObjectType.GoldMine)
+              if (hitGameObject.type !== GameObjectType.GoldMine && hitGameObject.health == -1)
                 player.points += (hat?.extraGold || 0) * gather;
 
               player.client?.socket.send(
