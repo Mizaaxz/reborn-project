@@ -747,19 +747,17 @@ export default class Game {
       let tribe = this.state.tribes.find((t) => t.name == player.clanName);
       let tribeMembers = tribe
         ? tribe.membersSIDs
-            .map((memberSID) => this.state.players.find((player) => player.id === memberSID))
-            .filter((player) => player)
-        : [];
-      let parsedMembers = tribeMembers
-        .filter((otherMember) => otherMember !== player)
-        .reduce<number[]>((acc, otherMember) => {
-          if (!otherMember || otherMember.dead) return acc;
+            .map((m) => this.state.players.find((p) => p.id === m))
+            .filter((m) => m !== player)
+            .reduce<number[]>((acc, otherMember) => {
+              if (!otherMember || otherMember.dead) return acc;
 
-          return acc.concat([otherMember?.location.x, otherMember?.location.y]);
-        }, []);
+              return acc.concat([otherMember?.location.x, otherMember?.location.y]);
+            }, [])
+        : [];
 
       player?.client?.socket.send(
-        packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [parsedMembers]))
+        packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [tribeMembers]))
       );
     });
 
