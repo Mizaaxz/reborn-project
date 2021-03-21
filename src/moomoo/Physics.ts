@@ -1,7 +1,7 @@
 import Vec2 from "vec2";
 import Player from "./Player";
 import GameObject from "../gameobjects/GameObject";
-import { getWeaponAttackDetails, hasCollision, getGameObjDamage } from "../items/items";
+import { getWeaponAttackDetails, hasCollision } from "../items/items";
 import GameState from "./GameState";
 import { ItemType } from "../items/UpgradeItems";
 import { getHat } from "./Hats";

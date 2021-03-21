@@ -1,6 +1,5 @@
 import WebSocket from "ws";
 import { Server as WSServer } from "ws";
-import { Server as HTTPServer } from "http";
 
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));

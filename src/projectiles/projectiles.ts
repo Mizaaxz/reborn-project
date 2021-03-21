@@ -1,5 +1,4 @@
 import projectiles from "../definitions/projectiles";
-import e from "express";
 
 enum Layer {
   Pad = -1,

@@ -14,9 +14,7 @@ import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
-import { gameObjectSizes, GameObjectType } from "./gameobjects/gameobjects";
 import * as logger from "./log";
-import Animal from "./moomoo/Animal";
 
 let command = "";
 let lastMessage = "";

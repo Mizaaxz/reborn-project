@@ -32,7 +32,6 @@ import {
   getPPS,
   isRangedWeapon,
   getProjectileType,
-  getWeaponLength,
   getRecoil,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
@@ -46,7 +45,6 @@ import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
-import { pointCircle, getAttackLocation } from "./Physics";
 import * as logger from "../log";
 import Animal from "./Animal";
 import animals from "../definitions/animals";

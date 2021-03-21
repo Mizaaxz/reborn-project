@@ -1,4 +1,4 @@
-import { Packet, PacketData, Side } from "./Packet";
+import { Packet, Side } from "./Packet";
 import { PacketType } from "./PacketType";
 
 import msgpack from "msgpack-lite";

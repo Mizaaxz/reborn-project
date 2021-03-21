@@ -1,7 +1,6 @@
 import url from "url";
 import http from "http";
 import express from "express";
-import nunjucks from "nunjucks";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import config from "./config";
@@ -9,7 +8,6 @@ import * as console from "./console";
 import { Server as WSServer } from "ws";
 import UptimeWSServer from "./uptimeWS";
 import { startServer } from "./moomoo/moomoo";
-import { getGame } from "./moomoo/Game";
 import errCodes from "./definitions/errorCodes";
 import db from "enhanced.db";
 import b64 from "./base64";
@@ -34,11 +32,6 @@ const app = express();
 const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-nunjucks.configure("views", {
-  autoescape: true,
-  express: app,
-});
 
 const VERSION = "1.9.1a";
 
