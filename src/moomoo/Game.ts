@@ -742,7 +742,6 @@ export default class Game {
       this.tick();
     }
 
-    let highKills = this.state.players.filter((p) => p.getUpdateData(this.state)[11] == 1);
     this.state.players.forEach((player) => {
       let tribe = this.state.tribes.find((t) => t.name == player.clanName);
       let tribeMembers = tribe
@@ -756,8 +755,16 @@ export default class Game {
             }, [])
         : [];
 
+      let highKills = this.state.players
+        .filter((p) => p.getUpdateData(this.state)[11] == 1 && p !== player)
+        .reduce<number[]>((acc, otherMember) => {
+          if (!otherMember || otherMember.dead) return acc;
+
+          return acc.concat([otherMember?.location.x, otherMember?.location.y]);
+        }, []);
+
       player?.client?.socket.send(
-        packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [tribeMembers]))
+        packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [tribeMembers, highKills]))
       );
     });
 
