@@ -72,6 +72,13 @@ function stableSort<T>(array: T[], cmp: Comparator<T> = defaultCmp): T[] {
   return array;
 }
 
+function deg2rad(val: number) {
+  return val * (Math.PI / 180);
+}
+function rad2deg(val: number) {
+  return (val * 180) / Math.PI;
+}
+
 function Broadcast(text: string, to: Client | undefined) {
   let game = getGame();
   let packetFactory = PacketFactory.getInstance();
@@ -110,4 +117,14 @@ function filter(text: string) {
   text.split("").forEach((char) => {});
 }
 
-export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast, GetSessions };
+export {
+  SkinColor,
+  eucDistance,
+  randomPos,
+  chunk,
+  stableSort,
+  deg2rad,
+  rad2deg,
+  Broadcast,
+  GetSessions,
+};

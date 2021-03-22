@@ -6,7 +6,7 @@ import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
 import bcrypt from "bcrypt";
 import db from "../database";
-import { randomPos, chunk, stableSort, Broadcast } from "./util";
+import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
 import * as Physics from "./Physics";
@@ -48,6 +48,7 @@ import { readdirSync } from "fs";
 import * as logger from "../log";
 import Animal from "./Animal";
 import animals from "../definitions/animals";
+import items from "../definitions/items";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -765,6 +766,43 @@ export default class Game {
         packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [tribeMembers, highKills]))
       );
     });
+
+    this.state.gameObjects
+      .filter((o) => o.data == ItemType.Turret)
+      .forEach((turret) => {
+        let Turret = items.find((i) => i.group.id == 7);
+        let nearbyPlayers = this.state.players.filter(
+          (p) => p.location.distance(turret.location) < (Turret?.shootRange || 0)
+        );
+        let nearestPlayer = nearbyPlayers.find(
+          (p) => p.location == turret.location.nearest(nearbyPlayers.map((p) => p.location))
+        );
+        /*nearbyPlayers.sort((p1, p2) => {
+          return p1.location.distance(turret.location) > p1.location.distance(turret.location)
+            ? 1
+            : -1;
+        })[0];*/
+
+        if (turret.lastShoot < Date.now()) {
+          turret.lastShoot = Date.now() + (Turret?.shootRate || 0);
+          this.state.players
+            .filter((p) => p.getNearbyGameObjects(this.state).includes(turret))
+            .forEach((player) => {
+              if (nearestPlayer)
+                player?.client?.socket.send(
+                  packetFactory.serializePacket(
+                    new Packet(PacketType.SHOOT_TURRET, [
+                      turret.id,
+                      Math.atan2(
+                        nearestPlayer.location.y - turret.location.y,
+                        nearestPlayer.location.x - turret.location.x
+                      ),
+                    ])
+                  )
+                );
+            });
+        }
+      });
 
     this.state.players.forEach((player) => {
       if (player.dead) return;

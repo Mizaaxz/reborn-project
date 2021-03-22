@@ -4,6 +4,8 @@ import Player from "../moomoo/Player";
 import { Tribe } from "../moomoo/Tribes";
 
 export default class GameObject {
+  public lastShoot: number = Date.now() + 1000;
+
   constructor(
     public id: number = 0,
     public location: Vec2 = new Vec2(0, 0),

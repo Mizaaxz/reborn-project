@@ -56,6 +56,7 @@ packetTypeMapping[PacketType.CLAN_NOTIFY_SERVER] = { value: "14", side: Side.Ser
 packetTypeMapping[PacketType.CLAN_NOTIFY_CLIENT] = { value: "p", side: Side.Client };
 packetTypeMapping[PacketType.UPDATE_PLACE_LIMIT] = { value: "14", side: Side.Client };
 packetTypeMapping[PacketType.SPAWN] = { value: "sp", side: Side.Server };
+packetTypeMapping[PacketType.SHOOT_TURRET] = { value: "sp", side: Side.Client };
 packetTypeMapping[PacketType.UPDATE_ITEMS] = { value: "17", side: Side.Client };
 packetTypeMapping[PacketType.UPDATE_STORE] = { value: "us", side: Side.Client };
 packetTypeMapping[PacketType.UPGRADES] = { value: "16", side: Side.Client };
