@@ -104,6 +104,7 @@ function tryMovePlayer(
             break;
           case ItemType.Teleporter:
             player.location = randomPos(14400 + 35, 14400 - 35);
+            getGame()?.sendGameObjects(player);
             return;
         }
         if (!hasCollision(gameObj.data)) continue;
