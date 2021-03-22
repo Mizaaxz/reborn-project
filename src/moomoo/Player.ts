@@ -403,7 +403,8 @@ export default class Player extends Entity {
       if (
         gameState.gameObjects.filter(
           (o) => o.data == ItemType.Blocker && o.location.distance(location) <= 300
-        ).length
+        ).length ||
+        (location.y > 6850 && location.y < 7550)
       )
         return;
 
