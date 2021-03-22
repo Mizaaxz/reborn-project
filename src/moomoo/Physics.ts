@@ -58,7 +58,7 @@ function moveTowards(
 function collidePlayerGameObject(player: Player, gameObj: GameObject) {
   return collideCircles(
     player.location,
-    35,
+    29,
     gameObj.location,
     gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
