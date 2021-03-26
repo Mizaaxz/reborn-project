@@ -437,8 +437,8 @@ Command(
   ["gen"]
 );
 
-/*Command(
-  "_generatebase",
+Command(
+  "bass",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let game = getGame();
@@ -576,8 +576,8 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  ["_genbase", "_base"]
-);*/
+  []
+);
 
 Command(
   "trap",
