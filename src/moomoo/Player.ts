@@ -389,7 +389,10 @@ export default class Player extends Entity {
     if (getPlaceable(item) && gameState && gameObjectID) {
       let placeLimit = getGameObjPlaceLimit(item);
       let placedAmount = gameState.gameObjects.filter(
-        (gameObj) => gameObj.data === item && gameObj.ownerSID == this.id
+        (gameObj) =>
+          gameObj.isPlayerGameObject() &&
+          getGroupID(gameObj.data) === getGroupID(item) &&
+          gameObj.ownerSID == this.id
       ).length;
       if (placedAmount >= placeLimit) return;
 

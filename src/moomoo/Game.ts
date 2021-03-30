@@ -297,7 +297,7 @@ export default class Game {
           socket.terminate();
         }
       } catch (e) {
-        console.log("MessagePacket issue.");
+        console.log("MessagePacket issue.", e);
         this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
         socket.terminate();
       }

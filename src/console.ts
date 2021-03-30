@@ -275,7 +275,7 @@ Command(
 );
 
 Command(
-  "_god",
+  "god",
   (args: any[], source: Player | undefined) => {
     let playerSID = Number(args[1]);
     let game = getGame();
@@ -297,7 +297,7 @@ Command(
       } else return "You need to be in the game to run this command!";
     }
   },
-  []
+  ["g", "_god"]
 );
 
 Command(
