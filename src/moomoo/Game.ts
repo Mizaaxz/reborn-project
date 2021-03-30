@@ -772,18 +772,15 @@ export default class Game {
       .forEach((turret) => {
         let Turret = items.find((i) => i.group.id == 7);
         let nearbyPlayers = this.state.players.filter(
-          (p) => p.location.distance(turret.location) < (Turret?.shootRange || 0)
+          (p) =>
+            turret.ownerSID !== p.id &&
+            p.location.distance(turret.location) < (Turret?.shootRange || 0)
         );
         let nearestPlayer = nearbyPlayers.find(
           (p) => p.location == turret.location.nearest(nearbyPlayers.map((p) => p.location))
         );
-        /*nearbyPlayers.sort((p1, p2) => {
-          return p1.location.distance(turret.location) > p1.location.distance(turret.location)
-            ? 1
-            : -1;
-        })[0];*/
 
-        if (turret.lastShoot < Date.now()) {
+        if (turret.lastShoot < Date.now() && nearestPlayer) {
           turret.lastShoot = Date.now() + (Turret?.shootRate || 0);
           this.state.players
             .filter((p) => p.getNearbyGameObjects(this.state).includes(turret))
