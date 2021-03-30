@@ -40,7 +40,12 @@ import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
 import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
-import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
+import {
+  getProjectileRange,
+  getProjectileSpeed,
+  Layer,
+  ProjectileType,
+} from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
@@ -785,22 +790,28 @@ export default class Game {
 
         if (turret.lastShoot < Date.now() && nearestPlayer) {
           turret.lastShoot = Date.now() + (Turret?.shootRate || 0);
+          let turretAngle = Math.atan2(
+            nearestPlayer.location.y - turret.location.y,
+            nearestPlayer.location.x - turret.location.x
+          );
           this.state.players
             .filter((p) => p.getNearbyGameObjects(this.state).includes(turret))
             .forEach((player) => {
               if (nearestPlayer)
                 player?.client?.socket.send(
                   packetFactory.serializePacket(
-                    new Packet(PacketType.SHOOT_TURRET, [
-                      turret.id,
-                      Math.atan2(
-                        nearestPlayer.location.y - turret.location.y,
-                        nearestPlayer.location.x - turret.location.x
-                      ),
-                    ])
+                    new Packet(PacketType.SHOOT_TURRET, [turret.id, turretAngle])
                   )
                 );
             });
+
+          /*this.state.addProjectile(
+            ProjectileType.Turret,
+            turret.location.add(0, 100, true),
+            undefined,
+            turretAngle,
+            Layer.Player
+          );*/
         }
       });
 

@@ -32,8 +32,8 @@ export default class GameState {
     angle = player?.angle,
     layer = player?.layer
   ) {
-    if (player?.client) Broadcast("Projectiles have been disabled due to abuse.", player.client);
-    return;
+    if (player?.client)
+      return Broadcast("Projectiles have been disabled due to abuse.", player.client);
     let packetFactory = PacketFactory.getInstance();
     let newProjectile = new Projectile(
       this.projectiles.length > 0
