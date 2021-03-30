@@ -774,6 +774,9 @@ export default class Game {
         let nearbyPlayers = this.state.players.filter(
           (p) =>
             turret.ownerSID !== p.id &&
+            !this.state.tribes.find(
+              (t) => t.membersSIDs.includes(turret.ownerSID) && t.membersSIDs.includes(p.id)
+            ) &&
             p.location.distance(turret.location) < (Turret?.shootRange || 0)
         );
         let nearestPlayer = nearbyPlayers.find(
