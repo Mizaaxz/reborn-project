@@ -819,6 +819,25 @@ Command(
   },
   []
 );
+Command(
+  "acc.delete",
+  function (args: any[], source: Player | undefined) {
+    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    if (!account || !account.username) {
+      if (source?.client) return Broadcast("Invalid username.", source.client);
+      else return console.log("Invalid username.");
+    }
+    db.delete(`account_${account.username}`);
+    getGame()
+      ?.state.players.filter(
+        (p) => p.client?.account && p.client.account.username == account.username
+      )
+      .forEach((plr) => {
+        if (plr.client) getGame()?.kickClient(plr.client, "Account Deleted.");
+      });
+  },
+  []
+);
 
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
