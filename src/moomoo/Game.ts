@@ -5,7 +5,7 @@ import Player from "./Player";
 import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
 import bcrypt from "bcrypt";
-import db from "../database";
+import db from "enhanced.db";
 import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
@@ -54,6 +54,7 @@ import * as logger from "../log";
 import Animal from "./Animal";
 import animals from "../definitions/animals";
 import items from "../definitions/items";
+import { Account } from "./Account";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1293,11 +1294,11 @@ export default class Game {
         if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
           return this.kickClient(client, "Kicked for hacks.");
         client.triedAuth = true;
-        let account = db.get(`account_${packet.data[0].name}`);
+        let account = db.get(`account_${packet.data[0].name.replace(/ /g, "+")}`) as Account;
         if (!account) return;
-        bcrypt.compare(packet.data[0].password, account.password, (_: any, match: any) => {
+        bcrypt.compare(packet.data[0].password, account.password || "", (_: any, match: any) => {
           if (match === true) {
-            client.accountName = packet.data[0].name;
+            client.accountName = account.username || "";
             client.loggedIn = true;
             account.admin && ((client.admin = true), this.promoteClient(client));
           }

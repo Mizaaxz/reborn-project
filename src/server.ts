@@ -80,7 +80,7 @@ app.post("/api/v1/login", (req, res) => {
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
-  let account = db.fetch(`account_${username}`) as Account;
+  let account = db.fetch(`account_${username.replace(/ /g, "+")}`) as Account;
   if (!account)
     return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
 
@@ -94,13 +94,12 @@ app.post("/api/v1/login", (req, res) => {
   });
 });
 app.post("/api/v1/create", (req, res) => {
-  //return res.json({ error: "DISABLED", text: "Accounts are disabled." }); //disabled
   let username = req.body.username;
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
 
-  let exists = db.fetch(`account_${username}`);
+  let exists = db.fetch(`account_${username.replace(/ /g, "+")}`);
   if (exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
 
   let notAllowed: any[] = [];
@@ -138,10 +137,11 @@ app.post("/api/v1/create", (req, res) => {
   bcrypt.hash(password, 5, (err: any, hash: any) => {
     if (err) return res.json({ error: "HASH_ERROR", text: errCodes.create.HASH_ERROR, err });
 
-    db.set(`account_${username}`, {
+    db.set(`account_${username.replace(/ /g, "+")}`, {
       username,
       password: hash,
       level: 1,
+      admin: false,
     });
 
     res.json({ error: "", text: "Account created!" });
