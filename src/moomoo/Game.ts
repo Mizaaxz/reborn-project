@@ -1299,6 +1299,7 @@ export default class Game {
         bcrypt.compare(packet.data[0].password, account.password || "", (_: any, match: any) => {
           if (match === true) {
             client.accountName = account.username || "";
+            client.account = account;
             client.loggedIn = true;
             account.admin && ((client.admin = true), this.promoteClient(client));
           }
@@ -1344,7 +1345,9 @@ export default class Game {
             [...packet.data[0].name].forEach((char) => {
               if (config.allowedMax.split("").includes(char)) filteredName.push(char);
             });
-            newPlayer.name = filteredName.slice(0, 16).join("").trim() || "unknown";
+            newPlayer.name = newPlayer.client?.account
+              ? newPlayer.client.account.username || "unknown"
+              : filteredName.slice(0, 16).join("").trim() || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;

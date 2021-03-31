@@ -1,5 +1,6 @@
 import Vec2 from "vec2";
 import WebSocket from "ws";
+import { Account } from "./Account";
 import Player from "./Player";
 
 export default class Client {
@@ -11,6 +12,7 @@ export default class Client {
   public triedAuth: boolean = false;
   public loggedIn: boolean = false;
   public accountName: string = "";
+  public account: Account | undefined;
   constructor(
     public id: string,
     public socket: WebSocket,
