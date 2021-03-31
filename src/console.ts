@@ -782,7 +782,9 @@ Command(
 Command(
   "acc.promote",
   function (args: any[], source: Player | undefined) {
-    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    let account = db.get(
+      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
+    ) as Account;
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
@@ -802,7 +804,9 @@ Command(
 Command(
   "acc.demote",
   function (args: any[], source: Player | undefined) {
-    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    let account = db.get(
+      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
+    ) as Account;
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
@@ -822,7 +826,9 @@ Command(
 Command(
   "acc.delete",
   function (args: any[], source: Player | undefined) {
-    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    let account = db.get(
+      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
+    ) as Account;
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
