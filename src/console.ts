@@ -14,7 +14,9 @@ import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
+import db from "enhanced.db";
 import * as logger from "./log";
+import { Account } from "./moomoo/Account";
 
 let command = "";
 let lastMessage = "";
@@ -773,6 +775,47 @@ Command(
   function (args: any[], source: Player | undefined) {
     if (source?.client) return Broadcast("Must use in console.", source.client);
     console.log("\n" + logger.returnLogs(Number(args[1]) || 15));
+  },
+  []
+);
+
+Command(
+  "acc.promote",
+  function (args: any[], source: Player | undefined) {
+    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    if (!account || !account.username) {
+      if (source?.client) return Broadcast("Invalid username.", source.client);
+      else return console.log("Invalid username.");
+    }
+    account.admin = true;
+    db.set(`account_${account.username}`, account);
+    getGame()
+      ?.state.players.filter(
+        (p) => p.client?.account && p.client.account.username == account.username
+      )
+      .forEach((plr) => {
+        if (plr.client) getGame()?.kickClient(plr.client, "Promoted.");
+      });
+  },
+  []
+);
+Command(
+  "acc.demote",
+  function (args: any[], source: Player | undefined) {
+    let account = db.get(`account_${(args[1] || "").replace(/ /g, "+")}`) as Account;
+    if (!account || !account.username) {
+      if (source?.client) return Broadcast("Invalid username.", source.client);
+      else return console.log("Invalid username.");
+    }
+    account.admin = false;
+    db.set(`account_${account.username}`, account);
+    getGame()
+      ?.state.players.filter(
+        (p) => p.client?.account && p.client.account.username == account.username
+      )
+      .forEach((plr) => {
+        if (plr.client) getGame()?.kickClient(plr.client, "Demoted.");
+      });
   },
   []
 );
