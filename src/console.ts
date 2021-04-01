@@ -790,7 +790,7 @@ Command(
       else return console.log("Invalid username.");
     }
     account.admin = true;
-    db.set(`account_${account.username}`, account);
+    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
     getGame()
       ?.state.players.filter(
         (p) => p.client?.account && p.client.account.username == account.username
@@ -812,7 +812,7 @@ Command(
       else return console.log("Invalid username.");
     }
     account.admin = false;
-    db.set(`account_${account.username}`, account);
+    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
     getGame()
       ?.state.players.filter(
         (p) => p.client?.account && p.client.account.username == account.username
@@ -833,7 +833,7 @@ Command(
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
     }
-    db.delete(`account_${account.username}`);
+    db.delete(`account_${account.username.replace(/ /g, "+")}`);
     getGame()
       ?.state.players.filter(
         (p) => p.client?.account && p.client.account.username == account.username
