@@ -242,7 +242,7 @@ export default class Game {
 
     let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
 
-    if (this.clients.filter((client) => client.ip === ip).length >= 2) {
+    if (this.clients.filter((client) => client.ip === ip).length > 2) {
       this.kickClient(client, "Only 2 connections allowed!");
       setTimeout(function () {
         socket.terminate();
