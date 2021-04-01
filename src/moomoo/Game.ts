@@ -235,18 +235,24 @@ export default class Game {
     // Only start on first connection to save resources
     if (!this.started) this.start();
 
-    if (this.clients.filter((client) => client.ip === ip).length >= 2) socket.terminate();
-
     let packetFactory = PacketFactory.getInstance();
 
     if (this.clients.some((client) => client.id === id))
       throw `There is already a client with ID ${id} in this Game!`;
 
     let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
+
+    if (this.clients.filter((client) => client.ip === ip).length >= 2) {
+      this.kickClient(client, "Only 2 connections allowed!");
+      setTimeout(function () {
+        socket.terminate();
+      }, 100);
+    }
+
     let bannedIPs = this.db?.get("bannedIPs");
     if (bannedIPs) {
       if (bannedIPs.includes(ip).value()) {
-        this.kickClient(client, "You are banned");
+        this.kickClient(client, "You are banned.");
         return;
       }
     }
@@ -299,12 +305,12 @@ export default class Game {
           );
         } else {
           console.log("MessagePacket issue. Not a buffer.");
-          this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          this.kickClient(client, "disconnected");
           socket.terminate();
         }
       } catch (e) {
         console.log("MessagePacket issue.", e);
-        this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        this.kickClient(client, "disconnected");
         socket.terminate();
       }
     });
@@ -1292,7 +1298,7 @@ export default class Game {
     */
         if (client.triedAuth || !packet.data[0]) return;
         if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
-          return this.kickClient(client, "Kicked for hacks.");
+          return this.kickClient(client, "disconnected");
         client.triedAuth = true;
         let account = db.get(`account_${packet.data[0].name.replace(/ /g, "+")}`) as Account;
         if (!account) return;
@@ -1306,8 +1312,7 @@ export default class Game {
         });
         break;
       case PacketType.SPAWN:
-        if (client.player && !client.player.dead)
-          this.kickClient(client, "Kicked for hacks. SpawnPacket error.");
+        if (client.player && !client.player.dead) this.kickClient(client, "disconnected");
 
         if ("name" in packet.data[0] && "moofoll" in packet.data[0] && "skin" in packet.data[0]) {
           let player = this.state.players.find((plr) => plr.ownerID === client.id);
@@ -1395,7 +1400,7 @@ export default class Game {
             }
           }
         } else {
-          this.kickClient(client, "Malformed spawn packet!");
+          this.kickClient(client, "disconnected");
         }
         break;
       case PacketType.ATTACK:
@@ -1622,10 +1627,7 @@ export default class Game {
 
         if (isAcc) {
           if (!getAccessory(packet.data[1]) && packet.data[1] !== 0) {
-            this.kickClient(
-              client,
-              "Kicked for invalid accessory. (you are probably using hacks, cmon man)"
-            );
+            this.kickClient(client, "disconnected");
             return;
           }
 
@@ -1668,10 +1670,7 @@ export default class Game {
                   );
                 }
               } else {
-                this.kickClient(
-                  client,
-                  "Kicked for equipping an accessory not bought. (you are probably using hacks, cmon man...)"
-                );
+                this.kickClient(client, "disconnected");
               }
             }
           }
@@ -1680,10 +1679,7 @@ export default class Game {
             (!getHat(packet.data[1]) || getHat(packet.data[1])?.dontSell) &&
             packet.data[1] !== 0
           ) {
-            this.kickClient(
-              client,
-              "Kicked for invalid hat. (you are probably using hacks, cmon man)"
-            );
+            this.kickClient(client, "disconnected");
             return;
           }
 
@@ -1730,10 +1726,7 @@ export default class Game {
                   );
                 }
               } else {
-                this.kickClient(
-                  client,
-                  "Kicked for equipping a hat not bought. (you are probably using hacks, cmon man...)"
-                );
+                this.kickClient(client, "disconnected");
               }
             }
           }
