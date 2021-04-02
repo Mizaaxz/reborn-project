@@ -809,6 +809,14 @@ export default class Game {
         this.sendPlayerUpdates();
       }
 
+      function sendOneTapped(x: number, y: number) {
+        player.client?.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.HEALTH_CHANGE, [x, y, "One Tapped!", 1])
+          )
+        );
+      }
+
       if (player.isAttacking && player.selectedWeapon != Weapons.Shield && player.buildItem == -1) {
         if (now - player.lastHitTime >= player.getWeaponHitTime()) {
           player.lastHitTime = now;
@@ -889,16 +897,18 @@ export default class Game {
                   break;
               }
 
-              player.client?.socket.send(
-                packetFactory.serializePacket(
-                  new Packet(PacketType.HEALTH_CHANGE, [
-                    hitPlayer.location.x,
-                    hitPlayer.location.y,
-                    Math.round(dmg),
-                    1,
-                  ])
-                )
-              );
+              if (player.weaponMode !== WeaponModes.OneTap)
+                player.client?.socket.send(
+                  packetFactory.serializePacket(
+                    new Packet(PacketType.HEALTH_CHANGE, [
+                      hitPlayer.location.x,
+                      hitPlayer.location.y,
+                      Math.round(dmg),
+                      1,
+                    ])
+                  )
+                );
+              else sendOneTapped(hitPlayer.location.x, hitPlayer.location.y);
             }
 
             for (let hitAnimal of hitAnimals) {
@@ -938,16 +948,18 @@ export default class Game {
                 );
               }
 
-              player.client?.socket.send(
-                packetFactory.serializePacket(
-                  new Packet(PacketType.HEALTH_CHANGE, [
-                    hitAnimal.location.x,
-                    hitAnimal.location.y,
-                    Math.round(dmg),
-                    1,
-                  ])
-                )
-              );
+              if (player.weaponMode !== WeaponModes.OneTap)
+                player.client?.socket.send(
+                  packetFactory.serializePacket(
+                    new Packet(PacketType.HEALTH_CHANGE, [
+                      hitAnimal.location.x,
+                      hitAnimal.location.y,
+                      Math.round(dmg),
+                      1,
+                    ])
+                  )
+                );
+              else sendOneTapped(hitAnimal.location.x, hitAnimal.location.y);
             }
 
             for (let hitGameObject of hitGameObjects) {
@@ -1115,9 +1127,12 @@ export default class Game {
                 )
               );
 
-              if(hitGameObject.health == -1 &&player.weaponMode == WeaponModes.OneTap) {
+              if (hitGameObject.health == -1 && player.weaponMode == WeaponModes.OneTap) {
                 this.state.removeGameObject(hitGameObject);
               }
+
+              if (player.weaponMode == WeaponModes.OneTap)
+                sendOneTapped(hitGameObject.location.x, hitGameObject.location.y);
             }
 
             this.gatherAnim(player, hitGameObjects.length > 0);
