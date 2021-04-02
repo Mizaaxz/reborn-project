@@ -1337,7 +1337,7 @@ export default class Game {
               newPlayer.name.toLowerCase().includes("alex") &&
               newPlayer.client
             )
-              this.kickClient(newPlayer.client, "disconnected");
+              return this.kickClient(newPlayer.client, "disconnected");
 
             client.socket.send(
               packetFactory.serializePacket(new Packet(PacketType.PLAYER_START, [newPlayer.id]))
