@@ -852,6 +852,7 @@ export default class Game {
               if (hitPlayer.clanName == player.clanName && hitPlayer.clanName != null) continue;
 
               let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
+              if (player.weaponMode == WeaponModes.OneTap) dmg = 8962;
 
               dmg = this.damageFrom(hitPlayer, player, dmg);
 
@@ -902,6 +903,7 @@ export default class Game {
 
             for (let hitAnimal of hitAnimals) {
               let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
+              if (player.weaponMode == WeaponModes.OneTap) dmg = 124650;
 
               dmg = this.damageFromAnimal(hitAnimal, player, dmg);
 
