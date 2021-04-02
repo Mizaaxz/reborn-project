@@ -852,7 +852,7 @@ export default class Game {
               if (hitPlayer.clanName == player.clanName && hitPlayer.clanName != null) continue;
 
               let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
-              if (player.weaponMode == WeaponModes.OneTap) dmg = 8962;
+              if (player.weaponMode == WeaponModes.OneTap) dmg = 8642;
 
               dmg = this.damageFrom(hitPlayer, player, dmg);
 
