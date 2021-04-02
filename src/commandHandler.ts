@@ -49,7 +49,12 @@ const playerSelector = function (
 
   if (plr.startsWith("[") && plr.endsWith("]") && allowMultiple)
     return game.state.players.filter(
-      (p) => p.clanName?.toLowerCase() == plr.substr(1, plr.length - 2).toLowerCase()
+      (p) =>
+        p.clanName?.toLowerCase() ==
+        plr
+          .substr(1, plr.length - 2)
+          .toLowerCase()
+          .replace(/\+/g, " ")
     );
 
   player = game.state.players.filter(
