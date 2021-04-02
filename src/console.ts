@@ -743,7 +743,17 @@ Command(
     source.weaponMode = WeaponModes.Inspect;
     source.buildItem = -1;
   },
-  []
+  ["ins"]
+);
+Command(
+  "onetap",
+  function (args: any[], source: Player | undefined) {
+    if (!source?.client) return "You must be in the game to use this command.";
+    source.selectedWeapon = Weapons.ToolHammer;
+    source.weaponMode = WeaponModes.OneTap;
+    source.buildItem = -1;
+  },
+  ["ot"]
 );
 
 Command(

@@ -30,6 +30,7 @@ enum SecondaryWeapons {
 enum WeaponModes {
   None,
   Inspect,
+  OneTap,
 }
 
 interface AttackDetails {

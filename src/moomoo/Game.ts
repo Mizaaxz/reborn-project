@@ -966,6 +966,7 @@ export default class Game {
                 );
 
                 let dmgMult = 1;
+                if (player.weaponMode == WeaponModes.OneTap) dmgMult = hitGameObject.health;
 
                 if (hat && hat.bDmg) dmgMult *= hat.bDmg;
 
