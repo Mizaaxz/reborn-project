@@ -1140,8 +1140,9 @@ export default class Game {
   /**
    * Generates a unique SID for a new player
    */
+  public lastSID = 0;
   genSID() {
-    return Math.max(0, ...this.state.players.map((plr) => plr.id)) + 1;
+    return (this.lastSID += 1);
   }
   genAnimalSID() {
     return Math.max(0, ...this.state.animals.map((anm) => anm.id)) + 1;
