@@ -1114,6 +1114,10 @@ export default class Game {
                   ])
                 )
               );
+
+              if(hitGameObject.health == -1 &&player.weaponMode == WeaponModes.OneTap) {
+                this.state.removeGameObject(hitGameObject);
+              }
             }
 
             this.gatherAnim(player, hitGameObjects.length > 0);
