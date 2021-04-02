@@ -1332,6 +1332,12 @@ export default class Game {
             newPlayer.stone = packet.data[0].moofoll ? 100 : 0;
             newPlayer.wood = packet.data[0].moofoll ? 100 : 0;
 
+            if (
+              newPlayer.name.toLowerCase().includes("cum") &&
+              newPlayer.name.toLowerCase().includes("alex") && newPlayer.client
+            )
+              this.kickClient(newPlayer.client, "disconnected");
+
             client.socket.send(
               packetFactory.serializePacket(new Packet(PacketType.PLAYER_START, [newPlayer.id]))
             );
