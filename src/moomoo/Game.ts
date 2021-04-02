@@ -1334,7 +1334,8 @@ export default class Game {
 
             if (
               newPlayer.name.toLowerCase().includes("cum") &&
-              newPlayer.name.toLowerCase().includes("alex") && newPlayer.client
+              newPlayer.name.toLowerCase().includes("alex") &&
+              newPlayer.client
             )
               this.kickClient(newPlayer.client, "disconnected");
 
@@ -1458,6 +1459,9 @@ export default class Game {
         if (client.player) {
           let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
           if (!tribeName) return;
+          if (tribeName.toLowerCase().includes("cum") && tribeName.toLowerCase().includes("alex"))
+            return this.kickClient(client, "disconnected");
+
           let tribe = this.state.addTribe(tribeName, client.player.id);
 
           if (tribe) {
