@@ -256,15 +256,6 @@ export default class Game {
         return;
       }
     }
-    if (!process.env.NO_MODERATORS) {
-      // not sure
-      let modIPs = this.db?.get("moderatorIPs");
-      if (modIPs) {
-        if (modIPs.includes(ip).value()) {
-          client.admin = true;
-        }
-      }
-    }
 
     socket.addListener("close", () => {
       if (client.player) {
@@ -373,28 +364,6 @@ export default class Game {
       }
 
       console.log(`Unbanned player with ip ${ip}`);
-    }
-  }
-
-  async addModerator(client: Client) {
-    client.admin = !0;
-    this.promoteClient(client);
-    if (this.db) {
-      if (!this.db.get("moderatorIPs").includes(client.ip).value()) {
-        await this.db.get("moderatorIPs").push(client.ip).write();
-      }
-    }
-  }
-  async remModerator(client: Client) {
-    client.admin = false;
-    this.kickClient(client, "Demoted.");
-    if (this.db) {
-      if (this.db.get("moderatorIPs").includes(client.ip).value()) {
-        await this.db
-          .get("moderatorIPs")
-          .splice(await this.db.get("moderatorIPs").indexOf(client.ip).value(), 1)
-          .write();
-      }
     }
   }
 

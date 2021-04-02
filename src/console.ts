@@ -242,41 +242,6 @@ Command(
 );
 
 Command(
-  "promote",
-  (args: any[]) => {
-    let playerSID = Number(args[1]);
-    let game = getGame();
-
-    if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
-      if (player && player.client) {
-        game.addModerator(player.client);
-        return false;
-      } else return "Invalid Player ID";
-    }
-  },
-  ["mod", "admin"]
-);
-Command(
-  "rmadmin",
-  (args: any[]) => {
-    let playerSID = Number(args[1]);
-    let game = getGame();
-
-    if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
-
-      if (player && player.client) {
-        game.remModerator(player.client);
-        return false;
-      } else return "Invalid Player ID";
-    }
-  },
-  ["mod", "admin"]
-);
-
-Command(
   "god",
   (args: any[], source: Player | undefined) => {
     let playerSID = Number(args[1]);
