@@ -21,6 +21,7 @@ import {
   getGroupID,
   shouldHideFromEnemy,
   getGameObjDamage,
+  WeaponModes,
 } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 import GameObject from "../gameobjects/GameObject";
@@ -64,6 +65,7 @@ export default class Player extends Entity {
   public weapon: PrimaryWeapons = 0;
   public secondaryWeapon: SecondaryWeapons = -1;
   public selectedWeapon: Weapons = 0;
+  public weaponMode: WeaponModes = 0;
 
   private _primaryWeaponExp = 0;
   private _secondaryWeaponExp = 0;

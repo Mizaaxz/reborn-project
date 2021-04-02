@@ -10,7 +10,7 @@ import { setWeaponVariant } from "./functions";
 import config from "./config";
 import Vec2 from "vec2";
 import GameObject from "./gameobjects/GameObject";
-import { getGameObjDamage, getGameObjHealth, getScale } from "./items/items";
+import { getGameObjDamage, getGameObjHealth, getScale, WeaponModes, Weapons } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Broadcast } from "./moomoo/util";
 import { GameModes } from "./moomoo/GameMode";
@@ -733,6 +733,17 @@ Command(
     }
   },
   ["an", "spawn"]
+);
+
+Command(
+  "inspect",
+  function (args: any[], source: Player | undefined) {
+    if (!source?.client) return "You must be in the game to use this command.";
+    source.selectedWeapon = Weapons.Stick;
+    source.weaponMode = WeaponModes.Inspect;
+    source.buildItem = -1;
+  },
+  []
 );
 
 Command(

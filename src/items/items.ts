@@ -27,6 +27,11 @@ enum SecondaryWeapons {
   Bow = 9,
 }
 
+enum WeaponModes {
+  None,
+  Inspect,
+}
+
 interface AttackDetails {
   kbMultiplier: number;
   attackRange: number;
@@ -187,6 +192,7 @@ function getWeaponLength(weapon: Weapons) {
 export {
   PrimaryWeapons,
   SecondaryWeapons,
+  WeaponModes,
   getHitTime,
   Weapons,
   getWeaponAttackDetails,

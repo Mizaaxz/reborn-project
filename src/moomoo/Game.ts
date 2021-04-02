@@ -33,6 +33,7 @@ import {
   isRangedWeapon,
   getProjectileType,
   getRecoil,
+  WeaponModes,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -948,6 +949,17 @@ export default class Game {
             }
 
             for (let hitGameObject of hitGameObjects) {
+              if (player.weaponMode == WeaponModes.Inspect) {
+                Broadcast(
+                  JSON.stringify({
+                    ownerSID: hitGameObject.ownerSID,
+                    health: hitGameObject.health,
+                    protected: hitGameObject.protect,
+                  }),
+                  player.client
+                );
+              }
+
               if (hitGameObject.health !== -1) {
                 let hitGameObjectOwner = this.state.players.find(
                   (player: { id: any }) => player.id == hitGameObject.ownerSID
@@ -1550,6 +1562,7 @@ export default class Game {
 
           if (isWeapon) {
             client.player.buildItem = -1;
+            client.player.weaponMode = WeaponModes.None;
 
             if (client.player.weapon == packet.data[0])
               client.player.selectedWeapon = client.player.weapon;
