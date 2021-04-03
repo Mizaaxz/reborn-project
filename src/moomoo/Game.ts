@@ -456,24 +456,24 @@ export default class Game {
   sendAnimalUpdates() {
     let packetFactory = PacketFactory.getInstance();
 
+    let animalData = this.state.animals.reduce<number[]>((acc, animal) => {
+      if (!animal) return acc;
+
+      return acc.concat([
+        animal.id, // sid
+        animal.type, // animal index id
+        animal.location.x, // locx
+        animal.location.y, // locy
+        animal.angle, // angle (dir?)
+        animal.health, // health
+        1, // cow name index
+      ]);
+    }, []);
+
     this.state.players.forEach((plr: Player) => {
-      this.state.animals.forEach((animal: Animal) => {
-        plr.client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_ANIMALS, [
-              [
-                animal.id, // sid
-                animal.type, // animal index id
-                animal.location.x, // locx
-                animal.location.y, // locy
-                animal.angle, // angle (dir?)
-                animal.health, // health
-                1, // cow name index
-              ],
-            ])
-          )
-        );
-      });
+      plr.client?.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.UPDATE_ANIMALS, [animalData]))
+      );
     });
   }
 
@@ -1178,8 +1178,9 @@ export default class Game {
   genSID() {
     return (this.lastSID += 1);
   }
+  public lastAnimalSID = 0;
   genAnimalSID() {
-    return Math.max(0, ...this.state.animals.map((anm) => anm.id)) + 1;
+    return (this.lastAnimalSID += 1);
   }
 
   /**
