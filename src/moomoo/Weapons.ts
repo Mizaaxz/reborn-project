@@ -4,6 +4,7 @@ enum WeaponVariant {
   Diamond = 2,
   Ruby = 3,
   Emerald = 4,
+  Amethyst = 5,
 }
 
 let WeaponVariants: {
@@ -14,6 +15,7 @@ let WeaponVariants: {
     gatherMult: number;
     poison?: number;
     lifeSteal?: number;
+    extraGold?: number;
   };
 } = {};
 WeaponVariants[WeaponVariant.Normal] = { xp: 0, dmgMult: 1, structDmgMult: 1, gatherMult: 1 };
@@ -38,6 +40,15 @@ WeaponVariants[WeaponVariant.Emerald] = {
   gatherMult: 3,
   poison: 10,
   lifeSteal: 0.2,
+};
+WeaponVariants[WeaponVariant.Amethyst] = {
+  xp: 25000,
+  dmgMult: 1.5,
+  structDmgMult: 4,
+  gatherMult: 4,
+  poison: 13,
+  lifeSteal: 0.5,
+  extraGold: 1,
 };
 
 export { WeaponVariant, WeaponVariants };
