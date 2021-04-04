@@ -990,6 +990,9 @@ export default class Game {
                 else if (hitGameObjectOwner == player)
                   hitGameObject.health -=
                     getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
+                else if (player.weaponMode == WeaponModes.OneTap)
+                  hitGameObject.health -=
+                    getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
 
                 if (hitGameObject.health <= 0) {
                   let itemCost = getItemCost(hitGameObject.data);
