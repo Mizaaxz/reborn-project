@@ -128,26 +128,9 @@ function getWeaponSpeedMultiplier(weapon: Weapons) {
 
 function getStructureDamage(weapon: Weapons, weaponVariant: WeaponVariant) {
   let weaponData = weapons[weapon];
-
-  switch (weaponVariant) {
-    case WeaponVariant.Normal:
-    case WeaponVariant.Gold:
-    case WeaponVariant.Diamond:
-    case WeaponVariant.Ruby:
-      if (weaponData.dmg) {
-        if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg;
-
-        return weaponData.dmg;
-      }
-    case WeaponVariant.Emerald:
-      if (weaponData.dmg) {
-        if (weaponData.sDmg) return weaponData.dmg * weaponData.sDmg * 2;
-
-        return weaponData.dmg * 2;
-      }
-  }
-
-  return 0;
+  return weaponData.dmg
+    ? weaponData.dmg * (weaponData.sDmg || 1) * WeaponVariants[weaponVariant].structDmgMult
+    : 0;
 }
 
 function getGameObjHealth(item: ItemType) {
