@@ -3,7 +3,7 @@ import { SkinColor, eucDistance } from "./util";
 import Vec2 from "vec2";
 import GameState from "./GameState";
 import Game from "./Game";
-import { WeaponVariant } from "./Weapons";
+import { WeaponVariant, WeaponVariants } from "./Weapons";
 import Client from "./Client";
 import { PacketFactory } from "../packets/PacketFactory";
 import { Packet } from "../packets/Packet";
@@ -79,19 +79,19 @@ export default class Player extends Entity {
   }
 
   public set primaryWeaponExp(value) {
-    if (value >= 18000) this.primaryWeaponVariant = WeaponVariant.Emerald;
-    else if (value >= 12000) this.primaryWeaponVariant = WeaponVariant.Ruby;
-    else if (value >= 7000) this.primaryWeaponVariant = WeaponVariant.Diamond;
-    else if (value >= 3000) this.primaryWeaponVariant = WeaponVariant.Gold;
+    ((Object.keys(WeaponVariants) as unknown[]) as WeaponVariant[]).forEach((v) => {
+      let va = WeaponVariants[v];
+      if (value >= va.xp) this.primaryWeaponVariant = v;
+    });
 
     this._primaryWeaponExp = value;
   }
 
   public set secondaryWeaponExp(value) {
-    if (value >= 18000) this.secondaryWeaponVariant = WeaponVariant.Emerald;
-    else if (value >= 12000) this.secondaryWeaponVariant = WeaponVariant.Ruby;
-    else if (value >= 7000) this.secondaryWeaponVariant = WeaponVariant.Diamond;
-    else if (value >= 3000) this.secondaryWeaponVariant = WeaponVariant.Gold;
+    ((Object.keys(WeaponVariants) as unknown[]) as WeaponVariant[]).forEach((v) => {
+      let va = WeaponVariants[v];
+      if (value >= va.xp) this.secondaryWeaponVariant = v;
+    });
 
     this._secondaryWeaponExp = value;
   }
