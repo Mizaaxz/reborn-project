@@ -1,48 +1,34 @@
-import { WeaponVariant } from "./moomoo/Weapons";
-const setWeaponVariant = function (player: any, variant: any) {
+import Player from "./moomoo/Player";
+import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
+const setWeaponVariant = function (player: Player, variant: any) {
+  let wv = WeaponVariant.Normal;
   switch (variant) {
+    case "amethyst":
+    case "am":
+    case "a":
+      wv = WeaponVariant.Amethyst;
+      break;
     case "emerald":
     case "em":
     case "e":
-      player.selectedWeapon === player.weapon
-        ? (player.primaryWeaponVariant = WeaponVariant.Emerald)
-        : (player.secondaryWeaponVariant = WeaponVariant.Emerald);
+      wv = WeaponVariant.Emerald;
       break;
-
     case "ruby":
     case "r":
-      player.selectedWeapon === player.weapon
-        ? (player.primaryWeaponVariant = WeaponVariant.Ruby)
-        : (player.secondaryWeaponVariant = WeaponVariant.Ruby);
+      wv = WeaponVariant.Ruby;
       break;
-
     case "diamond":
     case "dia":
     case "d":
-      player.selectedWeapon === player.weapon
-        ? (player.primaryWeaponVariant = WeaponVariant.Diamond)
-        : (player.secondaryWeaponVariant = WeaponVariant.Diamond);
+      wv = WeaponVariant.Diamond;
       break;
-
     case "gold":
     case "g":
-      player.selectedWeapon === player.weapon
-        ? (player.primaryWeaponVariant = WeaponVariant.Gold)
-        : (player.secondaryWeaponVariant = WeaponVariant.Gold);
+      wv = WeaponVariant.Gold;
       break;
-
-    case "normal":
-    case "norm":
-    case "default":
-    case "reset":
-      player.selectedWeapon === player.weapon
-        ? (player.primaryWeaponVariant = WeaponVariant.Normal)
-        : (player.secondaryWeaponVariant = WeaponVariant.Normal);
-      break;
-
-    default:
-      return 1;
   }
-  return 0;
+  player.selectedWeapon === player.weapon
+    ? (player.primaryWeaponExp = WeaponVariants[wv].xp)
+    : (player.secondaryWeaponExp = WeaponVariants[wv].xp);
 };
 export { setWeaponVariant };
