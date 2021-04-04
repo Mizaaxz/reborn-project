@@ -39,7 +39,7 @@ import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
 import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
-import { WeaponVariant } from "./Weapons";
+import { WeaponVariant, WeaponVariants } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import {
   getProjectileRange,
@@ -864,14 +864,11 @@ export default class Game {
 
               dmg = this.damageFrom(hitPlayer, player, dmg);
 
-              if (weaponVariant == WeaponVariant.Emerald) {
+              let poison = WeaponVariants[weaponVariant].poison;
+              if (poison) {
                 hitPlayer.bleedDmg = 5;
                 hitPlayer.bleedAmt = 0;
-                hitPlayer.maxBleedAmt = 10;
-              } else if (weaponVariant === WeaponVariant.Ruby) {
-                hitPlayer.bleedDmg = 5;
-                hitPlayer.bleedAmt = 0;
-                hitPlayer.maxBleedAmt = 5;
+                hitPlayer.maxBleedAmt = poison;
               } else if (hat?.poisonDmg) {
                 hitPlayer.bleedDmg = hat.poisonDmg;
                 hitPlayer.bleedAmt = 0;
