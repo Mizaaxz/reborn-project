@@ -626,7 +626,14 @@ export default class Game {
     let attackerAcc = getAccessory(from.accID);
     let recieverAcc = getAccessory(to.accID);
 
-    let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
+    let healAmount =
+      ((attackerHat?.healD || 0) +
+        (attackerAcc?.healD || 0) +
+        ((from.selectedWeapon == from.weapon
+          ? WeaponVariants[from.primaryWeaponVariant]
+          : WeaponVariants[from.secondaryWeaponVariant]
+        ).lifeSteal || 0)) *
+      dmg;
     from.health = Math.min(from.health + healAmount, 100);
 
     if (healAmount) {

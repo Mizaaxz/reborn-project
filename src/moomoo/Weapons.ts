@@ -13,7 +13,7 @@ let WeaponVariants: {
     structDmgMult: number;
     gatherMult: number;
     poison?: number;
-    lifeSteal?: boolean;
+    lifeSteal?: number;
   };
 } = {};
 WeaponVariants[WeaponVariant.Normal] = { xp: 0, dmgMult: 1, structDmgMult: 1, gatherMult: 1 };
@@ -37,7 +37,7 @@ WeaponVariants[WeaponVariant.Emerald] = {
   structDmgMult: 3,
   gatherMult: 3,
   poison: 10,
-  lifeSteal: true,
+  lifeSteal: 0.2,
 };
 
 export { WeaponVariant, WeaponVariants };
