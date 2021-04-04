@@ -1,7 +1,7 @@
 import weapons from "../definitions/weapons";
 import items from "../definitions/items";
 import { ItemType } from "./UpgradeItems";
-import { WeaponVariant } from "../moomoo/Weapons";
+import { WeaponVariant, WeaponVariants } from "../moomoo/Weapons";
 import { getGame } from "../moomoo/Game";
 import { GameModes } from "../moomoo/GameMode";
 
@@ -75,31 +75,13 @@ function getWeaponDamage(item: Weapons, weaponVariant: WeaponVariant) {
   let weapon = weapons.find((weapon) => weapon.id == item);
   let baseDamage = weapon?.dmg || 0;
 
-  switch (weaponVariant) {
-    case WeaponVariant.Normal:
-      return baseDamage;
-    case WeaponVariant.Gold:
-      return baseDamage * 1.1;
-    case WeaponVariant.Diamond:
-    case WeaponVariant.Ruby:
-      return baseDamage * 1.18;
-    case WeaponVariant.Emerald:
-      return baseDamage * 1.3;
-  }
+  return baseDamage * WeaponVariants[weaponVariant].dmgMult;
 }
 
 function getWeaponGatherAmount(item: Weapons, weaponVariant: WeaponVariant) {
   let weapon = weapons.find((weapon) => weapon.id == item);
   let defaultGather = weapon?.gather || 0;
-  switch (weaponVariant) {
-    case WeaponVariant.Normal:
-    case WeaponVariant.Gold:
-    case WeaponVariant.Diamond:
-    case WeaponVariant.Ruby:
-      return defaultGather;
-    case WeaponVariant.Emerald:
-      return defaultGather * 2;
-  }
+  return Math.floor(defaultGather * WeaponVariants[weaponVariant].gatherMult);
 }
 
 function getItemCost(item: ItemType) {
