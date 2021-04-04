@@ -792,6 +792,13 @@ export default class Game {
         }
       });
 
+    this.state.animals.forEach((animal) => {
+      if (Date.now() - animal.lastDot >= 1000) {
+        animal.damageOverTime();
+        animal.lastDot = now;
+      }
+    });
+
     this.state.players.forEach((player) => {
       if (player.dead) return;
 
@@ -914,19 +921,16 @@ export default class Game {
 
               dmg = this.damageFromAnimal(hitAnimal, player, dmg);
 
-              /*if (weaponVariant == WeaponVariant.Emerald) {
-                hitPlayer.bleedDmg = 5;
-                hitPlayer.bleedAmt = 0;
-                hitPlayer.maxBleedAmt = 10;
-              } else if (weaponVariant === WeaponVariant.Ruby) {
-                hitPlayer.bleedDmg = 5;
-                hitPlayer.bleedAmt = 0;
-                hitPlayer.maxBleedAmt = 5;
+              let poison = WeaponVariants[weaponVariant].poison;
+              if (poison) {
+                hitAnimal.bleedDmg = 5;
+                hitAnimal.bleedAmt = 0;
+                hitAnimal.maxBleedAmt = poison;
               } else if (hat?.poisonDmg) {
-                hitPlayer.bleedDmg = hat.poisonDmg;
-                hitPlayer.bleedAmt = 0;
-                hitPlayer.maxBleedAmt = hat.poisonTime;
-              }*/
+                hitAnimal.bleedDmg = hat.poisonDmg;
+                hitAnimal.bleedAmt = 0;
+                hitAnimal.maxBleedAmt = hat.poisonTime;
+              }
 
               if (hitAnimal.health <= 0) {
                 let type = animals[hitAnimal.type];
