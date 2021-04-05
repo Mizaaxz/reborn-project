@@ -775,6 +775,8 @@ Command(
 Command(
   "acc.promote",
   function (args: any[], source: Player | undefined) {
+    let level = AdminLevel.Admin;
+    if (Number(args[args.length - 1])) level = Number(args.pop());
     let account = db.get(
       `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
     ) as Account;
@@ -782,7 +784,8 @@ Command(
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
     }
-    account.adminLevel = AdminLevel.Owner;
+    if (!AdminLevel[level]) level = AdminLevel.Admin;
+    account.adminLevel = level;
     db.set(`account_${account.username.replace(/ /g, "+")}`, account);
     getGame()
       ?.state.players.filter(
