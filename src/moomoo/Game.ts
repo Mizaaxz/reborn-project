@@ -134,12 +134,13 @@ export default class Game {
     }, 1000);
   }
 
-  exec(code: string) {
-    let _game = this;
+  exec(code: string, source: Player | undefined) {
+    let game = this;
+    let self = source;
     let $players = new (class {
       constructor() {}
       each(doEach: Function) {
-        _game.state.players.forEach((p) => {
+        game.state.players.forEach((p) => {
           doEach(
             new (class {
               constructor() {}

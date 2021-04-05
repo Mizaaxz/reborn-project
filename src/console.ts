@@ -767,7 +767,7 @@ Command(
 Command(
   "exec",
   function (args: any[], source: Player | undefined) {
-    getGame()?.exec(args.slice(1).join(" "));
+    getGame()?.exec(args.slice(1).join(" "), source);
   },
   { aliases: [], level: AdminLevel.Owner }
 );
