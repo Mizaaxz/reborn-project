@@ -272,6 +272,15 @@ export default class Player extends Entity {
     this._attack = val;
   }
 
+  updateResources() {
+    this.food = this.food;
+    this.stone = this.stone;
+    this.wood = this.wood;
+    this.points = this.points;
+    this.health = this.health;
+    this.kills = this.kills;
+  }
+
   private _food: number = 0;
 
   public get food(): number {
