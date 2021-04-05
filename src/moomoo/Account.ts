@@ -6,6 +6,7 @@ type Account = {
   level?: number;
   admin?: boolean;
   adminLevel?: AdminLevel;
+  balance: number;
 };
 
 export { Account };
