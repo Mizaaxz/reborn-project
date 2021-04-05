@@ -2,7 +2,7 @@
 Description=MooMoo Reborn
 
 [Service]
-ExecStart=/root/server/start.sh
+ExecStart=/root/server/start.js
 Restart=always
 User=nobody
 Group=nogroup
