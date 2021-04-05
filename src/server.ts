@@ -141,7 +141,8 @@ app.post("/api/v1/create", (req, res) => {
       username,
       password: hash,
       level: 1,
-      admin: false,
+      adminLevel: 0,
+      balance: 0,
     });
 
     res.json({ error: "", text: "Account created!" });

@@ -4,9 +4,9 @@ type Account = {
   username?: string;
   password?: string;
   level?: number;
-  admin?: boolean;
+  admin?: boolean; // depreciated
   adminLevel?: AdminLevel;
-  balance: number;
+  balance?: number;
 };
 
 export { Account };
