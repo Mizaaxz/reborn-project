@@ -63,8 +63,14 @@ Command(
       let player = playerSelector(args[1], source);
       if (!player) return "Invalid Player ID";
 
-      if (player instanceof Player) game.killPlayer(player);
-      else player.map((p) => game?.killPlayer(p));
+      if (player instanceof Player)
+        (player.client?.account?.adminLevel || 0) > (source?.client?.account?.adminLevel || 0) &&
+          game.killPlayer(player);
+      else
+        player.forEach((p) => {
+          if ((p.client?.account?.adminLevel || 0) > (source?.client?.account?.adminLevel || 0))
+            game?.killPlayer(p);
+        });
     }
   },
   { aliases: ["k"], level: AdminLevel.Moderator }
