@@ -376,8 +376,11 @@ export default class Game {
   }
 
   async banClient(client: Client, reason: string = "Banned by a moderator.") {
-    if (!((db.get("bannedIPs") as any[]) || []).includes(client.ip))
-      db.push("bannedIPs", client.ip);
+    if (!((db.get("bannedIPs") as any[]) || []).includes(client.ip)) {
+      let bannedIPs = (db.get("bannedIPs") as any[]) || [];
+      bannedIPs.push(client.ip);
+      db.set("bannedIPs", bannedIPs);
+    }
 
     this.kickClient(client, reason);
   }
