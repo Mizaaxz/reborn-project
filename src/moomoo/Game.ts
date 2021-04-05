@@ -115,10 +115,12 @@ export default class Game {
 
     process.nextTick(this.update);
   }
+  public closing: NodeJS.Timeout = setInterval(() => {}, 5000);
   close(reason: string = "Server Closed", doneMax: number = 10) {
     let g = this;
     let doneTimer = 0;
-    setInterval(function () {
+    clearInterval(this.closing);
+    this.closing = setInterval(function () {
       if (doneTimer == doneMax) {
         g.clients.forEach((c) => {
           g.kickClient(c, reason);
@@ -131,6 +133,10 @@ export default class Game {
         doneTimer++;
       }
     }, 1000);
+  }
+  cancelClose() {
+    clearInterval(this.closing);
+    this.closing = setInterval(() => {}, 5000);
   }
 
   exec(code: string, source: Player | undefined) {

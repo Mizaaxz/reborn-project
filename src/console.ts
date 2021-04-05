@@ -31,6 +31,13 @@ Command(
   },
   { aliases: ["close", "exit"], level: AdminLevel.Staff }
 );
+Command(
+  "cancelclose",
+  () => {
+    getGame()?.cancelClose();
+  },
+  { aliases: ["stopclose", "cclose"], level: AdminLevel.Admin }
+);
 
 Command(
   "broadcast",
