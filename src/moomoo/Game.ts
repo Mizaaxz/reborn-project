@@ -1367,7 +1367,7 @@ export default class Game {
             client.accountName = account.username || "";
             client.account = account;
             client.loggedIn = true;
-            if (typeof client.admin == "boolean") {
+            if (typeof account.admin == "boolean") {
               account.adminLevel = 0;
               delete account.admin;
               db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
