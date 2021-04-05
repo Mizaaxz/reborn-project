@@ -1811,7 +1811,7 @@ export default class Game {
           let upgrades = getUpgrades(client.player.upgradeAge);
           let weaponUpgrades = getWeaponUpgrades(client.player.upgradeAge);
 
-          if (item <= 15) {
+          if (item <= 16) {
             if (weaponUpgrades.includes(item)) {
               let preItem = getPrerequisiteWeapon(item);
 

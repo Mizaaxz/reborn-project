@@ -15,6 +15,7 @@ enum PrimaryWeapons {
   Stick = 8,
   Katana = 4,
   GreatAxe = 2,
+  Pitchfork = 16,
 }
 
 enum SecondaryWeapons {

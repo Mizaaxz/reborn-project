@@ -288,5 +288,23 @@ const weapons = [
     spdMult: 0.6,
     speed: 1500,
   },
+  {
+    id: 16,
+    type: 0,
+    age: 8,
+    pre: 8,
+    name: "Pitchfork",
+    desc: "Good for gathering and fighting.",
+    src: "pitchfork_1",
+    length: 130,
+    width: 220,
+    xOff: 1,
+    yOff: 48,
+    dmg: 20,
+    spdMult: 1,
+    range: 100,
+    gather: 5,
+    speed: 350,
+  },
 ];
 export default weapons;
