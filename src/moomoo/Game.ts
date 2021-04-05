@@ -118,7 +118,7 @@ export default class Game {
   close(reason: string = "Server Closed", doneMax: number = 10) {
     let g = this;
     let doneTimer = 0;
-    let closeInt = setInterval(function () {
+    setInterval(function () {
       if (doneTimer == doneMax) {
         g.clients.forEach((c) => {
           g.kickClient(c, reason);
