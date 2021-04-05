@@ -56,6 +56,7 @@ import Animal from "./Animal";
 import animals from "../definitions/animals";
 import items from "../definitions/items";
 import { Account } from "./Account";
+import ms from "ms";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -125,7 +126,7 @@ export default class Game {
         setTimeout(process.exit, 1000);
       } else {
         g.clients.forEach((c) => {
-          Broadcast(`Server closing in ${doneMax - doneTimer} seconds...`, c);
+          Broadcast(`Server closing in ${ms((doneMax - doneTimer) * 1000, { long: true })}...`, c);
         });
         doneTimer++;
       }
