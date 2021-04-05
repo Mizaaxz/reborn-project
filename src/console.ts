@@ -29,7 +29,7 @@ Command(
     let message = args.slice(1).join(" ");
     getGame()?.close(message, timeout || 0);
   },
-  { aliases: ["close", "exit"], level: AdminLevel.Admin }
+  { aliases: ["close", "exit"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -44,7 +44,7 @@ Command(
       return false;
     }
   },
-  { aliases: ["bc", "send", "echo"], level: AdminLevel.Admin }
+  { aliases: ["bc", "send", "echo"], level: AdminLevel.Helper }
 );
 
 Command(
@@ -60,7 +60,7 @@ Command(
       else player.map((p) => game?.killPlayer(p));
     }
   },
-  { aliases: ["k"], level: AdminLevel.Admin }
+  { aliases: ["k"], level: AdminLevel.Moderator }
 );
 
 Command(
@@ -97,7 +97,7 @@ Command(
       }
     }
   },
-  { aliases: ["teleport"], level: AdminLevel.Admin }
+  { aliases: ["teleport"], level: AdminLevel.Helper }
 );
 
 Command(
@@ -128,7 +128,7 @@ Command(
       }
     }
   },
-  { aliases: ["invis", "vanish", "v"], level: AdminLevel.Admin }
+  { aliases: ["invis", "vanish", "v"], level: AdminLevel.Moderator }
 );
 
 Command(
@@ -154,7 +154,7 @@ Command(
       }
     }
   },
-  { aliases: ["invinc", "nokill"], level: AdminLevel.Admin }
+  { aliases: ["invinc", "nokill"], level: AdminLevel.Helper }
 );
 
 Command(
@@ -177,7 +177,7 @@ Command(
       }
     }
   },
-  { aliases: ["movespeed", "s", "spd"], level: AdminLevel.Admin }
+  { aliases: ["movespeed", "s", "spd"], level: AdminLevel.Moderator }
 );
 
 //TODO: change to tempmod command
@@ -220,7 +220,7 @@ Command(
       else return "Invalid Player ID(s)";
     }
   },
-  { aliases: ["variant", "wv"], level: AdminLevel.Admin }
+  { aliases: ["variant", "wv"], level: AdminLevel.Moderator }
 );
 
 Command(
@@ -238,7 +238,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  { aliases: ["b"], level: AdminLevel.Admin }
+  { aliases: ["b"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -264,7 +264,7 @@ Command(
       } else return "You need to be in the game to run this command!";
     }
   },
-  { aliases: ["g", "_god"], level: AdminLevel.Admin }
+  { aliases: ["g", "_god"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -359,7 +359,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Helper }
 );
 
 Command(
@@ -381,7 +381,7 @@ Command(
       }
     }
   },
-  { aliases: ["k"], level: AdminLevel.Admin }
+  { aliases: ["k"], level: AdminLevel.Moderator }
 );
 
 Command(
@@ -401,7 +401,7 @@ Command(
     );
     return false;
   },
-  { aliases: ["gen"], level: AdminLevel.Admin }
+  { aliases: ["gen"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -543,7 +543,7 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Owner }
 );
 
 Command(
@@ -601,7 +601,7 @@ Command(
       return false;
     }
   },
-  { aliases: ["rap", "t", "trp", "tr"], level: AdminLevel.Admin }
+  { aliases: ["rap", "t", "trp", "tr"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -659,7 +659,7 @@ Command(
       return false;
     }
   },
-  { aliases: ["p", "ad", "speedpad"], level: AdminLevel.Admin }
+  { aliases: ["p", "ad", "speedpad"], level: AdminLevel.Staff }
 );
 
 Command(
@@ -713,7 +713,7 @@ Command(
         );
     }
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Staff }
 );
 
 Command(
@@ -743,7 +743,7 @@ Command(
     source.weaponMode = WeaponModes.Inspect;
     source.buildItem = -1;
   },
-  { aliases: ["ins"], level: AdminLevel.Admin }
+  { aliases: ["ins"], level: AdminLevel.Helper }
 );
 Command(
   "onetap",
@@ -769,7 +769,7 @@ Command(
   function (args: any[], source: Player | undefined) {
     getGame()?.exec(args.slice(1).join(" "));
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Owner }
 );
 
 Command(
@@ -835,7 +835,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Account Deleted.");
       });
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Owner }
 );
 
 function logMethod(text: string) {

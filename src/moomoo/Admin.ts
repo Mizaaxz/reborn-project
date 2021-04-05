@@ -4,6 +4,7 @@ enum AdminLevel {
   Moderator,
   Staff,
   Admin,
+  Owner,
 }
 
 export { AdminLevel };

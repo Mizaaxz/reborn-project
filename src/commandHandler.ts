@@ -18,7 +18,7 @@ const Command = function (
     options,
     execute: (text: string, source: Player | undefined) => {
       let permLevel = AdminLevel.None;
-      if (!source?.client) permLevel = AdminLevel.Admin;
+      if (!source?.client) permLevel = AdminLevel.Owner;
       else permLevel = source.client.admin;
 
       if (text.startsWith("/")) text = text.replace("/", "");
