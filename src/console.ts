@@ -764,6 +764,13 @@ Command(
   },
   []
 );
+Command(
+  "exec",
+  function (args: any[], source: Player | undefined) {
+    getGame()?.exec(args[1]);
+  },
+  []
+);
 
 Command(
   "acc.promote",

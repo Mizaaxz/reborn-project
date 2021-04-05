@@ -114,6 +114,26 @@ export default class Game {
     process.nextTick(this.update);
   }
 
+  exec(code: string) {
+    let _game = this;
+    let $players = new (class {
+      constructor() {}
+      each(doEach: Function) {
+        _game.state.players.forEach((p) => {
+          doEach(
+            new (class {
+              constructor() {}
+              kill() {
+                p.die();
+              }
+            })()
+          );
+        });
+      }
+    })();
+    eval(code.replace(/\(\$\./g, "($=>$."));
+  }
+
   getNextGameObjectID() {
     return this.state.gameObjects.length > 0
       ? Math.max(...this.state.gameObjects.map((gameObj) => gameObj.id)) + 1
