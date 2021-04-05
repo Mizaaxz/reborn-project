@@ -767,7 +767,7 @@ Command(
 Command(
   "exec",
   function (args: any[], source: Player | undefined) {
-    getGame()?.exec(args[1]);
+    getGame()?.exec(args.slice(1).join(" "));
   },
   []
 );
