@@ -1,6 +1,7 @@
 import Vec2 from "vec2";
 import WebSocket from "ws";
 import { Account } from "./Account";
+import { AdminLevel } from "./Admin";
 import Player from "./Player";
 
 export default class Client {
@@ -22,6 +23,6 @@ export default class Client {
     public player: Player | null = null,
     public ownedHats: number[] = [],
     public ownedAccs: number[] = [],
-    public admin: boolean = false
+    public admin: AdminLevel = AdminLevel.None
   ) {}
 }

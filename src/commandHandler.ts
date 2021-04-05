@@ -1,3 +1,4 @@
+import { AdminLevel } from "./moomoo/Admin";
 import { getGame } from "./moomoo/Game";
 import Player from "./moomoo/Player";
 
@@ -6,20 +7,29 @@ interface cmdIndex {
 }
 const commandIndex: cmdIndex = {};
 
-const Command = function (name: string, callback: Function, aliases: any[]) {
+const Command = function (
+  name: string,
+  callback: Function,
+  options: { aliases: string[]; level: AdminLevel }
+) {
   let cmd = {
     name,
     callback,
-    aliases,
-    execute: (text: string, source: any) => {
+    options,
+    execute: (text: string, source: Player | undefined) => {
+      let permLevel = AdminLevel.None;
+      if (!source?.client) permLevel = AdminLevel.Moderator;
+      else permLevel = source.client.admin;
+
       if (text.startsWith("/")) text = text.replace("/", "");
       let parsed = text.split(/ +/g);
+      if (permLevel < options.level) return "You do not have permission to run this command.";
 
       return callback(parsed, source);
     },
   };
   commandIndex[name.toLowerCase()] = cmd;
-  aliases.forEach((a) => {
+  options.aliases.forEach((a) => {
     commandIndex[a.toLowerCase()] = cmd;
   });
   return cmd;

@@ -57,6 +57,7 @@ import animals from "../definitions/animals";
 import items from "../definitions/items";
 import { Account } from "./Account";
 import ms from "ms";
+import { AdminLevel } from "./Admin";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1300,33 +1301,6 @@ export default class Game {
     }
   }
 
-  promoteClient(client: Client) {
-    if (!client.player) return;
-    let packetFactory = PacketFactory.getInstance();
-    client.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.PLAYER_ADD, [
-          [
-            client.id,
-            client.player.id,
-            client.admin
-              ? `\u3010${client.player.id}\u3011 ${client.player.name}`
-              : client.player.name,
-            client.player.location.x,
-            client.player.location.y,
-            0,
-            100,
-            100,
-            35,
-            client.player.skinColor,
-          ],
-          true,
-        ])
-      )
-    );
-    Broadcast("Promoted to admin.", client);
-  }
-
   updateWindmills() {
     for (let windmill of this.state.gameObjects.filter(
       (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
@@ -1373,7 +1347,7 @@ export default class Game {
               db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
               return this.kickClient(client, "Migrated to new admin system. Please reload.");
             }
-            account.admin && ((client.admin = true), this.promoteClient(client));
+            if (account.adminLevel) client.admin = account.adminLevel;
           }
         });
         break;

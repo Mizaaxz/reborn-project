@@ -17,6 +17,7 @@ import { GameModes } from "./moomoo/GameMode";
 import db from "enhanced.db";
 import * as logger from "./log";
 import { Account } from "./moomoo/Account";
+import { AdminLevel } from "./moomoo/Admin";
 
 let command = "";
 let lastMessage = "";
@@ -28,7 +29,7 @@ Command(
     let message = args.slice(1).join(" ");
     getGame()?.close(message, timeout || 0);
   },
-  ["close", "exit"]
+  { aliases: ["close", "exit"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -43,7 +44,7 @@ Command(
       return false;
     }
   },
-  ["bc", "send", "echo"]
+  { aliases: ["bc", "send", "echo"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -59,7 +60,7 @@ Command(
       else player.map((p) => game?.killPlayer(p));
     }
   },
-  ["k"]
+  { aliases: ["k"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -96,7 +97,7 @@ Command(
       }
     }
   },
-  ["teleport"]
+  { aliases: ["teleport"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -127,7 +128,7 @@ Command(
       }
     }
   },
-  ["invis", "vanish", "v"]
+  { aliases: ["invis", "vanish", "v"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -153,7 +154,7 @@ Command(
       }
     }
   },
-  ["invinc", "nokill"]
+  { aliases: ["invinc", "nokill"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -176,7 +177,7 @@ Command(
       }
     }
   },
-  ["movespeed", "s", "spd"]
+  { aliases: ["movespeed", "s", "spd"], level: AdminLevel.Admin }
 );
 
 //TODO: change to tempmod command
@@ -219,7 +220,7 @@ Command(
       else return "Invalid Player ID(s)";
     }
   },
-  ["variant", "wv"]
+  { aliases: ["variant", "wv"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -237,7 +238,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  ["b"]
+  { aliases: ["b"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -263,7 +264,7 @@ Command(
       } else return "You need to be in the game to run this command!";
     }
   },
-  ["g", "_god"]
+  { aliases: ["g", "_god"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -358,7 +359,7 @@ Command(
       } else return "Invalid Player ID";
     }
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 
 Command(
@@ -380,7 +381,7 @@ Command(
       }
     }
   },
-  ["k"]
+  { aliases: ["k"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -400,7 +401,7 @@ Command(
     );
     return false;
   },
-  ["gen"]
+  { aliases: ["gen"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -542,7 +543,7 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 
 Command(
@@ -600,7 +601,7 @@ Command(
       return false;
     }
   },
-  ["rap", "t", "trp", "tr"]
+  { aliases: ["rap", "t", "trp", "tr"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -658,7 +659,7 @@ Command(
       return false;
     }
   },
-  ["p", "ad", "speedpad"]
+  { aliases: ["p", "ad", "speedpad"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -671,7 +672,7 @@ Command(
       return false;
     } else return "Invalid GameMode.";
   },
-  ["gm"]
+  { aliases: ["gm"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -712,7 +713,7 @@ Command(
         );
     }
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 
 Command(
@@ -731,7 +732,7 @@ Command(
       console.log(ai);
     }
   },
-  ["an", "spawn"]
+  { aliases: ["an", "spawn"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -742,7 +743,7 @@ Command(
     source.weaponMode = WeaponModes.Inspect;
     source.buildItem = -1;
   },
-  ["ins"]
+  { aliases: ["ins"], level: AdminLevel.Admin }
 );
 Command(
   "onetap",
@@ -752,7 +753,7 @@ Command(
     source.weaponMode = WeaponModes.OneTap;
     source.buildItem = -1;
   },
-  ["ot"]
+  { aliases: ["ot"], level: AdminLevel.Admin }
 );
 
 Command(
@@ -761,14 +762,14 @@ Command(
     if (source?.client) return Broadcast("Must use in console.", source.client);
     console.log("\n" + logger.returnLogs(Number(args[1]) || 15));
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 Command(
   "exec",
   function (args: any[], source: Player | undefined) {
     getGame()?.exec(args.slice(1).join(" "));
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 
 Command(
@@ -791,7 +792,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Promoted.");
       });
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 Command(
   "acc.demote",
@@ -813,7 +814,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Demoted.");
       });
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 Command(
   "acc.delete",
@@ -834,7 +835,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Account Deleted.");
       });
   },
-  []
+  { aliases: [], level: AdminLevel.Admin }
 );
 
 function logMethod(text: string) {
