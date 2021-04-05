@@ -954,7 +954,7 @@ export default class Game {
                     new Packet(PacketType.HEALTH_CHANGE, [
                       hitPlayer.location.x,
                       hitPlayer.location.y,
-                      Math.round(dmg),
+                      hitPlayer.invincible ? "Invincible!" : Math.round(dmg),
                       1,
                     ])
                   )
