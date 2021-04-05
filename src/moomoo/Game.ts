@@ -120,11 +120,10 @@ export default class Game {
     let doneTimer = 0;
     let closeInt = setInterval(function () {
       if (doneTimer == doneMax) {
-        clearInterval(closeInt);
         g.clients.forEach((c) => {
           g.kickClient(c, reason);
         });
-        setTimeout(process.exit, 1000);
+        if (!g.clients.length) process.exit();
       } else {
         g.clients.forEach((c) => {
           Broadcast(`Server closing in ${ms((doneMax - doneTimer) * 1000, { long: true })}...`, c);
