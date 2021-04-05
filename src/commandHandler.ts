@@ -95,4 +95,10 @@ function boolSelector(bool: string | undefined) {
   }
 }
 
-export { Command, GetCommand, playerSelector, boolSelector };
+function compareAdmin(plr?: Player, receiver?: Player) {
+  if (plr == receiver) return true;
+  else
+    return (plr?.client?.account?.adminLevel || 0) > (receiver?.client?.account?.adminLevel || 0);
+}
+
+export { Command, GetCommand, playerSelector, boolSelector, compareAdmin };

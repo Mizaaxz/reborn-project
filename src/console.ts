@@ -4,7 +4,7 @@ import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
 import { Packet, Side } from "./packets/Packet";
 import { PacketType } from "./packets/PacketType";
-import { boolSelector, Command, GetCommand, playerSelector } from "./commandHandler";
+import { boolSelector, Command, compareAdmin, GetCommand, playerSelector } from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
@@ -63,13 +63,10 @@ Command(
       let player = playerSelector(args[1], source);
       if (!player) return "Invalid Player ID";
 
-      if (player instanceof Player)
-        (player.client?.account?.adminLevel || 0) > (source?.client?.account?.adminLevel || 0) &&
-          game.killPlayer(player);
+      if (player instanceof Player) compareAdmin(source, player) && game.killPlayer(player);
       else
         player.forEach((p) => {
-          if ((p.client?.account?.adminLevel || 0) > (source?.client?.account?.adminLevel || 0))
-            game?.killPlayer(p);
+          if (compareAdmin(source, p)) game?.killPlayer(p);
         });
     }
   },
