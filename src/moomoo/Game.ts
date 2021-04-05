@@ -1398,7 +1398,8 @@ export default class Game {
             });
             newPlayer.name = newPlayer.client?.account
               ? newPlayer.client.account.username || "unknown"
-              : filteredName.slice(0, 16).join("").trim() || "unknown";
+              : "Guest";
+            //: filteredName.slice(0, 16).join("").trim() || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;
