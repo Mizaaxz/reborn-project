@@ -126,10 +126,12 @@ Command(
           player.invisible = bool1 == null ? !player.invisible : bool1;
           player.hideLeaderboard = player.invisible;
         } else if (player instanceof Player) {
+          if (!compareAdmin(source, player)) return;
           player.invisible = bool == null ? !player.invisible : bool;
           player.hideLeaderboard = player.invisible;
         } else if (player.length) {
           player.forEach((p) => {
+            if (!compareAdmin(source, p)) return;
             p.invisible = bool == null ? !p.invisible : bool;
             p.hideLeaderboard = p.invisible;
           });
