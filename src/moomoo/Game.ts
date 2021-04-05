@@ -122,7 +122,7 @@ export default class Game {
         g.clients.forEach((c) => {
           g.kickClient(c, reason);
         });
-        setTimeout(process.exit, 10);
+        setTimeout(process.exit, 1000);
       } else {
         g.clients.forEach((c) => {
           Broadcast(`Server closing in ${doneMax - doneTimer} seconds...`, c);
