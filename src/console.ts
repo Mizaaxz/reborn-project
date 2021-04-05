@@ -22,14 +22,13 @@ let command = "";
 let lastMessage = "";
 
 Command(
-  "_stop",
+  "stop",
   (args: any[], source: Player | undefined) => {
-    Broadcast("no", source?.client);
-    //Broadcast("Restarting server in 10 seconds...")
-    //setTimeout(function() {process.exit()}, 10000)
-    //process.exit();
+    let timeout = Number(args[args.length - 1]) ? Number(args.pop()) : 10;
+    let message = args.slice(1).join(" ");
+    getGame()?.close(message, timeout || 0);
   },
-  []
+  ["close", "exit"]
 );
 
 Command(
