@@ -298,7 +298,7 @@ const weapons = [
     src: "pitchfork_1",
     length: 130,
     width: 220,
-    xOff: 1,
+    xOff: -4,
     yOff: 48,
     dmg: 20,
     spdMult: 1,
