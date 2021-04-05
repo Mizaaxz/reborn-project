@@ -113,6 +113,24 @@ export default class Game {
 
     process.nextTick(this.update);
   }
+  close(reason: string = "Server Closed", doneMax: number = 10) {
+    let g = this;
+    let doneTimer = 0;
+    let closeInt = setInterval(function () {
+      if (doneTimer == doneMax) {
+        clearInterval(closeInt);
+        g.clients.forEach((c) => {
+          g.kickClient(c, reason);
+        });
+        setTimeout(process.exit, 10);
+      } else {
+        g.clients.forEach((c) => {
+          Broadcast(`Server closing in ${doneMax - doneTimer} seconds...`, c);
+        });
+        doneTimer++;
+      }
+    }, 1000);
+  }
 
   exec(code: string) {
     let _game = this;
