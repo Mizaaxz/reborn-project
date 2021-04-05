@@ -67,13 +67,7 @@ const DEFAULT_MAX_CPS = 25;
 let MAX_CPS = (config.maxCPS && parseInt(config.maxCPS, 10)) || DEFAULT_MAX_CPS;
 if (isNaN(MAX_CPS)) MAX_CPS = DEFAULT_MAX_CPS;
 
-interface DBSchema {
-  bannedIPs: string[];
-  moderatorIPs: string[];
-}
-
 export default class Game {
-  private db?: lowDb.LowdbAsync<DBSchema>;
   public state: GameState;
   public clients: Client[] = [];
   public lastTick: number = 0;
@@ -92,13 +86,6 @@ export default class Game {
     this.update = this.update.bind(this);
 
     if (!currentGame) currentGame = this;
-
-    this.initDatabase();
-  }
-
-  async initDatabase() {
-    this.db = await lowdb(new FileAsync<DBSchema>("./data/sanctuary.json"));
-    this.db.defaults({ bannedIPs: [], moderatorIPs: [] }).write();
   }
 
   /**
@@ -296,13 +283,8 @@ export default class Game {
       }, 100);
     }
 
-    let bannedIPs = this.db?.get("bannedIPs");
-    if (bannedIPs) {
-      if (bannedIPs.includes(ip).value()) {
-        this.kickClient(client, "You are banned.");
-        return;
-      }
-    }
+    let bannedIPs = (db.get("bannedIPs") as any[]) || [];
+    if (bannedIPs.includes(ip)) return this.kickClient(client, "You are banned.");
 
     socket.addListener("close", () => {
       if (client.player) {
@@ -393,24 +375,16 @@ export default class Game {
     }, 1);
   }
 
-  async banClient(client: Client) {
-    if (this.db) {
-      if (!this.db.get("bannedIPs").includes(client.ip).value()) {
-        await this.db.get("bannedIPs").push(client.ip).write();
-      }
+  async banClient(client: Client, reason: string = "Banned by a moderator.") {
+    if (!(db.get("bannedIPs") as any[]).includes(client.ip)) db.push("bannedIPs", client.ip);
 
-      console.log(`Banned ${client.id} with ip ${client.ip}`);
-      this.kickClient(client, "Banned by a moderator.");
-    }
+    this.kickClient(client, reason);
   }
-
   async unbanIP(ip: string) {
-    if (this.db) {
-      if (this.db.get("bannedIPs").includes(ip).value()) {
-        await this.db.get("bannedIPs").remove(ip).write();
-      }
-
-      console.log(`Unbanned player with ip ${ip}`);
+    let bannedIPs = db.get("bannedIPs") as any[];
+    if (bannedIPs.includes(ip)) {
+      bannedIPs.splice(bannedIPs.indexOf(ip), 1);
+      db.set("bannedIPs", bannedIPs);
     }
   }
 

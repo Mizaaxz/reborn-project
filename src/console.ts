@@ -245,7 +245,7 @@ Command(
       let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
 
       if (player && player.client && !player.client.admin) {
-        game.banClient(player.client);
+        game.banClient(player.client, args.slice(2).join(" "));
         return false;
       } else return "Invalid Player ID";
     }
