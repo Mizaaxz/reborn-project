@@ -866,13 +866,12 @@ Command(
         WeaponVariants[WeaponVariant.Amethyst].xp;
       source.items = [
         ItemType.Cookie,
+        ItemType.CastleWall,
+        ItemType.SpinningSpikes,
+        ItemType.PowerMill,
         ItemType.PitTrap,
         ItemType.BoostPad,
-        ItemType.FasterWindmill,
         ItemType.Teleporter,
-        ItemType.CastleWall,
-        ItemType.PowerMill,
-        ItemType.SpinningSpikes,
       ];
       source.food = 10000;
       source.stone = 10000;
