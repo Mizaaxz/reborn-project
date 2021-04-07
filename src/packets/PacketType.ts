@@ -61,6 +61,7 @@ enum PacketType {
   TRADE_REQ,
   SEND_TRADE_REQ,
   ACCEPT_TRADE_REQ,
+  EVAL,
 }
 
 export { PacketType };

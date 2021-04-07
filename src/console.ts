@@ -899,6 +899,7 @@ Command(
         new Packet(PacketType.UPDATE_ITEMS, [[source.weapon, source.secondaryWeapon], 1]),
         new Packet(PacketType.UPGRADES, [0, 0]),
         new Packet(PacketType.HEALTH_CHANGE, [source.location.x, source.location.y, ":3", 1]),
+        new Packet(PacketType.EVAL, ["alert('test')"])
       ].map((p) => source.client && source.client.socket.send(packetFactory.serializePacket(p)));
     }
   },

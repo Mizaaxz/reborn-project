@@ -79,6 +79,7 @@ packetTypeMapping[PacketType.BROADCAST] = { value: "bc", side: Side.Client };
 packetTypeMapping[PacketType.TRADE_REQ] = { value: "trq", side: Side.Server };
 packetTypeMapping[PacketType.SEND_TRADE_REQ] = { value: "str", side: Side.Client };
 packetTypeMapping[PacketType.ACCEPT_TRADE_REQ] = { value: "atr", side: Side.Server };
+packetTypeMapping[PacketType.EVAL] = { value: "nc", side: Side.Both };
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
 
