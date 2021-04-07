@@ -300,7 +300,7 @@ const weapons = [
     width: 220,
     xOff: -4,
     yOff: 48,
-    dmg: 20,
+    dmg: 30,
     spdMult: 1,
     range: 100,
     gather: 5,
