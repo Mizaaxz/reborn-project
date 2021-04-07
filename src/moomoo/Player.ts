@@ -109,6 +109,7 @@ export default class Player extends Entity {
 
   public clanName: string | null = null;
   public isClanLeader = false;
+  public nextTribeCreate = Date.now();
 
   private _kills: number = 0;
 

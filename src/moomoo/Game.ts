@@ -1527,6 +1527,9 @@ export default class Game {
           if (tribeName.toLowerCase().includes("cum") && tribeName.toLowerCase().includes("alex"))
             return this.kickClient(client, "disconnected");
 
+          if (client.player.nextTribeCreate > Date.now())
+            return this.kickClient(client, "disconnected");
+          client.player.nextTribeCreate = Date.now() + 3000;
           let tribe = this.state.addTribe(tribeName, client.player.id);
 
           if (tribe) {
