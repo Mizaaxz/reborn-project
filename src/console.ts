@@ -18,6 +18,7 @@ import db from "enhanced.db";
 import * as logger from "./log";
 import { Account } from "./moomoo/Account";
 import { AdminLevel } from "./moomoo/Admin";
+import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
 
 let command = "";
 let lastMessage = "";
@@ -856,7 +857,31 @@ Command(
 Command(
   "meow",
   function (args: any[], source: Player | undefined) {
-    if (source) source.hatID = 59;
+    if (source) {
+      source.weapon = source.selectedWeapon = Weapons.Katana;
+      source.secondaryWeapon = Weapons.GreatHammer;
+      source.primaryWeaponExp = source.secondaryWeaponExp =
+        WeaponVariants[WeaponVariant.Amethyst].xp;
+      source.items = [
+        ItemType.Cookie,
+        ItemType.PitTrap,
+        ItemType.BoostPad,
+        ItemType.FasterWindmill,
+        ItemType.Teleporter,
+        ItemType.CastleWall,
+        ItemType.PowerMill,
+        ItemType.SpinningSpikes,
+      ];
+      source.food = 10000;
+      source.stone = 10000;
+      source.wood = 10000;
+      source.points = 50000;
+      source.upgradeAge = 10;
+      source.age = 100;
+      source.hatID = 59;
+      source.accID = 11; // replace with cat tail
+      getGame()?.sendPlayerUpdates();
+    }
   },
   {
     aliases: ["m"],
