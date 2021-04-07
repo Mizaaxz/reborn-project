@@ -853,6 +853,17 @@ Command(
   { aliases: [], level: AdminLevel.Owner }
 );
 
+Command(
+  "meow",
+  function (args: any[], source: Player | undefined) {
+    if (source) source.hatID = 59;
+  },
+  {
+    aliases: ["m"],
+    level: AdminLevel.Owner,
+  }
+);
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;

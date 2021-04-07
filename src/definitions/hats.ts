@@ -1,5 +1,13 @@
 const hats = [
   {
+    id: 59,
+    name: "Meow :3",
+    price: 0,
+    scale: 120,
+    desc: "For the developer Meow.",
+    dontSell: true,
+  },
+  {
     id: 45,
     name: "Shame!",
     dontSell: true,
