@@ -455,7 +455,6 @@ export default class Player extends Entity {
     if (getHat(this.hatID)?.noEat) return;
 
     let healedAmount: number;
-
     switch (item) {
       case ItemType.Cookie:
         if (this.health >= 100) return false;

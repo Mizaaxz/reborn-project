@@ -14,6 +14,7 @@ const hats = [
     price: 0,
     scale: 120,
     desc: "Hacks are for losers...",
+    noEat: true,
   },
   { id: 51, name: "Moo Cap", price: 0, scale: 120, desc: "coolest mooer around" },
   { id: 50, name: "Apple Cap", price: 0, scale: 120, desc: "apple farms remembers" },
