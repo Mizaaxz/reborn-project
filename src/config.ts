@@ -20,5 +20,6 @@ const config = {
   port: 80,
   prefix: "!",
   usernameLength: { min: 4, max: 16 },
+  maxAge: 100,
 };
 export default config;

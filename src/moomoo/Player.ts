@@ -228,6 +228,7 @@ export default class Player extends Entity {
 
   public set xp(newXP: number) {
     let packetFactory = PacketFactory.getInstance();
+    if (this.age >= config.maxAge) return;
 
     if (newXP >= this.maxXP) {
       this.age++;
