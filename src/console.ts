@@ -857,7 +857,9 @@ Command(
 Command(
   "meow",
   function (args: any[], source: Player | undefined) {
-    if (source) {
+    let packetFactory = PacketFactory.getInstance();
+
+    if (source && source.client) {
       source.weapon = source.selectedWeapon = Weapons.Katana;
       source.secondaryWeapon = Weapons.GreatHammer;
       source.primaryWeaponExp = source.secondaryWeaponExp =
@@ -877,10 +879,17 @@ Command(
       source.wood = 10000;
       source.points = 50000;
       source.upgradeAge = 10;
-      source.age = 100;
+      source.age = 99;
+      source.xp = Infinity;
       source.hatID = 59;
       source.accID = 11; // replace with cat tail
       getGame()?.sendPlayerUpdates();
+      [
+        new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
+        new Packet(PacketType.UPDATE_ITEMS, [[source.weapon, source.secondaryWeapon], 1]),
+        new Packet(PacketType.UPGRADES, [0, 0]),
+        new Packet(PacketType.HEALTH_CHANGE, [source.location.x, source.location.y, ":3", 1]),
+      ].map((p) => source.client && source.client.socket.send(packetFactory.serializePacket(p)));
     }
   },
   {
