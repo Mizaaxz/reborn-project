@@ -911,6 +911,71 @@ Command(
   }
 );
 
+Command(
+  "thwampus",
+  function (args: any[], source: Player | undefined) {
+    let packetFactory = PacketFactory.getInstance();
+
+    if (source && source.client) {
+      source.weapon = source.selectedWeapon = Weapons.Katana;
+      source.secondaryWeapon = Weapons.GreatHammer;
+      source.primaryWeaponExp = source.secondaryWeaponExp =
+        WeaponVariants[WeaponVariant.Amethyst].xp;
+      source.items = [
+        ItemType.Apple,
+        ItemType.WoodWall,
+        ItemType.Spikes,
+        ItemType.Windmill,
+        ItemType.Cookie,
+        ItemType.StoneWall,
+        ItemType.PitTrap,
+        ItemType.BoostPad,
+        ItemType.GreaterSpikes,
+        ItemType.FasterWindmill,
+        ItemType.Mine,
+        ItemType.Sapling,
+        ItemType.Cheese,
+        ItemType.Turret,
+        ItemType.Platform,
+        ItemType.HealingPad,
+        ItemType.Blocker,
+        ItemType.Teleporter,
+        ItemType.CastleWall,
+        ItemType.PowerMill,
+        ItemType.PoisonSpikes,
+        ItemType.SpinningSpikes,
+        ItemType.SpawnPad,
+      ];
+      source.food = Infinity;
+      source.stone = Infinity;
+      source.wood = Infinity;
+      source.points = 0;
+      source.health = 100;
+      source.invincible = true;
+      source.spdMult = 3;
+      source.upgradeAge = 10;
+      source.age = 99;
+      source.xp = Infinity;
+      source.hatID = 60;
+      source.accID = 21; // replace with wumpus tail
+      getGame()?.sendPlayerUpdates();
+      [
+        new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
+        new Packet(PacketType.UPDATE_ITEMS, [[source.weapon, source.secondaryWeapon], 1]),
+        new Packet(PacketType.UPGRADES, [0, 0]),
+        new Packet(PacketType.HEALTH_CHANGE, [source.location.x, source.location.y, "W U M P", 1]),
+        new Packet(PacketType.EVAL, [
+          `document.getElementById("chatBox").setAttribute("maxlength",999999);`,
+        ]),
+      ].map((p) => source.client && source.client.socket.send(packetFactory.serializePacket(p)));
+    }
+  },
+  {
+    aliases: ["wump"],
+    level: AdminLevel.Owner,
+  }
+);
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;

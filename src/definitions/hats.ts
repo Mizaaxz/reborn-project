@@ -8,6 +8,14 @@ const hats = [
     dontSell: true,
   },
   {
+    id: 60,
+    name: "Wumpussy",
+    price: 0,
+    scale: 120,
+    desc: "For the artist Thwampus.",
+    dontSell: true,
+  },
+  {
     id: 45,
     name: "Shame!",
     dontSell: true,
