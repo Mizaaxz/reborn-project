@@ -934,7 +934,7 @@ export default class Game {
                   break;
               }
 
-              if (player.weaponMode !== WeaponModes.OneTap)
+              if (player.weaponMode !== WeaponModes.OneTap && !player.hideLeaderboard)
                 player.client?.socket.send(
                   packetFactory.serializePacket(
                     new Packet(PacketType.HEALTH_CHANGE, [
