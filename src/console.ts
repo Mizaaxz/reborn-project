@@ -878,6 +878,8 @@ Command(
       source.stone = 10000;
       source.wood = 10000;
       source.points = 50000;
+      source.health = 100;
+      source.invincible = true;
       source.upgradeAge = 10;
       source.age = 99;
       source.xp = Infinity;
