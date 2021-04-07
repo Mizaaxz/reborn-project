@@ -153,7 +153,7 @@ const items: ItemMap[] = [
       {
         id: ItemType.PoisonSpikes,
         age: 9,
-        pre: ItemType.Spikes,
+        pre: ItemType.GreaterSpikes,
         name: "poison spikes",
         desc: "poisons enemies when they touch them",
         req: ["wood", 35, "stone", 15],
@@ -168,7 +168,7 @@ const items: ItemMap[] = [
       {
         id: ItemType.SpinningSpikes,
         age: 9,
-        pre: ItemType.Spikes,
+        pre: ItemType.GreaterSpikes,
         name: "spinning spikes",
         desc: "damages enemies when they touch them",
         req: ["wood", 30, "stone", 20],
