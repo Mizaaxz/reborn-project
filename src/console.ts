@@ -922,16 +922,8 @@ Command(
       source.primaryWeaponExp = source.secondaryWeaponExp =
         WeaponVariants[WeaponVariant.Amethyst].xp;
       source.items = [
-        ItemType.Apple,
-        ItemType.WoodWall,
-        ItemType.Spikes,
-        ItemType.Windmill,
-        ItemType.Cookie,
-        ItemType.StoneWall,
         ItemType.PitTrap,
         ItemType.BoostPad,
-        ItemType.GreaterSpikes,
-        ItemType.FasterWindmill,
         ItemType.Mine,
         ItemType.Sapling,
         ItemType.Cheese,
