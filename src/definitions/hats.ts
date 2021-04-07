@@ -11,6 +11,7 @@ const hats = [
     id: 45,
     name: "Shame!",
     dontSell: true,
+    keepOn: true,
     price: 0,
     scale: 120,
     desc: "Hacks are for losers...",

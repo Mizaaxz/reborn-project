@@ -1753,6 +1753,8 @@ export default class Game {
                 getHat(packet.data[1])?.price === 0 ||
                 packet.data[1] === 0
               ) {
+                if (getHat(packet.data[1])?.keepOn) return;
+
                 if (getHat(client.player.hatID)?.invisTimer) {
                   client.player.invisible = client.player.hideLeaderboard = false;
                   this.sendLeaderboardUpdates();
