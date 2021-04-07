@@ -110,7 +110,7 @@ export default class Game {
     let doneTimer = 0;
     clearInterval(this.closing);
     this.closing = setInterval(function () {
-      if (doneTimer == doneMax) {
+      if (doneTimer > doneMax) {
         g.clients.forEach((c) => {
           g.kickClient(c, reason);
         });
