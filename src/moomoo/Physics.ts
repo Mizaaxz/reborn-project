@@ -138,18 +138,19 @@ function tryMovePlayer(
           player.health -= gameObj.dmg;
         }
 
-        state.players
-          .find((player) => player.id == gameObj.ownerSID)
-          ?.client?.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.HEALTH_CHANGE, [
-                gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
-                gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
-                dmg,
-                1,
-              ])
-            )
-          );
+        if (!player.hideLeaderboard)
+          state.players
+            .find((player) => player.id == gameObj.ownerSID)
+            ?.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.HEALTH_CHANGE, [
+                  gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+                  gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
+                  dmg,
+                  1,
+                ])
+              )
+            );
       }
 
       xVel *= 0.83;

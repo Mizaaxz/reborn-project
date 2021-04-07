@@ -611,7 +611,7 @@ export default class Game {
           );
           if (player.health <= 0) this.killPlayer(player);
 
-          if (owner) {
+          if (owner && !player.hideLeaderboard) {
             owner.client?.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.HEALTH_CHANGE, [
