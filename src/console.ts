@@ -401,7 +401,7 @@ Command(
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let size = Number(args[2]);
-    if (size > 3000) size = 3000;
+    if (size > 1000) size = 1000;
     if (size < 1) size = 1;
 
     let game = getGame();
