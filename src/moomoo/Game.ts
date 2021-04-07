@@ -34,6 +34,7 @@ import {
   getProjectileType,
   getRecoil,
   WeaponModes,
+  getItem,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -58,6 +59,7 @@ import items from "../definitions/items";
 import { Account } from "./Account";
 import ms from "ms";
 import { AdminLevel } from "./Admin";
+import weapons from "../definitions/weapons";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -783,7 +785,7 @@ export default class Game {
     this.state.gameObjects
       .filter((o) => o.data == ItemType.Turret)
       .forEach((turret) => {
-        let Turret = items.find((i) => i.group.id == 7);
+        let Turret = getItem(ItemType.Turret);
         let nearbyPlayers = this.state.players.filter(
           (p) =>
             turret.ownerSID !== p.id &&
@@ -1826,19 +1828,20 @@ export default class Game {
               Broadcast("Error: NOT_EARNED_FROM_TIERS", client);
             }
           } else {
-            item -= 16;
+            item -= weapons.length;
+            console.log(upgrades);
+            console.log(getItem(item));
             if (upgrades.includes(item)) {
               let preItem = getPrerequisiteItem(item);
 
-              if (preItem) {
-                if (!client.player.items.includes(item - preItem))
-                  Broadcast("Error: NOT_EARNED_YET", client);
-              }
+              if (preItem && !client.player.items.includes(preItem)) return;
 
+              console.log(client.player.items);
               client.player.items[getGroupID(item)] = item;
-              client.player.items = client.player.items.filter(
+              console.log(client.player.items);
+              /*client.player.items = client.player.items.filter(
                 (playerItem) => playerItem != undefined
-              );
+              );*/
             } else {
               Broadcast("Error: INVALID_ITEM", client);
             }

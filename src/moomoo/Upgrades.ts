@@ -1,8 +1,16 @@
 import weapons from "../definitions/weapons";
 import items from "../definitions/items";
+import { getItem } from "../items/items";
+import { ItemType } from "../items/UpgradeItems";
 
 function getUpgrades(age: number): number[] {
-  return items.map((_item, index) => index).filter((item) => items[item].age == age);
+  let upgr: ItemType[] = [];
+  items.forEach((i) => {
+    i.items.forEach((it) => {
+      if (it.age == age) upgr.push(it.id);
+    });
+  });
+  return upgr;
 }
 
 function getWeaponUpgrades(age: number) {

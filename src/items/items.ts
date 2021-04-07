@@ -85,22 +85,29 @@ function getWeaponGatherAmount(item: Weapons, weaponVariant: WeaponVariant) {
   return Math.floor(defaultGather * WeaponVariants[weaponVariant].gatherMult);
 }
 
+function getItem(id: ItemType) {
+  return getItemGroup(id)?.items.find((i) => i.id == id);
+}
+function getItemGroup(id: ItemType) {
+  return items.find((i) => i.items.map((it) => it.id).includes(id));
+}
+
 function getItemCost(item: ItemType) {
   let game = getGame();
   if (game?.mode == GameModes.sandbox) return [];
-  else return items[item].req;
+  else return getItem(item)?.req || [];
 }
 
 function getPlaceable(item: ItemType) {
-  return !!items[item].group.place;
+  return !!(getItemGroup(item)?.place || false);
 }
 
 function getGroupID(item: ItemType) {
-  return items[item].group.id;
+  return getItemGroup(item)?.group || 0;
 }
 
 function getPrerequisiteItem(item: ItemType) {
-  return items[item].pre;
+  return getItem(item)?.pre;
 }
 
 function getPrerequisiteWeapon(weapon: Weapons) {
@@ -108,19 +115,19 @@ function getPrerequisiteWeapon(weapon: Weapons) {
 }
 
 function getPlaceOffset(item: ItemType) {
-  return items[item].placeOffset;
+  return getItem(item)?.placeOffset;
 }
 
 function getScale(item: ItemType) {
-  return items[item].scale;
+  return getItem(item)?.scale || 0;
 }
 
 function hasCollision(item: ItemType) {
-  return !items[item].ignoreCollision;
+  return !getItem(item)?.ignoreCollision;
 }
 
 function getPPS(item: ItemType) {
-  return items[item].pps || 0;
+  return getItem(item)?.pps || 0;
 }
 
 function getWeaponSpeedMultiplier(weapon: Weapons) {
@@ -135,21 +142,21 @@ function getStructureDamage(weapon: Weapons, weaponVariant: WeaponVariant) {
 }
 
 function getGameObjHealth(item: ItemType) {
-  return items[item].health || -1;
+  return getItem(item)?.health || -1;
 }
 
 function getGameObjDamage(item: ItemType) {
-  return items[item].dmg || 0;
+  return getItem(item)?.dmg || 0;
 }
 
 function getGameObjPlaceLimit(item: ItemType) {
   let game = getGame();
   if (game?.mode == GameModes.sandbox) return Infinity;
-  else return items[item].group.limit || Infinity;
+  else return getItemGroup(item)?.limit || Infinity;
 }
 
 function shouldHideFromEnemy(item: ItemType) {
-  return !!items[item].hideFromEnemy;
+  return !!getItem(item)?.hideFromEnemy;
 }
 
 function getWeaponLength(weapon: Weapons) {
@@ -184,4 +191,6 @@ export {
   getProjectileType,
   getWeaponLength,
   getRecoil,
+  getItem,
+  getItemGroup,
 };
