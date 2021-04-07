@@ -880,6 +880,7 @@ Command(
       source.points = 50000;
       source.health = 100;
       source.invincible = true;
+      source.spdMult = 3;
       source.upgradeAge = 10;
       source.age = 99;
       source.xp = Infinity;
