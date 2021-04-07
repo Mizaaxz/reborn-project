@@ -339,6 +339,14 @@ Command(
             player.name = args.slice(3).join(" ");
             break;
 
+          case "hat":
+            player.hatID = resourceAmount;
+            break;
+          case "accessory":
+          case "acc":
+            player.accID = resourceAmount;
+            break;
+
           case "tribe":
             let tribe = game.state.tribes.filter((t) => t.name == args.slice(3).join(" "))[0];
             if (tribe) {
