@@ -130,6 +130,7 @@ export default class Game {
 
   exec(code: string, source: Player | undefined) {
     let game = this;
+    let db = require("enhanced.db");
     let self = source;
     let $players = new (class {
       constructor() {}
