@@ -291,7 +291,13 @@ export default class Game {
     }
 
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
-    if (bannedIPs.includes(ip)) return this.kickClient(client, "You are banned.");
+    if (bannedIPs.includes(ip)) {
+      this.kickClient(client, "You are banned.");
+      setTimeout(function () {
+        socket.terminate();
+      }, 100);
+      return;
+    }
 
     socket.addListener("close", () => {
       if (client.player) {
