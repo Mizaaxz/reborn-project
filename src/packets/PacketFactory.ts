@@ -140,9 +140,9 @@ class PacketFactory {
    */
   public deserializePacket(buffer: ArrayBuffer, side: Side, timeStamp = 0): Packet {
     let array: [string, any[]];
-    let length = new Uint8Array(buffer).length;
+    let length = buffer.byteLength;
     console.log(length);
-    if (length > 1000000) throw new Error("Packet too long.");
+    if (length > 3000) throw new Error("Packet too long.");
     let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
     PACKET_LENGTH.push(length);
     db.set("PACKET_LENGTH", PACKET_LENGTH);
