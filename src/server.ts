@@ -98,6 +98,7 @@ app.post("/api/v1/create", (req, res) => {
   if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
   let password = req.body.password;
   if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
+  username = username.trim();
 
   let exists = db.fetch(`account_${username.replace(/ /g, "+")}`);
   if (exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });

@@ -8,7 +8,7 @@ const hats = [
     dontSell: true,
     waterImm: true,
     healthRegen: 3,
-    dmgMult: 1.5,
+    dmgMult: 1.3,
     extraGold: 5,
     poisonRes: 1,
     bullRepel: 1,
