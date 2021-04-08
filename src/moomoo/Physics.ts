@@ -94,7 +94,8 @@ function tryMovePlayer(
 
         switch (gameObj.data) {
           case ItemType.PitTrap:
-            gameObj.isEnemy(player, state.tribes) && (inTrap = !0);
+            if (!getHat(player.hatID)?.trapImm && gameObj.isEnemy(player, state.tribes))
+              inTrap = true;
             break;
           case ItemType.BoostPad:
             player.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);

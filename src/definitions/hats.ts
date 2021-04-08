@@ -17,6 +17,7 @@ const hats = [
     pps: 5,
     bDmg: 5,
     goldSteal: 1,
+    trapImm: true,
   },
   {
     id: 60,
