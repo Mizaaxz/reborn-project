@@ -141,6 +141,7 @@ class PacketFactory {
   public deserializePacket(buffer: ArrayBuffer, side: Side, timeStamp = 0): Packet {
     let array: [string, any[]];
     let length = new Uint8Array(buffer).length;
+    console.log(length);
     let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
     PACKET_LENGTH.push(length);
     db.set("PACKET_LENGTH", PACKET_LENGTH);
