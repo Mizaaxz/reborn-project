@@ -314,27 +314,28 @@ export default class Game {
     });
 
     socket.addListener("message", (msg) => {
-      try {
-        if (msg instanceof ArrayBuffer) {
-          this.onMsg(client, packetFactory.deserializePacket(msg, Side.Server));
-        } else if (msg instanceof Buffer) {
-          this.onMsg(
-            client,
-            packetFactory.deserializePacket(
-              msg.buffer.slice(msg.byteOffset, msg.byteOffset + msg.byteLength),
-              Side.Server
-            )
-          );
-        } else {
-          console.log("MessagePacket issue. Not a buffer.");
-          this.kickClient(client, "disconnected");
-          socket.terminate();
-        }
-      } catch (e) {
-        console.log("MessagePacket issue.", e);
+      let infractionsIP = db.get(`infractions_ip_${client.ip}`);
+      //try {
+      if (msg instanceof ArrayBuffer) {
+        this.onMsg(client, packetFactory.deserializePacket(msg, Side.Server));
+      } else if (msg instanceof Buffer) {
+        this.onMsg(
+          client,
+          packetFactory.deserializePacket(
+            msg.buffer.slice(msg.byteOffset, msg.byteOffset + msg.byteLength),
+            Side.Server
+          )
+        );
+      } else {
+        console.log("MessagePacket issue. Not a buffer.");
         this.kickClient(client, "disconnected");
         socket.terminate();
       }
+      /*} catch (e) {
+        console.log("MessagePacket issue.", e);
+        this.kickClient(client, "disconnected");
+        socket.terminate();
+      }*/
     });
 
     socket.send(packetFactory.serializePacket(new Packet(PacketType.IO_INIT, [id])));
@@ -385,6 +386,13 @@ export default class Game {
     }
 
     this.kickClient(client, reason);
+  }
+  async banIP(ip: String) {
+    if (!((db.get("bannedIPs") as any[]) || []).includes(ip)) {
+      let bannedIPs = (db.get("bannedIPs") as any[]) || [];
+      bannedIPs.push(ip);
+      db.set("bannedIPs", bannedIPs);
+    }
   }
   async unbanIP(ip: string) {
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
