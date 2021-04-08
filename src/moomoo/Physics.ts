@@ -100,7 +100,7 @@ function tryMovePlayer(
             player.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
             break;
           case ItemType.HealingPad:
-            player.padHeal = 15;
+            player.padHeal += 15;
             break;
           case ItemType.Teleporter:
             player.location = randomPos(14400 + 35, 14400 - 35);
