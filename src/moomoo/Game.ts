@@ -146,7 +146,11 @@ export default class Game {
         });
       }
     })();
-    eval(code.replace(/\(\$\./g, "($=>$."));
+    try {
+      return [true, eval(code.replace(/\(\$\./g, "($=>$."))];
+    } catch (e) {
+      return [false, e];
+    }
   }
 
   getNextGameObjectID() {

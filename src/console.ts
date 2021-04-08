@@ -788,7 +788,8 @@ Command(
 Command(
   "exec",
   function (args: any[], source: Player | undefined) {
-    getGame()?.exec(args.slice(1).join(" "), source);
+    let out = getGame()?.exec(args.slice(1).join(" "), source) || [false, ""];
+    source?.client && Broadcast(String(out[1]), source?.client);
   },
   { aliases: [], level: AdminLevel.Owner }
 );
