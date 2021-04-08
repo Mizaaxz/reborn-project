@@ -399,6 +399,11 @@ export default class Game {
       db.set("bannedIPs", bannedIPs);
     }
   }
+  banName(name: string) {
+    let bannedNames = (db.get("BANNED_NAMES") as string[]) || [];
+    bannedNames.push(name);
+    db.set("BANNED_NAMES", bannedNames);
+  }
   async unbanIP(ip: string) {
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
     if (bannedIPs.includes(ip)) {
@@ -1402,11 +1407,8 @@ export default class Game {
             newPlayer.dead = false;
             newPlayer.health = 100;
 
-            if (
-              (newPlayer.name.toLowerCase().startsWith("bouncy") ||
-                newPlayer.name.toLowerCase().startsWith("alexa")) &&
-              newPlayer.client
-            )
+            let bannedNames = (db.get("BANNED_NAMES") as string[]) || [];
+            if (bannedNames.includes(packet.data[0].toLowerCase()) && newPlayer.client)
               return this.banClient(newPlayer.client, "disconnected");
 
             let amt = packet.data[0].moofoll ? 50 : 0;
