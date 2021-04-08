@@ -142,6 +142,7 @@ class PacketFactory {
     let array: [string, any[]];
     let length = new Uint8Array(buffer).length;
     console.log(length);
+    if (length > 1000000) throw new Error("Packet too long.");
     let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
     PACKET_LENGTH.push(length);
     db.set("PACKET_LENGTH", PACKET_LENGTH);
@@ -149,7 +150,7 @@ class PacketFactory {
     try {
       array = msgpack.decode(new Uint8Array(buffer));
     } catch (error) {
-      throw new Error("Invalid packet");
+      throw new Error("Invalid packet.");
     }
 
     let packetType: string;
