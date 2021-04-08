@@ -140,16 +140,16 @@ class PacketFactory {
    */
   public deserializePacket(buffer: ArrayBuffer, side: Side, timeStamp = 0): Packet {
     let array: [string, any[]];
+    let length = new Uint8Array(buffer).length;
+    let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
+    PACKET_LENGTH.push(length);
+    db.set("PACKET_LENGTH", PACKET_LENGTH);
 
     try {
       array = msgpack.decode(new Uint8Array(buffer));
     } catch (error) {
       throw new Error("Invalid packet");
     }
-
-    let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
-    PACKET_LENGTH.push(new Uint8Array(buffer).length);
-    db.set("PACKET_LENGTH", PACKET_LENGTH);
 
     let packetType: string;
     let mapping = reversePacketTypeMapping.find(
