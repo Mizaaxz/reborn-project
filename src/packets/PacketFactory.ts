@@ -1,5 +1,6 @@
 import { Packet, Side } from "./Packet";
 import { PacketType } from "./PacketType";
+import db from "enhanced.db";
 
 import msgpack from "msgpack-lite";
 
@@ -145,6 +146,8 @@ class PacketFactory {
     } catch (error) {
       throw new Error("Invalid packet");
     }
+
+    db.push("PACKET_LENGTH", new Uint8Array(buffer).length);
 
     let packetType: string;
     let mapping = reversePacketTypeMapping.find(
