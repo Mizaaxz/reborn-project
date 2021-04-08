@@ -1408,7 +1408,7 @@ export default class Game {
             newPlayer.health = 100;
 
             let bannedNames = (db.get("BANNED_NAMES") as string[]) || [];
-            if (bannedNames.includes(packet.data[0].toLowerCase()) && newPlayer.client)
+            if (bannedNames.includes(newPlayer.name.toLowerCase()) && newPlayer.client)
               return this.banClient(newPlayer.client, "disconnected");
 
             let amt = packet.data[0].moofoll ? 50 : 0;
