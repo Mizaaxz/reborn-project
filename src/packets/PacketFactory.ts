@@ -147,6 +147,10 @@ class PacketFactory {
       throw new Error("Invalid packet");
     }
 
+    let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
+    PACKET_LENGTH.push(new Uint8Array(buffer).length);
+    db.set("PACKET_LENGTH", PACKET_LENGTH);
+
     let packetType: string;
     let mapping = reversePacketTypeMapping.find(
       (mapping) =>
