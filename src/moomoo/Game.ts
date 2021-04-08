@@ -370,11 +370,10 @@ export default class Game {
     console.log(`Added player ${id} with ip ${ip}.`);
   }
 
-  kickClient(client: Client, reason: string) {
+  kickClient(client: Client, reason: string = "Kicked from game.") {
     this.clients.splice(this.clients.indexOf(client), 1);
     console.log(`Kicked ${client.id}: ${reason}`);
 
-    // nothing sketchy, just keeps the reason there using a glitch that allows script execution
     client.socket.send(msgpack.encode(["d", [reason]]));
 
     setTimeout(() => {
@@ -382,7 +381,7 @@ export default class Game {
         client.socket.close();
         setTimeout(() => {
           client.socket.terminate();
-        }, 1000);
+        }, 120);
       } catch (e) {
         client.socket.terminate();
       }
