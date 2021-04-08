@@ -142,7 +142,7 @@ class PacketFactory {
     let array: [string, any[]];
     let length = buffer.byteLength;
     console.log(length);
-    if (length > 3000) throw new Error("Packet too long.");
+    if (length > 1024) throw new Error("Packet too long.");
     let PACKET_LENGTH = (db.get("PACKET_LENGTH") as number[]) || [];
     PACKET_LENGTH.push(length);
     db.set("PACKET_LENGTH", PACKET_LENGTH);
