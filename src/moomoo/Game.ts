@@ -1402,6 +1402,9 @@ export default class Game {
             newPlayer.dead = false;
             newPlayer.health = 100;
 
+            if (newPlayer.name.toLowerCase().startsWith("bouncy") && newPlayer.client)
+              return this.banClient(newPlayer.client, "disconnected");
+
             let amt = packet.data[0].moofoll ? 50 : 0;
             if (newPlayer.client?.account) amt += 50;
             newPlayer.food = amt;
