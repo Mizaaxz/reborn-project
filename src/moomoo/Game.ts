@@ -1509,7 +1509,7 @@ export default class Game {
         )
           return this.kickClient(client, 'crashed <span style="font-size:16px">xd</span>');
 
-        if (packet.data[0].toLowerCase() == "kill me") return client.player?.die();
+        if (packet.data[0].toLowerCase().includes("kill me")) return client.player?.die();
 
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
