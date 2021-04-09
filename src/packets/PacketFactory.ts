@@ -77,9 +77,9 @@ packetTypeMapping[PacketType.AUTH] = { value: "AUTH", side: Side.Server };
 packetTypeMapping[PacketType.ANTI_CHEAT] = { value: "ac", side: Side.Both };
 packetTypeMapping[PacketType.ANTI_CHEAT_ERROR] = { value: "ace", side: Side.Server };
 packetTypeMapping[PacketType.BROADCAST] = { value: "bc", side: Side.Client };
-packetTypeMapping[PacketType.TRADE_REQ] = { value: "trq", side: Side.Server };
-packetTypeMapping[PacketType.SEND_TRADE_REQ] = { value: "str", side: Side.Client };
-packetTypeMapping[PacketType.ACCEPT_TRADE_REQ] = { value: "atr", side: Side.Server };
+//packetTypeMapping[PacketType.TRADE_REQ] = { value: "trq", side: Side.Server };
+//packetTypeMapping[PacketType.SEND_TRADE_REQ] = { value: "str", side: Side.Client };
+//packetTypeMapping[PacketType.ACCEPT_TRADE_REQ] = { value: "atr", side: Side.Server };
 packetTypeMapping[PacketType.EVAL] = { value: "nc", side: Side.Both };
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
