@@ -1353,7 +1353,7 @@ export default class Game {
         plr.invisible = false;
 
         let selected = plr.items.indexOf(plr.buildItem);
-        let groups = items.map((i) => i.group).filter((g) => g != 0);
+        let groups = items.map((i) => i.group).filter((g) => g != 0 && g != 13);
         plr.items = [
           getRandomItem(0),
           getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
