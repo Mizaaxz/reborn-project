@@ -862,6 +862,22 @@ Command(
   },
   { aliases: [], level: AdminLevel.Owner }
 );
+Command(
+  "acc.setyt",
+  function (args: any[], source: Player | undefined) {
+    let yt = boolSelector(args.pop()) || false;
+    let account = db.get(
+      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
+    ) as Account;
+    if (!account || !account.username) {
+      if (source?.client) return Broadcast("Invalid username.", source.client);
+      else return console.log("Invalid username.");
+    }
+    account.mootuber = yt;
+    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
+  },
+  { aliases: ["acc.setyoutube"], level: AdminLevel.Admin }
+);
 
 Command(
   "meow",

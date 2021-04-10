@@ -7,6 +7,7 @@ type Account = {
   admin?: boolean; // depreciated
   adminLevel?: AdminLevel;
   balance?: number;
+  mootuber?: boolean;
 };
 
 export { Account };
