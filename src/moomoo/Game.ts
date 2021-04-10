@@ -1332,15 +1332,9 @@ export default class Game {
       let packetFactory = PacketFactory.getInstance();
       this.state.players.forEach((plr) => {
         let weaponsArray = [];
-        if (Math.random() >= 0.5) {
-          plr.weapon = getRandomWeapon(0);
-          plr.secondaryWeapon = -1;
-          weaponsArray = [plr.weapon];
-        } else {
-          plr.weapon = -1;
-          plr.secondaryWeapon = getRandomWeapon(1);
-          weaponsArray = [-1, plr.secondaryWeapon];
-        }
+        plr.weapon = getRandomWeapon(0);
+        plr.secondaryWeapon = -1;
+        weaponsArray = [plr.weapon];
         let wvs = Object.values(WeaponVariants).map((v) => v.xp);
         plr.primaryWeaponExp = plr.secondaryWeaponExp = wvs[Math.floor(Math.random() * wvs.length)];
 
