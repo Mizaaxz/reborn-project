@@ -1367,7 +1367,7 @@ export default class Game {
           packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [plr.items, 0]))
         );
         plr.client?.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [[plr.weapon], 1]))
+          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [weaponsArray, 1]))
         );
         plr.client?.socket.send(
           packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
