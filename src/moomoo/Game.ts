@@ -1334,11 +1334,15 @@ export default class Game {
         let groups = items.map((i) => i.group).filter((g) => g != 0);
         plr.weapon = getRandomWeapon(0);
         plr.secondaryWeapon = -1;
+        let selected = plr.items.indexOf(plr.buildItem);
         plr.items = [
           getRandomItem(0),
           getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
         ];
         plr.upgradeAge = 10;
+
+        if (selected == -1) plr.selectedWeapon = plr.weapon;
+        else plr.buildItem = plr.items[selected == 0 || selected == 1 ? selected : 1];
 
         plr.client?.socket.send(
           packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [plr.items, 0]))
