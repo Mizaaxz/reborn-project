@@ -62,6 +62,8 @@ import { Account } from "./Account";
 import ms from "ms";
 import { AdminLevel } from "./Admin";
 import weapons from "../definitions/weapons";
+import hats from "../definitions/hats";
+import accessories from "../definitions/accessories";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1338,6 +1340,18 @@ export default class Game {
         let wvs = Object.values(WeaponVariants).map((v) => v.xp);
         plr.primaryWeaponExp = plr.secondaryWeaponExp = wvs[Math.floor(Math.random() * wvs.length)];
 
+        let randomRes = [100, 200, 250, 300, 500];
+        plr.wood = randomRes[Math.floor(Math.random() * randomRes.length)];
+        plr.stone = randomRes[Math.floor(Math.random() * randomRes.length)];
+        plr.food = randomRes[Math.floor(Math.random() * randomRes.length)];
+        plr.points = plr.age = 0;
+
+        let hatArr = hats.map((h) => h.id);
+        let accArr = accessories.map((a) => a.id);
+        plr.hatID = hatArr[Math.floor(Math.random() * hatArr.length)];
+        plr.accID = accArr[Math.floor(Math.random() * accArr.length)];
+        plr.invisible = false;
+
         let selected = plr.items.indexOf(plr.buildItem);
         let groups = items.map((i) => i.group).filter((g) => g != 0);
         plr.items = [
@@ -1358,6 +1372,9 @@ export default class Game {
         plr.client?.socket.send(
           packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
         );
+        plr.updateResources();
+        this.sendLeaderboardUpdates();
+        this.sendPlayerUpdates();
       });
     }
   }
