@@ -1329,14 +1329,29 @@ export default class Game {
     }
 
     if (this.mode == GameModes.random && this.windmillTicks % 10 == 0) {
+      let packetFactory = PacketFactory.getInstance();
       this.state.players.forEach((plr) => {
         let groups = items.map((i) => i.group).filter((g) => g != 0);
-        plr.weapon = getRandomWeapon(-1)
+        plr.weapon = getRandomWeapon(-1);
         plr.secondaryWeapon = -1;
         plr.items = [
           getRandomItem(0),
           getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
         ];
+        plr.upgradeAge = 10;
+
+        plr.client?.socket.send(
+          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [plr.items, 0]))
+        );
+        let newWeapons = [plr.weapon];
+        if (plr.secondaryWeapon != -1) newWeapons.push(plr.secondaryWeapon);
+
+        plr.client?.socket.send(
+          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [newWeapons, 1]))
+        );
+        plr.client?.socket.send(
+          packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
+        );
       });
     }
   }
