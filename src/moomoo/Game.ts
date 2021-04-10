@@ -1344,7 +1344,7 @@ export default class Game {
         plr.wood = randomRes[Math.floor(Math.random() * randomRes.length)];
         plr.stone = randomRes[Math.floor(Math.random() * randomRes.length)];
         plr.food = randomRes[Math.floor(Math.random() * randomRes.length)];
-        plr.points = plr.age = 0;
+        plr.points = plr.age = plr.xp = 0;
 
         let hatArr = hats.map((h) => h.id);
         let accArr = accessories.map((a) => a.id);
