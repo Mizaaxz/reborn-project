@@ -1331,10 +1331,21 @@ export default class Game {
     if (this.mode == GameModes.random && this.windmillTicks % 5 == 0) {
       let packetFactory = PacketFactory.getInstance();
       this.state.players.forEach((plr) => {
-        let groups = items.map((i) => i.group).filter((g) => g != 0);
-        plr.weapon = getRandomWeapon(0);
-        plr.secondaryWeapon = -1;
+        let weaponsArray = [];
+        if (Math.random() >= 0.5) {
+          plr.weapon = getRandomWeapon(0);
+          plr.secondaryWeapon = -1;
+          weaponsArray = [plr.weapon];
+        } else {
+          plr.weapon = -1;
+          plr.secondaryWeapon = getRandomWeapon(1);
+          weaponsArray = [-1, plr.secondaryWeapon];
+        }
+        let wvs = Object.values(WeaponVariants).map((v) => v.xp);
+        plr.primaryWeaponExp = plr.secondaryWeaponExp = wvs[Math.floor(Math.random() * wvs.length)];
+
         let selected = plr.items.indexOf(plr.buildItem);
+        let groups = items.map((i) => i.group).filter((g) => g != 0);
         plr.items = [
           getRandomItem(0),
           getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
