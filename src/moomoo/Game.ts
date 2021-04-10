@@ -35,6 +35,8 @@ import {
   getRecoil,
   WeaponModes,
   getItem,
+  getRandomItem,
+  getRandomWeapon,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -1310,7 +1312,9 @@ export default class Game {
     }
   }
 
+  public windmillTicks = 0;
   updateWindmills() {
+    this.windmillTicks++;
     for (let windmill of this.state.gameObjects.filter(
       (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
     )) {
@@ -1322,6 +1326,18 @@ export default class Game {
         player.points += getPPS(windmill.data) + (hat?.pps || 0);
         player.xp += getPPS(windmill.data) + (hat?.pps || 0);
       }
+    }
+
+    if (this.mode == GameModes.random && this.windmillTicks % 10 == 0) {
+      this.state.players.forEach((plr) => {
+        let groups = items.map((i) => i.group).filter((g) => g != 0);
+        plr.weapon = getRandomWeapon(-1)
+        plr.secondaryWeapon = -1;
+        plr.items = [
+          getRandomItem(0),
+          getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
+        ];
+      });
     }
   }
   /**
@@ -1422,6 +1438,7 @@ export default class Game {
             newPlayer.points = amt;
             newPlayer.stone = amt;
             newPlayer.wood = amt;
+            if (this.mode == GameModes.random) newPlayer.upgradeAge = 100;
 
             if (
               newPlayer.name.toLowerCase().includes("cum") &&

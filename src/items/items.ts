@@ -84,9 +84,28 @@ function getWeaponGatherAmount(item: Weapons, weaponVariant: WeaponVariant) {
   let defaultGather = weapon?.gather || 0;
   return Math.floor(defaultGather * WeaponVariants[weaponVariant].gatherMult);
 }
+function getRandomWeapon(type: -1 | 0 | 1 = -1) {
+  let wpns: number[] = [];
+  switch (type) {
+    case -1:
+      wpns = weapons.map((w) => w.id);
+      break;
+    case 0:
+      wpns = weapons.filter((w) => w.type == 0).map((w) => w.id);
+      break;
+    case 1:
+      wpns = weapons.filter((w) => w.type == 1).map((w) => w.id);
+      break;
+  }
+  return wpns[Math.floor(Math.random() * wpns.length)];
+}
 
 function getItem(id: ItemType) {
   return getItemGroup(id)?.items.find((i) => i.id == id);
+}
+function getRandomItem(group: number) {
+  let it = items.find((i) => i.group == group)?.items || [];
+  return it[Math.floor(Math.random() * it.length)].id;
 }
 function getItemGroup(id: ItemType) {
   return items.find((i) => i.items.map((it) => it.id).includes(id));
@@ -192,5 +211,7 @@ export {
   getWeaponLength,
   getRecoil,
   getItem,
+  getRandomItem,
+  getRandomWeapon,
   getItemGroup,
 };

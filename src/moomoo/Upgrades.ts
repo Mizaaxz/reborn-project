@@ -1,6 +1,5 @@
 import weapons from "../definitions/weapons";
 import items from "../definitions/items";
-import { getItem } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 
 function getUpgrades(age: number): number[] {
