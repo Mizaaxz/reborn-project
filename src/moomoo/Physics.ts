@@ -13,6 +13,7 @@ import { getGame } from "./Game";
 import { randomPos } from "./util";
 import config from "../config";
 import Animal from "./Animal";
+import { PlayerMode } from "./PlayerMode";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -56,6 +57,7 @@ function moveTowards(
  * @param gameObj the GameObject to test collision for
  */
 function collidePlayerGameObject(player: Player, gameObj: GameObject) {
+  if (player.mode == PlayerMode.spectator) return false;
   return collideCircles(
     player.location,
     29,
@@ -173,7 +175,12 @@ function tryMovePlayer(
   if (inTrap) return;
 
   // River
-  if (player.location.y > 6850 && player.location.y < 7550 && player.layer < 1) {
+  if (
+    player.location.y > 6850 &&
+    player.location.y < 7550 &&
+    player.layer < 1 &&
+    player.mode !== PlayerMode.spectator
+  ) {
     if (getHat(player.hatID)?.watrImm) {
       xVel *= 0.75;
       yVel *= 0.75;
@@ -205,7 +212,10 @@ function movePlayer(player: Player, delta: number, state: GameState) {
   }
 
   for (let p of player.getNearbyPlayers(state)) {
-    if (collideCircles(p.location, 30, player.location, 30)) {
+    if (
+      collideCircles(p.location, 30, player.location, 30) &&
+      player.mode !== PlayerMode.spectator
+    ) {
       let dis = player.location.distance(p.location);
       let angle = Math.atan2(p.location.y - player.location.y, p.location.x - player.location.x);
       let distanceToMove = 30 + 30 - dis;
