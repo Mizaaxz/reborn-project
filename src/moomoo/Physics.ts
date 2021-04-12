@@ -214,7 +214,8 @@ function movePlayer(player: Player, delta: number, state: GameState) {
   for (let p of player.getNearbyPlayers(state)) {
     if (
       collideCircles(p.location, 30, player.location, 30) &&
-      player.mode !== PlayerMode.spectator
+      player.mode !== PlayerMode.spectator &&
+      p.mode !== PlayerMode.spectator
     ) {
       let dis = player.location.distance(p.location);
       let angle = Math.atan2(p.location.y - player.location.y, p.location.x - player.location.x);
