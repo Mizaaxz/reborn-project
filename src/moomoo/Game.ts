@@ -1404,7 +1404,7 @@ export default class Game {
     let waitTickAmt = 5;
     if (this.spikeAdvance > 6800) waitTickAmt = 15;
     else if (this.spikeAdvance > 6000) waitTickAmt = 10;
-    else if (this.spikeAdvance > 5000) waitTickAmt = 5;
+    else if (this.spikeAdvance > 4500) waitTickAmt = 5;
     else if (this.spikeAdvance > 3000) waitTickAmt = 2;
     else if (this.spikeAdvance > 1500) waitTickAmt = 7;
     if (this.mode == GameModes.royale && this.windmillTicks % waitTickAmt == 0) {
