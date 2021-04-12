@@ -256,24 +256,25 @@ Command(
 Command(
   "god",
   (args: any[], source: Player | undefined) => {
-    let playerSID = Number(args[1]);
     let game = getGame();
 
-    if (game) {
-      let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+    function setRes(p: Player) {
+      p.points = 1000000;
+      p.food = Infinity;
+      p.wood = Infinity;
+      p.stone = Infinity;
+      p.age = 29;
+      p.xp = Infinity;
+      p.invincible = true;
+      p.spdMult = 2.5;
+    }
 
-      if (player) {
-        player.points = 1000000;
-        player.food = Infinity;
-        player.wood = Infinity;
-        player.stone = Infinity;
-        player.age = 29;
-        player.xp = Infinity;
-        player.invincible = true;
-        player.spdMult = 2.5;
-        return false;
-      } else return "You need to be in the game to run this command!";
+    if (game) {
+      let player = playerSelector(args[1], source) || source;
+
+      if (player instanceof Player) setRes(player);
+      else if (player && player.length) player?.map((p) => setRes(p));
+      else return "You need to be in the game to run this command!";
     }
   },
   { aliases: ["g", "_god"], level: AdminLevel.Staff }
