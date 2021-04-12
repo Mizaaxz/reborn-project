@@ -1328,7 +1328,6 @@ export default class Game {
   public windmillTicks = 0;
   public spikeAdvance = 0;
   public spawnBounds = 14400;
-  public spikeRemove: number[] = [];
   updateWindmills() {
     this.windmillTicks++;
     for (let windmill of this.state.gameObjects.filter(
@@ -1428,7 +1427,32 @@ export default class Game {
         currentPos.add(0, addAmt);
       }
 
-      let newSpikeRemove: number[] = [];
+      let packetFactory = PacketFactory.getInstance();
+
+      this.state.gameObjects
+        .filter(
+          (g) =>
+            g.location.x > this.spawnBounds ||
+            g.location.x < this.spikeAdvance ||
+            g.location.y > this.spawnBounds ||
+            g.location.y < this.spikeAdvance
+        )
+        .forEach((g) => {
+          this.state.removeGameObject(g);
+          if (g.isPlayerGameObject()) {
+            let placedAmount = this.state.gameObjects.filter(
+              (gameObj) => gameObj.data === g.data && gameObj.ownerSID == g.ownerSID
+            ).length;
+            this.state.players
+              .find((p) => p.id == g.ownerSID)
+              ?.client?.socket.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(g.data), placedAmount])
+                )
+              );
+          }
+        });
+
       gens.forEach((g) => {
         let sid = this.getNextGameObjectID();
         this.state.gameObjects.push(
@@ -1446,14 +1470,7 @@ export default class Game {
             true
           )
         );
-        newSpikeRemove.push(sid);
       });
-
-      this.spikeRemove.forEach((g) => {
-        let go = this.state.gameObjects.find((o) => o.id == g);
-        if (go) this.state.removeGameObject(go);
-      });
-      this.spikeRemove = newSpikeRemove.map((v) => v);
 
       this.state.players.forEach((p) => {
         this.sendGameObjects(p);
