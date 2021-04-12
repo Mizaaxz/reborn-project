@@ -29,6 +29,7 @@ import { collideGameObjects } from "./Physics";
 import { getHat } from "./Hats";
 import config from "../config";
 import { getAccessory } from "./Accessories";
+import { PlayerMode } from "./PlayerMode";
 
 export default class Player extends Entity {
   public name: string;
@@ -50,6 +51,7 @@ export default class Player extends Entity {
   public invincible = false;
 
   public layer = 0;
+  public mode: PlayerMode = PlayerMode.normal;
 
   public foodHealOverTime = 0;
   public foodHealOverTimeAmt = 0;

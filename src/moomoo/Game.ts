@@ -67,6 +67,7 @@ import { AdminLevel } from "./Admin";
 import weapons from "../definitions/weapons";
 import hats from "../definitions/hats";
 import accessories from "../definitions/accessories";
+import { PlayerMode } from "./PlayerMode";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1568,6 +1569,7 @@ export default class Game {
               newPlayer.name += " (Spectator)";
               newPlayer.hatID = -1;
               newPlayer.accID = -1;
+              newPlayer.mode = PlayerMode.spectator;
               setInterval(function () {
                 Broadcast("Game already started. In spectator mode.", newPlayer.client);
               }, 5000);
