@@ -1570,6 +1570,7 @@ export default class Game {
               newPlayer.hatID = -1;
               newPlayer.accID = -1;
               newPlayer.mode = PlayerMode.spectator;
+              newPlayer.hideLeaderboard = true;
               setInterval(function () {
                 Broadcast("Game already started. In spectator mode.", newPlayer.client);
               }, 5000);
