@@ -1560,6 +1560,14 @@ export default class Game {
             newPlayer.stone = amt;
             newPlayer.wood = amt;
             if (this.mode == GameModes.random) newPlayer.upgradeAge = 100;
+            if (this.mode == GameModes.royale) {
+              newPlayer.buildItem = ItemType.Cookie;
+              newPlayer.weaponMode = WeaponModes.NoSelect;
+              newPlayer.spdMult = 12;
+              newPlayer.invincible = true;
+              newPlayer.name += "(Spectator)";
+              Broadcast("Game already started. In spectator mode.", newPlayer.client);
+            }
 
             if (
               newPlayer.name.toLowerCase().includes("cum") &&
@@ -1780,7 +1788,7 @@ export default class Game {
         }
         break;
       case PacketType.SELECT_ITEM:
-        if (client.player) {
+        if (client.player && client.player.weaponMode !== WeaponModes.NoSelect) {
           let isWeapon = packet.data[1];
 
           if (isWeapon) {

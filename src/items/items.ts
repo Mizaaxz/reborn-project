@@ -32,6 +32,7 @@ enum WeaponModes {
   None,
   Inspect,
   OneTap,
+  NoSelect,
 }
 
 interface AttackDetails {
