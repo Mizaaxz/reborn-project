@@ -3,4 +3,5 @@ export enum GameModes {
   sandbox = "sandbox",
   royale = "royale",
   random = "random",
+  randomroyale = "randomroyale",
 }

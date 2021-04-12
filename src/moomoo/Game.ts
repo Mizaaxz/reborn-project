@@ -1336,6 +1336,146 @@ export default class Game {
     }
   }
 
+  randomizePlayers() {
+    let packetFactory = PacketFactory.getInstance();
+    this.state.players.forEach((plr) => {
+      let weaponsArray = [];
+      plr.weapon = getRandomWeapon(0);
+      plr.secondaryWeapon = -1;
+      weaponsArray = [plr.weapon];
+      let wvs = Object.values(WeaponVariants).map((v) => v.xp);
+      plr.primaryWeaponExp = plr.secondaryWeaponExp = wvs[Math.floor(Math.random() * wvs.length)];
+
+      let randomRes = [100, 200, 250, 300, 500];
+      plr.wood = randomRes[Math.floor(Math.random() * randomRes.length)];
+      plr.stone = randomRes[Math.floor(Math.random() * randomRes.length)];
+      plr.food = randomRes[Math.floor(Math.random() * randomRes.length)];
+      plr.points = plr.age = plr.xp = 0;
+
+      let hatArr = hats.map((h) => h.id);
+      let accArr = accessories.map((a) => a.id);
+      plr.hatID = hatArr[Math.floor(Math.random() * hatArr.length)];
+      plr.accID = accArr[Math.floor(Math.random() * accArr.length)];
+      plr.invisible = false;
+
+      let selected = plr.items.indexOf(plr.buildItem);
+      let groups = items.map((i) => i.group).filter((g) => g != 0 && g != 13);
+      plr.items = [
+        getRandomItem(0),
+        getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
+      ];
+      plr.upgradeAge = 10;
+
+      if (selected == -1) plr.selectedWeapon = plr.weapon;
+      else plr.buildItem = plr.items[selected == 0 || selected == 1 ? selected : 1];
+
+      plr.client?.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [plr.items, 0]))
+      );
+      plr.client?.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [weaponsArray, 1]))
+      );
+      plr.client?.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
+      );
+      plr.updateResources();
+      this.sendLeaderboardUpdates();
+      this.sendPlayerUpdates();
+    });
+  }
+  advanceSpikes() {
+    let gens: [number, number][] = [];
+    let i = ItemType.GreaterSpikes;
+    let addAmt = getScale(i) * 1.8;
+    let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
+
+    if (stillAlive.length <= 1) {
+      this.close(
+        `Game Finished<br>Winner: ${stillAlive.map((p) => p.name).join(", ") || "None"}`,
+        -1
+      );
+    }
+
+    let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
+    while (currentPos.x < 14400 - this.spikeAdvance) {
+      gens.push([currentPos.x, currentPos.y]);
+      currentPos.add(addAmt, 0);
+    }
+    currentPos = new Vec2(0 + this.spikeAdvance, 14400 - this.spikeAdvance);
+    while (currentPos.x < 14400 - this.spikeAdvance + addAmt) {
+      gens.push([currentPos.x, currentPos.y]);
+      currentPos.add(addAmt, 0);
+    }
+    currentPos = new Vec2(14400 - this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
+    while (currentPos.y < 14400 - this.spikeAdvance) {
+      gens.push([currentPos.x, currentPos.y]);
+      currentPos.add(0, addAmt);
+    }
+    currentPos = new Vec2(0 + this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
+    while (currentPos.y < 14400 - this.spikeAdvance) {
+      gens.push([currentPos.x, currentPos.y]);
+      currentPos.add(0, addAmt);
+    }
+
+    let packetFactory = PacketFactory.getInstance();
+
+    this.state.gameObjects
+      .filter(
+        (g) =>
+          g.location.x > this.spawnBounds ||
+          g.location.x < this.spikeAdvance ||
+          g.location.y > this.spawnBounds ||
+          g.location.y < this.spikeAdvance
+      )
+      .forEach((g) => {
+        this.state.removeGameObject(g);
+        if (g.isPlayerGameObject()) {
+          let placedAmount = this.state.gameObjects.filter(
+            (gameObj) => gameObj.data === g.data && gameObj.ownerSID == g.ownerSID
+          ).length;
+          this.state.players
+            .find((p) => p.id == g.ownerSID)
+            ?.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(g.data), placedAmount])
+              )
+            );
+        }
+      });
+
+    gens.forEach((g) => {
+      let sid = this.getNextGameObjectID();
+      this.state.gameObjects.push(
+        new GameObject(
+          sid,
+          new Vec2(g[0], g[1]),
+          0,
+          getScale(i),
+          -1,
+          undefined,
+          i,
+          0,
+          getGameObjHealth(i),
+          getGameObjDamage(i),
+          true
+        )
+      );
+    });
+
+    this.state.players.forEach((p) => {
+      this.sendGameObjects(p);
+      if (
+        ((p.invincible && p.mode !== PlayerMode.spectator) ||
+          (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
+        !p.dead
+      )
+        p.die();
+    });
+
+    this.spikeAdvance += addAmt;
+    this.spawnBounds -= addAmt;
+  }
+
   public windmillTicks = 0;
   public spikeAdvance = 0;
   public spawnBounds = 14400;
@@ -1354,53 +1494,11 @@ export default class Game {
       }
     }
 
-    if (this.mode == GameModes.random && this.windmillTicks % 5 == 0) {
-      let packetFactory = PacketFactory.getInstance();
-      this.state.players.forEach((plr) => {
-        let weaponsArray = [];
-        plr.weapon = getRandomWeapon(0);
-        plr.secondaryWeapon = -1;
-        weaponsArray = [plr.weapon];
-        let wvs = Object.values(WeaponVariants).map((v) => v.xp);
-        plr.primaryWeaponExp = plr.secondaryWeaponExp = wvs[Math.floor(Math.random() * wvs.length)];
-
-        let randomRes = [100, 200, 250, 300, 500];
-        plr.wood = randomRes[Math.floor(Math.random() * randomRes.length)];
-        plr.stone = randomRes[Math.floor(Math.random() * randomRes.length)];
-        plr.food = randomRes[Math.floor(Math.random() * randomRes.length)];
-        plr.points = plr.age = plr.xp = 0;
-
-        let hatArr = hats.map((h) => h.id);
-        let accArr = accessories.map((a) => a.id);
-        plr.hatID = hatArr[Math.floor(Math.random() * hatArr.length)];
-        plr.accID = accArr[Math.floor(Math.random() * accArr.length)];
-        plr.invisible = false;
-
-        let selected = plr.items.indexOf(plr.buildItem);
-        let groups = items.map((i) => i.group).filter((g) => g != 0 && g != 13);
-        plr.items = [
-          getRandomItem(0),
-          getRandomItem(groups[Math.floor(Math.random() * groups.length)]),
-        ];
-        plr.upgradeAge = 10;
-
-        if (selected == -1) plr.selectedWeapon = plr.weapon;
-        else plr.buildItem = plr.items[selected == 0 || selected == 1 ? selected : 1];
-
-        plr.client?.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [plr.items, 0]))
-        );
-        plr.client?.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [weaponsArray, 1]))
-        );
-        plr.client?.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
-        );
-        plr.updateResources();
-        this.sendLeaderboardUpdates();
-        this.sendPlayerUpdates();
-      });
-    }
+    if (
+      (this.mode == GameModes.random && this.windmillTicks % 5 == 0) ||
+      (this.mode == GameModes.randomroyale && this.windmillTicks % 10 == 0)
+    )
+      this.randomizePlayers();
 
     let waitTickAmt = 5;
     if (this.spikeAdvance > 6800) waitTickAmt = 15;
@@ -1408,98 +1506,11 @@ export default class Game {
     else if (this.spikeAdvance > 4500) waitTickAmt = 5;
     else if (this.spikeAdvance > 3000) waitTickAmt = 2;
     else if (this.spikeAdvance > 1500) waitTickAmt = 7;
-    if (this.mode == GameModes.royale && this.windmillTicks % waitTickAmt == 0) {
-      let gens: [number, number][] = [];
-      let i = ItemType.GreaterSpikes;
-      let addAmt = getScale(i) * 1.8;
-      let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
-
-      if (stillAlive.length <= 1) {
-        this.close(
-          `Game Finished<br>Winner: ${stillAlive.map((p) => p.name).join(", ") || "None"}`,
-          -1
-        );
-      }
-
-      let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
-      while (currentPos.x < 14400 - this.spikeAdvance) {
-        gens.push([currentPos.x, currentPos.y]);
-        currentPos.add(addAmt, 0);
-      }
-      currentPos = new Vec2(0 + this.spikeAdvance, 14400 - this.spikeAdvance);
-      while (currentPos.x < 14400 - this.spikeAdvance + addAmt) {
-        gens.push([currentPos.x, currentPos.y]);
-        currentPos.add(addAmt, 0);
-      }
-      currentPos = new Vec2(14400 - this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
-      while (currentPos.y < 14400 - this.spikeAdvance) {
-        gens.push([currentPos.x, currentPos.y]);
-        currentPos.add(0, addAmt);
-      }
-      currentPos = new Vec2(0 + this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
-      while (currentPos.y < 14400 - this.spikeAdvance) {
-        gens.push([currentPos.x, currentPos.y]);
-        currentPos.add(0, addAmt);
-      }
-
-      let packetFactory = PacketFactory.getInstance();
-
-      this.state.gameObjects
-        .filter(
-          (g) =>
-            g.location.x > this.spawnBounds ||
-            g.location.x < this.spikeAdvance ||
-            g.location.y > this.spawnBounds ||
-            g.location.y < this.spikeAdvance
-        )
-        .forEach((g) => {
-          this.state.removeGameObject(g);
-          if (g.isPlayerGameObject()) {
-            let placedAmount = this.state.gameObjects.filter(
-              (gameObj) => gameObj.data === g.data && gameObj.ownerSID == g.ownerSID
-            ).length;
-            this.state.players
-              .find((p) => p.id == g.ownerSID)
-              ?.client?.socket.send(
-                packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(g.data), placedAmount])
-                )
-              );
-          }
-        });
-
-      gens.forEach((g) => {
-        let sid = this.getNextGameObjectID();
-        this.state.gameObjects.push(
-          new GameObject(
-            sid,
-            new Vec2(g[0], g[1]),
-            0,
-            getScale(i),
-            -1,
-            undefined,
-            i,
-            0,
-            getGameObjHealth(i),
-            getGameObjDamage(i),
-            true
-          )
-        );
-      });
-
-      this.state.players.forEach((p) => {
-        this.sendGameObjects(p);
-        if (
-          ((p.invincible && p.mode !== PlayerMode.spectator) ||
-            (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
-          !p.dead
-        )
-          p.die();
-      });
-
-      this.spikeAdvance += addAmt;
-      this.spawnBounds -= addAmt;
-    }
+    if (
+      (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) &&
+      this.windmillTicks % waitTickAmt == 0
+    )
+      this.advanceSpikes();
   }
   /**
    * Handles packets from the client
@@ -1611,8 +1622,9 @@ export default class Game {
             newPlayer.points = amt;
             newPlayer.stone = amt;
             newPlayer.wood = amt;
-            if (this.mode == GameModes.random) newPlayer.upgradeAge = 100;
-            if (this.mode == GameModes.royale) {
+            if (this.mode == GameModes.random || this.mode == GameModes.randomroyale)
+              newPlayer.upgradeAge = 100;
+            if (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) {
               newPlayer.buildItem = ItemType.Cookie;
               newPlayer.weaponMode = WeaponModes.NoSelect;
               newPlayer.spdMult = 14;
