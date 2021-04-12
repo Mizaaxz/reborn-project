@@ -789,16 +789,17 @@ export default class Game {
 
     this.state.players.forEach((player) => {
       let tribe = this.state.tribes.find((t) => t.name == player.clanName);
-      let tribeMembers = tribe
-        ? tribe.membersSIDs
-            .map((m) => this.state.players.find((p) => p.id === m))
-            .filter((m) => m !== player)
-            .reduce<number[]>((acc, otherMember) => {
-              if (!otherMember || otherMember.dead) return acc;
+      let tribeMembers: number[] = [];
 
-              return acc.concat([otherMember?.location.x, otherMember?.location.y]);
-            }, [])
-        : [];
+      if (tribe)
+        tribeMembers = tribe.membersSIDs
+          .map((m) => this.state.players.find((p) => p.id === m))
+          .filter((m) => m !== player)
+          .reduce<number[]>((acc, otherMember) => {
+            if (!otherMember || otherMember.dead) return acc;
+
+            return acc.concat([otherMember?.location.x, otherMember?.location.y]);
+          }, []);
 
       if (player.mode == PlayerMode.spectator)
         tribeMembers = this.state.players
