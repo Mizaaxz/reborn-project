@@ -1994,19 +1994,12 @@ export default class Game {
             }
           } else {
             item -= weapons.length;
-            console.log(upgrades);
-            console.log(getItem(item));
             if (upgrades.includes(item)) {
               let preItem = getPrerequisiteItem(item);
 
               if (preItem && !client.player.items.includes(preItem)) return;
 
-              console.log(client.player.items);
               client.player.items[getGroupID(item)] = item;
-              console.log(client.player.items);
-              /*client.player.items = client.player.items.filter(
-                (playerItem) => playerItem != undefined
-              );*/
             } else {
               Broadcast("Error: INVALID_ITEM", client);
             }
