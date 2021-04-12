@@ -1563,10 +1563,14 @@ export default class Game {
             if (this.mode == GameModes.royale) {
               newPlayer.buildItem = ItemType.Cookie;
               newPlayer.weaponMode = WeaponModes.NoSelect;
-              newPlayer.spdMult = 12;
+              newPlayer.spdMult = 14;
               newPlayer.invincible = true;
-              newPlayer.name += "(Spectator)";
-              Broadcast("Game already started. In spectator mode.", newPlayer.client);
+              newPlayer.name += " (Spectator)";
+              newPlayer.hatID = -1;
+              newPlayer.accID = -1;
+              setInterval(function () {
+                Broadcast("Game already started. In spectator mode.", newPlayer.client);
+              }, 5000);
             }
 
             if (
@@ -1846,6 +1850,7 @@ export default class Game {
         break;
       case PacketType.BUY_AND_EQUIP:
         if (!client.player || client.player.dead) Broadcast("Error: EQUIP_WHEN_DEAD", client);
+        if (client.player?.weaponMode == WeaponModes.NoSelect) return;
 
         let isAcc = packet.data[2];
 
