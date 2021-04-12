@@ -1557,7 +1557,11 @@ export default class Game {
             let newPlayer = (client.player =
               player || this.state.addPlayer(this.genSID(), client.id, client, this));
 
-            if (packet.data[0].pwd !== this.locked && newPlayer.client)
+            if (
+              packet.data[0].pwd !== this.locked &&
+              newPlayer.client &&
+              (newPlayer.client.account?.adminLevel || 0) < AdminLevel.Admin
+            )
               return this.kickClient(newPlayer.client, "Incorrect password.");
 
             if (typeof client.spawnPos == "boolean") {

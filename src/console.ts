@@ -985,6 +985,23 @@ Command(
   }
 );
 
+Command(
+  "lock",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    if (!game) return;
+
+    game.locked = args.slice(1).join(" ") || "";
+    game.state.players.forEach((p) => {
+      p.client && game?.kickClient(p.client, "Server locked. Get the password from an admin.");
+    });
+  },
+  {
+    aliases: ["lockdown", "lockserver", "ls"],
+    level: AdminLevel.Admin,
+  }
+);
+
 function logMethod(text: string) {
   process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
   lastMessage = text;
