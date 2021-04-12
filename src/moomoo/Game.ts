@@ -1419,27 +1419,28 @@ export default class Game {
 
       let newSpikeRemove: number[] = [];
       gens.forEach((g) => {
-        newSpikeRemove.push(
-          this.state.gameObjects.push(
-            new GameObject(
-              this.getNextGameObjectID(),
-              new Vec2(g[0], g[1]),
-              0,
-              getScale(i),
-              -1,
-              undefined,
-              i,
-              0,
-              getGameObjHealth(i),
-              getGameObjDamage(i),
-              true
-            )
-          ) - 1
+        let sid = this.getNextGameObjectID();
+        this.state.gameObjects.push(
+          new GameObject(
+            sid,
+            new Vec2(g[0], g[1]),
+            0,
+            getScale(i),
+            -1,
+            undefined,
+            i,
+            0,
+            getGameObjHealth(i),
+            getGameObjDamage(i),
+            true
+          )
         );
+        newSpikeRemove.push(sid);
       });
 
       this.spikeRemove[3].forEach((g) => {
-        this.state.removeGameObject(this.state.gameObjects[g]);
+        let go = this.state.gameObjects.find((o) => o.id == g);
+        if (go) this.state.removeGameObject(go);
       });
       this.spikeRemove[3] = this.spikeRemove[2].map((v) => v);
       this.spikeRemove[2] = this.spikeRemove[1].map((v) => v);
