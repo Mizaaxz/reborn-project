@@ -247,7 +247,10 @@ function checkAttack(player: Player, players: Player[]) {
   let hitPlayers: Player[] = [];
 
   for (let hitPlayer of players) {
-    if (pointCircle(getAttackLocation(player), hitPlayer.location, 35 * 2))
+    if (
+      pointCircle(getAttackLocation(player), hitPlayer.location, 35 * 2) &&
+      hitPlayer.mode !== PlayerMode.spectator
+    )
       hitPlayers.push(hitPlayer);
   }
 
