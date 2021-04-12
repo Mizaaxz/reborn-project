@@ -104,7 +104,7 @@ function tryMovePlayer(
             player.padHeal += 15;
             break;
           case ItemType.Teleporter:
-            player.location = randomPos(14400 + 35, 14400 - 35);
+            player.location = randomPos(14400 + 35, 14400 - 35, getGame()?.spawnBounds);
             getGame()?.sendGameObjects(player);
             return;
         }
@@ -187,7 +187,13 @@ function tryMovePlayer(
     }
   }
 
-  newLocation.clamp(new Vec2(0 + 35, 0 + 35), new Vec2(14400 - 35, 14400 - 35));
+  newLocation.clamp(
+    new Vec2(0 + 35 + (getGame()?.spikeAdvance || 0), 0 + 35 + (getGame()?.spikeAdvance || 0)),
+    new Vec2(
+      14400 - 35 - (getGame()?.spikeAdvance || 0),
+      14400 - 35 - (getGame()?.spikeAdvance || 0)
+    )
+  );
   player.location = newLocation.add(delta * xVel, delta * yVel);
 }
 
