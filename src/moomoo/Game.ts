@@ -982,7 +982,8 @@ export default class Game {
                     ])
                   )
                 );
-              else sendOneTapped(hitPlayer.location.x, hitPlayer.location.y);
+              else if (player.weaponMode == WeaponModes.OneTap)
+                sendOneTapped(hitPlayer.location.x, hitPlayer.location.y);
             }
 
             for (let hitAnimal of hitAnimals) {
