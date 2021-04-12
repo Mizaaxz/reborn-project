@@ -26,8 +26,11 @@ function eucDistance(a: number[], b: number[]) {
   return Math.hypot(...a.map((val, i) => val - b[i]));
 }
 
-function randomPos(width: number, height: number) {
-  return new Vec2(Math.random() * (width + 1), Math.random() * (height + 1));
+function randomPos(width: number, height: number, min: number = 0) {
+  return new Vec2(
+    Math.floor(Math.random() * (width - min + 1)) + min,
+    Math.floor(Math.random() * (height - min + 1)) + min
+  );
 }
 
 function chunk<T>(arr: T[], len: number) {

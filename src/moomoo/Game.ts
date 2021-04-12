@@ -37,6 +37,9 @@ import {
   getItem,
   getRandomItem,
   getRandomWeapon,
+  getScale,
+  getGameObjHealth,
+  getGameObjDamage,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -1315,6 +1318,8 @@ export default class Game {
   }
 
   public windmillTicks = 0;
+  public spikeAdvance = 0;
+  public spawnBounds = 14400;
   updateWindmills() {
     this.windmillTicks++;
     for (let windmill of this.state.gameObjects.filter(
@@ -1377,6 +1382,64 @@ export default class Game {
         this.sendPlayerUpdates();
       });
     }
+
+    if (this.mode == GameModes.royale && this.windmillTicks % 3 == 0) {
+      let gens: [number, number][] = [];
+      let i = ItemType.GreaterSpikes;
+      let addAmt = getScale(i) * 1.8;
+
+      if (this.spikeAdvance > 6800) {
+        this.close(
+          `Game Finished<br>Winners: ${this.state.players.map((p) => p.name).join(", ")}`,
+          -1
+        );
+      }
+
+      let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
+      while (currentPos.x < 14400 - this.spikeAdvance) {
+        gens.push([currentPos.x, currentPos.y]);
+        currentPos.add(addAmt, 0);
+      }
+      currentPos = new Vec2(0 + this.spikeAdvance, 14400 - this.spikeAdvance);
+      while (currentPos.x < 14400 - this.spikeAdvance + addAmt) {
+        gens.push([currentPos.x, currentPos.y]);
+        currentPos.add(addAmt, 0);
+      }
+      currentPos = new Vec2(14400 - this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
+      while (currentPos.y < 14400 - this.spikeAdvance) {
+        gens.push([currentPos.x, currentPos.y]);
+        currentPos.add(0, addAmt);
+      }
+      currentPos = new Vec2(0 + this.spikeAdvance, 0 + addAmt + this.spikeAdvance);
+      while (currentPos.y < 14400 - this.spikeAdvance) {
+        gens.push([currentPos.x, currentPos.y]);
+        currentPos.add(0, addAmt);
+      }
+
+      gens.forEach((g) => {
+        this.state.gameObjects.push(
+          new GameObject(
+            this.getNextGameObjectID(),
+            new Vec2(g[0], g[1]),
+            0,
+            getScale(i),
+            -1,
+            undefined,
+            i,
+            0,
+            getGameObjHealth(i),
+            getGameObjDamage(i)
+          )
+        );
+      });
+
+      this.state.players.forEach((p) => {
+        this.sendGameObjects(p);
+      });
+
+      this.spikeAdvance += addAmt;
+      this.spawnBounds -= addAmt;
+    }
   }
   /**
    * Handles packets from the client
@@ -1430,7 +1493,7 @@ export default class Game {
               player || this.state.addPlayer(this.genSID(), client.id, client, this));
 
             if (typeof client.spawnPos == "boolean") {
-              newPlayer.location = randomPos(14400, 14400);
+              newPlayer.location = randomPos(this.spawnBounds, this.spawnBounds, this.spikeAdvance);
             } else {
               newPlayer.location = client.spawnPos;
               client.spawnPos = false;
