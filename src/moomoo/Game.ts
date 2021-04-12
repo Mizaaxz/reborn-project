@@ -101,6 +101,7 @@ export default class Game {
   /**
    * Starts the server loop
    */
+  public locked: string = "";
   start() {
     this.started = true;
     this.lastUpdate = Date.now();
@@ -1544,7 +1545,12 @@ export default class Game {
       case PacketType.SPAWN:
         if (client.player && !client.player.dead) this.kickClient(client, "disconnected");
 
-        if ("name" in packet.data[0] && "moofoll" in packet.data[0] && "skin" in packet.data[0]) {
+        if (
+          "name" in packet.data[0] &&
+          "moofoll" in packet.data[0] &&
+          "skin" in packet.data[0] &&
+          "pwd" in packet.data[0]
+        ) {
           let player = this.state.players.find((plr) => plr.ownerID === client.id);
 
           if (!player || (player && player.dead)) {
