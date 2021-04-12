@@ -1488,7 +1488,7 @@ export default class Game {
 
       this.state.players.forEach((p) => {
         this.sendGameObjects(p);
-        if (p.invincible && p.mode !== PlayerMode.spectator) p.die();
+        if (p.invincible && p.mode !== PlayerMode.spectator && !p.dead) p.die();
       });
 
       this.spikeAdvance += addAmt;
