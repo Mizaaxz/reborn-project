@@ -1401,19 +1401,20 @@ export default class Game {
       });
     }
 
-    if (this.mode == GameModes.royale && this.windmillTicks % 5 == 0) {
+    let waitTickAmt = 5;
+    if (this.spikeAdvance > 6800) waitTickAmt = 15;
+    else if (this.spikeAdvance > 6000) waitTickAmt = 10;
+    else if (this.spikeAdvance > 5000) waitTickAmt = 5;
+    else if (this.spikeAdvance > 3000) waitTickAmt = 2;
+    else if (this.spikeAdvance > 1500) waitTickAmt = 7;
+    if (this.mode == GameModes.royale && this.windmillTicks % waitTickAmt == 0) {
       let gens: [number, number][] = [];
       let i = ItemType.GreaterSpikes;
       let addAmt = getScale(i) * 1.8;
+      let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
 
-      if (this.spikeAdvance > 6800) {
-        this.close(
-          `Game Finished<br>Winners: ${this.state.players
-            .filter((p) => !p.dead && !p.invincible)
-            .map((p) => p.name)
-            .join(", ")}`,
-          -1
-        );
+      if (stillAlive.length <= 1) {
+        this.close(`Game Finished<br>Winners: ${stillAlive.map((p) => p.name).join(", ")}`, -1);
       }
 
       let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
