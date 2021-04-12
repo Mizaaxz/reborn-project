@@ -1414,7 +1414,10 @@ export default class Game {
       let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
 
       if (stillAlive.length <= 1) {
-        this.close(`Game Finished<br>Winners: ${stillAlive.map((p) => p.name).join(", ")}`, -1);
+        this.close(
+          `Game Finished<br>Winner: ${stillAlive.map((p) => p.name).join(", ") || "None"}`,
+          -1
+        );
       }
 
       let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
