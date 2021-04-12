@@ -1488,7 +1488,12 @@ export default class Game {
 
       this.state.players.forEach((p) => {
         this.sendGameObjects(p);
-        if (p.invincible && p.mode !== PlayerMode.spectator && !p.dead) p.die();
+        if (
+          ((p.invincible && p.mode !== PlayerMode.spectator) ||
+            (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
+          !p.dead
+        )
+          p.die();
       });
 
       this.spikeAdvance += addAmt;
