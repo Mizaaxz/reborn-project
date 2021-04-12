@@ -1391,7 +1391,10 @@ export default class Game {
 
       if (this.spikeAdvance > 6800) {
         this.close(
-          `Game Finished<br>Winners: ${this.state.players.map((p) => p.name).join(", ")}`,
+          `Game Finished<br>Winners: ${this.state.players
+            .filter((p) => !p.dead)
+            .map((p) => p.name)
+            .join(", ")}`,
           -1
         );
       }
