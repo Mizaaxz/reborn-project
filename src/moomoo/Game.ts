@@ -812,9 +812,7 @@ export default class Game {
           new Packet(PacketType.MINIMAP, [
             tribeMembers,
             highKills,
-            this.spikeAdvance > 0
-              ? [this.spikeAdvance, this.spikeAdvance, 14400 - this.spikeAdvance]
-              : [],
+            this.spikeAdvance > 0 ? [this.spikeAdvance, 14400 - this.spikeAdvance * 2] : [],
           ])
         )
       );
