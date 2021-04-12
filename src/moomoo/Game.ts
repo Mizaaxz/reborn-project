@@ -1441,10 +1441,10 @@ export default class Game {
       this.spikeRemove[3].forEach((g) => {
         this.state.removeGameObject(this.state.gameObjects[g]);
       });
-      this.spikeRemove[3] = this.spikeRemove[2];
-      this.spikeRemove[2] = this.spikeRemove[1];
-      this.spikeRemove[1] = this.spikeRemove[0];
-      this.spikeRemove[0] = newSpikeRemove;
+      this.spikeRemove[3] = this.spikeRemove[2].map((v) => v);
+      this.spikeRemove[2] = this.spikeRemove[1].map((v) => v);
+      this.spikeRemove[1] = this.spikeRemove[0].map((v) => v);
+      this.spikeRemove[0] = newSpikeRemove.map((v) => v);
 
       this.state.players.forEach((p) => {
         this.sendGameObjects(p);
