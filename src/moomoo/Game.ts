@@ -1390,7 +1390,7 @@ export default class Game {
       });
     }
 
-    if (this.mode == GameModes.royale && this.windmillTicks % 3 == 0) {
+    if (this.mode == GameModes.royale && this.windmillTicks % 5 == 0) {
       let gens: [number, number][] = [];
       let i = ItemType.GreaterSpikes;
       let addAmt = getScale(i) * 1.8;
