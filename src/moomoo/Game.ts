@@ -800,6 +800,15 @@ export default class Game {
             }, [])
         : [];
 
+      if (player.mode == PlayerMode.spectator)
+        tribeMembers = this.state.players
+          .filter((m) => m !== player && m.mode !== PlayerMode.spectator)
+          .reduce<number[]>((acc, otherMember) => {
+            if (!otherMember || otherMember.dead) return acc;
+
+            return acc.concat([otherMember?.location.x, otherMember?.location.y]);
+          }, []);
+
       let highKills = this.state.players
         .filter((p) => p.getUpdateData(this.state)[11] == 1 && p !== player)
         .reduce<number[]>((acc, otherMember) => {
