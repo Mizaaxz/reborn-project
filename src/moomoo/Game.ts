@@ -1557,6 +1557,9 @@ export default class Game {
             let newPlayer = (client.player =
               player || this.state.addPlayer(this.genSID(), client.id, client, this));
 
+            if (packet.data[0].pwd !== this.locked && newPlayer.client)
+              return this.kickClient(newPlayer.client, "Incorrect password.");
+
             if (typeof client.spawnPos == "boolean") {
               newPlayer.location = randomPos(this.spawnBounds, this.spawnBounds, this.spikeAdvance);
             } else {
