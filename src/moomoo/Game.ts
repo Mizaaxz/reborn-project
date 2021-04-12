@@ -808,7 +808,15 @@ export default class Game {
         }, []);
 
       player?.client?.socket.send(
-        packetFactory.serializePacket(new Packet(PacketType.MINIMAP, [tribeMembers, highKills]))
+        packetFactory.serializePacket(
+          new Packet(PacketType.MINIMAP, [
+            tribeMembers,
+            highKills,
+            this.spikeAdvance > 0
+              ? [this.spikeAdvance, this.spikeAdvance, 14400 - this.spikeAdvance]
+              : [],
+          ])
+        )
       );
     });
 
