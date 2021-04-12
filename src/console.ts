@@ -238,14 +238,13 @@ Command(
 
 Command(
   "ban",
-  (args: any[]) => {
-    let playerSID = Number(args[1]);
+  (args: any[], source: Player | undefined) => {
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = playerSelector(args[1], source, false);
 
-      if (player && player.client && !player.client.admin) {
+      if (player instanceof Player && player.client && !player.client.admin) {
         game.banClient(player.client, args.slice(2).join(" "));
         return false;
       } else return "Invalid Player ID";
