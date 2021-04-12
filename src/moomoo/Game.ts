@@ -1320,6 +1320,7 @@ export default class Game {
   public windmillTicks = 0;
   public spikeAdvance = 0;
   public spawnBounds = 14400;
+  public spikeRemove: number[][] = [[], [], [], []];
   updateWindmills() {
     this.windmillTicks++;
     for (let windmill of this.state.gameObjects.filter(
@@ -1416,22 +1417,34 @@ export default class Game {
         currentPos.add(0, addAmt);
       }
 
+      let newSpikeRemove: number[] = [];
       gens.forEach((g) => {
-        this.state.gameObjects.push(
-          new GameObject(
-            this.getNextGameObjectID(),
-            new Vec2(g[0], g[1]),
-            0,
-            getScale(i),
-            -1,
-            undefined,
-            i,
-            0,
-            getGameObjHealth(i),
-            getGameObjDamage(i)
-          )
+        newSpikeRemove.push(
+          this.state.gameObjects.push(
+            new GameObject(
+              this.getNextGameObjectID(),
+              new Vec2(g[0], g[1]),
+              0,
+              getScale(i),
+              -1,
+              undefined,
+              i,
+              0,
+              getGameObjHealth(i),
+              getGameObjDamage(i),
+              true
+            )
+          ) - 1
         );
       });
+
+      this.spikeRemove[3].forEach((g) => {
+        this.state.removeGameObject(this.state.gameObjects[g]);
+      });
+      this.spikeRemove[3] = this.spikeRemove[2];
+      this.spikeRemove[2] = this.spikeRemove[1];
+      this.spikeRemove[1] = this.spikeRemove[0];
+      this.spikeRemove[0] = newSpikeRemove;
 
       this.state.players.forEach((p) => {
         this.sendGameObjects(p);
