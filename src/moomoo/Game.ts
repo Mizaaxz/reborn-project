@@ -457,7 +457,10 @@ export default class Game {
       if (!client.player.dead) playerUpdate = client.player.getUpdateData(this.state, true);
 
       for (let player of client.player.getNearbyPlayers(this.state)) {
-        if (!player.invisible) {
+        if (
+          !player.invisible &&
+          !(player.mode == PlayerMode.spectator && client.player.mode !== PlayerMode.spectator)
+        ) {
           playerUpdate = playerUpdate.concat(player.getUpdateData(this.state));
         }
       }
