@@ -750,7 +750,6 @@ Command(
         type || 0,
         "Steph"
       );
-      console.log(ai);
     }
   },
   { aliases: ["an", "spawn"], level: AdminLevel.Admin }
