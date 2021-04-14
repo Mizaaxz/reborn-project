@@ -910,6 +910,10 @@ export default class Game {
         animal.damageOverTime();
         animal.lastDot = now;
       }
+
+      if (animal.moving) {
+        Physics.moveTowards(animal, animal.angle, config.defaultSpeed - 0.1, deltaTime, this.state);
+      }
     });
 
     this.state.players.forEach((player) => {

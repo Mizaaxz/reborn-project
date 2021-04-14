@@ -9,6 +9,7 @@ import config from "../config";
 export default class Animal extends Entity {
   public name: string = "Steph";
   public type: number = 0;
+  public moving: boolean = false;
 
   private _health: number;
   public get health(): number {
@@ -115,5 +116,10 @@ export default class Animal extends Entity {
   run(from: Vec2) {
     let angleAway = Math.atan2(this.location.y - from.y, this.location.x - from.x);
     this.angle = angleAway;
+    this.moving = true;
+    let anim = this;
+    setTimeout(function () {
+      anim.moving = false;
+    }, 2000);
   }
 }
