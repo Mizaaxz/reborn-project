@@ -83,7 +83,7 @@ function collidePlayerGameObject(player: Player, gameObj: GameObject) {
 function collideAnimalGameObject(animal: Animal, gameObj: GameObject) {
   return collideCircles(
     animal.location,
-    29,
+    animal.data.scale || 29,
     gameObj.location,
     gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
@@ -364,7 +364,7 @@ function movePlayer(player: Player, delta: number, state: GameState) {
   }
   for (let a of player.getNearbyAnimals(state)) {
     if (
-      collideCircles(a.location, 30, player.location, 30) &&
+      collideCircles(a.location, a.data.scale || 30, player.location, 30) &&
       player.mode !== PlayerMode.spectator
     ) {
       let dis = player.location.distance(a.location);
@@ -396,7 +396,7 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
     }
   }
   for (let a of animal.getNearbyAnimals(state)) {
-    if (collideCircles(a.location, 30, animal.location, 30)) {
+    if (collideCircles(a.location, a.data.scale || 0, animal.location, animal.data.scale || 0)) {
       let dis = animal.location.distance(a.location);
       let angle = Math.atan2(a.location.y - animal.location.y, a.location.x - animal.location.x);
       let distanceToMove = 30 + 30 - dis;

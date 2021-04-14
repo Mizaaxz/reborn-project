@@ -10,6 +10,7 @@ export default class Animal extends Entity {
   public name: string = "Steph";
   public type: number = 0;
   public moving: boolean = false;
+  public data: { [key: string]: any };
 
   private _health: number;
   public get health(): number {
@@ -39,6 +40,7 @@ export default class Animal extends Entity {
     this.name = name;
     this.type = type;
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
+    this.data = animals.find((a) => a.id == this.id) || {};
   }
 
   die() {
