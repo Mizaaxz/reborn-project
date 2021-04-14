@@ -282,7 +282,7 @@ export default class Game {
   }
 
   spawnAnimals() {
-    outerLoop: for (let i = 0; i < 50; i++) {
+    outerLoop: for (let i = 0; i < 25; i++) {
       let location = randomPos(14400, 14400);
 
       let allowedTypes = animals.filter((a) => !a.hostile);
