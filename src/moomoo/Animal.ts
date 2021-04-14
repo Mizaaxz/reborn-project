@@ -111,4 +111,9 @@ export default class Animal extends Entity {
 
     return gameObjects;
   }
+
+  run(from: Vec2) {
+    let angleAway = Math.atan2(this.location.y - from.y, this.location.x - from.x);
+    this.angle = angleAway;
+  }
 }
