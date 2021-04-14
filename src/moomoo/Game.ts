@@ -1540,7 +1540,9 @@ export default class Game {
       this.state.players.forEach((p) => {
         if (
           ((p.invincible && p.mode !== PlayerMode.spectator) ||
-            (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
+            (p.mode == PlayerMode.spectator &&
+              (!p.hideLeaderboard || p.invisible) &&
+              !getHat(p.hatID)?.invisTimer)) &&
           !p.dead
         )
           p.die();
