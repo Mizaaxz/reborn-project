@@ -85,7 +85,6 @@ export default class Game {
   public mode: GameModes = GameModes.normal;
   lastUpdate: number = 0;
   physTimer: NanoTimer | undefined;
-  millTimer: NanoTimer | undefined;
 
   constructor() {
     let defaultMode = (
@@ -106,16 +105,13 @@ export default class Game {
   start() {
     this.started = true;
     this.lastUpdate = Date.now();
-
     this.physTimer = new NanoTimer();
     this.physTimer.setInterval(this.physUpdate.bind(this), "", "33m");
-
     this.generateStructures();
     this.spawnAnimals();
 
-    this.millTimer = new NanoTimer();
-    this.millTimer.setInterval(this.updateWindmills.bind(this), "", "1s");
-    this.millTimer.setInterval(this.spawnAnimals.bind(this), "", "10s");
+    setInterval(this.updateWindmills.bind(this), 1000);
+    setInterval(this.spawnAnimals.bind(this), 10000);
 
     process.nextTick(this.update);
   }
