@@ -418,7 +418,7 @@ export default class Game {
     }, 1);
   }
 
-  async banClient(client: Client, reason: string = "Banned by a moderator.") {
+  banClient(client: Client, reason: string = "Banned by a moderator.") {
     if (!((db.get("bannedIPs") as any[]) || []).includes(client.ip)) {
       let bannedIPs = (db.get("bannedIPs") as any[]) || [];
       bannedIPs.push(client.ip);
@@ -427,7 +427,7 @@ export default class Game {
 
     this.kickClient(client, reason);
   }
-  async banIP(ip: String) {
+  banIP(ip: String) {
     if (!((db.get("bannedIPs") as any[]) || []).includes(ip)) {
       let bannedIPs = (db.get("bannedIPs") as any[]) || [];
       bannedIPs.push(ip);
@@ -439,7 +439,7 @@ export default class Game {
     bannedNames.push(name);
     db.set("BANNED_NAMES", bannedNames);
   }
-  async unbanIP(ip: string) {
+  unbanIP(ip: string) {
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
     if (bannedIPs.includes(ip)) {
       bannedIPs.splice(bannedIPs.indexOf(ip), 1);
