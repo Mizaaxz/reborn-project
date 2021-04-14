@@ -119,11 +119,11 @@ export default class Game {
 
     process.nextTick(this.update);
   }
-  public closing: NodeJS.Timeout = setInterval(() => {}, 5000);
+  public closing: NodeJS.Timeout | undefined;
   close(reason: string = "Server Closed", doneMax: number = 10) {
     let g = this;
     let doneTimer = 0;
-    clearInterval(this.closing);
+    if (this.closing) clearInterval(this.closing);
     this.closing = setInterval(function () {
       if (doneTimer > doneMax) {
         g.clients.forEach((c) => {
@@ -139,8 +139,8 @@ export default class Game {
     }, 1000);
   }
   cancelClose() {
-    clearInterval(this.closing);
-    this.closing = setInterval(() => {}, 5000);
+    if (this.closing) clearInterval(this.closing);
+    this.closing = undefined;
   }
 
   exec(code: string, source: Player | undefined) {
@@ -1425,7 +1425,7 @@ export default class Game {
     let addAmt = getScale(i) * 1.8;
     let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
 
-    if (stillAlive.length <= 1) {
+    if (stillAlive.length <= 1 && !this.closing) {
       this.close(
         `Game Finished<br>Winner: ${stillAlive.map((p) => p.name).join(", ") || "None"}`,
         10
