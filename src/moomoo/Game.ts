@@ -302,6 +302,7 @@ export default class Game {
     }
   }
 
+  public clientConnectionInfractions: { [key: string]: number } = {};
   async addClient(id: string, socket: WebSocket, ip: string) {
     // Only start on first connection to save resources
     if (!this.started) this.start();
@@ -314,10 +315,16 @@ export default class Game {
     let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
 
     if (this.clients.filter((client) => client.ip === ip).length > 2) {
+      let clientConnectionInfractions = this.clientConnectionInfractions[client.ip] || 0;
       this.kickClient(client, "Only 2 connections allowed!");
       setTimeout(function () {
         socket.terminate();
       }, 5);
+      clientConnectionInfractions++;
+      this.clientConnectionInfractions[client.ip] = clientConnectionInfractions;
+
+      if (clientConnectionInfractions > 5) this.banIP(client.ip);
+      return;
     }
 
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
