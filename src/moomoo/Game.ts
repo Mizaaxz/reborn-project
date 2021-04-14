@@ -284,8 +284,8 @@ export default class Game {
   }
 
   spawnAnimals() {
-    if (this.state.animals.length > 50) return;
     outerLoop: for (let i = 0; i < 25; i++) {
+      if (this.state.animals.length >= 25) break;
       let location = randomPos(14400, 14400);
 
       let allowedTypes = animals.filter((a) => !a.hostile);
