@@ -538,7 +538,7 @@ export default class Game {
   sendAnimalUpdates() {
     let packetFactory = PacketFactory.getInstance();
 
-    let animalData = this.state.animals.reduce<number[]>((acc, animal) => {
+    let animalData = this.state.animals.reduce<(number | string)[]>((acc, animal) => {
       if (!animal) return acc;
 
       return acc.concat([
@@ -548,7 +548,7 @@ export default class Game {
         animal.location.y, // locy
         animal.angle, // angle (dir?)
         animal.health, // health
-        1, // cow name index
+        animal.name, // cow name index - now cow name string
       ]);
     }, []);
 
