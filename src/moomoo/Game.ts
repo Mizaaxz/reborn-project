@@ -108,8 +108,10 @@ export default class Game {
     this.physTimer = new NanoTimer();
     this.physTimer.setInterval(this.physUpdate.bind(this), "", "33m");
     this.generateStructures();
+    this.spawnAnimals();
 
     setInterval(this.updateWindmills.bind(this), 1000);
+    setInterval(this.spawnAnimals.bind(this), 10000);
 
     process.nextTick(this.update);
   }
