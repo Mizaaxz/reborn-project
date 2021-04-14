@@ -281,6 +281,24 @@ export default class Game {
     }
   }
 
+  spawnAnimals() {
+    outerLoop: for (let i = 0; i < 50; i++) {
+      let location = randomPos(14400, 14400);
+
+      let allowedTypes = animals.filter((a) => !a.hostile);
+      let type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)].id;
+
+      let newAnimal = new Animal(this.genAnimalSID(), location, type, "Steph");
+
+      if (newAnimal.getNearbyAnimals(this.state).length) {
+        i--;
+        continue outerLoop;
+      }
+
+      this.state.animals.push(newAnimal);
+    }
+  }
+
   async addClient(id: string, socket: WebSocket, ip: string) {
     // Only start on first connection to save resources
     if (!this.started) this.start();

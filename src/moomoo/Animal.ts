@@ -2,6 +2,9 @@ import Vec2 from "vec2";
 import animals from "../definitions/animals";
 import Entity from "./Entity";
 import { getGame } from "./Game";
+import GameState from "./GameState";
+import { eucDistance } from "./util";
+import config from "../config";
 
 export default class Animal extends Entity {
   public name: string = "Steph";
@@ -35,5 +38,42 @@ export default class Animal extends Entity {
     } else {
       this.maxBleedAmt = -1;
     }
+  }
+
+  getNearbyPlayers(state: GameState) {
+    const RADIUS = config.playerNearbyRadius || 1250;
+
+    let players = [];
+
+    for (let player of state.players) {
+      if (!player.dead) {
+        if (
+          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
+          RADIUS
+        ) {
+          players.push(player);
+        }
+      }
+    }
+
+    return players;
+  }
+  getNearbyAnimals(state: GameState) {
+    const RADIUS = config.animalNearbyRadius || 1250;
+
+    let animals = [];
+
+    for (let animal of state.animals) {
+      if (animal !== this) {
+        if (
+          eucDistance([this.location.x, this.location.y], [animal.location.x, animal.location.y]) <
+          RADIUS
+        ) {
+          animals.push(animal);
+        }
+      }
+    }
+
+    return animals;
   }
 }
