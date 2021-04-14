@@ -1467,12 +1467,6 @@ export default class Game {
 
     this.state.players.forEach((p) => {
       this.sendGameObjects(p);
-      if (
-        ((p.invincible && p.mode !== PlayerMode.spectator) ||
-          (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
-        !p.dead
-      )
-        p.die();
     });
 
     this.spikeAdvance += addAmt;
@@ -1512,8 +1506,20 @@ export default class Game {
     if (
       (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) &&
       this.windmillTicks % waitTickAmt == 0
-    )
+    ) {
       this.advanceSpikes();
+      this.state.players.forEach((p) => {
+        if (
+          ((p.invincible && p.mode !== PlayerMode.spectator) ||
+            (p.mode == PlayerMode.spectator && (!p.hideLeaderboard || p.invisible))) &&
+          !p.dead
+        )
+          p.die();
+      });
+      this.state.tribes.forEach((t) => {
+        this.state.removeTribe(this.state.tribes.indexOf(t));
+      });
+    }
   }
   /**
    * Handles packets from the client
@@ -1768,6 +1774,7 @@ export default class Game {
       case PacketType.CLAN_CREATE:
         if (!client.player || client.player.dead)
           Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
+        if (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) return;
 
         if (client.player) {
           let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
