@@ -317,7 +317,7 @@ export default class Game {
       this.kickClient(client, "Only 2 connections allowed!");
       setTimeout(function () {
         socket.terminate();
-      }, 100);
+      }, 5);
     }
 
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
@@ -325,7 +325,7 @@ export default class Game {
       this.kickClient(client, "You are banned.");
       setTimeout(function () {
         socket.terminate();
-      }, 100);
+      }, 2);
       return;
     }
 
