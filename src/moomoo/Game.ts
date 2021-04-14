@@ -291,7 +291,7 @@ export default class Game {
       let allowedTypes = animals.filter((a) => !a.hostile);
       let type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)].id;
 
-      let newAnimal = new Animal(this.genAnimalSID(), location, type, "Steph");
+      let newAnimal = new Animal(this.genAnimalSID(), location, type, "Test Subject");
 
       if (newAnimal.getNearbyAnimals(this.state).length) {
         i--;
