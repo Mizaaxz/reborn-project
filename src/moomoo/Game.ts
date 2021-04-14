@@ -1041,9 +1041,9 @@ export default class Game {
               }
 
               if (hitAnimal.health <= 0) {
-                let type = animals[hitAnimal.type];
                 this.killAnimal(hitAnimal);
 
+                let type = animals[hitAnimal.type];
                 if (type) {
                   player.food += type.drop || 0;
                   player.points += type.killScore || 0;

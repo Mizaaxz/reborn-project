@@ -14,6 +14,7 @@ import { randomPos } from "./util";
 import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
+import animals from "../definitions/animals";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -279,6 +280,14 @@ function tryMoveAnimal(
           getGame()?.damageFromAnimal(animal, owner, gameObj.dmg, false);
         } else {
           animal.health -= gameObj.dmg;
+        }
+
+        if (animal.health <= 0) {
+          let type = animals[animal.type];
+          if (type && owner) {
+            owner.food += type.drop || 0;
+            owner.points += type.killScore || 0;
+          }
         }
 
         state.players
