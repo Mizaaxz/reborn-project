@@ -898,6 +898,8 @@ export default class Game {
       });
 
     this.state.animals.forEach((animal) => {
+      Physics.moveAnimal(animal, 33, this.state);
+
       if (Date.now() - animal.lastDot >= 1000) {
         animal.damageOverTime();
         animal.lastDot = now;

@@ -32,22 +32,31 @@ function collideRectangles(
 }
 
 function moveTowards(
-  player: Player,
+  ent: Player | Animal,
   angle: number,
   speed: number,
   deltaTime: number,
   state: GameState
 ) {
-  try {
-    player.velocity.add(
-      Math.cos(angle) * speed * 0.0016 * deltaTime,
-      Math.sin(angle) * speed * 0.0016 * deltaTime
-    );
-  } catch (e) {
-    if (e == "Error: Infinity detected") {
-      console.log("Infinity Error");
-      player.spdMult = config.defaultSpeed || 1;
-    } else console.log("Error: " + e);
+  if (ent instanceof Player) {
+    try {
+      ent.velocity.add(
+        Math.cos(angle) * speed * 0.0016 * deltaTime,
+        Math.sin(angle) * speed * 0.0016 * deltaTime
+      );
+    } catch (e) {
+      if (e == "Error: Infinity detected") {
+        console.log("Infinity Error");
+        ent.spdMult = config.defaultSpeed || 1;
+      } else console.log("Error: " + e);
+    }
+  } else {
+    try {
+      ent.velocity.add(
+        Math.cos(angle) * speed * 0.0016 * deltaTime,
+        Math.sin(angle) * speed * 0.0016 * deltaTime
+      );
+    } catch (e) {}
   }
 }
 
@@ -60,6 +69,19 @@ function collidePlayerGameObject(player: Player, gameObj: GameObject) {
   if (player.mode == PlayerMode.spectator) return false;
   return collideCircles(
     player.location,
+    29,
+    gameObj.location,
+    gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
+  );
+}
+/**
+ * Utility function to collide an animal and a GameObject with collideCircles()
+ * @param animal the animal to test collision for
+ * @param gameObj the GameObject to test collision for
+ */
+function collideAnimalGameObject(animal: Animal, gameObj: GameObject) {
+  return collideCircles(
+    animal.location,
     29,
     gameObj.location,
     gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
@@ -203,6 +225,111 @@ function tryMovePlayer(
   );
   player.location = newLocation.add(delta * xVel, delta * yVel);
 }
+function tryMoveAnimal(
+  animal: Animal,
+  delta: number,
+  xVel: number,
+  yVel: number,
+  state: GameState
+) {
+  let inTrap = false;
+  let packetFactory = PacketFactory.getInstance();
+
+  animal.spikeHit > 0 && --animal.spikeHit < 0 && (animal.spikeHit = 0);
+  animal.layer = 0;
+  animal.padHeal = 0;
+
+  let newLocation = new Vec2(animal.location.x, animal.location.y);
+
+  for (let gameObj of animal.getNearbyGameObjects(state)) {
+    if (collideAnimalGameObject(animal, gameObj)) {
+      if (gameObj.isPlayerGameObject()) {
+        if (gameObj.data == ItemType.Platform) animal.layer = 1;
+
+        switch (gameObj.data) {
+          case ItemType.PitTrap:
+            inTrap = true;
+            break;
+          case ItemType.BoostPad:
+            animal.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
+            break;
+          case ItemType.HealingPad:
+            animal.padHeal += 15;
+            break;
+          case ItemType.Teleporter:
+            animal.location = randomPos(14400 + 35, 14400 - 35, getGame()?.spawnBounds);
+            return;
+        }
+        if (!hasCollision(gameObj.data)) continue;
+      }
+
+      let dmg = gameObj.dmg;
+
+      if (dmg && !animal.spikeHit) {
+        let owner = state.players.find((player) => player.id == gameObj.ownerSID);
+        animal.spikeHit = 2;
+
+        let angle = Math.atan2(
+          animal.location.y - gameObj.location.y,
+          animal.location.x - gameObj.location.x
+        );
+        animal.velocity.add(Math.cos(angle), Math.sin(angle));
+
+        if (owner) {
+          getGame()?.damageFromAnimal(animal, owner, gameObj.dmg, false);
+        } else {
+          animal.health -= gameObj.dmg;
+        }
+
+        state.players
+          .find((player) => player.id == gameObj.ownerSID)
+          ?.client?.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.HEALTH_CHANGE, [
+                gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+                gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
+                dmg,
+                1,
+              ])
+            )
+          );
+      }
+
+      xVel *= 0.83;
+      yVel *= 0.83;
+
+      let angle = Math.atan2(
+        newLocation.y - gameObj.location.y,
+        newLocation.x - gameObj.location.x
+      );
+
+      newLocation = new Vec2(
+        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+        gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35)
+      );
+    }
+  }
+
+  animal.inTrap = inTrap;
+  if (inTrap) return;
+
+  // River
+  if (animal.location.y > 6850 && animal.location.y < 7550 && animal.layer < 1) {
+    xVel *= 0.33;
+    yVel *= 0.33;
+
+    animal.velocity.add(0.0011 * delta * (1 / 0.33), 0);
+  }
+
+  newLocation.clamp(
+    new Vec2(0 + 35 + (getGame()?.spikeAdvance || 0), 0 + 35 + (getGame()?.spikeAdvance || 0)),
+    new Vec2(
+      14400 - 35 - (getGame()?.spikeAdvance || 0),
+      14400 - 35 - (getGame()?.spikeAdvance || 0)
+    )
+  );
+  animal.location = newLocation.add(delta * xVel, delta * yVel);
+}
 
 function movePlayer(player: Player, delta: number, state: GameState) {
   tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
@@ -224,6 +351,50 @@ function movePlayer(player: Player, delta: number, state: GameState) {
       player.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
       tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
       tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
+    }
+  }
+  for (let a of player.getNearbyAnimals(state)) {
+    if (
+      collideCircles(a.location, 30, player.location, 30) &&
+      player.mode !== PlayerMode.spectator
+    ) {
+      let dis = player.location.distance(a.location);
+      let angle = Math.atan2(a.location.y - player.location.y, a.location.x - player.location.x);
+      let distanceToMove = 30 + 30 - dis;
+      a.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
+      player.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
+      tryMoveAnimal(a, delta, a.velocity.x, a.velocity.y, state);
+      tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
+    }
+  }
+}
+function moveAnimal(animal: Animal, delta: number, state: GameState) {
+  tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
+
+  if (animal.velocity.x || animal.velocity.y) {
+    animal.velocity = animal.velocity.multiply(0.993 ** delta, 0.993 ** delta);
+  }
+
+  for (let p of animal.getNearbyPlayers(state)) {
+    if (collideCircles(p.location, 30, animal.location, 30) && p.mode !== PlayerMode.spectator) {
+      let dis = animal.location.distance(p.location);
+      let angle = Math.atan2(p.location.y - animal.location.y, p.location.x - animal.location.x);
+      let distanceToMove = 30 + 30 - dis;
+      p.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
+      animal.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
+      tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
+      tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
+    }
+  }
+  for (let a of animal.getNearbyAnimals(state)) {
+    if (collideCircles(a.location, 30, animal.location, 30)) {
+      let dis = animal.location.distance(a.location);
+      let angle = Math.atan2(a.location.y - animal.location.y, a.location.x - animal.location.x);
+      let distanceToMove = 30 + 30 - dis;
+      a.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
+      animal.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
+      tryMoveAnimal(a, delta, a.velocity.x, a.velocity.y, state);
+      tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
     }
   }
 }
@@ -314,6 +485,7 @@ export {
   collideGameObjects,
   checkAttackGameObj,
   movePlayer,
+  moveAnimal,
   getAttackLocation,
   collideProjectilePlayer,
   collideProjectileGameObject,

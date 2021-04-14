@@ -9,19 +9,35 @@ import config from "../config";
 export default class Animal extends Entity {
   public name: string = "Steph";
   public type: number = 0;
-  public health: number;
+
+  private _health: number;
+  public get health(): number {
+    return this._health;
+  }
+
+  public set health(newHealth: number) {
+    this._health = newHealth;
+
+    if (this._health <= 0) {
+      getGame()?.killAnimal(this);
+    }
+  }
 
   public lastDot = 0;
   public bleedDmg = 5;
   public bleedAmt = 0;
   public maxBleedAmt = -1;
+  public padHeal = 0;
+  public spikeHit = 0;
+  public layer = 0;
+  public inTrap = false;
 
   constructor(sid: number, location: Vec2, type: number, name: string) {
     super(sid, location, 0, new Vec2(0, 0));
 
     this.name = name;
     this.type = type;
-    this.health = animals.find((a) => a.id == this.type)?.health || 100;
+    this._health = animals.find((a) => a.id == this.type)?.health || 100;
   }
 
   die() {
@@ -75,5 +91,24 @@ export default class Animal extends Entity {
     }
 
     return animals;
+  }
+
+  public getNearbyGameObjects(state: GameState) {
+    const RADIUS = config.gameObjectNearbyRadius || 1250;
+
+    let gameObjects = [];
+
+    for (let gameObject of state.gameObjects) {
+      if (
+        eucDistance(
+          [this.location.x, this.location.y],
+          [gameObject.location.x, gameObject.location.y]
+        ) < RADIUS
+      ) {
+        gameObjects.push(gameObject);
+      }
+    }
+
+    return gameObjects;
   }
 }
