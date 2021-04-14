@@ -1424,7 +1424,7 @@ export default class Game {
     if (stillAlive.length <= 1) {
       this.close(
         `Game Finished<br>Winner: ${stillAlive.map((p) => p.name).join(", ") || "None"}`,
-        -1
+        10
       );
     }
 
