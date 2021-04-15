@@ -1591,10 +1591,6 @@ export default class Game {
       pos.topleft.y + (pos.bottomleft.y - pos.topleft.y) / 2
     );
 
-    this.state.players.forEach((p) => {
-      p.location = centerPos.add(0, 0, true);
-    });
-
     let startPadPos = pos.topleft.add(125, 40, true);
     let padGen: [number, number, number][] = [];
     let pad = ItemType.SpawnPad;
@@ -1659,6 +1655,7 @@ export default class Game {
       let name = tribe.name;
       tribe.membersSIDs = players.map((p) => {
         p.clanName = name;
+        p.location = letter == "a" ? centerPos.add(750, 0, true) : centerPos.subtract(750, 0, true);
         return p.id;
       });
       this.state.updateClanPlayers(tribe);
