@@ -259,7 +259,7 @@ function tryMoveAnimal(
           else game.winsB++;
           game.genBallArena(false);
           Broadcast(
-            `The ${teamWon.toUpperCase} team won!\nA: ${game.winsA} B: ${game.winsB}`,
+            `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${game.winsB}`,
             undefined
           );
         }
