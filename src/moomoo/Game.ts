@@ -393,6 +393,17 @@ export default class Game {
 
     socket.on("error", (err) => {
       console.error("SOCKET_ERR:" + err);
+      if (String(err) == "RangeError: Invalid WebSocket frame: RSV1 must be clear") {
+        let clientConnectionInfractions = this.clientConnectionInfractions[client.ip] || 0;
+        this.kickClient(client, "Error.");
+        setTimeout(function () {
+          socket.terminate();
+        }, 1);
+        clientConnectionInfractions++;
+        this.clientConnectionInfractions[client.ip] = clientConnectionInfractions;
+
+        if (clientConnectionInfractions > 5) this.banIP(client.ip);
+      }
     });
 
     console.log(`Added player ${id} with ip ${ip}.`);
