@@ -1616,10 +1616,10 @@ export default class Game {
           new Vec2(pd[0], pd[1]),
           0,
           getScale(pad),
-          -pd[2],
+          -1,
           undefined,
           pad,
-          0,
+          -pd[2],
           getGameObjHealth(pad),
           getGameObjDamage(pad),
           true
