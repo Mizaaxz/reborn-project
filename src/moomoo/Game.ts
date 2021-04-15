@@ -1604,6 +1604,13 @@ export default class Game {
       startPadPos.add(0, getScale(pad) * 2);
       numPads--;
     }
+    numPads = 9;
+    startPadPos = pos.topright.subtract(125, 30, true);
+    while (numPads > 0) {
+      padGen.push([startPadPos.x, startPadPos.y]);
+      startPadPos.add(0, getScale(pad) * 2);
+      numPads--;
+    }
 
     padGen.forEach((pd: number[]) => {
       this.state.gameObjects.push(
