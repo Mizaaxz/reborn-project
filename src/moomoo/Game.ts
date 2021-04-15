@@ -1575,7 +1575,7 @@ export default class Game {
       this.generateStructure(
         "stone:normal",
         wall[0],
-        wall[1] - (pos.topleft.y - pos.topright.y) / 2,
+        wall[1] - (pos.topleft.y - pos.bottomleft.y) / 2,
         90
       );
     });
