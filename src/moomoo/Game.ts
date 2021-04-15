@@ -1531,7 +1531,7 @@ export default class Game {
 
     lastWallPos = wallPos;
     wallPos = 0;
-    wallCount = 0;
+    wallCount = 1;
     while (wallCount < totalWalls) {
       let wallLoc = new Vec2(loc.x + lastWallPos, loc.y + wallPos);
       wallGen.push([wallLoc.x, wallLoc.y]);
