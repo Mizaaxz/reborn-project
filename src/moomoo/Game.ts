@@ -1654,7 +1654,11 @@ export default class Game {
       let players = playerTeams[letter];
       let tribe = this.state.addTribe(`Team ${letter.toUpperCase()}`, letter == "a" ? -65 : -66);
       if (!tribe) return;
-      tribe.membersSIDs = players.map((p) => p.id);
+      let name = tribe.name;
+      tribe.membersSIDs = players.map((p) => {
+        p.clanName = name;
+        return p.id;
+      });
       this.state.updateClanPlayers(tribe);
     });
   }
