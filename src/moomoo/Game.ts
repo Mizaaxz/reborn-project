@@ -1627,10 +1627,6 @@ export default class Game {
       );
     });
 
-    this.state.players.forEach((p) => {
-      this.sendGameObjects(p);
-    });
-
     let playersArray = this.state.players.sort(() => {
       return 0.5 - Math.random();
     });
@@ -1659,6 +1655,7 @@ export default class Game {
         p.selectedWeapon = Weapons.Sword;
         p.weaponMode = WeaponModes.NoSelect;
         p.invincible = true;
+        this.sendGameObjects(p);
         return p.id;
       });
       this.state.updateClanPlayers(tribe);
