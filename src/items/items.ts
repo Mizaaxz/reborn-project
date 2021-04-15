@@ -114,7 +114,7 @@ function getItemGroup(id: ItemType) {
 
 function getItemCost(item: ItemType) {
   let game = getGame();
-  if (game?.mode == GameModes.sandbox) return [];
+  if (game?.mode.includes(GameModes.sandbox)) return [];
   else return getItem(item)?.req || [];
 }
 
@@ -171,7 +171,7 @@ function getGameObjDamage(item: ItemType) {
 
 function getGameObjPlaceLimit(item: ItemType) {
   let game = getGame();
-  if (game?.mode == GameModes.sandbox) return Infinity;
+  if (game?.mode.includes(GameModes.sandbox)) return Infinity;
   else return getItemGroup(item)?.limit || Infinity;
 }
 

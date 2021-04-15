@@ -686,10 +686,13 @@ Command(
 Command(
   "gamemode",
   function (args: any[]) {
-    let mode: GameModes = args[1].toLowerCase();
-    if (mode && GameModes[mode]) {
+    let modes: GameModes[] = args
+      .slice(1)
+      .map((a: GameModes) => GameModes[a])
+      .filter((m) => !!m);
+    if (modes.length) {
       let game = getGame();
-      if (game) game.mode = mode;
+      if (game) game.mode = modes;
       return false;
     } else return "Invalid GameMode.";
   },

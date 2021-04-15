@@ -82,7 +82,7 @@ export default class Game {
   public clients: Client[] = [];
   public lastTick: number = 0;
   public started: boolean = false;
-  public mode: GameModes = GameModes.normal;
+  public mode: GameModes[] = [GameModes.normal];
   lastUpdate: number = 0;
   physTimer: NanoTimer | undefined;
 
@@ -90,7 +90,7 @@ export default class Game {
     let defaultMode = (
       readdirSync("data").filter((f) => f.startsWith("DEFAULT_GAMEMODE="))[0] || ""
     ).split("=")[1] as GameModes;
-    if (defaultMode && GameModes[defaultMode]) this.mode = defaultMode;
+    if (defaultMode && GameModes[defaultMode]) this.mode = [defaultMode];
 
     this.state = new GameState(this);
     this.update = this.update.bind(this);
@@ -1654,10 +1654,7 @@ export default class Game {
       }
     }
 
-    if (
-      (this.mode == GameModes.random && this.windmillTicks % 5 == 0) ||
-      (this.mode == GameModes.randomroyale && this.windmillTicks % 10 == 0)
-    )
+    if (this.mode.includes(GameModes.randomroyale) && this.windmillTicks % 10 == 0)
       this.randomizePlayers();
 
     let waitTickAmt = 5;
@@ -1666,10 +1663,7 @@ export default class Game {
     else if (this.spikeAdvance > 4500) waitTickAmt = 5;
     else if (this.spikeAdvance > 3000) waitTickAmt = 2;
     else if (this.spikeAdvance > 1500) waitTickAmt = 7;
-    if (
-      (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) &&
-      this.windmillTicks % waitTickAmt == 0
-    ) {
+    if (this.mode.includes(GameModes.royale) && this.windmillTicks % waitTickAmt == 0) {
       this.advanceSpikes();
       this.state.players.forEach((p) => {
         if (
@@ -1796,9 +1790,8 @@ export default class Game {
             newPlayer.points = amt;
             newPlayer.stone = amt;
             newPlayer.wood = amt;
-            if (this.mode == GameModes.random || this.mode == GameModes.randomroyale)
-              newPlayer.upgradeAge = 100;
-            if (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) {
+            if (this.mode.includes(GameModes.random)) newPlayer.upgradeAge = 100;
+            if (this.mode.includes(GameModes.royale)) {
               newPlayer.buildItem = ItemType.Cookie;
               newPlayer.weaponMode = WeaponModes.NoSelect;
               newPlayer.spdMult = 14;
@@ -1939,7 +1932,7 @@ export default class Game {
       case PacketType.CLAN_CREATE:
         if (!client.player || client.player.dead)
           Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
-        if (this.mode == GameModes.royale || this.mode == GameModes.randomroyale) return;
+        if (this.mode.includes(GameModes.royale)) return;
 
         if (client.player) {
           let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
