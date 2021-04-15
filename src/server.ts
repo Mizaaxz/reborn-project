@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 import config from "./config";
 import * as console from "./console";
 import { Server as WSServer } from "ws";
-import UptimeWSServer from "./uptimeWS";
 import { startServer } from "./moomoo/moomoo";
 import errCodes from "./definitions/errorCodes";
 import db from "enhanced.db";
@@ -174,18 +173,10 @@ app.get("/api/v1/players", (req, res) => {
 let wss = new WSServer({ noServer: true, maxPayload: 1024, backlog: 5 });
 startServer(wss);
 
-let uptimeServer = new WSServer({ noServer: true });
-
-new UptimeWSServer(uptimeServer);
-
 server.on("upgrade", function upgrade(request, socket, head) {
   const pathname = url.parse(request.url).pathname?.replace(/\/$/, "");
 
-  if (pathname === "/uptimeWS") {
-    uptimeServer.handleUpgrade(request, socket, head, function done(ws) {
-      uptimeServer.emit("connection", ws, request);
-    });
-  } else if (pathname === "/moomoo") {
+  if (pathname === "/moomoo") {
     wss.handleUpgrade(request, socket, head, function done(ws) {
       wss.emit("connection", ws, request);
     });
