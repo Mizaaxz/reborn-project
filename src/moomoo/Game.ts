@@ -1507,7 +1507,7 @@ export default class Game {
     this.spikeAdvance += addAmt;
     this.spawnBounds -= addAmt;
   }
-  genBallArena() {
+  genBallArena(makeTeams: boolean = true) {
     let loc = new Vec2(14400 / 2, 14400 / 2 - 1000);
     let wallPos = 0;
     let lastWallPos = 0;
@@ -1638,7 +1638,14 @@ export default class Game {
       if (chunkLength * (i + 1) <= playersArray.length)
         chunks.push(playersArray.slice(chunkLength * i, chunkLength * (i + 1)));
     }
-    let playerTeams: { [key: string]: Player[] } = { a: chunks[0], b: chunks[1] };
+    if (!makeTeams) {
+      let a = this.state.tribes.find((t) => t.name == "Team A");
+      let b = this.state.tribes.find((t) => t.name == "Team B");
+      if (!a || !b) return;
+      chunks[0] = a.membersSIDs.map((m) => this.state.players.find((p) => p.id == m));
+      chunks[1] = b.membersSIDs.map((m) => this.state.players.find((p) => p.id == m));
+    }
+    let playerTeams: { [key: string]: (Player | undefined)[] } = { a: chunks[0], b: chunks[1] };
 
     while (this.state.tribes.length) {
       this.state.tribes.forEach((t) => {
@@ -1652,14 +1659,17 @@ export default class Game {
       if (!tribe) return;
       let name = tribe.name;
       tribe.membersSIDs = players.map((p) => {
-        p.clanName = name;
-        p.location = letter == "a" ? centerPos.subtract(750, 0, true) : centerPos.add(750, 0, true);
-        p.selectedWeapon = Weapons.Sword;
-        p.weaponMode = WeaponModes.NoSelect;
-        p.invincible = true;
-        p.spdMult = 3.5;
-        this.sendGameObjects(p);
-        return p.id;
+        if (p) {
+          p.clanName = name;
+          p.location =
+            letter == "a" ? centerPos.subtract(750, 0, true) : centerPos.add(750, 0, true);
+          p.selectedWeapon = Weapons.Sword;
+          p.weaponMode = WeaponModes.NoSelect;
+          p.invincible = true;
+          p.spdMult = 3.5;
+          this.sendGameObjects(p);
+        }
+        return p?.id || -1;
       });
       this.state.updateClanPlayers(tribe);
     });

@@ -10,7 +10,7 @@ import { Packet } from "../packets/Packet";
 import { PacketFactory } from "../packets/PacketFactory";
 import Projectile from "../projectiles/Projectile";
 import { getGame } from "./Game";
-import { randomPos } from "./util";
+import { Broadcast, randomPos } from "./util";
 import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
@@ -252,6 +252,9 @@ function tryMoveAnimal(
           animal.type == 8 &&
           getGame()?.mode.includes(GameModes.moofieball)
         ) {
+          let teamWon = gameObj.ownerSID == -55 ? "a" : "b";
+          Broadcast("Team won: " + teamWon, undefined);
+          getGame()?.genBallArena(false);
         }
 
         switch (gameObj.data) {
