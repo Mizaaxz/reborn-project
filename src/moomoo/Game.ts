@@ -305,14 +305,6 @@ export default class Game {
 
   public clientConnectionInfractions: { [key: string]: number } = {};
   addClient(id: string, socket: WebSocket, ip: string) {
-    let bannedIPs = (db.get("bannedIPs") as any[]) || [];
-    if (bannedIPs.includes(ip)) {
-      console.log(`Kicked ${ip}, banned.`);
-      socket.send(msgpack.encode(["d", ["Banned."]]));
-      socket.terminate();
-      return;
-    }
-
     // Only start on first connection to save resources
     if (!this.started) this.start();
 

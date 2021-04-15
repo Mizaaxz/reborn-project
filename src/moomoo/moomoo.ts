@@ -1,6 +1,8 @@
 import { Server as WSServer, default as WebSocket } from "ws";
 import Game from "./Game";
 import { IncomingMessage } from "http";
+import db from "enhanced.db";
+import msgpack from "msgpack-lite";
 
 /**
  * Gets a unique (if game is passed) id for a MooMoo.io client
@@ -41,6 +43,13 @@ export function startServer(server: WSServer) {
       ip = (req.headers["x-forwarded-for"] as string).split(/\s*,\s*/)[0];
     } else if (req.socket.remoteAddress) {
       ip = req.socket.remoteAddress;
+    }
+
+    let bannedIPs = (db.get("bannedIPs") as any[]) || [];
+    if (bannedIPs.includes(ip)) {
+      socket.send(msgpack.encode(["d", ["Banned."]]));
+      socket.terminate();
+      return;
     }
 
     game.addClient(getID(game), socket, ip);
