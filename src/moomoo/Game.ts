@@ -1653,7 +1653,7 @@ export default class Game {
       let name = tribe.name;
       tribe.membersSIDs = players.map((p) => {
         p.clanName = name;
-        p.location = letter == "a" ? centerPos.add(750, 0, true) : centerPos.subtract(750, 0, true);
+        p.location = letter == "a" ? centerPos.subtract(750, 0, true) : centerPos.add(750, 0, true);
         p.selectedWeapon = Weapons.Sword;
         p.weaponMode = WeaponModes.NoSelect;
         p.invincible = true;
