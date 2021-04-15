@@ -1661,6 +1661,9 @@ export default class Game {
       });
       this.state.updateClanPlayers(tribe);
     });
+
+    this.state.animals.push(new Animal(this.genAnimalSID(), centerPos, 8, "Ball"));
+    this.sendAnimalUpdates();
   }
 
   public windmillTicks = 0;
