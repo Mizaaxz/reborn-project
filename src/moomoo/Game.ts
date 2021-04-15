@@ -1595,7 +1595,7 @@ export default class Game {
       p.location = centerPos.add(0, 0, true);
     });
 
-    let startPadPos = pos.topleft.add(125, 25, true);
+    let startPadPos = pos.topleft.add(125, 30, true);
     let padGen: [number, number][] = [];
     let pad = ItemType.SpawnPad;
     let numPads = 9;
