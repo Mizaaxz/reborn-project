@@ -1585,6 +1585,15 @@ export default class Game {
     wallGen.forEach((wall: any[]) => {
       this.generateStructure("stone:normal", wall[0], wall[1], 90);
     });
+
+    let centerPos = new Vec2(
+      pos.topright.x + (pos.topright.x - pos.topleft.x) / 2,
+      pos.topright.y + (pos.topright.y - pos.bottomleft.y) / 2
+    );
+
+    this.state.players.forEach((p) => {
+      p.location = centerPos.add(0, 0, true);
+    });
   }
 
   public windmillTicks = 0;
