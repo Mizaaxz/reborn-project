@@ -1587,8 +1587,8 @@ export default class Game {
     });
 
     let centerPos = new Vec2(
-      pos.topleft.x + (pos.topleft.x - pos.topleft.x) / 2,
-      pos.topleft.y + (pos.topleft.y - pos.bottomleft.y) / 2
+      pos.topleft.x + (pos.topright.x - pos.topleft.x) / 2,
+      pos.topleft.y + (pos.bottomleft.y - pos.topleft.y) / 2
     );
 
     this.state.players.forEach((p) => {
@@ -1596,7 +1596,7 @@ export default class Game {
     });
 
     let startPadPos = pos.topleft.add(125, 125, true);
-    let padGen = [[0, 0]];
+    let padGen = [[startPadPos, startPadPos]];
     let pad = ItemType.SpawnPad;
 
     padGen.forEach((pd: any[]) => {
