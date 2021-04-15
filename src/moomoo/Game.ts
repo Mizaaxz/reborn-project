@@ -1065,6 +1065,7 @@ export default class Game {
                   knockback * Math.cos(player.angle),
                   knockback * Math.sin(player.angle)
                 );
+                hitAnimal.run(player.location);
               }
 
               if (player.weaponMode !== WeaponModes.OneTap)

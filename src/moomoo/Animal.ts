@@ -11,7 +11,7 @@ export default class Animal extends Entity {
   public type: number = 0;
   public moving: boolean = false;
   public data: { [key: string]: any };
-
+  public runTimer: NodeJS.Timeout | undefined;
   private _health: number;
   public get health(): number {
     return this._health;
@@ -116,11 +116,13 @@ export default class Animal extends Entity {
   }
 
   run(from: Vec2) {
-    let angleAway = Math.atan2(this.location.y - from.y, this.location.x - from.x);
-    this.angle = angleAway;
+    if (this.runTimer) clearTimeout(this.runTimer);
+
+    this.angle = Math.atan2(this.location.y - from.y, this.location.x - from.x);
     this.moving = true;
+
     let anim = this;
-    setTimeout(function () {
+    this.runTimer = setTimeout(function () {
       anim.moving = false;
     }, 2000);
   }
