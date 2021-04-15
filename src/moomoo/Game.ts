@@ -1594,6 +1594,32 @@ export default class Game {
     this.state.players.forEach((p) => {
       p.location = centerPos.add(0, 0, true);
     });
+
+    let startPadPos = pos.topleft.add(125, 125, true);
+    let padGen = [[0, 0]];
+    let pad = ItemType.SpawnPad;
+
+    padGen.forEach((pd: any[]) => {
+      this.state.gameObjects.push(
+        new GameObject(
+          this.getNextGameObjectID(),
+          new Vec2(pd[0], pd[1]),
+          0,
+          getScale(pad),
+          -1,
+          undefined,
+          pad,
+          0,
+          getGameObjHealth(pad),
+          getGameObjDamage(pad),
+          true
+        )
+      );
+    });
+
+    this.state.players.forEach((p) => {
+      this.sendGameObjects(p);
+    });
   }
 
   public windmillTicks = 0;
