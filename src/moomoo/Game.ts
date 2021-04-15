@@ -1665,6 +1665,7 @@ export default class Game {
             letter == "a" ? centerPos.subtract(750, 0, true) : centerPos.add(750, 0, true);
           p.selectedWeapon = Weapons.Sword;
           p.weaponMode = WeaponModes.NoSelect;
+          p.primaryWeaponExp = p.secondaryWeaponExp = 0;
           p.invincible = true;
           p.spdMult = 3.5;
           this.sendGameObjects(p);
