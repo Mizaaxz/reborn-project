@@ -14,7 +14,6 @@ import * as consoleTS from "../console";
 import { Packet, Side } from "../packets/Packet";
 import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packets/PacketType";
-import FileAsync from "lowdb/adapters/FileAsync";
 import { PacketFactory } from "../packets/PacketFactory";
 import {
   getWeaponDamage,
@@ -393,7 +392,7 @@ export default class Game {
     );
 
     socket.on("error", (err) => {
-      console.error(err);
+      console.error("SOCKET_ERR:" + err);
     });
 
     console.log(`Added player ${id} with ip ${ip}.`);
