@@ -252,9 +252,16 @@ function tryMoveAnimal(
           animal.type == 8 &&
           getGame()?.mode.includes(GameModes.moofieball)
         ) {
+          let game = getGame();
+          if (!game) return;
           let teamWon = gameObj.ownerSID == -66 ? "a" : "b";
-          Broadcast("Team won: " + teamWon, undefined);
-          getGame()?.genBallArena(false);
+          if (teamWon == "a") game.winsA++;
+          else game.winsB++;
+          game.genBallArena(false);
+          Broadcast(
+            `The ${teamWon.toUpperCase} team won!\nA: ${game.winsA} B: ${game.winsB}`,
+            undefined
+          );
         }
 
         switch (gameObj.data) {

@@ -1507,6 +1507,8 @@ export default class Game {
     this.spikeAdvance += addAmt;
     this.spawnBounds -= addAmt;
   }
+  public winsA: number = 0;
+  public winsB: number = 0;
   genBallArena(makeTeams: boolean = true) {
     let loc = new Vec2(14400 / 2, 14400 / 2 - 1000);
     let wallPos = 0;
