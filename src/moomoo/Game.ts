@@ -1571,9 +1571,11 @@ export default class Game {
       wallPos += 100;
     }
 
-    this.state.gameObjects.forEach((o) => {
-      this.state.removeGameObject(o);
-    });
+    while (this.state.gameObjects.length) {
+      this.state.gameObjects.forEach((o) => {
+        this.state.removeGameObject(o);
+      });
+    }
 
     wallGen.forEach((wall: any[]) => {
       this.generateStructure("stone:normal", wall[0], wall[1], 90);
