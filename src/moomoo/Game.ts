@@ -1600,7 +1600,7 @@ export default class Game {
     let pad = ItemType.SpawnPad;
     let numPads = 10;
     while (numPads > 0) {
-      startPadPos.add(getScale(pad) / 2, 0);
+      startPadPos.add(0, getScale(pad) * 2);
       padGen.push([startPadPos.x, startPadPos.y]);
       numPads--;
     }
