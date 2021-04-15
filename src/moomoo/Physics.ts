@@ -252,7 +252,7 @@ function tryMoveAnimal(
           animal.type == 8 &&
           getGame()?.mode.includes(GameModes.moofieball)
         ) {
-          let teamWon = gameObj.ownerSID == -55 ? "a" : "b";
+          let teamWon = gameObj.ownerSID == -66 ? "a" : "b";
           Broadcast("Team won: " + teamWon, undefined);
           getGame()?.genBallArena(false);
         }
