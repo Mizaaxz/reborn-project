@@ -171,7 +171,7 @@ app.get("/api/v1/players", (req, res) => {
   }
 });
 
-let wss = new WSServer({ noServer: true });
+let wss = new WSServer({ noServer: true, maxPayload: 1024, backlog: 5 });
 startServer(wss);
 
 let uptimeServer = new WSServer({ noServer: true });

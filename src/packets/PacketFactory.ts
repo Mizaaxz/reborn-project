@@ -140,8 +140,6 @@ class PacketFactory {
    */
   public deserializePacket(buffer: ArrayBuffer, side: Side, timeStamp = 0): Packet {
     let array: [string, any[]];
-    let length = buffer.byteLength;
-    if (length > 1024) throw new Error("Packet too long.");
 
     try {
       array = msgpack.decode(new Uint8Array(buffer));
