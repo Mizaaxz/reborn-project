@@ -1507,8 +1507,8 @@ export default class Game {
     this.spawnBounds -= addAmt;
   }
   genBallArena() {
-    let loc = new Vec2(14400 / 2, 14400 / 2);
-    let wallPos = 125;
+    let loc = new Vec2(14400 / 2, 14400 / 2 + 1000);
+    let wallPos = 0;
     let lastWallPos = 0;
     let wallCount = 0;
     let totalWalls = 10;
@@ -1572,12 +1572,7 @@ export default class Game {
     }
 
     wallGen.forEach((wall: any[]) => {
-      this.generateStructure(
-        "stone:normal",
-        wall[0],
-        wall[1] - (pos.topleft.y - pos.bottomleft.y) / 2,
-        90
-      );
+      this.generateStructure("stone:normal", wall[0], wall[1], 90);
     });
   }
 
