@@ -1572,7 +1572,12 @@ export default class Game {
     }
 
     wallGen.forEach((wall: any[]) => {
-      this.generateStructure("stone:normal", wall[0], wall[1] - (pos.topleft.y - pos.topright.y), 90);
+      this.generateStructure(
+        "stone:normal",
+        wall[0],
+        wall[1] - (pos.topleft.y - pos.topright.y) / 2,
+        90
+      );
     });
   }
 
