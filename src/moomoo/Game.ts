@@ -1596,10 +1596,15 @@ export default class Game {
     });
 
     let startPadPos = pos.topleft.add(125, 25, true);
-    let padGen = [[startPadPos, startPadPos]];
+    let padGen: [number, number][] = [];
     let pad = ItemType.SpawnPad;
+    let numPads = 10;
+    while (numPads > 0) {
+      startPadPos.add(getScale(pad) / 2, 0);
+      padGen.push([startPadPos.x, startPadPos.y]);
+    }
 
-    padGen.forEach((pd: any[]) => {
+    padGen.forEach((pd: number[]) => {
       this.state.gameObjects.push(
         new GameObject(
           this.getNextGameObjectID(),
