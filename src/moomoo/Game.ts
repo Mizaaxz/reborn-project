@@ -102,6 +102,7 @@ export default class Game {
    * Starts the server loop
    */
   public locked: string = "";
+  public spawnAnimalsInt: NodeJS.Timeout | undefined;
   start() {
     this.started = true;
     this.lastUpdate = Date.now();
@@ -111,7 +112,7 @@ export default class Game {
     this.spawnAnimals();
 
     setInterval(this.updateWindmills.bind(this), 1000);
-    setInterval(this.spawnAnimals.bind(this), 10000);
+    this.spawnAnimalsInt = setInterval(this.spawnAnimals.bind(this), 10000);
 
     process.nextTick(this.update);
   }
@@ -1576,6 +1577,10 @@ export default class Game {
         this.state.removeGameObject(o);
       });
     }
+    if (this.spawnAnimalsInt) clearInterval(this.spawnAnimalsInt);
+    this.state.animals.forEach((a) => {
+      a.die();
+    });
 
     wallGen.forEach((wall: any[]) => {
       this.generateStructure("stone:normal", wall[0], wall[1], 90);
