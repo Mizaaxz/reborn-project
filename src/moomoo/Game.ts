@@ -1654,9 +1654,7 @@ export default class Game {
       let players = playerTeams[letter];
       let tribe = this.state.addTribe(`Team ${letter.toUpperCase()}`, letter == "a" ? -65 : -66);
       if (!tribe) return;
-      players.forEach((plr) => {
-        if (typeof tribe !== "boolean") this.state.joinClan(plr, tribe);
-      });
+      tribe.membersSIDs = players.map((p) => p.id);
       this.state.updateClanPlayers(tribe);
     });
   }
