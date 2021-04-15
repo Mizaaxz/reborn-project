@@ -442,7 +442,7 @@ function checkAnimalAttack(player: Player, animals: Animal[]) {
   let hitAnimals: Animal[] = [];
 
   for (let hitAnimal of animals) {
-    if (pointCircle(getAttackLocation(player), hitAnimal.location, 25 * 2))
+    if (pointCircle(getAttackLocation(player), hitAnimal.location, hitAnimal.data.scale * 2))
       hitAnimals.push(hitAnimal);
   }
 
