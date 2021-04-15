@@ -1654,7 +1654,7 @@ export default class Game {
       }
     }
 
-    if (this.mode.includes(GameModes.randomroyale) && this.windmillTicks % 10 == 0)
+    if (this.mode.includes(GameModes.random) && this.windmillTicks % 10 == 0)
       this.randomizePlayers();
 
     let waitTickAmt = 5;
