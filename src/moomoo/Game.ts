@@ -1578,9 +1578,11 @@ export default class Game {
       });
     }
     if (this.spawnAnimalsInt) clearInterval(this.spawnAnimalsInt);
-    this.state.animals.forEach((a) => {
-      a.die();
-    });
+    while (this.state.animals.length) {
+      this.state.animals.forEach((a) => {
+        a.die();
+      });
+    }
 
     wallGen.forEach((wall: any[]) => {
       this.generateStructure("stone:normal", wall[0], wall[1], 90);
