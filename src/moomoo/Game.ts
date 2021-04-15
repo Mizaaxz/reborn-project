@@ -1506,6 +1506,75 @@ export default class Game {
     this.spikeAdvance += addAmt;
     this.spawnBounds -= addAmt;
   }
+  genBallArena() {
+    let loc = new Vec2(14400 / 2, 14400 / 2);
+    let wallPos = 125;
+    let lastWallPos = 0;
+    let wallCount = 0;
+    let totalWalls = 10;
+
+    let pos = {
+      topleft: new Vec2(0, 0),
+      topright: new Vec2(0, 0),
+      bottomleft: new Vec2(0, 0),
+      bottomright: new Vec2(0, 0),
+    };
+    let wallGen = [];
+
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos += 100;
+    }
+    pos.bottomright = new Vec2(loc.x + wallPos - 100, loc.y);
+
+    lastWallPos = wallPos;
+    wallPos = 0;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + lastWallPos, loc.y + wallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.topright = new Vec2(loc.x + lastWallPos, loc.y + wallPos + 100);
+
+    wallPos = -125;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.bottomleft = new Vec2(loc.x + wallPos + 100, loc.y);
+
+    lastWallPos = wallPos;
+    wallPos = 0;
+    wallCount = 0;
+    while (wallCount < totalWalls) {
+      let wallLoc = new Vec2(loc.x + lastWallPos, loc.y + wallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos -= 100;
+    }
+    pos.topleft = new Vec2(loc.x + lastWallPos, loc.y + wallPos + 100);
+
+    lastWallPos = wallPos;
+    wallPos = -totalWalls * 100 - 100;
+    wallCount = -3;
+    while (wallCount < totalWalls * 2) {
+      let wallLoc = new Vec2(loc.x + wallPos, loc.y + lastWallPos);
+      wallGen.push([wallLoc.x, wallLoc.y]);
+      wallCount++;
+      wallPos += 100;
+    }
+
+    wallGen.forEach((wall: any[]) => {
+      this.generateStructure("stone:normal", wall[0], wall[1] - (pos.topleft.y - pos.topright.y), 90);
+    });
+  }
 
   public windmillTicks = 0;
   public spikeAdvance = 0;
