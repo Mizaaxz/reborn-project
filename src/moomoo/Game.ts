@@ -1596,11 +1596,11 @@ export default class Game {
     });
 
     let startPadPos = pos.topleft.add(125, 40, true);
-    let padGen: [number, number][] = [];
+    let padGen: [number, number, number][] = [];
     let pad = ItemType.SpawnPad;
     let numPads = 9;
     while (numPads > 0) {
-      padGen.push([startPadPos.x, startPadPos.y]);
+      padGen.push([startPadPos.x, startPadPos.y, 65]);
       startPadPos.add(0, getScale(pad) * 2);
       numPads--;
     }
@@ -1608,7 +1608,7 @@ export default class Game {
     startPadPos = pos.topright.subtract(125, 0, true);
     startPadPos.add(0, 40);
     while (numPads > 0) {
-      padGen.push([startPadPos.x, startPadPos.y]);
+      padGen.push([startPadPos.x, startPadPos.y, 66]);
       startPadPos.add(0, getScale(pad) * 2);
       numPads--;
     }
@@ -1620,7 +1620,7 @@ export default class Game {
           new Vec2(pd[0], pd[1]),
           0,
           getScale(pad),
-          -1,
+          -pd[2],
           undefined,
           pad,
           0,
