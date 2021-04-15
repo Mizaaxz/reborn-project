@@ -1655,6 +1655,7 @@ export default class Game {
         p.selectedWeapon = Weapons.Sword;
         p.weaponMode = WeaponModes.NoSelect;
         p.invincible = true;
+        p.spdMult = 3.5;
         this.sendGameObjects(p);
         return p.id;
       });
