@@ -1646,9 +1646,11 @@ export default class Game {
     }
     let playerTeams: { [key: string]: Player[] } = { a: chunks[0], b: chunks[1] };
 
-    this.state.tribes.forEach((t) => {
-      this.state.removeTribe(this.state.tribes.indexOf(t));
-    });
+    while (this.state.tribes.length) {
+      this.state.tribes.forEach((t) => {
+        this.state.removeTribe(this.state.tribes.indexOf(t));
+      });
+    }
 
     Object.keys(playerTeams).forEach((letter) => {
       let players = playerTeams[letter];
