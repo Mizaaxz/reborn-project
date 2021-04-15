@@ -15,6 +15,7 @@ import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
 import animals from "../definitions/animals";
+import { GameModes } from "./GameMode";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -246,6 +247,12 @@ function tryMoveAnimal(
     if (collideAnimalGameObject(animal, gameObj)) {
       if (gameObj.isPlayerGameObject()) {
         if (gameObj.data == ItemType.Platform) animal.layer = 1;
+        if (
+          gameObj.data == ItemType.SpawnPad &&
+          animal.type == 8 &&
+          getGame()?.mode.includes(GameModes.moofieball)
+        ) {
+        }
 
         switch (gameObj.data) {
           case ItemType.PitTrap:

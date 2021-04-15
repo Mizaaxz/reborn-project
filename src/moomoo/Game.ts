@@ -1634,6 +1634,31 @@ export default class Game {
     this.state.players.forEach((p) => {
       this.sendGameObjects(p);
     });
+
+    let playersArray = this.state.players.sort(() => {
+      return 0.5 - Math.random();
+    });
+    let chunkLength = Math.max(playersArray.length / 2, 1);
+    let chunks = [];
+    for (let i = 0; i < 2; i++) {
+      if (chunkLength * (i + 1) <= playersArray.length)
+        chunks.push(playersArray.slice(chunkLength * i, chunkLength * (i + 1)));
+    }
+    let playerTeams: { [key: string]: Player[] } = { a: chunks[0], b: chunks[1] };
+
+    this.state.tribes.forEach((t) => {
+      this.state.removeTribe(this.state.tribes.indexOf(t));
+    });
+
+    Object.keys(playerTeams).forEach((letter) => {
+      let players = playerTeams[letter];
+      let tribe = this.state.addTribe(`Team ${letter.toUpperCase()}`, letter == "a" ? -65 : -66);
+      if (!tribe) return;
+      players.forEach((plr) => {
+        if (typeof tribe !== "boolean") this.state.joinClan(plr, tribe);
+      });
+      this.state.updateClanPlayers(tribe);
+    });
   }
 
   public windmillTicks = 0;
