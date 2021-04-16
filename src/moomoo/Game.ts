@@ -2087,7 +2087,7 @@ export default class Game {
             else Broadcast("Error: INVALID_WEAPON", client);
           } else {
             let item = client.player.items.filter((i) => i != undefined)[packet.data[0]];
-            if (!item) return;
+            if (!item && item !== 0) return;
             let itemCost = getItemCost(item);
             let costs = chunk(itemCost, 2);
 
