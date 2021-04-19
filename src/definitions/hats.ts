@@ -89,7 +89,7 @@ const hats = [
     scale: 120,
     longDesc: "",
     desc: "Have more control while in water.",
-    watrImm: true,
+    waterImm: true,
   },
   {
     id: 1,

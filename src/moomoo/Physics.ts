@@ -205,7 +205,7 @@ function tryMovePlayer(
     player.layer < 1 &&
     player.mode !== PlayerMode.spectator
   ) {
-    if (getHat(player.hatID)?.watrImm) {
+    if (getHat(player.hatID)?.waterImm) {
       xVel *= 0.75;
       yVel *= 0.75;
 
