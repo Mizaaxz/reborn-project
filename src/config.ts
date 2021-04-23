@@ -11,6 +11,8 @@ const config = {
   featuredYT: [
     { name: "Meow", link: "https://www.youtube.com/channel/UCWANi1TTqUP1ar4VTlOrqDA" },
     { name: "Riseking", link: "https://www.youtube.com/channel/UCe3BeaOhhFLYEWPq62Anaxw" },
+	{ name: "AppleTacoYT", link: "https://www.youtube.com/channel/UCXd0WfGLoHVyx82AKB4ZSHQ" },
+	{ name: "21st - Your Local Idiot", link: "https://www.youtube.com/channel/UCPtSORLvl44enwpHHXHpreQ"}
   ],
   gameObjectNearbyRadius: 1250,
   maxCPS: "25",
