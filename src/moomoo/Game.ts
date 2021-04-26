@@ -6,7 +6,7 @@ import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
 import bcrypt from "bcrypt";
 import db from "enhanced.db";
-import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg } from "./util";
+import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg, SkinColor } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
 import * as Physics from "./Physics";
@@ -1822,8 +1822,7 @@ export default class Game {
             newPlayer.name = newPlayer.client?.account
               ? newPlayer.client.account.username || "unknown"
               : "Guest";
-            //: filteredName.slice(0, 16).join("").trim() || "unknown";
-            newPlayer.skinColor = packet.data[0].skin;
+            newPlayer.skinColor = (packet.data[0].skin as SkinColor) || SkinColor.Light2;
             newPlayer.dead = false;
             newPlayer.health = 100;
 
