@@ -1822,7 +1822,8 @@ export default class Game {
             newPlayer.name = newPlayer.client?.account
               ? newPlayer.client.account.username || "unknown"
               : "Guest";
-            newPlayer.skinColor = (packet.data[0].skin as SkinColor) || SkinColor.Light2;
+            //newPlayer.skinColor = (packet.data[0].skin as SkinColor) || SkinColor.Light2;
+            newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;
 
