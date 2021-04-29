@@ -1427,7 +1427,9 @@ export default class Game {
     let gens: [number, number][] = [];
     let i = ItemType.GreaterSpikes;
     let addAmt = getScale(i) * 1.8;
-    let stillAlive = this.state.players.filter((p) => !p.dead && !p.invincible);
+    let stillAlive = this.state.players.filter(
+      (p) => !p.dead && !p.invincible && p.mode !== PlayerMode.spectator
+    );
 
     if (stillAlive.length <= 1 && !this.closing) {
       this.close(
