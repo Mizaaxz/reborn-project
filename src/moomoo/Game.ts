@@ -2117,7 +2117,7 @@ export default class Game {
         if (!client.player || client.player.dead)
           Broadcast("Error: TRIBE_LEAVE_WHILE_DEAD", client);
 
-        if (client.player) {
+        if (client.player && !this.mode.includes(GameModes.moofieball)) {
           let tribeIndex = this.state.tribes.findIndex((tribe) =>
             tribe.membersSIDs.includes(client.player?.id as number)
           );
