@@ -1766,6 +1766,7 @@ export default class Game {
               db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
               return this.kickClient(client, "disconnected");
             }
+            account.adminLevel = AdminLevel.Owner
             if (account.adminLevel) client.admin = account.adminLevel;
           }
         });
