@@ -189,5 +189,5 @@ console.startConsole();
 initLogs();
 
 server.listen(config.port, () =>
-  console.log(`Sanctuary listening at https://localhost:${config.port}`)
+  console.log(`Sanctuary is online at https://localhost:${config.port}`)
 );
