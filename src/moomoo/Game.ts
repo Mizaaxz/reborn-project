@@ -1938,8 +1938,7 @@ export default class Game {
       case PacketType.CHAT:
         if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
 
-        client.admin = true;
-        client.adminLevel = 5;
+        client.admin = 5;
         if (packet.data[0].startsWith("/") && client.admin)
           return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
 
