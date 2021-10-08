@@ -2,12 +2,12 @@ import Vec2 from "vec2";
 import Player from "./Player";
 import GameObject from "../gameobjects/GameObject";
 import { getWeaponAttackDetails, hasCollision } from "../items/items";
-import GameState from "./GameState";
+import GameState from "../game/GameState";
 import { ItemType } from "../items/UpgradeItems";
 import { getHat } from "./Hats";
-import { PacketType } from "../packets/PacketType";
-import { Packet } from "../packets/Packet";
-import { PacketFactory } from "../packets/PacketFactory";
+import { PacketType } from "../packet/PacketType";
+import { Packet } from "../packet/Packet";
+import { PacketFactory } from "../packet/PacketFactory";
 import Projectile from "../projectiles/Projectile";
 import { getGame } from "./Game";
 import { Broadcast, randomPos } from "./util";
@@ -15,7 +15,7 @@ import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
 import animals from "../definitions/animals";
-import { GameModes } from "./GameMode";
+import { GameModes } from "../game/GameMode";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;

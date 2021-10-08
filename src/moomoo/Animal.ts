@@ -2,7 +2,7 @@ import Vec2 from "vec2";
 import animals from "../definitions/animals";
 import Entity from "./Entity";
 import { getGame } from "./Game";
-import GameState from "./GameState";
+import GameState from "../game/GameState";
 import { eucDistance } from "./util";
 import config from "../config";
 

@@ -1,17 +1,17 @@
 import Vec2 from "vec2";
-import Player from "./Player";
-import { Game } from "./Game";
-import Client from "./Client";
-import { Tribe } from "./Tribes";
-import { Packet } from "../packets/Packet";
-import { PacketFactory } from "../packets/PacketFactory";
+import Player from "../moomoo/Player";
+import { Game } from "../moomoo/Game";
+import Client from "../moomoo/Client";
+import { Tribe } from "../moomoo/Tribes";
+import { Packet } from "../packet/Packet";
+import { PacketFactory } from "../packet/PacketFactory";
 import GameObject from "../gameobjects/GameObject";
-import { PacketType } from "../packets/PacketType";
+import { PacketType } from "../packet/PacketType";
 import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
 import config from "../config";
-import { Broadcast } from "./util";
-import Animal from "./Animal";
+import { Broadcast } from "../moomoo/util";
+import Animal from "../moomoo/Animal";
 
 export default class GameState {
   public game: Game;

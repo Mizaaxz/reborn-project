@@ -1,13 +1,13 @@
 import Entity from "./Entity";
 import { SkinColor, eucDistance } from "./util";
 import Vec2 from "vec2";
-import GameState from "./GameState";
+import GameState from "../game/GameState";
 import Game from "./Game";
 import { WeaponVariant, WeaponVariants } from "./Weapons";
 import Client from "./Client";
-import { PacketFactory } from "../packets/PacketFactory";
-import { Packet } from "../packets/Packet";
-import { PacketType } from "../packets/PacketType";
+import { PacketFactory } from "../packet/PacketFactory";
+import { Packet } from "../packet/Packet";
+import { PacketType } from "../packet/PacketType";
 import {
   PrimaryWeapons,
   SecondaryWeapons,

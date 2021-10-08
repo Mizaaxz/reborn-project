@@ -3,7 +3,7 @@ import items from "../definitions/items";
 import { ItemType } from "./UpgradeItems";
 import { WeaponVariant, WeaponVariants } from "../moomoo/Weapons";
 import { getGame } from "../moomoo/Game";
-import { GameModes } from "../moomoo/GameMode";
+import { GameModes } from "../game/GameMode";
 
 enum PrimaryWeapons {
   ToolHammer = 0,

@@ -8,13 +8,13 @@ import bcrypt from "bcrypt";
 import db from "enhanced.db";
 import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg, SkinColor } from "./util";
 import msgpack from "msgpack-lite";
-import GameState from "./GameState";
+import GameState from "../game/GameState";
 import * as Physics from "./Physics";
 import * as consoleTS from "../console";
-import { Packet, Side } from "../packets/Packet";
+import { Packet, Side } from "../packet/Packet";
 import GameObject from "../gameobjects/GameObject";
-import { PacketType } from "../packets/PacketType";
-import { PacketFactory } from "../packets/PacketFactory";
+import { PacketType } from "../packet/PacketType";
+import { PacketFactory } from "../packet/PacketFactory";
 import {
   getWeaponDamage,
   getWeaponAttackDetails,
@@ -55,7 +55,7 @@ import {
 } from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
-import { GameModes } from "./GameMode";
+import { GameModes } from "../game/GameMode";
 import { readdirSync } from "fs";
 import * as logger from "../log";
 import Animal from "./Animal";
@@ -68,6 +68,7 @@ import weapons from "../definitions/weapons";
 import hats from "../definitions/hats";
 import accessories from "../definitions/accessories";
 import { PlayerMode } from "./PlayerMode";
+import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1739,39 +1740,6 @@ export default class Game {
     let packetFactory = PacketFactory.getInstance();
 
     switch (packet.type) {
-      case PacketType.AUTH:
-        /*
-      im not kicking because this is to stop brute force and lagging the server
-      and if they knew that it would just ignore all but the first auth attempt
-      it would make bruteforce and lagging the server easier
-    */
-        if (client.triedAuth || !packet.data[0]) return;
-        if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
-          return this.kickClient(client, "disconnected");
-        client.triedAuth = true;
-        let account = db.get(`account_${packet.data[0].name.replace(/ /g, "+")}`) as Account;
-        if (!account) return;
-        bcrypt.compare(packet.data[0].password, account.password || "", (_: any, match: any) => {
-          if (match === true) {
-            client.accountName = account.username || "";
-            client.account = account;
-            client.loggedIn = true;
-            if (typeof account.admin == "boolean") {
-              account.adminLevel = 0;
-              delete account.admin;
-              db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
-              return this.kickClient(client, "Migrated to new admin system. Please reload.");
-            }
-            if (account.balance == undefined) {
-              account.balance = 0;
-              db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
-              return this.kickClient(client, "disconnected");
-            }
-
-            if (account.adminLevel) client.admin = account.adminLevel;
-          }
-        });
-        break;
       case PacketType.SPAWN:
         if (client.player && !client.player.dead) this.kickClient(client, "disconnected");
 
@@ -2381,7 +2349,18 @@ export default class Game {
           }
         }
         break;
+      default:
+        this.firePacketHandler(packet.type, client, packet);
     }
+  }
+
+  public packetHandlers: [PacketHandler, PacketHandlerCallback][] = [];
+  public addPacketHandler(handler: PacketHandler, cb: PacketHandlerCallback) {
+    this.packetHandlers.push([handler, cb]);
+  }
+  public firePacketHandler(type: PacketType, client: Client, packet: Packet) {
+    let handler = this.packetHandlers.find((p) => p[0].type == type);
+    if (handler) handler[0].fire(client, packet, handler[1]);
   }
 }
 
