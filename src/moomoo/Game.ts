@@ -315,7 +315,7 @@ export default class Game {
 
     let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
 
-    if (this.clients.filter((client) => client.ip === ip).length > 2) {
+    /*if (this.clients.filter((client) => client.ip === ip).length > 2) {
       let clientConnectionInfractions = this.clientConnectionInfractions[client.ip] || 0;
       this.kickClient(client, "Only 2 connections allowed!");
       setTimeout(function () {
@@ -326,7 +326,7 @@ export default class Game {
 
       //if (clientConnectionInfractions > 5) this.banIP(client.ip);
       return;
-    }
+    }*/
 
     socket.addListener("close", () => {
       if (client.player) {
