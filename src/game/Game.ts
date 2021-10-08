@@ -215,6 +215,50 @@ export default class Game {
         this.state.gameObjects.push(newGameObject);
       }
     }
+
+    this.generateBossArena();
+  }
+
+  public bossLoc = new Vec2(3333, 13155);
+  generateBossArena() {
+    let loc = this.bossLoc;
+    let locsize = 777;
+    let beginLoc = loc.subtract(locsize, locsize, true);
+    let endLoc = loc.add(locsize, locsize, true);
+    let locpad = 250;
+
+    this.state.gameObjects
+      .filter(
+        (o) =>
+          o.location.x < endLoc.x + locpad &&
+          o.location.x > beginLoc.x - locpad &&
+          o.location.y < endLoc.y + locpad &&
+          o.location.y > beginLoc.y - locpad
+      )
+      .map((g) => this.state.removeGameObject(g));
+
+    let game = this;
+    function genStone(x: number, y: number) {
+      game.generateStructure("stone", loc.x + x, loc.y + y, 115);
+    }
+
+    this.generateStructure("w", beginLoc.x - locpad, beginLoc.y - locpad, 15);
+    this.generateStructure("w", endLoc.x + locpad, endLoc.y + locpad, 15);
+
+    let rockAngles: number[] = [];
+    let rockBlacklist: number[] = [];
+    for (let i = 0; i <= 15; i++) {
+      rockBlacklist.push(i);
+    }
+    for (let i = 350; i <= 365; i++) {
+      rockBlacklist.push(i);
+    }
+    for (let i = 0; i <= 365; i += 11) {
+      if (!rockBlacklist.includes(i)) rockAngles.push(i);
+    }
+    rockAngles.forEach((r) => {
+      genStone(Math.cos((r * Math.PI) / 180) * locsize, Math.sin((r * Math.PI) / 180) * locsize);
+    });
   }
 
   generateStructure(objType: string, x: number, y: number, objSize?: number | undefined) {
