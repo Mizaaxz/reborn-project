@@ -323,7 +323,7 @@ export default class Game {
       clientConnectionInfractions++;
       this.clientConnectionInfractions[client.ip] = clientConnectionInfractions;
 
-      if (clientConnectionInfractions > 5) this.banIP(client.ip);
+      //if (clientConnectionInfractions > 5) this.banIP(client.ip);
       return;
     }
 
