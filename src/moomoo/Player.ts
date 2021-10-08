@@ -550,10 +550,12 @@ export default class Player extends Entity {
     return gameObjects;
   }
 
+  public lastDeath: number = 0;
   die() {
     let packetFactory = PacketFactory.getInstance();
 
     this.dead = true;
+    this.lastDeath = Date.now();
     this.kills = 0;
     this.weapon = 0;
     this.secondaryWeapon = -1;

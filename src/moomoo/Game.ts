@@ -1787,6 +1787,9 @@ export default class Game {
             let newPlayer = (client.player =
               player || this.state.addPlayer(this.genSID(), client.id, client, this));
 
+            if (newPlayer.client && newPlayer.lastDeath && Date.now() - newPlayer.lastDeath < 4000)
+              return this.kickClient(newPlayer.client, "Trying to evade the ad.");
+
             if (
               packet.data[0].pwd !== this.locked &&
               newPlayer.client &&
