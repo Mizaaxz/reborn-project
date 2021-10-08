@@ -69,6 +69,7 @@ import hats from "../definitions/hats";
 import accessories from "../definitions/accessories";
 import { PlayerMode } from "./PlayerMode";
 import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
+import initPacketHandlers from "../packethandlers";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -114,6 +115,8 @@ export default class Game {
 
     setInterval(this.updateWindmills.bind(this), 1000);
     this.spawnAnimalsInt = setInterval(this.spawnAnimals.bind(this), 10000);
+
+    initPacketHandlers(this);
 
     process.nextTick(this.update);
   }
@@ -2351,6 +2354,7 @@ export default class Game {
         break;
       default:
         this.firePacketHandler(packet.type, client, packet);
+        break;
     }
   }
 
