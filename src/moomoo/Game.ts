@@ -1,16 +1,12 @@
-import lowdb from "lowdb";
 import WebSocket from "ws";
 import Client from "./Client";
 import Player from "./Player";
-import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
-import bcrypt from "bcrypt";
 import db from "enhanced.db";
-import { randomPos, chunk, stableSort, Broadcast, deg2rad, rad2deg, SkinColor } from "./util";
+import { randomPos, chunk, stableSort, Broadcast,  } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "../game/GameState";
 import * as Physics from "./Physics";
-import * as consoleTS from "../console";
 import { Packet, Side } from "../packet/Packet";
 import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packet/PacketType";
@@ -45,25 +41,20 @@ import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
 import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
-import { WeaponVariant, WeaponVariants } from "./Weapons";
+import {  WeaponVariants } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import {
   getProjectileRange,
   getProjectileSpeed,
-  Layer,
-  ProjectileType,
 } from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "../game/GameMode";
 import { readdirSync } from "fs";
-import * as logger from "../log";
 import Animal from "./Animal";
 import animals from "../definitions/animals";
 import items from "../definitions/items";
-import { Account } from "./Account";
 import ms from "ms";
-import { AdminLevel } from "./Admin";
 import weapons from "../definitions/weapons";
 import hats from "../definitions/hats";
 import accessories from "../definitions/accessories";
@@ -72,7 +63,6 @@ import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 import initPacketHandlers from "../packethandlers";
 
 let currentGame: Game | null = null;
-let badWords = config.badWords;
 
 const DEFAULT_MAX_CPS = 25;
 
@@ -85,6 +75,7 @@ export default class Game {
   public lastTick: number = 0;
   public started: boolean = false;
   public mode: GameModes[] = [GameModes.normal];
+  public MAX_CPS = MAX_CPS;
   lastUpdate: number = 0;
   physTimer: NanoTimer | undefined;
 
@@ -1743,80 +1734,6 @@ export default class Game {
     let packetFactory = PacketFactory.getInstance();
 
     switch (packet.type) {
-      case PacketType.ATTACK:
-        if (client.player) {
-          if (packet.data[0]) {
-            if (Date.now() - client.lastAttackTime < 1000 / MAX_CPS) {
-              client.lastAttackTime = Date.now();
-              return;
-            }
-
-            client.lastAttackTime = Date.now();
-
-            this.normalAttack(client.player, packet.data[1]);
-          } else {
-            client.player.isAttacking = false;
-          }
-        } else {
-          Broadcast("Error: ATTACKING_WHILE_DEAD", client);
-        }
-        break;
-      case PacketType.PLAYER_MOVE:
-        if (packet.data[0] === null) {
-          if (client.player) client.player.stopMove();
-        } else {
-          if (client.player) client.player.move(packet.data[0]);
-        }
-        break;
-      case PacketType.WINDOW_FOCUS:
-        if (client.player) client.player.stopMove();
-        break;
-      case PacketType.SET_ANGLE:
-        if (client.player) client.player.angle = packet.data[0];
-        break;
-      case PacketType.CHAT:
-        if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
-
-        if (packet.data[0].startsWith("/") && client.admin)
-          return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
-
-        packet.data[0] = String([...packet.data[0]].slice(0, 50).join("").trim());
-        if (!packet.data[0]) return;
-
-        logger.log(
-          `Chat message by "${client.player?.name}" (ID: ${client.player?.id}): ${packet.data[0]}`
-        );
-
-        if (
-          ["!crash", "lcrash", "icrash", "crash", ".crash", "cr", "!cr", ".cr"].includes(
-            packet.data[0].toLowerCase()
-          )
-        )
-          return this.kickClient(client, 'crashed <span style="font-size:16px">xd</span>');
-
-        if (packet.data[0].toLowerCase().includes("kill me")) return client.player?.die();
-
-        for (let badWord of badWords) {
-          if (packet.data[0].includes(badWord))
-            packet.data[0] = packet.data[0].replace(
-              new RegExp(`\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`, "g"),
-              "M" + "o".repeat(badWord.length - 1)
-            );
-        }
-
-        let chatPacket = packetFactory.serializePacket(
-          new Packet(PacketType.CHAT, [client.player?.id, packet.data[0]])
-        );
-
-        client.socket?.send(chatPacket);
-
-        if (client.player) {
-          for (let player of client.player.getNearbyPlayers(this.state)) {
-            player.client?.socket.send(chatPacket);
-          }
-        }
-
-        break;
       case PacketType.CLAN_CREATE:
         if (!client.player || client.player.dead)
           Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
