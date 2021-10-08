@@ -20,6 +20,7 @@ import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
 import { Account } from "./moomoo/Account";
 import { initLogs } from "./log";
+import { Socket } from "net";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -174,10 +175,11 @@ let wss = new WSServer({ noServer: true, maxPayload: 1024, backlog: 5 });
 startServer(wss);
 
 server.on("upgrade", function upgrade(request, socket, head) {
+  if (!request.url) return;
   const pathname = url.parse(request.url).pathname?.replace(/\/$/, "");
 
   if (pathname === "/moomoo") {
-    wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.handleUpgrade(request, socket as Socket, head, function done(ws) {
       wss.emit("connection", ws, request);
     });
   } else {
