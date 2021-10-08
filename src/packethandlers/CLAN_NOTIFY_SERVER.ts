@@ -1,4 +1,4 @@
-import { getGame } from "../moomoo/Game";
+import { getGame } from "../game/Game";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";

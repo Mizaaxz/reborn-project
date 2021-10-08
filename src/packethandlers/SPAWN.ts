@@ -2,7 +2,7 @@ import config from "../config";
 import { GameModes } from "../game/GameMode";
 import { getGroupID, WeaponModes } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
-import { getGame } from "../moomoo/Game";
+import { getGame } from "../game/Game";
 import { PlayerMode } from "../moomoo/PlayerMode";
 import { Broadcast, randomPos, SkinColor } from "../moomoo/util";
 import { Packet } from "../packet/Packet";

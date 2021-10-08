@@ -1,6 +1,6 @@
 import Vec2 from "vec2";
 import Player from "../moomoo/Player";
-import { Game } from "../moomoo/Game";
+import { Game } from "./Game";
 import Client from "../moomoo/Client";
 import { Tribe } from "../moomoo/Tribes";
 import { Packet } from "../packet/Packet";

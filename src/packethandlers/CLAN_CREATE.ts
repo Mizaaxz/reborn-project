@@ -1,5 +1,5 @@
 import { GameModes } from "../game/GameMode";
-import { getGame } from "../moomoo/Game";
+import { getGame } from "../game/Game";
 import { Broadcast } from "../moomoo/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";

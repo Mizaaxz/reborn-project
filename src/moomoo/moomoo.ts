@@ -1,5 +1,5 @@
 import { Server as WSServer, default as WebSocket } from "ws";
-import Game from "./Game";
+import Game from "../game/Game";
 import { IncomingMessage } from "http";
 import db from "enhanced.db";
 import msgpack from "msgpack-lite";

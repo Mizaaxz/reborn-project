@@ -1,5 +1,5 @@
 import { AdminLevel } from "./moomoo/Admin";
-import { getGame } from "./moomoo/Game";
+import { getGame } from "./game/Game";
 import Player from "./moomoo/Player";
 
 interface cmdIndex {

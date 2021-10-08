@@ -1,5 +1,5 @@
 import fs from "fs";
-import Game from "../moomoo/Game";
+import Game from "../game/Game";
 
 export default function initPacketHandlers(game: Game) {
   let dir = __dirname + "/";

@@ -1,5 +1,5 @@
 import { getItemCost, WeaponModes } from "../items/items";
-import { getGame } from "../moomoo/Game";
+import { getGame } from "../game/Game";
 import { Broadcast, chunk } from "../moomoo/util";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";

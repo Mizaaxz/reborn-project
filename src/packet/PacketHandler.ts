@@ -2,7 +2,7 @@ import { PacketType } from "./PacketType";
 import Client from "../moomoo/Client";
 import { Packet } from "./Packet";
 import { PacketFactory } from "./PacketFactory";
-import Game, { getGame } from "../moomoo/Game";
+import Game, { getGame } from "../game/Game";
 
 class PacketHandler {
   constructor(public type: PacketType) {}

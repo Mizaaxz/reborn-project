@@ -2,7 +2,7 @@ import Entity from "./Entity";
 import { SkinColor, eucDistance } from "./util";
 import Vec2 from "vec2";
 import GameState from "../game/GameState";
-import Game from "./Game";
+import Game from "../game/Game";
 import { WeaponVariant, WeaponVariants } from "./Weapons";
 import Client from "./Client";
 import { PacketFactory } from "../packet/PacketFactory";

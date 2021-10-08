@@ -9,7 +9,7 @@ import { PacketType } from "../packet/PacketType";
 import { Packet } from "../packet/Packet";
 import { PacketFactory } from "../packet/PacketFactory";
 import Projectile from "../projectiles/Projectile";
-import { getGame } from "./Game";
+import { getGame } from "../game/Game";
 import { Broadcast, randomPos } from "./util";
 import config from "../config";
 import Animal from "./Animal";

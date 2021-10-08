@@ -6,7 +6,7 @@ import { Packet } from "../packet/Packet";
 import { PacketFactory } from "../packet/PacketFactory";
 import { PacketType } from "../packet/PacketType";
 import Client from "./Client";
-import { getGame } from "./Game";
+import { getGame } from "../game/Game";
 import config from "../config";
 
 enum SkinColor {
