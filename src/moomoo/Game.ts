@@ -3,7 +3,7 @@ import Client from "./Client";
 import Player from "./Player";
 import NanoTimer from "nanotimer";
 import db from "enhanced.db";
-import { randomPos, chunk, stableSort, Broadcast,  } from "./util";
+import { randomPos, chunk, stableSort, Broadcast } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "../game/GameState";
 import * as Physics from "./Physics";
@@ -41,12 +41,9 @@ import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
 import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
-import {  WeaponVariants } from "./Weapons";
+import { WeaponVariants } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
-import {
-  getProjectileRange,
-  getProjectileSpeed,
-} from "../projectiles/projectiles";
+import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "../game/GameMode";
@@ -1734,162 +1731,6 @@ export default class Game {
     let packetFactory = PacketFactory.getInstance();
 
     switch (packet.type) {
-      case PacketType.CLAN_CREATE:
-        if (!client.player || client.player.dead)
-          Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
-        if (this.mode.includes(GameModes.royale)) return;
-
-        if (client.player) {
-          let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
-          if (!tribeName) return;
-          if (tribeName.toLowerCase().includes("cum") && tribeName.toLowerCase().includes("alex"))
-            return this.kickClient(client, "disconnected");
-
-          if (client.player.nextTribeCreate > Date.now())
-            return this.kickClient(client, "disconnected");
-          client.player.nextTribeCreate = Date.now() + 3000;
-          let tribe = this.state.addTribe(tribeName, client.player.id);
-
-          if (tribe) {
-            client.player.clanName = tribe.name;
-            client.player.isClanLeader = true;
-            client.socket?.send(
-              packetFactory.serializePacket(
-                new Packet(PacketType.PLAYER_SET_CLAN, [tribe.name, true])
-              )
-            );
-
-            this.state.updateClanPlayers(tribe);
-          }
-        }
-        break;
-      case PacketType.CLAN_REQ_JOIN:
-        if (!client.player || client.player.dead) Broadcast("Error: JOIN_TRIBE_WHILE_DEAD", client);
-
-        if (client.player && client.player.clanName === null) {
-          let tribe = this.state.tribes.find((tribe) => tribe.name === packet.data[0]);
-          let ownerClient = this.state.players.find(
-            (player) => player.id === tribe?.ownerSID
-          )?.client;
-
-          if (tribe && !ownerClient?.tribeJoinQueue.includes(client.player)) {
-            ownerClient?.tribeJoinQueue.push(client.player);
-            ownerClient?.socket.send(
-              packetFactory.serializePacket(
-                new Packet(PacketType.JOIN_REQUEST, [client.player.id, client.player.name])
-              )
-            );
-          }
-        } else {
-          Broadcast("Error: ALREADY_IN_TRIBE", client);
-        }
-        break;
-      case PacketType.CLAN_ACC_JOIN:
-        if (!client.player || client.player.dead) Broadcast("Error: ADD_MEMBER_WHILE_DEAD", client);
-
-        if (client.tribeJoinQueue.length && client.player && packet.data[1]) {
-          let tribe = this.state.tribes.find((tribe) => tribe.ownerSID === client.player?.id);
-          let player = client.tribeJoinQueue[0];
-
-          if (tribe && player.clanName === null) {
-            player.clanName = tribe.name;
-
-            this.state.joinClan(player, tribe);
-
-            // for pit traps to appear
-            this.sendGameObjects(player);
-          }
-        }
-
-        client.tribeJoinQueue.splice(0, 1);
-        break;
-      case PacketType.AUTO_ATK:
-        if (client.player)
-          if (packet.data[0] == 1) client.player.autoAttackOn = !client.player.autoAttackOn;
-        break;
-      case PacketType.CLAN_NOTIFY_SERVER:
-        if (client.player && client.player.clanName) {
-          if (Date.now() - client.player.lastPing > 2200) {
-            let tribe = this.state.tribes.find((tribe) => tribe.name === client.player?.clanName);
-
-            if (tribe) {
-              for (let memberSID of tribe.membersSIDs) {
-                this.state.players
-                  .find((player) => player.id == memberSID)
-                  ?.client?.socket.send(
-                    packetFactory.serializePacket(
-                      new Packet(PacketType.CLAN_NOTIFY_CLIENT, [
-                        client.player.location.x,
-                        client.player.location.y,
-                      ])
-                    )
-                  );
-              }
-
-              client.player.lastPing = Date.now();
-            }
-          }
-        }
-        break;
-      case PacketType.SELECT_ITEM:
-        if (client.player && client.player.weaponMode !== WeaponModes.NoSelect) {
-          let isWeapon = packet.data[1];
-
-          if (isWeapon) {
-            client.player.buildItem = -1;
-            client.player.weaponMode = WeaponModes.None;
-
-            if (client.player.weapon == packet.data[0])
-              client.player.selectedWeapon = client.player.weapon;
-            else if (client.player.secondaryWeapon == packet.data[0])
-              client.player.selectedWeapon = client.player.secondaryWeapon;
-            else Broadcast("Error: INVALID_WEAPON", client);
-          } else {
-            let item = client.player.items.filter((i) => i != undefined)[packet.data[0]];
-            if (!item && item !== 0) return;
-            let itemCost = getItemCost(item);
-            let costs = chunk(itemCost, 2);
-
-            for (let cost of costs) {
-              switch (cost[0]) {
-                case "food":
-                  if (client.player.food < cost[1]) return;
-                  break;
-                case "wood":
-                  if (client.player.wood < cost[1]) return;
-                  break;
-                case "stone":
-                  if (client.player.stone < cost[1]) return;
-                  break;
-              }
-            }
-
-            if (client.player.buildItem == item) {
-              client.player.buildItem = -1;
-            } else {
-              client.player.buildItem = item;
-            }
-          }
-        }
-        break;
-      case PacketType.LEAVE_CLAN:
-        if (!client.player || client.player.dead)
-          Broadcast("Error: TRIBE_LEAVE_WHILE_DEAD", client);
-
-        if (client.player && !this.mode.includes(GameModes.moofieball)) {
-          let tribeIndex = this.state.tribes.findIndex((tribe) =>
-            tribe.membersSIDs.includes(client.player?.id as number)
-          );
-          let tribe = this.state.tribes[tribeIndex];
-
-          if (tribe && tribe.ownerSID == client.player.id) {
-            this.state.removeTribe(tribeIndex);
-            client.tribeJoinQueue = [];
-          } else {
-            this.state.leaveClan(client.player, tribeIndex);
-          }
-        }
-        break;
       case PacketType.BUY_AND_EQUIP:
         if (!client.player || client.player.dead) Broadcast("Error: EQUIP_WHEN_DEAD", client);
         if (client.player?.weaponMode == WeaponModes.NoSelect) return;
