@@ -7,3 +7,4 @@ data.json
 token
 package-lock.json
 enhanced.sqlite
+PORT
