@@ -39,6 +39,7 @@ import {
   getScale,
   getGameObjHealth,
   getGameObjDamage,
+  SecondaryWeapons,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -1766,7 +1767,7 @@ export default class Game {
               db.set(`account_${packet.data[0].name.replace(/ /g, "+")}`, account);
               return this.kickClient(client, "disconnected");
             }
-            
+
             if (account.adminLevel) client.admin = account.adminLevel;
           }
         });
@@ -2012,8 +2013,9 @@ export default class Game {
 
         if (client.player && client.player.clanName === null) {
           let tribe = this.state.tribes.find((tribe) => tribe.name === packet.data[0]);
-          let ownerClient = this.state.players.find((player) => player.id === tribe?.ownerSID)
-            ?.client;
+          let ownerClient = this.state.players.find(
+            (player) => player.id === tribe?.ownerSID
+          )?.client;
 
           if (tribe && !ownerClient?.tribeJoinQueue.includes(client.player)) {
             ownerClient?.tribeJoinQueue.push(client.player);
@@ -2317,7 +2319,7 @@ export default class Game {
             )
           );
 
-          let newWeapons = [client.player.weapon];
+          let newWeapons: number[] = [client.player.weapon];
 
           if (client.player.secondaryWeapon != -1) newWeapons.push(client.player.secondaryWeapon);
 

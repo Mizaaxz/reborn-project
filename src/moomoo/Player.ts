@@ -65,7 +65,7 @@ export default class Player extends Entity {
   public spikeHit = 0;
 
   public weapon: PrimaryWeapons = 0;
-  public secondaryWeapon: SecondaryWeapons = -1;
+  public secondaryWeapon: SecondaryWeapons | -1 = -1;
   public selectedWeapon: Weapons = 0;
   public weaponMode: WeaponModes = 0;
 
@@ -81,7 +81,7 @@ export default class Player extends Entity {
   }
 
   public set primaryWeaponExp(value) {
-    ((Object.keys(WeaponVariants) as unknown[]) as WeaponVariant[]).forEach((v) => {
+    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach((v) => {
       let va = WeaponVariants[v];
       if (value >= va.xp) this.primaryWeaponVariant = v;
     });
@@ -90,7 +90,7 @@ export default class Player extends Entity {
   }
 
   public set secondaryWeaponExp(value) {
-    ((Object.keys(WeaponVariants) as unknown[]) as WeaponVariant[]).forEach((v) => {
+    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach((v) => {
       let va = WeaponVariants[v];
       if (value >= va.xp) this.secondaryWeaponVariant = v;
     });
