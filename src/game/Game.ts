@@ -93,11 +93,12 @@ export default class Game {
    */
   public locked: string = "";
   public spawnAnimalsInt: NodeJS.Timeout | undefined;
+  public physDelay: number = 33;
   start() {
     this.started = true;
     this.lastUpdate = Date.now();
     this.physTimer = new NanoTimer();
-    this.physTimer.setInterval(this.physUpdate.bind(this), "", "66m");
+    this.physTimer.setInterval(this.physUpdate.bind(this), "", `${this.physDelay}m`);
     this.generateStructures();
     this.spawnAnimals();
 
@@ -106,7 +107,7 @@ export default class Game {
 
     initPacketHandlers(this);
 
-    process.nextTick(this.update);
+    this.physTimer.setInterval(this.update.bind(this), "", "5m");
   }
   public closing: NodeJS.Timeout | undefined;
   close(reason: string = "Server Closed", doneMax: number = 10) {
@@ -944,7 +945,7 @@ export default class Game {
       });
 
     this.state.animals.forEach((animal) => {
-      Physics.moveAnimal(animal, 33, this.state);
+      Physics.moveAnimal(animal, this.physDelay, this.state);
 
       if (Date.now() - animal.lastDot >= 1000) {
         animal.damageOverTime();
@@ -959,7 +960,7 @@ export default class Game {
     this.state.players.forEach((player) => {
       if (player.dead) return;
 
-      Physics.movePlayer(player, 33, this.state);
+      Physics.movePlayer(player, this.physDelay, this.state);
 
       if (Date.now() - player.lastDot >= 1000) {
         player.damageOverTime();
