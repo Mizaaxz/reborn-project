@@ -10,5 +10,6 @@ getGame()?.addPacketHandler(
     } else {
       if (client.player) client.player.move(packet.data[0]);
     }
+    game.physUpdate();
   }
 );
