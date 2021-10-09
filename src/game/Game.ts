@@ -107,7 +107,7 @@ export default class Game {
 
     initPacketHandlers(this);
 
-    this.physTimer.setInterval(this.update.bind(this), "", "5m");
+    this.physTimer.setInterval(this.update.bind(this), "", "3m");
   }
   public closing: NodeJS.Timeout | undefined;
   close(reason: string = "Server Closed", doneMax: number = 10) {
