@@ -19,6 +19,7 @@ import * as logger from "./log";
 import { Account } from "./moomoo/Account";
 import { AdminLevel } from "./moomoo/Admin";
 import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
+import readline from "readline";
 
 let command = "";
 let lastMessage = "";
@@ -1030,13 +1031,11 @@ function error(text: string) {
   console.error(text);
 }
 
-let specialChars = ["\b", "\n", "\r"];
-
 function runCommand(command: string, source?: Player) {
   try {
     let err = GetCommand(command).execute(command, source);
     if (err && source?.client) Broadcast(err, source.client);
-    console.log(`Ran "${command}" from ${source?.name} (${source?.id}).`);
+    console.log(`Ran "${command}" from ${source ? `${source.name} (${source.id})` : "CONSOLE"}.`);
     logger.log(
       `Player "${source?.name || "CONSOLE"}" (ID: ${source?.id || 0}) ran command "${command}".`
     );
@@ -1048,46 +1047,30 @@ function runCommand(command: string, source?: Player) {
 }
 
 function startConsole() {
-  if (!process.stdin.setRawMode) return;
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-  process.stdin.setRawMode(true);
-  process.stdin.resume();
-  process.stdin.setEncoding("utf8");
-
-  process.stdin.on("data", (key) => {
-    let char = key.toString("utf8");
-
-    if (char === "\u0003") {
-      logger.log("Stopped Server.");
-      setTimeout(function () {
+  function consoleLoop() {
+    rl.question("> ", (command) => {
+      if (command == "exit") {
+        console.log("Closing...");
         process.exit();
-      }, 20);
-    }
+      }
 
-    if (!specialChars.includes(char) && char.length === 1) {
-      command += char;
-    }
+      if (command.startsWith("/")) command = command.substring(1);
 
-    if ((char === "\b" || char === "\u007F") && command.length > 0) {
-      command = command.substr(0, command.length - 1);
-    } else if (char === "\x0D") {
       if (!runCommand(command)) {
         if (!runCommand(command)) {
           error("Invalid command.");
         }
       }
 
-      command = "";
-    }
-
-    let commandParts = command.split(" ");
-    let coloredCommand =
-      chalk.yellow(commandParts[0]) +
-      (commandParts.length > 1 ? " " : "") +
-      commandParts.slice(1).join(" ");
-
-    logMethod("> " + coloredCommand);
-  });
+      consoleLoop();
+    });
+  }
+  consoleLoop();
 }
 
 export { startConsole, log, runCommand };
