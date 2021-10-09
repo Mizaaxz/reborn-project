@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node --max_old_space_size=4096 lib/server.js",
-    "build": "tsc -b tsconfig.json"
+    "build": "tsc -b tsconfig.json",
+    "pm2": "npx pm2 start start.sh --no-daemon",
+    "gconf": "git config --global credential.helper store"
   },
   "keywords": [],
   "author": "Picoseconds",
