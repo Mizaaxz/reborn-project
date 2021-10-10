@@ -32,6 +32,7 @@ export default class Animal extends Entity {
   public padHeal = 0;
   public spikeHit = 0;
   public layer = 0;
+  public size = 30;
   public inTrap = false;
 
   constructor(sid: number, location: Vec2, type: number, name: string) {
@@ -40,7 +41,8 @@ export default class Animal extends Entity {
     this.name = name;
     this.type = type;
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
-    this.data = animals.find((a) => a.id == this.id) || {};
+    this.data = animals.find((a) => a.id == this.type) || {};
+    this.size = Math.floor((this.data.scale || 0) / 1.5) || 30;
   }
 
   die() {

@@ -84,7 +84,7 @@ function collidePlayerGameObject(player: Player, gameObj: GameObject) {
 function collideAnimalGameObject(animal: Animal, gameObj: GameObject) {
   return collideCircles(
     animal.location,
-    animal.data.scale * 2 || 29,
+    animal.size,
     gameObj.location,
     gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
@@ -334,8 +334,8 @@ function tryMoveAnimal(
       );
 
       newLocation = new Vec2(
-        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
-        gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35)
+        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + animal.size),
+        gameObj.location.y + Math.sin(angle) * (gameObj.realScale + animal.size)
       );
     }
   }
@@ -352,10 +352,13 @@ function tryMoveAnimal(
   }
 
   newLocation.clamp(
-    new Vec2(0 + 35 + (getGame()?.spikeAdvance || 0), 0 + 35 + (getGame()?.spikeAdvance || 0)),
     new Vec2(
-      14400 - 35 - (getGame()?.spikeAdvance || 0),
-      14400 - 35 - (getGame()?.spikeAdvance || 0)
+      0 + animal.size + (getGame()?.spikeAdvance || 0),
+      0 + animal.size + (getGame()?.spikeAdvance || 0)
+    ),
+    new Vec2(
+      14400 - animal.size - (getGame()?.spikeAdvance || 0),
+      14400 - animal.size - (getGame()?.spikeAdvance || 0)
     )
   );
   animal.location = newLocation.add(delta * xVel, delta * yVel);
@@ -383,20 +386,6 @@ function movePlayer(player: Player, delta: number, state: GameState) {
       tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
     }
   }
-  /*for (let a of player.getNearbyAnimals(state)) {
-    if (
-      collideCircles(a.location, a.data.scale * 2 || 30, player.location, 30) &&
-      player.mode !== PlayerMode.spectator
-    ) {
-      let dis = player.location.distance(a.location);
-      let angle = Math.atan2(a.location.y - player.location.y, a.location.x - player.location.x);
-      let distanceToMove = 30 + 30 - dis;
-      a.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
-      player.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
-      tryMoveAnimal(a, delta, a.velocity.x, a.velocity.y, state);
-      tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
-    }
-  }*/
 }
 function moveAnimal(animal: Animal, delta: number, state: GameState) {
   tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
@@ -406,10 +395,13 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
   }
 
   for (let p of animal.getNearbyPlayers(state)) {
-    if (collideCircles(p.location, 30, animal.location, 30) && p.mode !== PlayerMode.spectator) {
+    if (
+      collideCircles(p.location, 30, animal.location, animal.size) &&
+      p.mode !== PlayerMode.spectator
+    ) {
       let dis = animal.location.distance(p.location);
       let angle = Math.atan2(p.location.y - animal.location.y, p.location.x - animal.location.x);
-      let distanceToMove = 30 + 30 - dis;
+      let distanceToMove = 30 + animal.size - dis;
       p.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
       animal.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
       tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
