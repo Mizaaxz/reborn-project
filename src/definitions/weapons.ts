@@ -316,7 +316,7 @@ const weapons = [
     src: "shotgun_1",
     req: ["stone", 15],
     aboveHand: true,
-    rec: 0.25,
+    rec: 0.5,
     armS: 0.6,
     hndS: 0.3,
     hndD: 1.6,
@@ -328,6 +328,7 @@ const weapons = [
     hideProjectile: true,
     spdMult: 0.6,
     speed: 1500,
+    spread: true,
   },
 ];
 export default weapons;

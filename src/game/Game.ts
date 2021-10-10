@@ -1041,21 +1041,40 @@ export default class Game {
 
           if (isRangedWeapon(player.selectedWeapon)) {
             let projectileDistance = 35 / 1.5;
+            let cost = getProjectileCosts(getProjectileType(player.selectedWeapon));
 
-            this.state.addProjectile(
-              getProjectileType(player.selectedWeapon),
-              player.location.add(
-                projectileDistance * Math.cos(player.angle),
-                projectileDistance * Math.sin(player.angle),
-                true
-              ),
-              player,
-              player.angle,
-              player.layer
-            );
+            if (player.wood < cost.wood || player.stone < cost.stone) return;
 
-            player.wood -= getProjectileCosts(getProjectileType(player.selectedWeapon)).wood;
-            player.stone -= getProjectileCosts(getProjectileType(player.selectedWeapon)).stone;
+            if (weapons.find((w) => w.id == player.selectedWeapon)?.spread) {
+              [-0.5, -0.4, -0.3, -0.1, 0, 0.1, 0.3, 0.4, 0.5].forEach((ang) => {
+                this.state.addProjectile(
+                  getProjectileType(player.selectedWeapon),
+                  player.location.add(
+                    projectileDistance * Math.cos(player.angle),
+                    projectileDistance * Math.sin(player.angle),
+                    true
+                  ),
+                  player,
+                  player.angle + ang,
+                  player.layer
+                );
+              });
+            } else {
+              this.state.addProjectile(
+                getProjectileType(player.selectedWeapon),
+                player.location.add(
+                  projectileDistance * Math.cos(player.angle),
+                  projectileDistance * Math.sin(player.angle),
+                  true
+                ),
+                player,
+                player.angle,
+                player.layer
+              );
+            }
+
+            player.wood -= cost.wood;
+            player.stone -= cost.stone;
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
             player.velocity.add(

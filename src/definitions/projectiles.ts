@@ -41,7 +41,7 @@ const projectiles = [
     src: "bullet_1",
     dmg: 16,
     speed: 3,
-    scale: 20,
+    scale: 120,
     range: 500,
     stoneCost: 15,
   }, // shotgun
