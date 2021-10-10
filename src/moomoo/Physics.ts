@@ -1,7 +1,7 @@
 import Vec2 from "vec2";
 import Player from "./Player";
 import GameObject from "../gameobjects/GameObject";
-import { getWeaponAttackDetails, hasCollision } from "../items/items";
+import { getItem, getWeaponAttackDetails, hasCollision } from "../items/items";
 import GameState from "../game/GameState";
 import { ItemType } from "../items/UpgradeItems";
 import { getHat } from "./Hats";
@@ -264,19 +264,23 @@ function tryMoveAnimal(
           );
         }
 
-        switch (gameObj.data) {
-          case ItemType.PitTrap:
-            inTrap = true;
-            break;
-          case ItemType.BoostPad:
-            animal.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
-            break;
-          case ItemType.HealingPad:
-            animal.padHeal += 15;
-            break;
-          case ItemType.Teleporter:
-            animal.location = randomPos(14400 + 35, 14400 - 35, getGame()?.spawnBounds);
-            return;
+        if (
+          !(getItem(gameObj.data)?.bossImmune && animals.find((a) => a.id == animal.type)?.boss)
+        ) {
+          switch (gameObj.data) {
+            case ItemType.PitTrap:
+              inTrap = true;
+              break;
+            case ItemType.BoostPad:
+              animal.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
+              break;
+            case ItemType.HealingPad:
+              animal.padHeal += 15;
+              break;
+            case ItemType.Teleporter:
+              animal.location = randomPos(14400 + 35, 14400 - 35, getGame()?.spawnBounds);
+              return;
+          }
         }
         if (!hasCollision(gameObj.data)) continue;
       }

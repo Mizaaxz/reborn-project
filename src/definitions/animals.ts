@@ -108,6 +108,7 @@ const animals = [
     hitDelay: 1000,
     chargePlayer: !0,
     drop: 100,
+    boss: true,
   },
   {
     id: 7,
@@ -126,6 +127,7 @@ const animals = [
     scale: 70,
     spriteMlt: 1,
     drop: 0,
+    boss: true,
   },
   {
     id: 8,
@@ -149,6 +151,7 @@ const animals = [
     viewRange: 800,
     chargePlayer: !0,
     drop: 1000,
+    boss: true,
   },
 ];
 

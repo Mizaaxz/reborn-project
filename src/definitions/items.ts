@@ -34,6 +34,7 @@ type ItemsMap = {
   spawnPoint?: boolean;
   blocker?: number;
   teleport?: boolean;
+  bossImmune?: boolean;
 };
 type ItemMap = { group: number; place: boolean; limit?: number; layer: Layer; items: ItemsMap[] };
 const items: ItemMap[] = [
@@ -320,6 +321,7 @@ const items: ItemMap[] = [
         scale: 45,
         holdOffset: 20,
         placeOffset: -5,
+        bossImmune: true,
       },
     ],
   },
@@ -451,6 +453,7 @@ const items: ItemMap[] = [
         scale: 45,
         holdOffset: 20,
         placeOffset: -5,
+        bossImmune: true,
       },
     ],
   },
