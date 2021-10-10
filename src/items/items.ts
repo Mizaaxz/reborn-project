@@ -169,6 +169,10 @@ function getGameObjDamage(item: ItemType) {
   return getItem(item)?.dmg || 0;
 }
 
+function getGameObjLayer(item: ItemType) {
+  return getItemGroup(item)?.layer || 0;
+}
+
 function getGameObjPlaceLimit(item: ItemType) {
   let game = getGame();
   if (game?.mode.includes(GameModes.sandbox)) return Infinity;
@@ -215,4 +219,5 @@ export {
   getRandomItem,
   getRandomWeapon,
   getItemGroup,
+  getGameObjLayer,
 };

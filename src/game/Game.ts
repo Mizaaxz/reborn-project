@@ -43,7 +43,12 @@ import { getAccessory } from "../moomoo/Accessories";
 import { getHat } from "../moomoo/Hats";
 import { WeaponVariants } from "../moomoo/Weapons";
 import { ItemType } from "../items/UpgradeItems";
-import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
+import {
+  getProjectileRange,
+  getProjectileSpeed,
+  Layer,
+  ProjectileType,
+} from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
@@ -352,18 +357,21 @@ export default class Game {
 
     let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
 
-    /*if (this.clients.filter((client) => client.ip === ip).length > 2) {
+    if (this.clients.filter((client) => client.ip === ip).length > 2) {
       let clientConnectionInfractions = this.clientConnectionInfractions[client.ip] || 0;
-      this.kickClient(client, "Only 2 connections allowed!");
+      this.kickClient(
+        client,
+        `Only 2 connections allowed! Only ${5 - clientConnectionInfractions} times before a ban.`
+      );
       setTimeout(function () {
         socket.terminate();
       }, 5);
       clientConnectionInfractions++;
       this.clientConnectionInfractions[client.ip] = clientConnectionInfractions;
 
-      //if (clientConnectionInfractions > 5) this.banIP(client.ip);
+      if (clientConnectionInfractions > 5) this.banIP(client.ip);
       return;
-    }*/
+    }
 
     socket.addListener("close", () => {
       if (client.player) {
@@ -664,7 +672,10 @@ export default class Game {
     }
   }
 
-  updateProjectiles(deltaTime: number) {
+  public projectileDelta: number = Date.now();
+  updateProjectiles() {
+    let deltaTime = Date.now() - this.projectileDelta;
+    this.projectileDelta = Date.now();
     let packetFactory = PacketFactory.getInstance();
 
     this.state.projectiles.forEach((projectile) => {
@@ -674,15 +685,11 @@ export default class Game {
       );
       projectile.distance += projectile.speed * deltaTime;
 
-      this.state.getPlayersNearProjectile(projectile).forEach((player) => {
-        player.client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_PROJECTILES, [projectile.id, projectile.distance])
-          )
-        );
-      });
+      if (projectile.distance > (getProjectileRange(projectile.type) || 1000))
+        this.state.removeProjectile(projectile);
 
       let owner = this.state.players.find((player) => player.id == projectile.ownerSID);
+      if (!owner) owner = this.state.players.find((p) => p.id == projectile.source?.ownerSID);
 
       this.state.getPlayersNearProjectile(projectile).forEach((player) => {
         if (player.client && !player.client.seenProjectiles.includes(projectile.id)) {
@@ -702,15 +709,20 @@ export default class Game {
           );
           player.client.seenProjectiles.push(projectile.id);
         }
+
         if (
           Physics.collideProjectilePlayer(projectile, player) &&
-          player.id != projectile.ownerSID
+          player.id != projectile.ownerSID &&
+          !this.state.tribes
+            .find((t) => t.membersSIDs.includes(owner?.id || -1))
+            ?.membersSIDs.includes(player.id) &&
+          projectile.source?.ownerSID !== player.id
         ) {
           if (owner) this.damageFrom(player, owner, projectile.damage, false);
 
           player.velocity.add(
-            0.3 * Math.cos(projectile.angle) * deltaTime,
-            0.3 * Math.sin(projectile.angle) * deltaTime
+            0.0075 * Math.cos(projectile.angle) * deltaTime,
+            0.0075 * Math.sin(projectile.angle) * deltaTime
           );
           if (player.health <= 0) this.killPlayer(player);
 
@@ -720,19 +732,60 @@ export default class Game {
                 new Packet(PacketType.HEALTH_CHANGE, [
                   player.location.x,
                   player.location.y,
+                  player.invincible ? "Invincible!" : projectile.damage,
+                  1,
+                ])
+              )
+            );
+          }
+          player.client?.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.HEALTH_CHANGE, [
+                player.location.x,
+                player.location.y,
+                player.invincible ? "Invincible!" : projectile.damage,
+                1,
+              ])
+            )
+          );
+          this.state.removeProjectile(projectile);
+        }
+      });
+      this.state.animals.forEach((animal) => {
+        if (Physics.collideProjectileAnimal(projectile, animal)) {
+          if (owner) {
+            this.damageFromAnimal(animal, owner, projectile.damage, false);
+            animal.run(owner.location);
+          }
+
+          animal.velocity.add(
+            0.01 * Math.cos(projectile.angle) * deltaTime,
+            0.01 * Math.sin(projectile.angle) * deltaTime
+          );
+          if (animal.health <= 0) this.killAnimal(animal);
+
+          if (owner) {
+            owner.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.HEALTH_CHANGE, [
+                  animal.location.x,
+                  animal.location.y,
                   projectile.damage,
                   1,
                 ])
               )
             );
           }
-          this.state.projectiles.splice(this.state.projectiles.indexOf(projectile), 1);
+          this.state.removeProjectile(projectile);
         }
       });
 
       this.state.gameObjects.forEach((gameObj) => {
-        if (Physics.collideProjectileGameObject(projectile, gameObj)) {
-          this.state.projectiles.splice(this.state.projectiles.indexOf(projectile), 1);
+        if (
+          Physics.collideProjectileGameObject(projectile, gameObj) &&
+          projectile.source?.id !== gameObj.id
+        ) {
+          this.state.removeProjectile(projectile);
 
           for (let nearbyPlayer of this.state.getPlayersNearProjectile(projectile)) {
             nearbyPlayer.client?.socket.send(
@@ -926,21 +979,20 @@ export default class Game {
           this.state.players
             .filter((p) => p.getNearbyGameObjects(this.state).includes(turret))
             .forEach((player) => {
-              if (nearestPlayer)
-                player?.client?.socket.send(
-                  packetFactory.serializePacket(
-                    new Packet(PacketType.SHOOT_TURRET, [turret.id, turretAngle])
-                  )
-                );
+              player?.client?.socket.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.SHOOT_TURRET, [turret.id, turretAngle])
+                )
+              );
             });
 
-          /*this.state.addProjectile(
+          this.state.addProjectile(
             ProjectileType.Turret,
-            turret.location.add(0, 100, true),
+            turret.location.add(0, 0, true),
             undefined,
             turretAngle,
-            Layer.Player
-          );*/
+            Layer.Platform
+          ).source = turret;
         }
       });
 
@@ -987,7 +1039,7 @@ export default class Game {
           player.lastHitTime = now;
 
           if (isRangedWeapon(player.selectedWeapon)) {
-            let projectileDistance = 35 / 2;
+            let projectileDistance = 35 / 1.5;
 
             this.state.addProjectile(
               getProjectileType(player.selectedWeapon),
@@ -996,7 +1048,9 @@ export default class Game {
                 projectileDistance * Math.sin(player.angle),
                 true
               ),
-              player
+              player,
+              player.angle,
+              player.layer
             );
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
@@ -1337,7 +1391,7 @@ export default class Game {
 
   physUpdate() {
     this.update();
-    this.updateProjectiles(0.1);
+    this.updateProjectiles();
   }
 
   /**

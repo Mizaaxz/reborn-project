@@ -1,9 +1,11 @@
 import Vec2 from "vec2";
+import GameObject from "../gameobjects/GameObject";
 import Entity from "../moomoo/Entity";
 import { ProjectileType, Layer, getProjectileDamage } from "./projectiles";
 
 class Projectile extends Entity {
   public distance: number = 0;
+  public source?: GameObject;
 
   constructor(
     public id: number,

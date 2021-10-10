@@ -32,8 +32,6 @@ export default class GameState {
     angle = player?.angle,
     layer = player?.layer
   ) {
-    if (player?.client)
-      return Broadcast("Projectiles have been disabled due to abuse.", player.client);
     let packetFactory = PacketFactory.getInstance();
     let newProjectile = new Projectile(
       this.projectiles.length > 0
@@ -67,11 +65,17 @@ export default class GameState {
 
       player.client?.seenProjectiles.push(newProjectile.id);
     });
+
+    return newProjectile;
   }
 
   removeProjectile(projectile: Projectile) {
     let packetFactory = PacketFactory.getInstance();
-
+    this.getPlayersNearProjectile(projectile).forEach((player) => {
+      player.client?.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.UPDATE_PROJECTILES, [projectile.id]))
+      );
+    });
     this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
   }
 

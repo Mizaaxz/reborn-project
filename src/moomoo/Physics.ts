@@ -1,7 +1,13 @@
 import Vec2 from "vec2";
 import Player from "./Player";
 import GameObject from "../gameobjects/GameObject";
-import { getItem, getWeaponAttackDetails, hasCollision } from "../items/items";
+import {
+  getGameObjLayer,
+  getItem,
+  getItemGroup,
+  getWeaponAttackDetails,
+  hasCollision,
+} from "../items/items";
 import GameState from "../game/GameState";
 import { ItemType } from "../items/UpgradeItems";
 import { getHat } from "./Hats";
@@ -16,6 +22,7 @@ import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
 import animals from "../definitions/animals";
 import { GameModes } from "../game/GameMode";
+import { Layer } from "../projectiles/projectiles";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -302,6 +309,7 @@ function tryMoveAnimal(
         } else {
           animal.health -= gameObj.dmg;
         }
+        animal.run(gameObj.location);
 
         if (animal.health <= 0) {
           let type = animals[animal.type];
@@ -482,9 +490,12 @@ function checkAttackGameObj(player: Player, gameObjects: GameObject[]) {
 function collideProjectilePlayer(projectile: Projectile, player: Player) {
   return collideCircles(projectile.location, 10, player.location, 35);
 }
-
+function collideProjectileAnimal(projectile: Projectile, animal: Animal) {
+  return collideCircles(projectile.location, 10, animal.location, animal.size);
+}
 function collideProjectileGameObject(projectile: Projectile, gameObj: GameObject) {
-  return collideCircles(projectile.location, 10, gameObj.location, gameObj.scale);
+  let col = collideCircles(projectile.location, 10, gameObj.location, gameObj.scale);
+  return !gameObj.data ? projectile.layer >= getGameObjLayer(gameObj.data) && col : col;
 }
 
 export {
@@ -499,6 +510,7 @@ export {
   moveAnimal,
   getAttackLocation,
   collideProjectilePlayer,
+  collideProjectileAnimal,
   collideProjectileGameObject,
   pointCircle,
 };
