@@ -1054,8 +1054,8 @@ export default class Game {
               player.layer
             );
 
-            player.wood -= getProjectileCosts(getProjectileType(player.selectedWeapon)).wood
-            player.stone -= getProjectileCosts(getProjectileType(player.selectedWeapon)).stone
+            player.wood -= getProjectileCosts(getProjectileType(player.selectedWeapon)).wood;
+            player.stone -= getProjectileCosts(getProjectileType(player.selectedWeapon)).stone;
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
             player.velocity.add(
@@ -1976,7 +1976,7 @@ export default class Game {
           let upgrades = getUpgrades(client.player.upgradeAge);
           let weaponUpgrades = getWeaponUpgrades(client.player.upgradeAge);
 
-          if (item <= 16) {
+          if (item <= 17) {
             if (weaponUpgrades.includes(item)) {
               let preItem = getPrerequisiteWeapon(item);
 

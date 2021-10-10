@@ -334,7 +334,7 @@ const items: ItemMap[] = [
     items: [
       {
         id: ItemType.Turret,
-        age: 7,
+        age: 10,
         doUpdate: true,
         name: "turret",
         desc: "defensive structure that shoots at enemies",
@@ -400,7 +400,7 @@ const items: ItemMap[] = [
     items: [
       {
         id: ItemType.SpawnPad,
-        age: 9,
+        age: 11,
         name: "spawn pad",
         desc: "you will spawn here when you die but it will dissapear",
         req: ["wood", 100, "stone", 100],
@@ -443,7 +443,7 @@ const items: ItemMap[] = [
     items: [
       {
         id: ItemType.Teleporter,
-        age: 7,
+        age: 10,
         name: "teleporter",
         desc: "teleports you to a random point on the map",
         req: ["wood", 60, "stone", 60],

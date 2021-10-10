@@ -33,11 +33,9 @@ enum Age5Items {
 
 enum Age7Items {
   Cheese = 2,
-  Turret = 17,
   Platform = 18,
   HealingPad = 19,
   Blocker = 21,
-  Teleporter = 22,
   CastleWall = 5,
 }
 
@@ -48,6 +46,11 @@ enum Age8Items {
 enum Age9Items {
   PoisonSpikes = 8,
   SpinningSpikes = 9,
+  Teleporter = 22,
+  Turret = 17,
+}
+
+enum Age10Items {
   SpawnPad = 20,
 }
 
@@ -59,6 +62,7 @@ const ItemType = {
   ...Age7Items,
   ...Age8Items,
   ...Age9Items,
+  ...Age10Items,
 };
 
 type ItemType =
@@ -68,6 +72,7 @@ type ItemType =
   | Age5Items
   | Age7Items
   | Age8Items
-  | Age9Items;
+  | Age9Items
+  | Age10Items;
 
-export { Age3Items, Age4Items, Age5Items, Age7Items, Age8Items, Age9Items, ItemType };
+export { Age3Items, Age4Items, Age5Items, Age7Items, Age8Items, Age9Items, Age10Items, ItemType };

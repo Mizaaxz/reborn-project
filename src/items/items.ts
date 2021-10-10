@@ -26,6 +26,7 @@ enum SecondaryWeapons {
   McGrabby = 14,
   Musket = 15,
   Bow = 9,
+  Shotgun = 17,
 }
 
 enum WeaponModes {
