@@ -299,6 +299,7 @@ const items: ItemMap[] = [
         scale: 50,
         holdOffset: 20,
         placeOffset: -5,
+        bossImmune: true,
       },
     ],
   },
