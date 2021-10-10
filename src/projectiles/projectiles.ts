@@ -30,11 +30,16 @@ function getProjectileSpeed(type: ProjectileType) {
   return projectiles[type].speed;
 }
 
+function getProjectileCosts(type: ProjectileType) {
+  return { wood: projectiles[type].woodCost || 0, stone: projectiles[type].stoneCost || 0 };
+}
+
 export {
   getProjectileDamage,
   getProjectileLayer,
   getProjectileRange,
   getProjectileSpeed,
+  getProjectileCosts,
   ProjectileType,
   Layer,
 };

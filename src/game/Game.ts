@@ -44,6 +44,7 @@ import { getHat } from "../moomoo/Hats";
 import { WeaponVariants } from "../moomoo/Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import {
+  getProjectileCosts,
   getProjectileRange,
   getProjectileSpeed,
   Layer,
@@ -1052,6 +1053,9 @@ export default class Game {
               player.angle,
               player.layer
             );
+
+            player.wood -= getProjectileCosts(getProjectileType(player.selectedWeapon)).wood
+            player.stone -= getProjectileCosts(getProjectileType(player.selectedWeapon)).stone
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
             player.velocity.add(
