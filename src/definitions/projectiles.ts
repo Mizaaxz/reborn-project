@@ -36,11 +36,15 @@ const projectiles = [
     woodCost: 10,
   }, // repeater
   {
-    indx: 1,
-    layer: 1,
+    indx: 0,
+    layer: 0,
+    src: "bullet_1",
     dmg: 16,
+    speed: 3,
     scale: 20,
-  },
+    range: 500,
+    stoneCost: 15,
+  }, // shotgun
   {
     indx: 0,
     layer: 0,

@@ -10,6 +10,7 @@ enum ProjectileType {
   Bow = 0,
   Turret = 1,
   Crossbow = 2,
+  Shotgun = 3,
   RepeaterCrossbow = 3,
   Musket = 5,
 }
