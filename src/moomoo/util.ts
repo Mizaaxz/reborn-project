@@ -22,6 +22,18 @@ enum SkinColor {
   Green,
 }
 
+export enum Animals {
+  cow,
+  pig,
+  bull,
+  bully,
+  wolf,
+  quack,
+  moostafa,
+  treasure,
+  moofie,
+}
+
 function eucDistance(a: number[], b: number[]) {
   return Math.hypot(...a.map((val, i) => val - b[i]));
 }

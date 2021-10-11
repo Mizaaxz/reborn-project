@@ -3,12 +3,12 @@ import animals from "../definitions/animals";
 import Entity from "./Entity";
 import { getGame } from "../game/Game";
 import GameState from "../game/GameState";
-import { eucDistance } from "./util";
+import { Animals, eucDistance } from "./util";
 import config from "../config";
 
 export default class Animal extends Entity {
   public name: string = "Steph";
-  public type: number = 0;
+  public type: Animals = 0;
   public moving: boolean = false;
   public data: { [key: string]: any };
   public runTimer: NodeJS.Timeout | undefined;

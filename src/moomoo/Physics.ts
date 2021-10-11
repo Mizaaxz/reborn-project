@@ -16,7 +16,7 @@ import { Packet } from "../packet/Packet";
 import { PacketFactory } from "../packet/PacketFactory";
 import Projectile from "../projectiles/Projectile";
 import { getGame } from "../game/Game";
-import { Broadcast, randomPos } from "./util";
+import { Animals, Broadcast, randomPos } from "./util";
 import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
@@ -349,7 +349,7 @@ function tryMoveAnimal(
   }
 
   animal.inTrap = inTrap;
-  if (inTrap) return;
+  if (inTrap && animal.type !== Animals.quack) return;
 
   // River
   if (animal.location.y > 6850 && animal.location.y < 7550 && animal.layer < 1) {
