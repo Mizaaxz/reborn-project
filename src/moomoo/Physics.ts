@@ -495,7 +495,13 @@ function collideProjectileAnimal(projectile: Projectile, animal: Animal) {
 }
 function collideProjectileGameObject(projectile: Projectile, gameObj: GameObject) {
   let col = collideCircles(projectile.location, 10, gameObj.location, gameObj.scale);
-  return !gameObj.data ? projectile.layer >= getGameObjLayer(gameObj.data) && col : col;
+  let objLayer = getGameObjLayer(gameObj.data);
+  if (!gameObj.isPlayerGameObject()) return col;
+  if (gameObj.data == ItemType.Platform) return false;
+  if (objLayer == Layer.Pad) return false;
+  if (objLayer == Layer.Platform) return col;
+  if (objLayer == Layer.Player && projectile.layer == Layer.Platform) return false;
+  return col;
 }
 
 export {
