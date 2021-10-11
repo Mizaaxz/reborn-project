@@ -327,7 +327,7 @@ const weapons = [
     projectile: 4,
     hideProjectile: true,
     spdMult: 0.6,
-    speed: 1500,
+    speed: 1000,
     spread: true,
   },
 ];

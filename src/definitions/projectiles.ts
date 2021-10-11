@@ -39,7 +39,7 @@ const projectiles = [
     indx: 0,
     layer: 0,
     src: "bullet_1",
-    dmg: 16,
+    dmg: 15,
     speed: 3,
     scale: 120,
     range: 500,

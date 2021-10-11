@@ -1098,10 +1098,14 @@ export default class Game {
             let projectileDistance = 35 / 1.5;
             let cost = getProjectileCosts(getProjectileType(player.selectedWeapon));
 
-            if (player.wood < cost.wood || player.stone < cost.stone) return;
+            if (
+              !this.mode.includes(GameModes.sandbox) &&
+              (player.wood < cost.wood || player.stone < cost.stone)
+            )
+              return;
 
             if (weapons.find((w) => w.id == player.selectedWeapon)?.spread) {
-              [-0.5, -0.4, -0.3, -0.1, 0, 0.1, 0.3, 0.4, 0.5].forEach((ang) => {
+              [-0.2, -0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.2].forEach((ang) => {
                 this.state.addProjectile(
                   getProjectileType(player.selectedWeapon),
                   player.location.add(
@@ -1128,8 +1132,10 @@ export default class Game {
               );
             }
 
-            player.wood -= cost.wood;
-            player.stone -= cost.stone;
+            if (!this.mode.includes(GameModes.sandbox)) {
+              player.wood -= cost.wood;
+              player.stone -= cost.stone;
+            }
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
             player.velocity.add(
