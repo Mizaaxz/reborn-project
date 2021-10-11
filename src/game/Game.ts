@@ -2140,23 +2140,6 @@ export default class Game {
           }
         }
         break;
-      case PacketType.ACCEPT_TRADE_REQ:
-        if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
-
-        if (client.player) {
-          let fromUser = this.state.players.find((p) => p.id == packet.data[0]);
-          if (fromUser) {
-            if (!client.tradeRequests.includes(fromUser.id))
-              return Broadcast("Error: NOT_REQUESTED", client);
-            client.tradeRequests.splice(client.tradeRequests.indexOf(fromUser.id), 1);
-            client.socket.send(
-              packetFactory.serializePacket(
-                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 1])
-              )
-            );
-          }
-        }
-        break;
       default:
         this.firePacketHandler(packet.type, client, packet);
         break;
