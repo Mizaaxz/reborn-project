@@ -795,6 +795,62 @@ export default class Game {
               )
             );
           }
+
+          if (gameObj.isPlayerGameObject()) {
+            let gameObjOwner = this.state.players.find((p) => p.id == gameObj.ownerSID);
+
+            gameObj.health -= projectile.damage * 1.5;
+
+            if (gameObj.health <= 0) {
+              if (owner) {
+                let itemCost = getItemCost(gameObj.data);
+                let costs = chunk(itemCost, 2);
+
+                for (let cost of costs) {
+                  switch (cost[0]) {
+                    case "food":
+                      owner.food += cost[1] as number;
+                      break;
+                    case "wood":
+                      owner.wood += cost[1] as number;
+                      break;
+                    case "stone":
+                      owner.stone += cost[1] as number;
+                      break;
+                  }
+
+                  if (owner.selectedWeapon == owner.weapon)
+                    owner.primaryWeaponExp += cost[1] as number;
+                  else owner.secondaryWeaponExp += cost[1] as number;
+                }
+              }
+
+              if (gameObj.data == 20 && gameObjOwner && gameObjOwner.client) {
+                gameObjOwner.client.spawnPos = false;
+              }
+
+              if (gameObjOwner) {
+                let placedAmount = this.state.gameObjects.filter(
+                  (gameObj) => gameObj.data === gameObj.data && gameObj.ownerSID == gameObj.ownerSID
+                ).length;
+                gameObjOwner.client?.socket.send(
+                  packetFactory.serializePacket(
+                    new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+                      getGroupID(gameObj.data),
+                      placedAmount - 1,
+                    ])
+                  )
+                );
+              }
+
+              this.state.removeGameObject(gameObj);
+              if (owner) this.sendGameObjects(owner);
+
+              for (let otherPlayer of this.state.getPlayersNearProjectile(projectile)) {
+                this.sendGameObjects(otherPlayer);
+              }
+            }
+          }
         }
       });
     });
