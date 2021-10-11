@@ -12,7 +12,7 @@ import Vec2 from "vec2";
 import GameObject from "./gameobjects/GameObject";
 import { getGameObjDamage, getGameObjHealth, getScale, WeaponModes, Weapons } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
-import { Broadcast } from "./moomoo/util";
+import { Animals, Broadcast } from "./moomoo/util";
 import { GameModes } from "./game/GameMode";
 import db from "enhanced.db";
 import * as logger from "./log";
@@ -746,6 +746,7 @@ Command(
   function (args: any[], source: Player | undefined) {
     let game = getGame();
     let type = Number(args[1]);
+    if (!(type in Animals)) type = Animals.cow;
 
     if (source && game) {
       let ai = game.state.addAnimal(
