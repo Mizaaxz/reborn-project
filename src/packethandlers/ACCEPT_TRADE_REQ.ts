@@ -5,7 +5,7 @@ import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 
 getGame()?.addPacketHandler(
-  new PacketHandler(PacketType.SPAWN),
+  new PacketHandler(PacketType.ACCEPT_TRADE_REQ),
   (game, packetFactory, client, packet) => {
     if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
 
