@@ -249,9 +249,6 @@ export default class Game {
       game.generateStructure("stone", loc.x + x, loc.y + y, 115);
     }
 
-    this.generateStructure("w", beginLoc.x - locpad, beginLoc.y - locpad, 15);
-    this.generateStructure("w", endLoc.x + locpad, endLoc.y + locpad, 15);
-
     let rockAngles: number[] = [];
     let rockBlacklist: number[] = [];
     for (let i = 0; i <= 15; i++) {
@@ -266,6 +263,8 @@ export default class Game {
     rockAngles.forEach((r) => {
       genStone(Math.cos((r * Math.PI) / 180) * locsize, Math.sin((r * Math.PI) / 180) * locsize);
     });
+
+    this.generateStructure("s", endLoc.x + 90, loc.y + 20, 115);
   }
 
   generateStructure(objType: string, x: number, y: number, objSize?: number | undefined) {
