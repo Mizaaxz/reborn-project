@@ -749,7 +749,7 @@ Command(
     if (!(type in Animals)) type = Animals.cow;
 
     if (source && game) {
-      let ai = game.state.addAnimal(
+      game.state.addAnimal(
         game.genAnimalSID(),
         source.location.add(0, 0, true),
         type || 0,
@@ -890,9 +890,8 @@ Command(
 
     if (source && source.client) {
       source.weapon = source.selectedWeapon = Weapons.Katana;
-      source.secondaryWeapon = Weapons.GreatHammer;
-      source.primaryWeaponExp = source.secondaryWeaponExp =
-        WeaponVariants[WeaponVariant.Amethyst].xp;
+      source.secondaryWeapon = Weapons.Shotgun;
+      source.primaryWeaponExp = WeaponVariants[WeaponVariant.Amethyst].xp;
       source.items = [
         ItemType.Cookie,
         ItemType.CastleWall,
