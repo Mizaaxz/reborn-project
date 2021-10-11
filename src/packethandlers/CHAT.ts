@@ -23,9 +23,7 @@ getGame()?.addPacketHandler(
     );
 
     if (
-      ["!crash", "lcrash", "icrash", "crash", ".crash", "cr", "!cr", ".cr"].includes(
-        packet.data[0].toLowerCase()
-      )
+      ["!crash", "lcrash", "icrash", ".crash", "!cr", ".cr"].includes(packet.data[0].toLowerCase())
     )
       return game.kickClient(client, 'crashed <span style="font-size: 16px;">xd</span>');
 
