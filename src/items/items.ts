@@ -35,6 +35,7 @@ enum WeaponModes {
   OneTap,
   NoSelect,
   SuperShot,
+  BigShot,
 }
 
 interface AttackDetails {

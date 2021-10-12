@@ -1113,6 +1113,15 @@ export default class Game {
                 for (let i = startingAngle; i < endingAngle; i += 0.05) {
                   shotGunAngles.push(i);
                 }
+                player.lastHitTime = now - 500;
+              } else if (player.weaponMode == WeaponModes.BigShot) {
+                shotGunAngles = [];
+                let startingAngle = -0.3;
+                let endingAngle = 0.3;
+                for (let i = startingAngle; i < endingAngle; i += 0.01) {
+                  shotGunAngles.push(i);
+                }
+                player.lastHitTime = now - 500;
               }
               shotGunAngles.forEach((ang) => {
                 this.state.addProjectile(

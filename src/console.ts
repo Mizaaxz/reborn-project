@@ -790,6 +790,16 @@ Command(
   },
   { aliases: ["supers"], level: AdminLevel.Admin }
 );
+Command(
+  "bigshot",
+  function (args: any[], source: Player | undefined) {
+    if (!source?.client) return "You must be in the game to use this command.";
+    source.selectedWeapon = Weapons.Shotgun;
+    source.weaponMode = WeaponModes.BigShot;
+    source.buildItem = -1;
+  },
+  { aliases: ["bigs"], level: AdminLevel.Admin }
+);
 
 Command(
   "logs",
