@@ -1105,7 +1105,16 @@ export default class Game {
               return;
 
             if (weapons.find((w) => w.id == player.selectedWeapon)?.spread) {
-              [-0.2, -0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.2].forEach((ang) => {
+              let shotGunAngles = [-0.2, -0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.2];
+              if (player.weaponMode == WeaponModes.SuperShot) {
+                shotGunAngles = [];
+                let startingAngle = -(Math.PI * 2);
+                let endingAngle = Math.PI * 2;
+                for (let i = startingAngle; i < endingAngle; i += 0.05) {
+                  shotGunAngles.push(i);
+                }
+              }
+              shotGunAngles.forEach((ang) => {
                 this.state.addProjectile(
                   getProjectileType(player.selectedWeapon),
                   player.location.add(

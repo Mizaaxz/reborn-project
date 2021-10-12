@@ -780,6 +780,16 @@ Command(
   },
   { aliases: ["ot"], level: AdminLevel.Admin }
 );
+Command(
+  "supershot",
+  function (args: any[], source: Player | undefined) {
+    if (!source?.client) return "You must be in the game to use this command.";
+    source.selectedWeapon = Weapons.Shotgun;
+    source.weaponMode = WeaponModes.SuperShot;
+    source.buildItem = -1;
+  },
+  { aliases: ["supers"], level: AdminLevel.Admin }
+);
 
 Command(
   "logs",

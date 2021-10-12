@@ -34,6 +34,7 @@ enum WeaponModes {
   Inspect,
   OneTap,
   NoSelect,
+  SuperShot,
 }
 
 interface AttackDetails {
