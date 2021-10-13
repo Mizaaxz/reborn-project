@@ -395,10 +395,16 @@ Command(
       if (!player) return "Invalid Player ID";
 
       if (player instanceof Player) {
-        if (player.client) game.kickClient(player.client, reason);
+        if (player.client) {
+          if (player.client.admin > (source?.client?.admin || -1)) return;
+          game.kickClient(player.client, reason);
+        }
       } else {
         player.forEach((p) => {
-          if (p.client) game?.kickClient(p.client, reason);
+          if (p.client) {
+            if (p.client.admin > (source?.client?.admin || -1)) return;
+            game?.kickClient(p.client, reason);
+          }
         });
       }
     }
