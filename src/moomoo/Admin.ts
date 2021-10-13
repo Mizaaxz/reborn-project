@@ -5,6 +5,7 @@ enum AdminLevel {
   Staff,
   Admin,
   Owner,
+  Meow,
 }
 
 export { AdminLevel };
