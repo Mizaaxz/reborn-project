@@ -847,7 +847,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Promoted.");
       });
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Meow }
 );
 Command(
   "acc.demote",
@@ -869,7 +869,7 @@ Command(
         if (plr.client) getGame()?.kickClient(plr.client, "Demoted.");
       });
   },
-  { aliases: [], level: AdminLevel.Admin }
+  { aliases: [], level: AdminLevel.Meow }
 );
 Command(
   "acc.delete",
@@ -953,7 +953,7 @@ Command(
   },
   {
     aliases: ["m"],
-    level: AdminLevel.Owner,
+    level: AdminLevel.Meow,
   }
 );
 
