@@ -396,13 +396,13 @@ Command(
 
       if (player instanceof Player) {
         if (player.client) {
-          if (player.client.admin > (source?.client?.admin || -1)) return false;
+          if (player.client.admin >= (source?.client?.admin || -1)) return false;
           game.kickClient(player.client, reason);
         }
       } else {
         player.forEach((p) => {
           if (p.client) {
-            if (p.client.admin > (source?.client?.admin || -1)) return false;
+            if (p.client.admin >= (source?.client?.admin || -1)) return false;
             game?.kickClient(p.client, reason);
           }
         });
