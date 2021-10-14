@@ -464,7 +464,7 @@ function checkAttackAnimal(animal: Animal, players: Player[]) {
 
   for (let hitPlayer of players) {
     if (
-      pointCircle(getAttackLocationAnimal(animal), hitPlayer.location, animal.data.hitRange) &&
+      pointCircle(getAttackLocationAnimal(animal), hitPlayer.location, animal.data.hitRange / 2) &&
       hitPlayer.mode !== PlayerMode.spectator
     )
       hitPlayers.push(hitPlayer);
