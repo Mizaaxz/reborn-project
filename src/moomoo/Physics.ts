@@ -23,6 +23,7 @@ import { PlayerMode } from "./PlayerMode";
 import animals from "../definitions/animals";
 import { GameModes } from "../game/GameMode";
 import { Layer } from "../projectiles/projectiles";
+import genBallArena from "../game/genBallArena";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -264,7 +265,7 @@ function tryMoveAnimal(
           let teamWon = gameObj.ownerSID == -66 ? "a" : "b";
           if (teamWon == "a") game.winsA++;
           else game.winsB++;
-          game.genBallArena(false);
+          genBallArena(game, false);
           Broadcast(
             `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${game.winsB}`,
             undefined
