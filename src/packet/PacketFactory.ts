@@ -43,6 +43,7 @@ packetTypeMapping[PacketType.MINIMAP] = { value: "mm", side: Side.Client };
 packetTypeMapping[PacketType.PING] = { value: "pp", side: Side.Server };
 packetTypeMapping[PacketType.PLAYER_MOVE] = { value: "33", side: Side.Server };
 packetTypeMapping[PacketType.UPDATE_ANIMALS] = { value: "a", side: Side.Client };
+packetTypeMapping[PacketType.ANIMAL_HIT] = { value: "aa", side: Side.Client };
 packetTypeMapping[PacketType.PLAYER_REMOVE] = { value: "4", side: Side.Client };
 packetTypeMapping[PacketType.PLAYER_SET_CLAN] = { value: "st", side: Side.Client };
 packetTypeMapping[PacketType.PLAYER_START] = { value: "1", side: Side.Client };

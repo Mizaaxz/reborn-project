@@ -718,7 +718,8 @@ export default class Game {
             ?.membersSIDs.includes(player.id) &&
           projectile.source?.ownerSID !== player.id
         ) {
-          if (owner) this.damageFrom(player, owner, projectile.damage, false);
+          let dmg = projectile.damage;
+          if (owner) dmg = this.damageFrom(player, owner, projectile.damage, false);
 
           player.velocity.add(
             0.0075 * Math.cos(projectile.angle) * deltaTime,
@@ -732,7 +733,7 @@ export default class Game {
                 new Packet(PacketType.HEALTH_CHANGE, [
                   player.location.x,
                   player.location.y,
-                  player.invincible ? "Invincible!" : projectile.damage,
+                  player.invincible ? "Invincible!" : dmg,
                   1,
                 ])
               )
@@ -743,7 +744,7 @@ export default class Game {
               new Packet(PacketType.HEALTH_CHANGE, [
                 player.location.x,
                 player.location.y,
-                player.invincible ? "Invincible!" : projectile.damage,
+                player.invincible ? "Invincible!" : dmg,
                 1,
               ])
             )
@@ -753,9 +754,10 @@ export default class Game {
       });
       this.state.animals.forEach((animal) => {
         if (Physics.collideProjectileAnimal(projectile, animal)) {
+          let dmg = projectile.damage;
           if (owner) {
-            this.damageFromAnimal(animal, owner, projectile.damage, false);
-            animal.run(owner.location);
+            dmg = this.damageFromAnimal(animal, owner, projectile.damage, false);
+            if (!animal.data.hostile) animal.runFrom(owner.location);
           }
 
           animal.velocity.add(
@@ -767,12 +769,7 @@ export default class Game {
           if (owner) {
             owner.client?.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.HEALTH_CHANGE, [
-                  animal.location.x,
-                  animal.location.y,
-                  projectile.damage,
-                  1,
-                ])
+                new Packet(PacketType.HEALTH_CHANGE, [animal.location.x, animal.location.y, dmg, 1])
               )
             );
           }
@@ -798,29 +795,31 @@ export default class Game {
           if (gameObj.isPlayerGameObject()) {
             let gameObjOwner = this.state.players.find((p) => p.id == gameObj.ownerSID);
 
-            gameObj.health -= projectile.damage * 1.5;
+            if (gameObj.health != -1) {
+              gameObj.health -= projectile.damage * 1.5;
 
-            if (gameObj.health <= 0) {
-              if (owner) {
-                let itemCost = getItemCost(gameObj.data);
-                let costs = chunk(itemCost, 2);
+              if (gameObj.health <= 0) {
+                if (owner) {
+                  let itemCost = getItemCost(gameObj.data);
+                  let costs = chunk(itemCost, 2);
 
-                for (let cost of costs) {
-                  switch (cost[0]) {
-                    case "food":
-                      owner.food += cost[1] as number;
-                      break;
-                    case "wood":
-                      owner.wood += cost[1] as number;
-                      break;
-                    case "stone":
-                      owner.stone += cost[1] as number;
-                      break;
+                  for (let cost of costs) {
+                    switch (cost[0]) {
+                      case "food":
+                        owner.food += cost[1] as number;
+                        break;
+                      case "wood":
+                        owner.wood += cost[1] as number;
+                        break;
+                      case "stone":
+                        owner.stone += cost[1] as number;
+                        break;
+                    }
+
+                    if (owner.selectedWeapon == owner.weapon)
+                      owner.primaryWeaponExp += cost[1] as number;
+                    else owner.secondaryWeaponExp += cost[1] as number;
                   }
-
-                  if (owner.selectedWeapon == owner.weapon)
-                    owner.primaryWeaponExp += cost[1] as number;
-                  else owner.secondaryWeaponExp += cost[1] as number;
                 }
               }
 
@@ -919,6 +918,38 @@ export default class Game {
 
       if (attackerHat?.goldSteal) {
         from.points += attackerHat.goldSteal * to.points;
+      }
+    }
+
+    to.health -= dmg;
+    return dmg;
+  }
+  damageFromBoss(to: Player, from: Animal, dmg: number, direct = true) {
+    let recieverHat = getHat(to.hatID);
+
+    let recieverAcc = getAccessory(to.accID);
+
+    if (to.selectedWeapon == Weapons.Shield) dmg *= 0.2;
+
+    if (recieverHat) {
+      dmg *= recieverHat.dmgMult || 1;
+
+      if (recieverHat.dmg) {
+        from.health -= recieverHat.dmg * dmg;
+      }
+
+      if (recieverHat.dmgK && direct) {
+        let knockback = recieverHat.dmgK;
+        from.velocity.add(
+          knockback * Math.cos((from.angle - Math.PI) % (2 * Math.PI)),
+          knockback * Math.sin((from.angle - Math.PI) % (2 * Math.PI))
+        );
+      }
+    }
+
+    if (recieverAcc) {
+      if (recieverAcc.dmg) {
+        from.health -= recieverAcc.dmg * dmg;
       }
     }
 
@@ -1053,6 +1084,19 @@ export default class Game {
       });
 
     this.state.animals.forEach((animal) => {
+      if (animal.data.hostile) {
+        let near = animal.getNearbyPlayers(this.state, animal.data.viewRange);
+        let nearest = near
+          .filter((p) => p.location.distance(animal.location) >= animal.data.hitRange / 1.5)
+          .sort((p1, p2) => {
+            return p1.location.distance(animal.location) > p2.location.distance(animal.location)
+              ? 1
+              : -1;
+          })[0];
+        if (nearest) animal.runTo(nearest.location);
+        else animal.stopRunning();
+      }
+
       Physics.moveAnimal(animal, this.physDelay, this.state);
 
       if (Date.now() - animal.lastDot >= 1000) {
@@ -1062,6 +1106,62 @@ export default class Game {
 
       if (animal.moving) {
         Physics.moveTowards(animal, animal.angle, config.defaultSpeed - 0.1, deltaTime, this.state);
+      }
+
+      if (animal.isAttacking) {
+        if (now - animal.lastHitTime >= animal.data.hitDelay) {
+          animal.lastHitTime = now;
+          animal.isAttacking = false;
+          this.gatherAnimBoss(animal);
+
+          let nearbyPlayers = animal.getNearbyPlayers(this.state);
+
+          let hitPlayers = Physics.checkAttackAnimal(animal, nearbyPlayers);
+          let hitGameObjects = Physics.checkAttackGameObjAnimal(
+            animal,
+            animal.getNearbyGameObjects(this.state)
+          );
+
+          for (let hitPlayer of hitPlayers) {
+            let dmg = this.damageFromBoss(hitPlayer, animal, animal.data.dmg);
+
+            if (hitPlayer.health <= 0 && hitPlayer.client && !hitPlayer.invincible)
+              this.killPlayer(hitPlayer);
+            else hitPlayer.velocity.add(0.3 * Math.cos(animal.angle), 0.3 * Math.sin(animal.angle));
+
+            hitPlayer.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.HEALTH_CHANGE, [
+                  hitPlayer.location.x,
+                  hitPlayer.location.y,
+                  hitPlayer.invincible ? "Invincible!" : Math.round(dmg),
+                  1,
+                ])
+              )
+            );
+          }
+
+          for (let hitGameObject of hitGameObjects) {
+            if (hitGameObject.health != -1 && hitGameObject.isPlayerGameObject()) {
+              hitGameObject.health -= animal.data.dmg * 3;
+              if (hitGameObject.health < 1) this.state.removeGameObject(hitGameObject);
+            }
+
+            for (let nearbyPlayer of nearbyPlayers) {
+              nearbyPlayer.client?.socket.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.WIGGLE, [
+                    Math.atan2(
+                      hitGameObject.location.y - animal.location.y,
+                      hitGameObject.location.x - animal.location.x
+                    ),
+                    hitGameObject.id,
+                  ])
+                )
+              );
+            }
+          }
+        }
       }
     });
 
@@ -1116,9 +1216,9 @@ export default class Game {
                 player.lastHitTime = now - 500;
               } else if (player.weaponMode == WeaponModes.BigShot) {
                 shotGunAngles = [];
-                let startingAngle = -0.3;
-                let endingAngle = 0.3;
-                for (let i = startingAngle; i < endingAngle; i += 0.01) {
+                let startingAngle = -0.25;
+                let endingAngle = 0.25;
+                for (let i = startingAngle; i < endingAngle; i += 0.005) {
                   shotGunAngles.push(i);
                 }
                 player.lastHitTime = now - 500;
@@ -1262,7 +1362,7 @@ export default class Game {
                   knockback * Math.cos(player.angle),
                   knockback * Math.sin(player.angle)
                 );
-                hitAnimal.run(player.location);
+                if (!hitAnimal.data.hostile) hitAnimal.runFrom(player.location);
               }
 
               if (player.weaponMode !== WeaponModes.OneTap)
@@ -1566,6 +1666,15 @@ export default class Game {
         packetFactory.serializePacket(
           new Packet(PacketType.GATHER_ANIM, [player.id, hit ? 1 : 0, player.selectedWeapon])
         )
+      );
+    }
+  }
+  gatherAnimBoss(animal: Animal) {
+    let packetFactory = PacketFactory.getInstance();
+
+    for (let client of this.clients) {
+      client.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.ANIMAL_HIT, [animal.id]))
       );
     }
   }

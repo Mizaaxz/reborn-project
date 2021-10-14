@@ -271,6 +271,9 @@ function tryMoveAnimal(
           );
         }
 
+        if (gameObj.health != -1 && getGameObjLayer(gameObj.data) > Layer.Pad)
+          animal.isAttacking = true;
+
         if (
           !(getItem(gameObj.data)?.bossImmune && animals.find((a) => a.id == animal.type)?.boss)
         ) {
@@ -309,7 +312,7 @@ function tryMoveAnimal(
         } else {
           animal.health -= gameObj.dmg;
         }
-        animal.run(gameObj.location);
+        animal.runFrom(gameObj.location);
 
         if (animal.health <= 0) {
           let type = animals[animal.type];
@@ -416,6 +419,10 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
       tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
     }
   }
+
+  if (animal.getNearbyPlayers(state, animal.data.hitRange * 1.2).length) {
+    animal.isAttacking = true;
+  }
 }
 
 function pointCircle(point: Vec2, circlePos: Vec2, r: number) {
@@ -432,6 +439,12 @@ function getAttackLocation(player: Player) {
     player.location
   );
 }
+function getAttackLocationAnimal(animal: Animal) {
+  let range = animal.data.scale / 2;
+  return new Vec2(Math.cos(animal.angle) * range, Math.sin(animal.angle) * range).add(
+    animal.location
+  );
+}
 
 function checkAttack(player: Player, players: Player[]) {
   let hitPlayers: Player[] = [];
@@ -439,6 +452,19 @@ function checkAttack(player: Player, players: Player[]) {
   for (let hitPlayer of players) {
     if (
       pointCircle(getAttackLocation(player), hitPlayer.location, 35 * 2) &&
+      hitPlayer.mode !== PlayerMode.spectator
+    )
+      hitPlayers.push(hitPlayer);
+  }
+
+  return hitPlayers;
+}
+function checkAttackAnimal(animal: Animal, players: Player[]) {
+  let hitPlayers: Player[] = [];
+
+  for (let hitPlayer of players) {
+    if (
+      pointCircle(getAttackLocationAnimal(animal), hitPlayer.location, animal.data.hitRange) &&
       hitPlayer.mode !== PlayerMode.spectator
     )
       hitPlayers.push(hitPlayer);
@@ -486,6 +512,26 @@ function checkAttackGameObj(player: Player, gameObjects: GameObject[]) {
 
   return hitGameObjects;
 }
+function checkAttackGameObjAnimal(animal: Animal, gameObjects: GameObject[]) {
+  const GATHER_RANGE = Math.PI / 2.3;
+  let hitGameObjects: GameObject[] = [];
+  let range = animal.data.hitRange;
+
+  for (let gameObject of gameObjects) {
+    if (range + gameObject.scale < gameObject.location.distance(animal.location)) continue;
+
+    let angle = Math.atan2(
+      gameObject.location.y - animal.location.y,
+      gameObject.location.x - animal.location.x
+    );
+    let angleDist = Math.abs(animal.angle - angle) % (2 * Math.PI);
+
+    if (angleDist > Math.PI) angleDist = 2 * Math.PI - angleDist;
+    if (angleDist <= GATHER_RANGE) hitGameObjects.push(gameObject);
+  }
+
+  return hitGameObjects;
+}
 
 function collideProjectilePlayer(projectile: Projectile, player: Player) {
   return collideCircles(projectile.location, 10, player.location, 35);
@@ -519,4 +565,6 @@ export {
   collideProjectileAnimal,
   collideProjectileGameObject,
   pointCircle,
+  checkAttackAnimal,
+  checkAttackGameObjAnimal,
 };

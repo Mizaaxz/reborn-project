@@ -45,6 +45,19 @@ export default class Animal extends Entity {
     this.size = Math.floor((this.data.scale || 0) / 1.5) || 30;
   }
 
+  private _attack: boolean = false;
+
+  public lastHitTime: number = 0;
+  public gatherAnim: (() => any) | undefined;
+
+  public get isAttacking(): boolean {
+    return this._attack;
+  }
+
+  public set isAttacking(val: boolean) {
+    this._attack = val;
+  }
+
   die() {
     let game = getGame();
     if (game) {
@@ -61,8 +74,8 @@ export default class Animal extends Entity {
     }
   }
 
-  getNearbyPlayers(state: GameState) {
-    const RADIUS = config.playerNearbyRadius || 1250;
+  getNearbyPlayers(state: GameState, range?: number) {
+    const RADIUS = range || config.playerNearbyRadius || 1250;
 
     let players = [];
 
@@ -117,15 +130,32 @@ export default class Animal extends Entity {
     return gameObjects;
   }
 
-  run(from: Vec2) {
+  runFrom(point: Vec2) {
+    if (this.data.static) return;
     if (this.runTimer) clearTimeout(this.runTimer);
 
-    this.angle = Math.atan2(this.location.y - from.y, this.location.x - from.x);
+    this.angle = Math.atan2(this.location.y - point.y, this.location.x - point.x);
     this.moving = true;
 
     let anim = this;
     this.runTimer = setTimeout(function () {
       anim.moving = false;
     }, 2000);
+  }
+  runTo(point: Vec2) {
+    if (this.data.static) return;
+    if (this.runTimer) clearTimeout(this.runTimer);
+
+    this.angle = Math.atan2(point.y - this.location.y, point.x - this.location.x);
+    this.moving = true;
+
+    let anim = this;
+    this.runTimer = setTimeout(function () {
+      anim.moving = false;
+    }, 1000);
+  }
+  stopRunning() {
+    if (this.runTimer) clearTimeout(this.runTimer);
+    this.moving = false;
   }
 }
