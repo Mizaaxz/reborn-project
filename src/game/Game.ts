@@ -64,6 +64,7 @@ import accessories from "../definitions/accessories";
 import { PlayerMode } from "../moomoo/PlayerMode";
 import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 import initPacketHandlers from "../packethandlers";
+import updateWindmills from "./updateWindmills";
 
 let currentGame: Game | null = null;
 
@@ -108,7 +109,8 @@ export default class Game {
     this.generateStructures();
     this.spawnAnimals();
 
-    setInterval(this.updateWindmills.bind(this), 1000);
+    let g = this;
+    setInterval(() => updateWindmills(g), 1000);
     this.spawnAnimalsInt = setInterval(this.spawnAnimals.bind(this), 10000);
 
     initPacketHandlers(this);
@@ -2000,47 +2002,7 @@ export default class Game {
   public windmillTicks = 0;
   public spikeAdvance = 0;
   public spawnBounds = 14400;
-  updateWindmills() {
-    this.windmillTicks++;
-    for (let windmill of this.state.gameObjects.filter(
-      (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
-    )) {
-      let player = this.state.players.find((player) => player.id == windmill.ownerSID);
 
-      if (player && !player.dead) {
-        let hat = getHat(player.hatID);
-
-        player.points += getPPS(windmill.data) + (hat?.pps || 0);
-        player.xp += getPPS(windmill.data) + (hat?.pps || 0);
-      }
-    }
-
-    if (this.mode.includes(GameModes.random) && this.windmillTicks % 10 == 0)
-      this.randomizePlayers();
-
-    let waitTickAmt = 5;
-    if (this.spikeAdvance > 6800) waitTickAmt = 15;
-    else if (this.spikeAdvance > 6000) waitTickAmt = 10;
-    else if (this.spikeAdvance > 4500) waitTickAmt = 5;
-    else if (this.spikeAdvance > 3000) waitTickAmt = 2;
-    else if (this.spikeAdvance > 1500) waitTickAmt = 7;
-    if (this.mode.includes(GameModes.royale) && this.windmillTicks % waitTickAmt == 0) {
-      this.advanceSpikes();
-      this.state.players.forEach((p) => {
-        if (
-          ((p.invincible && p.mode !== PlayerMode.spectator) ||
-            (p.mode == PlayerMode.spectator &&
-              (!p.hideLeaderboard || p.invisible) &&
-              !getHat(p.hatID)?.invisTimer)) &&
-          !p.dead
-        )
-          p.die();
-      });
-      this.state.tribes.forEach((t) => {
-        this.state.removeTribe(this.state.tribes.indexOf(t));
-      });
-    }
-  }
   /**
    * Handles packets from the client
    * @param client the client sending the message
