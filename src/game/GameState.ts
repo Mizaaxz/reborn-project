@@ -1,6 +1,6 @@
 import Vec2 from "vec2";
 import Player from "../moomoo/Player";
-import { Game } from "./Game";
+import Game from "./Game";
 import Client from "../moomoo/Client";
 import { Tribe } from "../moomoo/Tribes";
 import { Packet } from "../packet/Packet";
@@ -10,7 +10,6 @@ import { PacketType } from "../packet/PacketType";
 import Projectile from "../projectiles/Projectile";
 import { getProjectileSpeed, getProjectileRange } from "../projectiles/projectiles";
 import config from "../config";
-import { Broadcast } from "../moomoo/util";
 import Animal from "../moomoo/Animal";
 
 export default class GameState {
