@@ -24,7 +24,6 @@ import {
   getPrerequisiteWeapon,
   getWeaponSpeedMultiplier,
   getStructureDamage,
-  getPPS,
   isRangedWeapon,
   getProjectileType,
   getRecoil,
@@ -35,7 +34,6 @@ import {
   getScale,
   getGameObjHealth,
   getGameObjDamage,
-  SecondaryWeapons,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "../moomoo/Upgrades";
@@ -65,6 +63,7 @@ import { PlayerMode } from "../moomoo/PlayerMode";
 import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 import initPacketHandlers from "../packethandlers";
 import updateWindmills from "./updateWindmills";
+import generateStructures from "./generateStructures";
 
 let currentGame: Game | null = null;
 
@@ -106,7 +105,7 @@ export default class Game {
     this.lastUpdate = Date.now();
     this.physTimer = new NanoTimer();
     this.physTimer.setInterval(this.physUpdate.bind(this), "", `${this.physDelay}m`);
-    this.generateStructures();
+    generateStructures(this);
     this.spawnAnimals();
 
     let g = this;
@@ -173,101 +172,7 @@ export default class Game {
       : 0;
   }
 
-  generateStructures() {
-    const gameObjectTypes = [
-      GameObjectType.Tree,
-      GameObjectType.Bush,
-      GameObjectType.Mine,
-      GameObjectType.GoldMine,
-    ];
-    const desertGameObjectTypes = [
-      GameObjectType.Bush,
-      GameObjectType.Mine,
-      GameObjectType.GoldMine,
-    ];
-    const riverGameObjectTypes = [GameObjectType.Mine];
-
-    outerLoop: for (let i = 0; i < 400; i++) {
-      let location = randomPos(14400, 14400);
-      let gameObjectType =
-        location.y >= 12e3
-          ? desertGameObjectTypes[Math.floor(Math.random() * desertGameObjectTypes.length)]
-          : location.y < 7550 && location.y > 6850
-          ? riverGameObjectTypes[Math.floor(Math.random() * riverGameObjectTypes.length)]
-          : gameObjectTypes[Math.floor(Math.random() * gameObjectTypes.length)];
-      let sizes = gameObjectSizes[gameObjectType];
-
-      if (sizes) {
-        let size = sizes[Math.floor(Math.random() * sizes.length)];
-
-        let newGameObject = new GameObject(
-          this.getNextGameObjectID(),
-          location,
-          0,
-          size,
-          gameObjectType,
-          gameObjectType == GameObjectType.Tree || gameObjectType == GameObjectType.Bush
-            ? size * 0.6
-            : size,
-          {},
-          -1,
-          -1,
-          gameObjectType == GameObjectType.Bush && location.y >= 12e3 ? 35 : 0
-        );
-
-        for (let gameObject of this.state.gameObjects) {
-          if (Physics.collideGameObjects(gameObject, newGameObject)) {
-            i--;
-            continue outerLoop;
-          }
-        }
-        this.state.gameObjects.push(newGameObject);
-      }
-    }
-
-    this.generateBossArena();
-  }
-
   public bossLoc = new Vec2(3333, 13155);
-  generateBossArena() {
-    let loc = this.bossLoc;
-    let locsize = 777;
-    let beginLoc = loc.subtract(locsize, locsize, true);
-    let endLoc = loc.add(locsize, locsize, true);
-    let locpad = 250;
-
-    this.state.gameObjects
-      .filter(
-        (o) =>
-          o.location.x < endLoc.x + locpad &&
-          o.location.x > beginLoc.x - locpad &&
-          o.location.y < endLoc.y + locpad &&
-          o.location.y > beginLoc.y - locpad
-      )
-      .map((g) => this.state.removeGameObject(g));
-
-    let game = this;
-    function genStone(x: number, y: number) {
-      game.generateStructure("stone", loc.x + x, loc.y + y, 115);
-    }
-
-    let rockAngles: number[] = [];
-    let rockBlacklist: number[] = [];
-    for (let i = 0; i <= 15; i++) {
-      rockBlacklist.push(i);
-    }
-    for (let i = 350; i <= 365; i++) {
-      rockBlacklist.push(i);
-    }
-    for (let i = 0; i <= 365; i += 11) {
-      if (!rockBlacklist.includes(i)) rockAngles.push(i);
-    }
-    rockAngles.forEach((r) => {
-      genStone(Math.cos((r * Math.PI) / 180) * locsize, Math.sin((r * Math.PI) / 180) * locsize);
-    });
-
-    this.generateStructure("s", endLoc.x + 90, loc.y + 20, 115);
-  }
 
   generateStructure(objType: string, x: number, y: number, objSize?: number | undefined) {
     let obj = objType.split(":")[0];
