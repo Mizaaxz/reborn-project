@@ -54,6 +54,7 @@ enum PacketType {
   UPDATE_PLACE_LIMIT,
   ADD_PROJECTILE,
   UPDATE_PROJECTILES,
+  SHOTGUN_HIT,
   /* reborn packets */
   AUTH,
   BROADCAST,

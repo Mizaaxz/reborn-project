@@ -1236,6 +1236,15 @@ export default class Game {
                   player.layer
                 );
               });
+
+              for (let pl of player.getNearbyPlayers(this.state)) {
+                pl.client?.socket.send(
+                  packetFactory.serializePacket(new Packet(PacketType.SHOTGUN_HIT, [player.id]))
+                );
+              }
+              player.client?.socket.send(
+                packetFactory.serializePacket(new Packet(PacketType.SHOTGUN_HIT, [player.id]))
+              );
             } else {
               this.state.addProjectile(
                 getProjectileType(player.selectedWeapon),
