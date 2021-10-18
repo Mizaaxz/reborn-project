@@ -10,6 +10,7 @@ import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 import db from "enhanced.db";
 import { AdminLevel } from "../moomoo/Admin";
+import { Account } from "../moomoo/Account";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SPAWN),
@@ -63,13 +64,21 @@ getGame()?.addPacketHandler(
           }
         }
 
-        let filteredName: any[] = [];
+        let filteredName: any = [];
         [...packet.data[0].name].forEach((char) => {
           if (config.allowedMax.split("").includes(char)) filteredName.push(char);
         });
-        newPlayer.name = newPlayer.client?.account
-          ? newPlayer.client.account.username || "unknown"
-          : "Guest";
+        filteredName = filteredName.join("").trim().slice(0, config.usernameLength.max);
+        if (newPlayer.client?.account) {
+          let plraccount = db.get(
+            `account_${newPlayer.client.account.username.replace(/ /g, "+")}`
+          ) as Account;
+          plraccount.displayName = filteredName || newPlayer.client.account.username;
+          newPlayer.client.account = plraccount;
+          db.set(`account_${newPlayer.client.account.username.replace(/ /g, "+")}`, plraccount);
+          newPlayer.name =
+            newPlayer.client.account.displayName || newPlayer.client.account.username || "unknown";
+        } else newPlayer.name = "Guest";
         newPlayer.skinColor = Number(packet.data[0].skin) || SkinColor.Light2;
         newPlayer.dead = false;
         newPlayer.health = 100;
