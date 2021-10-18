@@ -16,7 +16,7 @@ import { Animals, Broadcast } from "./moomoo/util";
 import { GameModes } from "./game/GameMode";
 import db from "enhanced.db";
 import * as logger from "./log";
-import { Account } from "./moomoo/Account";
+import { Account, getAccount } from "./moomoo/Account";
 import { AdminLevel } from "./moomoo/Admin";
 import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
 import readline from "readline";
@@ -829,9 +829,7 @@ Command(
   function (args: any[], source: Player | undefined) {
     let level = AdminLevel.Admin;
     if (Number(args[args.length - 1])) level = Number(args.pop());
-    let account = db.get(
-      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
-    ) as Account;
+    let account = getAccount(args.slice(1).join(" ") || "");
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
@@ -852,9 +850,8 @@ Command(
 Command(
   "acc.demote",
   function (args: any[], source: Player | undefined) {
-    let account = db.get(
-      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
-    ) as Account;
+    let account = getAccount(args.slice(1).join(" ") || "");
+
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
@@ -874,9 +871,8 @@ Command(
 Command(
   "acc.delete",
   function (args: any[], source: Player | undefined) {
-    let account = db.get(
-      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
-    ) as Account;
+    let account = getAccount(args.slice(1).join(" ") || "");
+
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
@@ -896,9 +892,8 @@ Command(
   "acc.setyt",
   function (args: any[], source: Player | undefined) {
     let yt = boolSelector(args.pop()) || false;
-    let account = db.get(
-      `account_${(args.slice(1).join(" ") || "").replace(/ /g, "+")}`
-    ) as Account;
+    let account = getAccount(args.slice(1).join(" ") || "");
+
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");

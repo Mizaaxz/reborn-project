@@ -2,7 +2,7 @@ import { getGame } from "../game/Game";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 import bcrypt from "bcrypt";
-import { Account } from "../moomoo/Account";
+import { Account, getAccount } from "../moomoo/Account";
 import db from "enhanced.db";
 
 getGame()?.addPacketHandler(
@@ -17,7 +17,7 @@ getGame()?.addPacketHandler(
     if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
       return game.kickClient(client, "disconnected");
     client.triedAuth = true;
-    let account = db.get(`account_${packet.data[0].name.replace(/ /g, "+")}`) as Account;
+    let account = getAccount(packet.data[0].name);
     if (!account) return;
     bcrypt.compare(packet.data[0].password, account.password || "", (_: any, match: any) => {
       if (match === true) {

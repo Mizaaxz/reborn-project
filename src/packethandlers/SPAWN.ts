@@ -10,7 +10,7 @@ import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 import db from "enhanced.db";
 import { AdminLevel } from "../moomoo/Admin";
-import { Account } from "../moomoo/Account";
+import { Account, getAccount, setAccount } from "../moomoo/Account";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SPAWN),
@@ -72,12 +72,12 @@ getGame()?.addPacketHandler(
         if (newPlayer.client?.account) {
           if (filteredName.toLowerCase() == "guest")
             filteredName = newPlayer.client?.account?.username;
-          let plraccount = db.get(
-            `account_${newPlayer.client.account.username.replace(/ /g, "+")}`
-          ) as Account;
+
+          let plraccount = getAccount(newPlayer.client.account.username);
           plraccount.displayName = filteredName || newPlayer.client.account.username;
           newPlayer.client.account = plraccount;
-          db.set(`account_${newPlayer.client.account.username.replace(/ /g, "+")}`, plraccount);
+          setAccount(newPlayer.client.account.username, plraccount);
+
           newPlayer.name =
             newPlayer.client.account.displayName || newPlayer.client.account.username || "unknown";
         } else newPlayer.name = "Guest";
