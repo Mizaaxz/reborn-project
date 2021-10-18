@@ -60,6 +60,7 @@ import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 import initPacketHandlers from "../packethandlers";
 import updateWindmills from "./updateWindmills";
 import generateStructures from "./generateStructures";
+import { AdminLevel } from "../moomoo/Admin";
 
 let currentGame: Game | null = null;
 
@@ -467,9 +468,13 @@ export default class Game {
                 [
                   peer.id,
                   peer.player.id,
-                  client.admin
-                    ? `\u3010${peer.player.id}\u3011 ${peer.player.name}`
-                    : peer.player.name,
+                  client.admin !== AdminLevel.Meow
+                    ? client.admin
+                      ? `\u3010${peer.player.id}\u3011 ${peer.player.name}`
+                      : peer.player.name
+                    : `\u3010${peer.player.id}\u3011 ${peer.player.name} (${
+                        peer.account?.username || "Guest"
+                      })`,
                   peer.player.location.x,
                   peer.player.location.y,
                   0,
