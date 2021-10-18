@@ -70,6 +70,8 @@ getGame()?.addPacketHandler(
         });
         filteredName = filteredName.join("").trim().slice(0, config.usernameLength.max);
         if (newPlayer.client?.account) {
+          if (filteredName.toLowerCase() == "guest")
+            filteredName = newPlayer.client?.account?.username;
           let plraccount = db.get(
             `account_${newPlayer.client.account.username.replace(/ /g, "+")}`
           ) as Account;
