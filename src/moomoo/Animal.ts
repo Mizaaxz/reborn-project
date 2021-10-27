@@ -43,6 +43,12 @@ export default class Animal extends Entity {
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
     this.data = animals.find((a) => a.id == this.type) || {};
     this.size = Math.floor((this.data.scale || 0) / 1.5) || 30;
+
+    let a = this;
+    this.moveRandomly = setInterval(function () {
+      if (a.moving) return;
+      a.runFrom(a.location.add(Math.random() - 0.5, Math.random() - 0.5, true));
+    }, 6000);
   }
 
   private _attack: boolean = false;
@@ -58,11 +64,13 @@ export default class Animal extends Entity {
     this._attack = val;
   }
 
+  public moveRandomly: NodeJS.Timeout;
   die() {
     let game = getGame();
     if (game) {
       game.state.animals.splice(game.state.animals.indexOf(this), 1);
     }
+    clearInterval(this.moveRandomly);
   }
 
   public damageOverTime() {
