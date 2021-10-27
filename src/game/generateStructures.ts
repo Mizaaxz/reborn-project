@@ -25,6 +25,11 @@ export default function generateStructures(game: Game) {
         : gameObjectTypes[Math.floor(Math.random() * gameObjectTypes.length)];
     let sizes = gameObjectSizes[gameObjectType];
 
+    if (gameObjectType == GameObjectType.GoldMine && Math.random() < 0.6) {
+      i--;
+      continue outerLoop;
+    }
+
     if (sizes) {
       let size = sizes[Math.floor(Math.random() * sizes.length)];
 

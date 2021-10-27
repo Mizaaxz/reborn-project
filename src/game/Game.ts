@@ -235,7 +235,7 @@ export default class Game {
       if (this.state.animals.length >= 25) break;
       let location = randomPos(14400, 14400);
 
-      let allowedTypes = animals.filter((a) => !a.hostile && !a.static);
+      let allowedTypes = animals.filter((a) => !a.boss && !a.static);
       let type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)].id;
 
       let newAnimal = new Animal(this.genAnimalSID(), location, type, "Test Subject");
