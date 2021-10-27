@@ -991,6 +991,39 @@ export default class Game {
         }
       });
 
+    this.state.players.forEach((p) => {
+      let h = getHat(p.hatID);
+      if (h?.turret) {
+        let nearbyPlayers = this.state.players.filter(
+          (pl) =>
+            p.id !== pl.id &&
+            !this.state.tribes.find(
+              (t) => t.membersSIDs.includes(p.id) && t.membersSIDs.includes(pl.id)
+            ) &&
+            pl.location.distance(pl.location) < (h?.turret?.range || 0)
+        );
+        let nearestPlayer = nearbyPlayers.find(
+          (pl) => pl.location == pl.location.nearest(nearbyPlayers.map((plr) => plr.location))
+        );
+
+        if (p.lastShoot < Date.now() && nearestPlayer) {
+          p.lastShoot = Date.now() + (h.turret.rate || 0);
+          let turretAngle = Math.atan2(
+            nearestPlayer.location.y - p.location.y,
+            nearestPlayer.location.x - p.location.x
+          );
+
+          this.state.addProjectile(
+            ProjectileType.Turret,
+            p.location.add(0, 0, true),
+            undefined,
+            turretAngle,
+            Layer.Platform
+          );
+        }
+      }
+    });
+
     this.state.animals.forEach((animal) => {
       if (animal.data.hostile) {
         let near = animal.getNearbyPlayers(this.state, animal.data.viewRange);

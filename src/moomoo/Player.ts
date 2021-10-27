@@ -264,6 +264,7 @@ export default class Player extends Entity {
   public client: Client | undefined;
 
   private _attack: boolean = false;
+  public lastShoot: number = Date.now() + 1000;
 
   public lastHitTime: number = 0;
   public gatherAnim: (() => any) | undefined;
