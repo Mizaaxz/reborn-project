@@ -995,7 +995,11 @@ export default class Game {
       if (animal.data.hostile) {
         let near = animal.getNearbyPlayers(this.state, animal.data.viewRange);
         let nearest = near
-          .filter((p) => p.location.distance(animal.location) >= animal.data.hitRange / 1.5)
+          .filter((p) =>
+            animal.data.weapon
+              ? p.location.distance(animal.location) >= animal.data.hitRange / 1.5
+              : true
+          )
           .sort((p1, p2) => {
             return p1.location.distance(animal.location) > p2.location.distance(animal.location)
               ? 1
@@ -1013,14 +1017,14 @@ export default class Game {
       }
 
       if (animal.moving) {
-        Physics.moveTowards(animal, animal.angle, config.defaultSpeed - 0.1, deltaTime, this.state);
+        Physics.moveTowards(animal, animal.angle, animal.data.speed * 900, deltaTime, this.state);
       }
 
       if (animal.isAttacking) {
         if (now - animal.lastHitTime >= animal.data.hitDelay) {
           animal.lastHitTime = now;
           animal.isAttacking = false;
-          this.gatherAnimBoss(animal);
+          if (animal.data.weapon) this.gatherAnimBoss(animal);
 
           let nearbyPlayers = animal.getNearbyPlayers(this.state);
 

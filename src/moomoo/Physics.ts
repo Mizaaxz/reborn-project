@@ -272,7 +272,7 @@ function tryMoveAnimal(
           );
         }
 
-        if (gameObj.health != -1 && getGameObjLayer(gameObj.data) > Layer.Pad)
+        if (gameObj.health != -1 && getGameObjLayer(gameObj.data) > Layer.Pad && animal.data.weapon)
           animal.isAttacking = true;
 
         if (
@@ -418,10 +418,32 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
       animal.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
       tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
       tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
+
+      let now = Date.now();
+      let game = getGame();
+      if (now - animal.lastHitTime >= animal.data.hitDelay && game && !animal.data.weapon) {
+        animal.lastHitTime = now;
+
+        let dmg = game.damageFromBoss(p, animal, animal.data.dmg);
+
+        if (p.health <= 0 && p.client && !p.invincible) game.killPlayer(p);
+        else p.velocity.add(0.6 * Math.cos(animal.angle), 0.6 * Math.sin(animal.angle));
+
+        p.client?.socket.send(
+          PacketFactory.getInstance().serializePacket(
+            new Packet(PacketType.HEALTH_CHANGE, [
+              p.location.x,
+              p.location.y,
+              p.invincible ? "Invincible!" : Math.round(dmg),
+              1,
+            ])
+          )
+        );
+      }
     }
   }
 
-  if (animal.getNearbyPlayers(state, animal.data.hitRange * 1.2).length) {
+  if (animal.getNearbyPlayers(state, animal.data.hitRange * 1.2).length && animal.data.weapon) {
     animal.isAttacking = true;
   }
 }

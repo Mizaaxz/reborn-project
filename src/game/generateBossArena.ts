@@ -1,3 +1,4 @@
+import { Animals } from "../moomoo/util";
 import Game from "./Game";
 
 export default function generateBossArena(game: Game) {
@@ -37,4 +38,12 @@ export default function generateBossArena(game: Game) {
   });
 
   game.generateStructure("s", endLoc.x + 90, loc.y + 20, 115);
+
+  game.state.addAnimal(
+    game.genAnimalSID(),
+    loc,
+    Math.random() > 0.5 ? Animals.moostafa : Animals.moofie,
+    "Boss"
+  );
+  game.state.addAnimal(game.genAnimalSID(), loc, Animals.treasure, "Treasure");
 }
