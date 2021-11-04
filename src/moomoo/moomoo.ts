@@ -3,6 +3,7 @@ import Game from "../game/Game";
 import { IncomingMessage } from "http";
 import db from "enhanced.db";
 import msgpack from "msgpack-lite";
+import { existsSync } from "fs";
 
 /**
  * Gets a unique (if game is passed) id for a MooMoo.io client
@@ -38,12 +39,14 @@ export function startServer(server: WSServer) {
   server.addListener("connection", (socket: WebSocket, req: IncomingMessage) => {
     let ip = "";
 
-    if (process.env.BEHIND_PROXY) {
+    if (existsSync(__dirname + "/../../PROXIED") && req.headers["x-forwarded-for"]) {
       // not sure
       ip = (req.headers["x-forwarded-for"] as string).split(/\s*,\s*/)[0];
+      console.log("proxying connection");
     } else if (req.socket.remoteAddress) {
       ip = req.socket.remoteAddress;
     }
+    console.log(ip);
 
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
     if (bannedIPs.includes(ip)) {
