@@ -46,7 +46,6 @@ export function startServer(server: WSServer) {
     } else if (req.socket.remoteAddress) {
       ip = req.socket.remoteAddress;
     }
-    console.log(ip);
 
     let bannedIPs = (db.get("bannedIPs") as any[]) || [];
     if (bannedIPs.includes(ip)) {
