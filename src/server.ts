@@ -59,7 +59,7 @@ app.get("/status", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("http://moomooreborn.io");
+  res.redirect("https://moomooreborn.io");
 });
 
 app.get("/api/v1/def", (req, res) => {
