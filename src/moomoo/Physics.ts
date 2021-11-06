@@ -557,6 +557,7 @@ function checkAttackGameObjAnimal(animal: Animal, gameObjects: GameObject[]) {
 }
 
 function collideProjectilePlayer(projectile: Projectile, player: Player) {
+  if (player.mode == PlayerMode.spectator) return false;
   return collideCircles(projectile.location, 10, player.location, 35);
 }
 function collideProjectileAnimal(projectile: Projectile, animal: Animal) {
