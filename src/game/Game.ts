@@ -1028,10 +1028,13 @@ export default class Game {
       if (animal.data.hostile) {
         let near = animal.getNearbyPlayers(this.state, animal.data.viewRange);
         let nearest = near
-          .filter((p) =>
-            animal.data.weapon
-              ? p.location.distance(animal.location) >= animal.data.hitRange / 1.5
-              : true
+          .filter(
+            (p) =>
+              (animal.data.weapon
+                ? p.location.distance(animal.location) >= animal.data.hitRange / 1.5
+                : true) &&
+              !p.invisible &&
+              !p.invincible
           )
           .sort((p1, p2) => {
             return p1.location.distance(animal.location) > p2.location.distance(animal.location)
