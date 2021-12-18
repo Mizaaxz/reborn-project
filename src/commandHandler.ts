@@ -23,7 +23,8 @@ const Command = function (
 
       if (text.startsWith("/")) text = text.replace("/", "");
       let parsed = text.split(/ +/g);
-      if (permLevel < options.level) return "You do not have permission to run this command.";
+      if (permLevel < options.level)
+        return "You do not have permission to run this command.";
 
       return callback(parsed, source);
     },
@@ -67,6 +68,11 @@ const playerSelector = function (
           .replace(/\+/g, " ")
     );
 
+  if (Number(plr.replace(/\,/g, "")) && allowMultiple) {
+    let IDs = plr.split(",").map(Number);
+    return game.state.players.filter((p) => IDs.includes(p.id));
+  }
+
   player = game.state.players.filter(
     (p) =>
       p.name.toLowerCase() == plr.toLowerCase() ||
@@ -98,7 +104,10 @@ function boolSelector(bool: string | undefined) {
 function compareAdmin(plr?: Player, receiver?: Player) {
   if (plr == receiver) return true;
   else
-    return (plr?.client?.account?.adminLevel || 0) > (receiver?.client?.account?.adminLevel || 0);
+    return (
+      (plr?.client?.account?.adminLevel || 0) >
+      (receiver?.client?.account?.adminLevel || 0)
+    );
 }
 
 export { Command, GetCommand, playerSelector, boolSelector, compareAdmin };
