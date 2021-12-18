@@ -168,7 +168,7 @@ Command(
       }
     }
   },
-  { aliases: ["invinc", "nokill"], level: AdminLevel.Helper }
+  { aliases: ["invinc", "nokill", "iv"], level: AdminLevel.Helper }
 );
 
 Command(
