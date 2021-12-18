@@ -4,13 +4,25 @@ import { getGame } from "./game/Game";
 import { PacketFactory } from "./packet/PacketFactory";
 import { Packet, Side } from "./packet/Packet";
 import { PacketType } from "./packet/PacketType";
-import { boolSelector, Command, compareAdmin, GetCommand, playerSelector } from "./commandHandler";
+import {
+  boolSelector,
+  Command,
+  compareAdmin,
+  GetCommand,
+  playerSelector,
+} from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
 import Vec2 from "vec2";
 import GameObject from "./gameobjects/GameObject";
-import { getGameObjDamage, getGameObjHealth, getScale, WeaponModes, Weapons } from "./items/items";
+import {
+  getGameObjDamage,
+  getGameObjHealth,
+  getScale,
+  WeaponModes,
+  Weapons,
+} from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
 import { Animals, Broadcast } from "./moomoo/util";
 import { GameModes } from "./game/GameMode";
@@ -65,7 +77,8 @@ Command(
       let player = playerSelector(args[1], source);
       if (!player) return "Invalid Player ID";
 
-      if (player instanceof Player) compareAdmin(source, player) && game.killPlayer(player);
+      if (player instanceof Player)
+        compareAdmin(source, player) && game.killPlayer(player);
       else
         player.forEach((p) => {
           if (compareAdmin(source, p)) game?.killPlayer(p);
@@ -157,7 +170,8 @@ Command(
       if (game) {
         let bool = boolSelector(args[2]);
         let bool1 = boolSelector(args[1]);
-        if (player == source) player.invincible = bool1 == null ? !player.invincible : bool1;
+        if (player == source)
+          player.invincible = bool1 == null ? !player.invincible : bool1;
         else if (player instanceof Player)
           player.invincible = bool == null ? !player.invincible : bool;
         else if (player.length) {
@@ -290,7 +304,9 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = game.state.players.find(
+        (player: { id: any }) => player.id == playerSID
+      );
 
       if (player) {
         switch (resourceType) {
@@ -349,7 +365,9 @@ Command(
             break;
 
           case "tribe":
-            let tribe = game.state.tribes.filter((t) => t.name == args.slice(3).join(" "))[0];
+            let tribe = game.state.tribes.filter(
+              (t) => t.name == args.slice(3).join(" ")
+            )[0];
             if (tribe) {
               let tribeIndex = game.state.tribes.findIndex((t) => {
                 if (t) t.membersSIDs.includes(player?.id as number);
@@ -396,7 +414,8 @@ Command(
 
       if (player instanceof Player) {
         if (player.client) {
-          if (player.client.admin >= (source?.client?.admin || -1)) return false;
+          if (player.client.admin >= (source?.client?.admin || -1))
+            return false;
           game.kickClient(player.client, reason);
         }
       } else {
@@ -513,8 +532,16 @@ Command(
     game.state.gameObjects
       .filter(
         (o) =>
-          between(o.location.x, pos.topleft.x - removeRadius, pos.topright.x + removeRadius) &&
-          between(o.location.y, pos.topleft.y - removeRadius, pos.bottomright.y + removeRadius)
+          between(
+            o.location.x,
+            pos.topleft.x - removeRadius,
+            pos.topright.x + removeRadius
+          ) &&
+          between(
+            o.location.y,
+            pos.topleft.y - removeRadius,
+            pos.bottomright.y + removeRadius
+          )
       )
       .forEach((o) => {
         if (game && o && !o.protect) game.state.removeGameObject(o);
@@ -524,11 +551,31 @@ Command(
       game?.generateStructure("stone:normal", wall[0], wall[1], 90);
     });
 
-    game.generateStructure("tree:normal", pos.topleft.x + 270, pos.topleft.y + 140, 120);
-    game.generateStructure("stone:normal", pos.topleft.x + 200, pos.topleft.y + 200, 90);
+    game.generateStructure(
+      "tree:normal",
+      pos.topleft.x + 270,
+      pos.topleft.y + 140,
+      120
+    );
+    game.generateStructure(
+      "stone:normal",
+      pos.topleft.x + 200,
+      pos.topleft.y + 200,
+      90
+    );
 
-    game.generateStructure("tree:normal", pos.topright.x - 270, pos.topright.y + 140, 120);
-    game.generateStructure("stone:normal", pos.topright.x - 200, pos.topright.y + 200, 90);
+    game.generateStructure(
+      "tree:normal",
+      pos.topright.x - 270,
+      pos.topright.y + 140,
+      120
+    );
+    game.generateStructure(
+      "stone:normal",
+      pos.topright.x - 200,
+      pos.topright.y + 200,
+      90
+    );
 
     //TODO: make this automatic
     game.generateStructure("food:normal", loc.x - 210, pos.topleft.y + 100, 70);
@@ -583,7 +630,9 @@ Command(
 
     if (game) {
       let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+        game.state.players.find(
+          (player: { id: any }) => player.id == playerSID
+        ) || source;
       if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
           if (!game) return;
@@ -641,7 +690,9 @@ Command(
 
     if (game) {
       let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+        game.state.players.find(
+          (player: { id: any }) => player.id == playerSID
+        ) || source;
       if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
           if (!game) return;
@@ -740,7 +791,9 @@ Command(
 
       if (source.client)
         source.client.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]))
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_ITEMS, [source.items, 0])
+          )
         );
     }
   },
@@ -839,7 +892,8 @@ Command(
     db.set(`account_${account.username.replace(/ /g, "+")}`, account);
     getGame()
       ?.state.players.filter(
-        (p) => p.client?.account && p.client.account.username == account.username
+        (p) =>
+          p.client?.account && p.client.account.username == account.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Promoted.");
@@ -860,7 +914,8 @@ Command(
     db.set(`account_${account.username.replace(/ /g, "+")}`, account);
     getGame()
       ?.state.players.filter(
-        (p) => p.client?.account && p.client.account.username == account.username
+        (p) =>
+          p.client?.account && p.client.account.username == account.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Demoted.");
@@ -880,7 +935,8 @@ Command(
     db.delete(`account_${account.username.replace(/ /g, "+")}`);
     getGame()
       ?.state.players.filter(
-        (p) => p.client?.account && p.client.account.username == account.username
+        (p) =>
+          p.client?.account && p.client.account.username == account.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Account Deleted.");
@@ -937,13 +993,25 @@ Command(
       getGame()?.sendPlayerUpdates();
       [
         new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
-        new Packet(PacketType.UPDATE_ITEMS, [[source.weapon, source.secondaryWeapon], 1]),
+        new Packet(PacketType.UPDATE_ITEMS, [
+          [source.weapon, source.secondaryWeapon],
+          1,
+        ]),
         new Packet(PacketType.UPGRADES, [0, 0]),
-        new Packet(PacketType.HEALTH_CHANGE, [source.location.x, source.location.y, ":3", 1]),
+        new Packet(PacketType.HEALTH_CHANGE, [
+          source.location.x,
+          source.location.y,
+          ":3",
+          1,
+        ]),
         new Packet(PacketType.EVAL, [
           `document.getElementById("chatBox").setAttribute("maxlength",999999);`,
         ]),
-      ].map((p) => source.client && source.client.socket.send(packetFactory.serializePacket(p)));
+      ].map(
+        (p) =>
+          source.client &&
+          source.client.socket.send(packetFactory.serializePacket(p))
+      );
     }
   },
   {
@@ -994,13 +1062,25 @@ Command(
       getGame()?.sendPlayerUpdates();
       [
         new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
-        new Packet(PacketType.UPDATE_ITEMS, [[source.weapon, source.secondaryWeapon], 1]),
+        new Packet(PacketType.UPDATE_ITEMS, [
+          [source.weapon, source.secondaryWeapon],
+          1,
+        ]),
         new Packet(PacketType.UPGRADES, [0, 0]),
-        new Packet(PacketType.HEALTH_CHANGE, [source.location.x, source.location.y, "W U M P", 1]),
+        new Packet(PacketType.HEALTH_CHANGE, [
+          source.location.x,
+          source.location.y,
+          "W U M P",
+          1,
+        ]),
         new Packet(PacketType.EVAL, [
           `document.getElementById("chatBox").setAttribute("maxlength",999999);`,
         ]),
-      ].map((p) => source.client && source.client.socket.send(packetFactory.serializePacket(p)));
+      ].map(
+        (p) =>
+          source.client &&
+          source.client.socket.send(packetFactory.serializePacket(p))
+      );
     }
   },
   {
@@ -1017,7 +1097,45 @@ Command(
 
     game.locked = args.slice(1).join(" ") || "";
     game.state.players.forEach((p) => {
-      p.client && game?.kickClient(p.client, "Server locked. Get the password from an admin.");
+      p.client &&
+        game?.kickClient(
+          p.client,
+          "Server locked. Get the password from an admin."
+        );
+    });
+  },
+  {
+    aliases: ["lockdown", "lockserver", "ls"],
+    level: AdminLevel.Admin,
+  }
+);
+
+Command(
+  "snake",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+    if (!game || !source) return;
+
+    let players = playerSelector(args[1], source);
+    if (players instanceof Player) players = [players];
+
+    let len = 0;
+    players?.forEach((p) => {
+      if (p.id == source.id) return;
+      len += 100;
+      let len2 = String(len);
+      setInterval(function () {
+        let ang = (source.angle * 180) / Math.PI;
+        ang = (ang + 180) % 360;
+        ang = (ang * Math.PI) / 180.0;
+        let x = Math.cos(ang);
+        let y = Math.sin(ang);
+        p.location = source.location.add(
+          x * Number(len2),
+          y * Number(len2),
+          true
+        );
+      }, 100);
     });
   },
   {
@@ -1027,7 +1145,9 @@ Command(
 );
 
 function logMethod(text: string) {
-  process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
+  process.stdout.write(
+    ansiEscapes.eraseLines(lastMessage.split("\n").length) + text
+  );
   lastMessage = text;
 }
 
@@ -1056,9 +1176,15 @@ function runCommand(command: string, source?: Player) {
   try {
     let err = GetCommand(command).execute(command, source);
     if (err && source?.client) Broadcast(err, source.client);
-    console.log(`Ran "${command}" from ${source ? `${source.name} (${source.id})` : "CONSOLE"}.`);
+    console.log(
+      `Ran "${command}" from ${
+        source ? `${source.name} (${source.id})` : "CONSOLE"
+      }.`
+    );
     logger.log(
-      `Player "${source?.name || "CONSOLE"}" (ID: ${source?.id || 0}) ran command "${command}".`
+      `Player "${source?.name || "CONSOLE"}" (ID: ${
+        source?.id || 0
+      }) ran command "${command}".`
     );
   } catch (_) {
     if (source?.client) Broadcast(`Error: ${_}`, source.client);
