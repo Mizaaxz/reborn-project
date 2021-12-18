@@ -1125,6 +1125,7 @@ Command(
       len += 100;
       let len2 = String(len);
       setInterval(function () {
+        if (!p) return;
         let ang = (source.angle * 180) / Math.PI;
         ang = (ang + 180) % 360;
         ang = (ang * Math.PI) / 180.0;
