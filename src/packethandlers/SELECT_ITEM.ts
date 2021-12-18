@@ -20,8 +20,12 @@ getGame()?.addPacketHandler(
           client.player.selectedWeapon = client.player.secondaryWeapon;
         else Broadcast("Error: INVALID_WEAPON", client);
       } else {
-        let item = client.player.items.filter((i) => i != undefined)[packet.data[0]];
-        if (!item && item !== 0) return;
+        if (
+          packet.data[0] == undefined ||
+          !client.player.items.includes(packet.data[0])
+        )
+          return;
+        let item = packet.data[0];
         let itemCost = getItemCost(item);
         let costs = chunk(itemCost, 2);
 
