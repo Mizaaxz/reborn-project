@@ -33,7 +33,7 @@ const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const VERSION = "1.12.0b";
+const VERSION = "1.14.0b";
 
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));
@@ -55,7 +55,11 @@ app.use((req, res, next) => {
 });
 
 app.get("/status", (req, res) => {
-  res.json({ uptime: format(process.uptime()), ver: VERSION, node: process.version });
+  res.json({
+    uptime: format(process.uptime()),
+    ver: VERSION,
+    node: process.version,
+  });
 });
 
 app.get("/", (req, res) => {
@@ -76,32 +80,63 @@ app.get("/api/v1/def", (req, res) => {
 
 app.post("/api/v1/login", (req, res) => {
   let username = req.body.username;
-  if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.login.NO_USERNAME });
+  if (!username)
+    return res.json({ error: "NO_USERNAME", text: errCodes.login.NO_USERNAME });
   let password = req.body.password;
-  if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
+  if (!password)
+    return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
   let account = db.fetch(`account_${username.replace(/ /g, "+")}`) as Account;
   if (!account)
-    return res.json({ error: "INVALID_USERNAME", text: errCodes.login.INVALID_USERNAME });
+    return res.json({
+      error: "INVALID_USERNAME",
+      text: errCodes.login.INVALID_USERNAME,
+    });
 
-  bcrypt.compare(password, account.password || "", function (err: any, match: any) {
-    if (err) return res.json({ error: "COMPARE_ERROR", text: errCodes.login.COMPARE_ERROR });
-    if (match === true) {
-      res.json({ ...account, ...{ token: b64.btoa(`${username}:${password}`) } });
-    } else {
-      res.json({ error: "INCORRECT_PASSWORD", text: errCodes.login.INCORRECT_PASSWORD });
+  bcrypt.compare(
+    password,
+    account.password || "",
+    function (err: any, match: any) {
+      if (err)
+        return res.json({
+          error: "COMPARE_ERROR",
+          text: errCodes.login.COMPARE_ERROR,
+        });
+      if (match === true) {
+        res.json({
+          ...account,
+          ...{ token: b64.btoa(`${username}:${password}`) },
+        });
+      } else {
+        res.json({
+          error: "INCORRECT_PASSWORD",
+          text: errCodes.login.INCORRECT_PASSWORD,
+        });
+      }
     }
-  });
+  );
 });
 app.post("/api/v1/create", (req, res) => {
   let username = req.body.username;
-  if (!username) return res.json({ error: "NO_USERNAME", text: errCodes.create.NO_USERNAME });
+  if (!username)
+    return res.json({
+      error: "NO_USERNAME",
+      text: errCodes.create.NO_USERNAME,
+    });
   let password = req.body.password;
-  if (!password) return res.json({ error: "NO_PASSWORD", text: errCodes.create.NO_PASSWORD });
+  if (!password)
+    return res.json({
+      error: "NO_PASSWORD",
+      text: errCodes.create.NO_PASSWORD,
+    });
   username = username.trim();
 
   let exists = db.fetch(`account_${username.replace(/ /g, "+")}`);
-  if (exists) return res.json({ error: "USERNAME_FOUND", text: errCodes.create.USERNAME_FOUND });
+  if (exists)
+    return res.json({
+      error: "USERNAME_FOUND",
+      text: errCodes.create.USERNAME_FOUND,
+    });
 
   let notAllowed: any[] = [];
   username.split("").forEach((a: any) => {
@@ -115,9 +150,15 @@ app.post("/api/v1/create", (req, res) => {
     });
 
   if (username.length > config.usernameLength.max)
-    return res.json({ error: "USERNAME_TOO_LONG", text: errCodes.create.USERNAME_TOO_LONG });
+    return res.json({
+      error: "USERNAME_TOO_LONG",
+      text: errCodes.create.USERNAME_TOO_LONG,
+    });
   if (username.length < config.usernameLength.min)
-    return res.json({ error: "USERNAME_TOO_SHORT", text: errCodes.create.USERNAME_TOO_SHORT });
+    return res.json({
+      error: "USERNAME_TOO_SHORT",
+      text: errCodes.create.USERNAME_TOO_SHORT,
+    });
 
   notAllowed = [];
   password.split("").forEach((a: any) => {
@@ -131,12 +172,23 @@ app.post("/api/v1/create", (req, res) => {
     });
 
   if (password.length > config.passwordLength.max)
-    return res.json({ error: "PASSWORD_TOO_LONG", text: errCodes.create.PASSWORD_TOO_LONG });
+    return res.json({
+      error: "PASSWORD_TOO_LONG",
+      text: errCodes.create.PASSWORD_TOO_LONG,
+    });
   if (password.length < config.passwordLength.min)
-    return res.json({ error: "PASSWORD_TOO_SHORT", text: errCodes.create.PASSWORD_TOO_SHORT });
+    return res.json({
+      error: "PASSWORD_TOO_SHORT",
+      text: errCodes.create.PASSWORD_TOO_SHORT,
+    });
 
   bcrypt.hash(password, 5, (err: any, hash: any) => {
-    if (err) return res.json({ error: "HASH_ERROR", text: errCodes.create.HASH_ERROR, err });
+    if (err)
+      return res.json({
+        error: "HASH_ERROR",
+        text: errCodes.create.HASH_ERROR,
+        err,
+      });
 
     db.set(`account_${username.replace(/ /g, "+")}`, {
       username,
