@@ -575,8 +575,8 @@ export default class Game {
         (player) => !player.dead && !player.hideLeaderboard
       ),
       (a, b) => {
-        if (a.points < b.points) return -1;
-        if (a.points > b.points) return 1;
+        if (a.score < b.score) return -1;
+        if (a.score > b.score) return 1;
         return 0;
       }
     )
@@ -585,7 +585,7 @@ export default class Game {
       leaderboardUpdate = leaderboardUpdate.concat([
         player.id,
         player.name,
-        player.points,
+        player.score,
       ]);
     }
 
@@ -1408,7 +1408,8 @@ export default class Game {
 
               switch (player.selectedWeapon) {
                 case Weapons.McGrabby:
-                  player.points += Math.min(250, hitPlayer.points);
+                  let addpp = Math.min(250, hitPlayer.points);
+                  player.points += addpp;
                   hitPlayer.points -= Math.min(250, hitPlayer.points);
                   break;
               }
@@ -1455,6 +1456,7 @@ export default class Game {
                 if (type) {
                   player.food += type.drop || 0;
                   player.points += type.killScore || 0;
+                  player.score += type.killScore || 0;
                 }
               } else {
                 let attackDetails = getWeaponAttackDetails(
@@ -1618,10 +1620,12 @@ export default class Game {
                   else player.secondaryWeaponExp += gather;
                   break;
                 case GameObjectType.GoldMine:
-                  player.points +=
+                  let gatherpp =
                     gather == 1 || player.selectedWeapon == Weapons.McGrabby
                       ? 5
                       : gather;
+                  player.points += gatherpp;
+                  player.score += gatherpp;
                   player.xp += 4 * gather;
 
                   if (player.selectedWeapon == player.weapon)
@@ -1658,14 +1662,17 @@ export default class Game {
               if (
                 hitGameObject.type !== GameObjectType.GoldMine &&
                 hitGameObject.health == -1
-              )
-                player.points +=
+              ) {
+                let hitpp =
                   ((hat?.extraGold || 0) +
                     ((player.selectedWeapon == player.weapon
                       ? WeaponVariants[player.primaryWeaponVariant].extraGold
                       : WeaponVariants[player.secondaryWeaponVariant]
                           .extraGold) || 0)) *
                   gather;
+                player.points += hitpp;
+                player.score += hitpp;
+              }
 
               player.client?.socket.send(
                 packetFactory.serializePacket(

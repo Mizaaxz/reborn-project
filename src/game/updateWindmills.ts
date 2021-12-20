@@ -9,17 +9,21 @@ export default function updateWindmills(game: Game) {
   for (let windmill of game.state.gameObjects.filter(
     (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
   )) {
-    let player = game.state.players.find((player) => player.id == windmill.ownerSID);
+    let player = game.state.players.find(
+      (player) => player.id == windmill.ownerSID
+    );
 
     if (player && !player.dead) {
       let hat = getHat(player.hatID);
-
-      player.points += getPPS(windmill.data) + (hat?.pps || 0);
-      player.xp += getPPS(windmill.data) + (hat?.pps || 0);
+      let pps = getPPS(windmill.data) + (hat?.pps || 0);
+      player.points += pps;
+      player.xp += pps;
+      player.score += pps;
     }
   }
 
-  if (game.mode.includes(GameModes.random) && game.windmillTicks % 10 == 0) game.randomizePlayers();
+  if (game.mode.includes(GameModes.random) && game.windmillTicks % 10 == 0)
+    game.randomizePlayers();
 
   let waitTickAmt = 5;
   if (game.spikeAdvance > 6800) waitTickAmt = 15;
@@ -27,7 +31,10 @@ export default function updateWindmills(game: Game) {
   else if (game.spikeAdvance > 4500) waitTickAmt = 5;
   else if (game.spikeAdvance > 3000) waitTickAmt = 2;
   else if (game.spikeAdvance > 1500) waitTickAmt = 7;
-  if (game.mode.includes(GameModes.royale) && game.windmillTicks % waitTickAmt == 0) {
+  if (
+    game.mode.includes(GameModes.royale) &&
+    game.windmillTicks % waitTickAmt == 0
+  ) {
     game.advanceSpikes();
     game.state.players.forEach((p) => {
       if (

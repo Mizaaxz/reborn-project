@@ -10,6 +10,7 @@ type Account = {
   adminLevel?: AdminLevel;
   balance?: number;
   mootuber?: boolean;
+  scores?: number[];
 };
 
 export function getAccount(username: string) {
