@@ -33,6 +33,7 @@ import { AdminLevel } from "./moomoo/Admin";
 import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
 import readline from "readline";
 import bcrypt from "bcrypt";
+import { PlayerMode } from "./moomoo/PlayerMode";
 
 let command = "";
 let lastMessage = "";
@@ -184,6 +185,46 @@ Command(
     }
   },
   { aliases: ["invinc", "nokill", "iv"], level: AdminLevel.Helper }
+);
+
+Command(
+  "spectator",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+
+    if (game) {
+      let player = playerSelector(args[1], source) || source;
+      if (!player) return "You need to be in the game to run this command.";
+
+      let makeSpec = (p: Player, enable: boolean) => {
+        if (enable) {
+          p.spdMult = 8;
+          p.buildItem = ItemType.Cookie;
+          p.weaponMode = WeaponModes.NoSelect;
+          p.mode = PlayerMode.spectator;
+          p.invincible = true;
+        } else {
+          p.spdMult = config.defaultSpeed;
+          p.buildItem = -1;
+          p.weaponMode = WeaponModes.None;
+          p.mode = PlayerMode.normal;
+        }
+      };
+
+      if (game) {
+        let bool = boolSelector(args[2]);
+        if (player == source)
+          makeSpec(player, bool || (bool == undefined ? true : false));
+        else if (player instanceof Player) makeSpec(player, bool || false);
+        else if (player.length) {
+          player.forEach((p) => {
+            makeSpec(p, bool || false);
+          });
+        } else return "Invalid Player ID";
+      }
+    }
+  },
+  { aliases: ["sp", "spec"], level: AdminLevel.Moderator }
 );
 
 Command(
