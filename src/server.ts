@@ -19,7 +19,7 @@ import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
 import { Account, getAccount, setAccount } from "./moomoo/Account";
-import { initLogs } from "./log";
+import { initLogs, log } from "./log";
 import { Socket } from "net";
 import animals from "./definitions/animals";
 const accessories2 = Object.values(accessories);
@@ -224,6 +224,7 @@ app.post("/api/v1/create", (req, res) => {
       createdAt: Date.now(),
     });
 
+    log(`Account created for '${username}' from ${req.ip}.`);
     res.json({ error: "", text: "Account created!" });
   });
 });
