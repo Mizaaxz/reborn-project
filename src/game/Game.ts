@@ -782,7 +782,7 @@ export default class Game {
             );
 
             if (gameObj.health != -1) {
-              gameObj.health -= projectile.damage * 0.8;
+              gameObj.health -= projectile.damage * 3;
 
               if (gameObj.health <= 0) {
                 if (owner) {
@@ -807,35 +807,35 @@ export default class Game {
                     else owner.secondaryWeaponExp += cost[1] as number;
                   }
                 }
-              }
 
-              if (gameObj.data == 20 && gameObjOwner && gameObjOwner.client) {
-                gameObjOwner.client.spawnPos = false;
-              }
+                if (gameObj.data == 20 && gameObjOwner && gameObjOwner.client) {
+                  gameObjOwner.client.spawnPos = false;
+                }
 
-              if (gameObjOwner) {
-                let placedAmount = this.state.gameObjects.filter(
-                  (gameObj) =>
-                    gameObj.data === gameObj.data &&
-                    gameObj.ownerSID == gameObj.ownerSID
-                ).length;
-                gameObjOwner.client?.socket.send(
-                  packetFactory.serializePacket(
-                    new Packet(PacketType.UPDATE_PLACE_LIMIT, [
-                      getGroupID(gameObj.data),
-                      placedAmount - 1,
-                    ])
-                  )
-                );
-              }
+                if (gameObjOwner) {
+                  let placedAmount = this.state.gameObjects.filter(
+                    (gameObj) =>
+                      gameObj.data === gameObj.data &&
+                      gameObj.ownerSID == gameObj.ownerSID
+                  ).length;
+                  gameObjOwner.client?.socket.send(
+                    packetFactory.serializePacket(
+                      new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+                        getGroupID(gameObj.data),
+                        placedAmount - 1,
+                      ])
+                    )
+                  );
+                }
 
-              this.state.removeGameObject(gameObj);
-              if (owner) this.sendGameObjects(owner);
+                this.state.removeGameObject(gameObj);
+                if (owner) this.sendGameObjects(owner);
 
-              for (let otherPlayer of this.state.getPlayersNearProjectile(
-                projectile
-              )) {
-                this.sendGameObjects(otherPlayer);
+                for (let otherPlayer of this.state.getPlayersNearProjectile(
+                  projectile
+                )) {
+                  this.sendGameObjects(otherPlayer);
+                }
               }
             }
           }
