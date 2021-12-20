@@ -890,7 +890,7 @@ Command(
     }
     if (!AdminLevel[level]) level = AdminLevel.Admin;
     account.adminLevel = level;
-    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
+    setAccount(account.username, account);
     getGame()
       ?.state.players.filter(
         (p) =>
@@ -912,7 +912,7 @@ Command(
       else return console.log("Invalid username.");
     }
     account.adminLevel = 0;
-    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
+    setAccount(account.username, account);
     getGame()
       ?.state.players.filter(
         (p) =>

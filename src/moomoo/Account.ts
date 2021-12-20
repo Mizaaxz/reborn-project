@@ -11,6 +11,7 @@ type Account = {
   balance?: number;
   mootuber?: boolean;
   scores?: number[];
+  createdAt?: number;
 };
 
 export function getAccount(username: string) {

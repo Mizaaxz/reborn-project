@@ -18,7 +18,7 @@ import items from "./definitions/items";
 import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
 import weaponVariants from "./definitions/weaponVariants";
-import { Account } from "./moomoo/Account";
+import { Account, getAccount, setAccount } from "./moomoo/Account";
 import { initLogs } from "./log";
 import { Socket } from "net";
 import animals from "./definitions/animals";
@@ -110,7 +110,7 @@ app.post("/api/v1/login", (req, res) => {
   if (!password)
     return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
-  let account = db.fetch(`account_${username.replace(/ /g, "+")}`) as Account;
+  let account = getAccount(username);
   if (!account)
     return res.json({
       error: "INVALID_USERNAME",
@@ -155,7 +155,7 @@ app.post("/api/v1/create", (req, res) => {
     });
   username = username.trim();
 
-  let exists = db.fetch(`account_${username.replace(/ /g, "+")}`);
+  let exists = getAccount(username);
   if (exists)
     return res.json({
       error: "USERNAME_FOUND",
@@ -214,12 +214,14 @@ app.post("/api/v1/create", (req, res) => {
         err,
       });
 
-    db.set(`account_${username.replace(/ /g, "+")}`, {
+    setAccount(username, {
       username,
+      displayName: username,
       password: hash,
       level: 1,
       adminLevel: 0,
       balance: 0,
+      createdAt: Date.now(),
     });
 
     res.json({ error: "", text: "Account created!" });
