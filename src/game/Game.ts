@@ -61,6 +61,7 @@ import initPacketHandlers from "../packethandlers";
 import updateWindmills from "./updateWindmills";
 import generateStructures from "./generateStructures";
 import { AdminLevel } from "../moomoo/Admin";
+import genBallArena from "./genBallArena";
 
 let currentGame: Game | null = null;
 
@@ -145,6 +146,11 @@ export default class Game {
   cancelClose() {
     if (this.closing) clearInterval(this.closing);
     this.closing = undefined;
+  }
+
+  ball() {
+    this.mode = [GameModes.moofieball];
+    genBallArena(this, true);
   }
 
   exec(code: string, source: Player | undefined) {
