@@ -1187,7 +1187,8 @@ Command(
       if (p.id == source.id) return;
       len += 100;
       let len2 = String(len);
-      setInterval(function () {
+      let i = setInterval(function () {
+        if (source.dead) return clearInterval(i);
         if (!p) return;
         let ang = (source.angle * 180) / Math.PI;
         ang = (ang + 180) % 360;
