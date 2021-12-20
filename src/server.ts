@@ -77,6 +77,28 @@ app.get("/api/v1/def", (req, res) => {
     yt: config.featuredYT,
   });
 });
+app.get("/api/v1/leaderboard", (req, res) => {
+  let allAccounts = db
+    .all()
+    .filter((e) => e.key.startsWith("account_"))
+    .map((a) => a.value) as Account[];
+  res.json(
+    allAccounts
+      .map((acc) => {
+        return {
+          name: acc.username,
+          badges:
+            [acc.adminLevel && "shield", acc.mootuber && "yt"].filter(
+              (a) => a
+            ) || [],
+          score: acc.scores?.reduce((a, b) => a + b) || 0,
+        };
+      })
+      .sort((a, b) => (a.score < b.score ? 1 : -1))
+      .filter((a) => a.score)
+      .slice(0, 10)
+  );
+});
 
 app.post("/api/v1/login", (req, res) => {
   let username = req.body.username;
