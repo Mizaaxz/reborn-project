@@ -1058,7 +1058,8 @@ export default class Game {
                 t.membersSIDs.includes(turret.ownerSID) &&
                 t.membersSIDs.includes(p.id)
             ) &&
-            p.location.distance(turret.location) < (Turret?.shootRange || 0)
+            p.location.distance(turret.location) < (Turret?.shootRange || 0) &&
+            p.mode !== PlayerMode.spectator
         );
         let nearestPlayer = nearbyPlayers.find(
           (p) =>
