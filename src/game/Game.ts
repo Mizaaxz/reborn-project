@@ -782,7 +782,7 @@ export default class Game {
             );
 
             if (gameObj.health != -1) {
-              gameObj.health -= projectile.damage;
+              gameObj.health -= projectile.damage * 0.8;
 
               if (gameObj.health <= 0) {
                 if (owner) {
