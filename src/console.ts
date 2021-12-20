@@ -1189,7 +1189,7 @@ Command(
       let len2 = String(len);
       let i = setInterval(function () {
         if (source.dead) return clearInterval(i);
-        if (!p) return;
+        if (!p || p.dead) return;
         let ang = (source.angle * 180) / Math.PI;
         ang = (ang + 180) % 360;
         ang = (ang * Math.PI) / 180.0;
