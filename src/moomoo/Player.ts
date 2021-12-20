@@ -348,6 +348,7 @@ export default class Player extends Entity {
     return this._score;
   }
   public set score(newScore: number) {
+    newScore = Math.min(newScore, 1000000);
     this._score = newScore;
     if (newScore && this.client?.account) {
       if (this.scoreSession == -1)
