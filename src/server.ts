@@ -33,7 +33,7 @@ const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const VERSION = "1.14.1b";
+const VERSION = "1.14.2b";
 
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));
