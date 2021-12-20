@@ -46,7 +46,7 @@ export default class Animal extends Entity {
 
     let a = this;
     this.moveRandomly = setInterval(function () {
-      if (a.moving) return;
+      if (a.moving || a.data.noAi) return;
       a.runFrom(a.location.add(Math.random() - 0.5, Math.random() - 0.5, true));
     }, 6000);
   }
@@ -90,8 +90,10 @@ export default class Animal extends Entity {
     for (let player of state.players) {
       if (!player.dead) {
         if (
-          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
-          RADIUS
+          eucDistance(
+            [this.location.x, this.location.y],
+            [player.location.x, player.location.y]
+          ) < RADIUS
         ) {
           players.push(player);
         }
@@ -108,8 +110,10 @@ export default class Animal extends Entity {
     for (let animal of state.animals) {
       if (animal !== this) {
         if (
-          eucDistance([this.location.x, this.location.y], [animal.location.x, animal.location.y]) <
-          RADIUS
+          eucDistance(
+            [this.location.x, this.location.y],
+            [animal.location.x, animal.location.y]
+          ) < RADIUS
         ) {
           animals.push(animal);
         }
@@ -142,7 +146,10 @@ export default class Animal extends Entity {
     if (this.data.static) return;
     if (this.runTimer) clearTimeout(this.runTimer);
 
-    this.angle = Math.atan2(this.location.y - point.y, this.location.x - point.x);
+    this.angle = Math.atan2(
+      this.location.y - point.y,
+      this.location.x - point.x
+    );
     this.moving = true;
 
     let anim = this;
@@ -154,7 +161,10 @@ export default class Animal extends Entity {
     if (this.data.static) return;
     if (this.runTimer) clearTimeout(this.runTimer);
 
-    this.angle = Math.atan2(point.y - this.location.y, point.x - this.location.x);
+    this.angle = Math.atan2(
+      point.y - this.location.y,
+      point.x - this.location.x
+    );
     this.moving = true;
 
     let anim = this;

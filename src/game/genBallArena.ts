@@ -1,9 +1,16 @@
 import Vec2 from "vec2";
 import GameObject from "../gameobjects/GameObject";
-import { getGameObjDamage, getGameObjHealth, getScale, WeaponModes, Weapons } from "../items/items";
+import {
+  getGameObjDamage,
+  getGameObjHealth,
+  getScale,
+  WeaponModes,
+  Weapons,
+} from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 import Animal from "../moomoo/Animal";
 import Player from "../moomoo/Player";
+import { Animals } from "../moomoo/util";
 import Game from "./Game";
 
 export default function genBallArena(game: Game, makeTeams: boolean = true) {
@@ -71,13 +78,13 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
     wallPos += 100;
   }
 
-  while (game.state.gameObjects.length) {
+  while (game.state.gameObjects?.length) {
     game.state.gameObjects.forEach((o) => {
       game.state.removeGameObject(o);
     });
   }
   if (game.spawnAnimalsInt) clearInterval(game.spawnAnimalsInt);
-  while (game.state.animals.length) {
+  while (game.state.animals?.length) {
     game.state.animals.forEach((a) => {
       a.die();
     });
@@ -131,22 +138,29 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
   let playersArray = game.state.players.sort(() => {
     return 0.5 - Math.random();
   });
-  let chunkLength = Math.max(playersArray.length / 2, 1);
+  let chunkLength = Math.max(playersArray?.length / 2, 1);
   let chunks = [];
   for (let i = 0; i < 2; i++) {
-    if (chunkLength * (i + 1) <= playersArray.length)
+    if (chunkLength * (i + 1) <= playersArray?.length)
       chunks.push(playersArray.slice(chunkLength * i, chunkLength * (i + 1)));
   }
   if (!makeTeams) {
     let a = game.state.tribes.find((t) => t.name == "Team A");
     let b = game.state.tribes.find((t) => t.name == "Team B");
     if (!a || !b) return;
-    chunks[0] = a.membersSIDs.map((m) => game.state.players.find((p) => p.id == m));
-    chunks[1] = b.membersSIDs.map((m) => game.state.players.find((p) => p.id == m));
+    chunks[0] = a.membersSIDs.map((m) =>
+      game.state.players.find((p) => p.id == m)
+    );
+    chunks[1] = b.membersSIDs.map((m) =>
+      game.state.players.find((p) => p.id == m)
+    );
   }
-  let playerTeams: { [key: string]: (Player | undefined)[] } = { a: chunks[0], b: chunks[1] };
+  let playerTeams: { [key: string]: (Player | undefined)[] } = {
+    a: chunks[0],
+    b: chunks[1],
+  };
 
-  while (game.state.tribes.length) {
+  while (game.state.tribes?.length) {
     game.state.tribes.forEach((t) => {
       game.state.removeTribe(game.state.tribes.indexOf(t));
     });
@@ -154,13 +168,19 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
 
   Object.keys(playerTeams).forEach((letter) => {
     let players = playerTeams[letter];
-    let tribe = game.state.addTribe(`Team ${letter.toUpperCase()}`, letter == "a" ? -65 : -66);
+    let tribe = game.state.addTribe(
+      `Team ${letter.toUpperCase()}`,
+      letter == "a" ? -65 : -66
+    );
     if (!tribe) return;
     let name = tribe.name;
-    tribe.membersSIDs = players.map((p) => {
+    tribe.membersSIDs = players?.map((p) => {
       if (p) {
         p.clanName = name;
-        p.location = letter == "a" ? centerPos.subtract(750, 0, true) : centerPos.add(750, 0, true);
+        p.location =
+          letter == "a"
+            ? centerPos.subtract(750, 0, true)
+            : centerPos.add(750, 0, true);
         p.selectedWeapon = Weapons.Sword;
         p.weaponMode = WeaponModes.NoSelect;
         p.primaryWeaponExp = p.secondaryWeaponExp = 0;
@@ -173,6 +193,8 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
     game.state.updateClanPlayers(tribe);
   });
 
-  game.state.animals.push(new Animal(game.genAnimalSID(), centerPos, 8, "Ball"));
+  game.state.animals.push(
+    new Animal(game.genAnimalSID(), centerPos, Animals.moofieball, "Ball")
+  );
   game.sendAnimalUpdates();
 }

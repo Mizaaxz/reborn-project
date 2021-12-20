@@ -282,7 +282,7 @@ function tryMoveAnimal(
         if (gameObj.data == ItemType.Platform) animal.layer = 1;
         if (
           gameObj.data == ItemType.SpawnPad &&
-          animal.type == 8 &&
+          animal.type == Animals.moofieball &&
           getGame()?.mode.includes(GameModes.moofieball)
         ) {
           let game = getGame();

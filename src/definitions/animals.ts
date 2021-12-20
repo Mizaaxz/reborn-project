@@ -159,6 +159,21 @@ const animals = [
     hitDelay: 350,
     boss: true,
   },
+  {
+    id: 9,
+    name: "Ball",
+    src: "wolf_2",
+    fixedSpawn: true,
+    noTrap: true,
+    nameScale: 35,
+    killScore: 3000,
+    health: 20000,
+    weightM: 0.45,
+    speed: 0.0015,
+    turnSpeed: 0.002,
+    scale: 90,
+    noAi: true,
+  },
 ];
 
 export default animals;
