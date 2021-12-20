@@ -28,10 +28,11 @@ import { Animals, Broadcast } from "./moomoo/util";
 import { GameModes } from "./game/GameMode";
 import db from "enhanced.db";
 import * as logger from "./log";
-import { Account, getAccount } from "./moomoo/Account";
+import { Account, getAccount, setAccount } from "./moomoo/Account";
 import { AdminLevel } from "./moomoo/Admin";
 import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
 import readline from "readline";
+import bcrypt from "bcrypt";
 
 let command = "";
 let lastMessage = "";
@@ -954,10 +955,31 @@ Command(
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
     }
+
     account.mootuber = yt;
-    db.set(`account_${account.username.replace(/ /g, "+")}`, account);
+    setAccount(account.username, account);
   },
   { aliases: ["acc.setyoutube"], level: AdminLevel.Admin }
+);
+Command(
+  "acc.setpass",
+  function (args: any[], source: Player | undefined) {
+    let newpass = args.pop();
+    let account = getAccount(args.slice(1).join(" ") || "");
+
+    if (!account || !account.username) {
+      if (source?.client) return Broadcast("Invalid username.", source.client);
+      else return console.log("Invalid username.");
+    }
+
+    bcrypt.hash(newpass, 5, (err: any, hash: any) => {
+      if (err) return Broadcast("Error.", source?.client);
+      account.password = hash;
+      setAccount(account.username, account);
+      Broadcast("Changed.", source?.client);
+    });
+  },
+  { aliases: ["acc.changepass"], level: AdminLevel.Meow }
 );
 
 Command(
