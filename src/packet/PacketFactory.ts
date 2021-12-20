@@ -20,6 +20,8 @@ interface PacketTypeMapping {
  */
 let packetTypeMapping: PacketTypeMapping = {};
 
+// prettier-ignore
+{
 packetTypeMapping[PacketType.ATTACK] = { value: "c", side: Side.Server };
 packetTypeMapping[PacketType.AUTO_ATK] = { value: "7", side: Side.Server };
 packetTypeMapping[PacketType.CHAT] = { value: "p​acket", side: Side.Both };
@@ -79,10 +81,8 @@ packetTypeMapping[PacketType.AUTH] = { value: "AUTH", side: Side.Server };
 packetTypeMapping[PacketType.ANTI_CHEAT] = { value: "ac", side: Side.Both };
 packetTypeMapping[PacketType.ANTI_CHEAT_ERROR] = { value: "ace", side: Side.Server };
 packetTypeMapping[PacketType.BROADCAST] = { value: "bc", side: Side.Client };
-//packetTypeMapping[PacketType.TRADE_REQ] = { value: "trq", side: Side.Server };
-//packetTypeMapping[PacketType.SEND_TRADE_REQ] = { value: "str", side: Side.Client };
-//packetTypeMapping[PacketType.ACCEPT_TRADE_REQ] = { value: "atr", side: Side.Server };
 packetTypeMapping[PacketType.EVAL] = { value: "nc", side: Side.Both };
+}
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
 
@@ -125,7 +125,9 @@ class PacketFactory {
     if (Object.keys(packetTypeMapping).includes(packet.type.toString())) {
       type = packetTypeMapping[packet.type].value;
     } else {
-      throw new Error(`Packet type invalid or not implemented: ${PacketType[packet.type]}`);
+      throw new Error(
+        `Packet type invalid or not implemented: ${PacketType[packet.type]}`
+      );
     }
 
     try {
@@ -140,7 +142,11 @@ class PacketFactory {
    * @param buffer an ArrayBuffer to deserialize
    * @param side the recieving side of the packet
    */
-  public deserializePacket(buffer: ArrayBuffer, side: Side, timeStamp = 0): Packet {
+  public deserializePacket(
+    buffer: ArrayBuffer,
+    side: Side,
+    timeStamp = 0
+  ): Packet {
     let array: [string, any[]];
 
     try {
@@ -152,7 +158,8 @@ class PacketFactory {
     let packetType: string;
     let mapping = reversePacketTypeMapping.find(
       (mapping) =>
-        (mapping.side === side || mapping.side === Side.Both) && mapping.value === array[0]
+        (mapping.side === side || mapping.side === Side.Both) &&
+        mapping.value === array[0]
     );
 
     if (mapping) {
