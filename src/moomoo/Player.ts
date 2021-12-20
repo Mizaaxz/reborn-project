@@ -623,8 +623,6 @@ export default class Player extends Entity {
     this.maxXP = 300;
     this.kills = 0;
     this.points = 0;
-    this.scoreSession = -1;
-    this.score = 0;
     this.food = 0;
     this.wood = 0;
     this.stone = 0;
@@ -633,8 +631,11 @@ export default class Player extends Entity {
     this.maxBleedAmt = -1;
 
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.DEATH, []))
+      packetFactory.serializePacket(new Packet(PacketType.DEATH, [this.score]))
     );
+
+    this.scoreSession = -1;
+    this.score = 0;
   }
 
   move(direction: number) {
