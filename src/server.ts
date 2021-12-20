@@ -21,6 +21,7 @@ import weaponVariants from "./definitions/weaponVariants";
 import { Account } from "./moomoo/Account";
 import { initLogs } from "./log";
 import { Socket } from "net";
+import animals from "./definitions/animals";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -69,6 +70,7 @@ app.get("/", (req, res) => {
 app.get("/api/v1/def", (req, res) => {
   res.json({
     accessories: accessories2,
+    animals: animals,
     hats: hats2,
     items: items2,
     projectiles: projectiles2,
