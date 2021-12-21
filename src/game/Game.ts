@@ -511,7 +511,7 @@ export default class Game {
                 [
                   peer.id,
                   peer.player.id,
-                  client.admin !== AdminLevel.Meow
+                  client.admin !== AdminLevel.None
                     ? client.admin
                       ? `\u3010${peer.player.id}\u3011 ${peer.player.name}`
                       : peer.player.name
