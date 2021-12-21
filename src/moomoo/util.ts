@@ -8,6 +8,7 @@ import { PacketType } from "../packet/PacketType";
 import Client from "./Client";
 import { getGame } from "../game/Game";
 import config from "../config";
+import Player from "./Player";
 
 enum SkinColor {
   Light1 = 2,
@@ -159,6 +160,16 @@ export function testBiome(pos: Vec2): Biomes {
     return Biomes.desert;
 
   return Biomes.main;
+}
+
+export function peerName(player: Player, peer: Player) {
+  if (player.client?.account?.adminLevel)
+    return `\u3010${peer.id}\u3011 ${peer.name} (${
+      peer.client?.account?.username || "Guest"
+    })`;
+  return player.client?.admin
+    ? `\u3010${peer.id}\u3011 ${peer.name}`
+    : peer.name;
 }
 
 export {

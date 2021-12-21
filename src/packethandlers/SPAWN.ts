@@ -4,7 +4,7 @@ import { getGroupID, WeaponModes } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 import { getGame } from "../game/Game";
 import { PlayerMode } from "../moomoo/PlayerMode";
-import { Broadcast, randomPos, SkinColor } from "../moomoo/util";
+import { Broadcast, peerName, randomPos, SkinColor } from "../moomoo/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
@@ -15,7 +15,8 @@ import { Account, getAccount, setAccount } from "../moomoo/Account";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SPAWN),
   (game, packetFactory, client, packet) => {
-    if (client.player && !client.player.dead) game.kickClient(client, "disconnected");
+    if (client.player && !client.player.dead)
+      game.kickClient(client, "disconnected");
 
     if (
       "name" in packet.data[0] &&
@@ -27,9 +28,14 @@ getGame()?.addPacketHandler(
 
       if (!player || (player && player.dead)) {
         let newPlayer = (client.player =
-          player || game.state.addPlayer(game.genSID(), client.id, client, game));
+          player ||
+          game.state.addPlayer(game.genSID(), client.id, client, game));
 
-        if (newPlayer.client && newPlayer.lastDeath && Date.now() - newPlayer.lastDeath < 4000)
+        if (
+          newPlayer.client &&
+          newPlayer.lastDeath &&
+          Date.now() - newPlayer.lastDeath < 4000
+        )
           return game.kickClient(newPlayer.client, "Trying to evade the ad.");
 
         if (
@@ -40,7 +46,11 @@ getGame()?.addPacketHandler(
           return game.kickClient(newPlayer.client, "Incorrect password.");
 
         if (typeof client.spawnPos == "boolean") {
-          newPlayer.location = randomPos(game.spawnBounds, game.spawnBounds, game.spikeAdvance);
+          newPlayer.location = randomPos(
+            game.spawnBounds,
+            game.spawnBounds,
+            game.spikeAdvance
+          );
         } else {
           newPlayer.location = client.spawnPos;
           client.spawnPos = false;
@@ -50,7 +60,10 @@ getGame()?.addPacketHandler(
           );
           client.socket.send(
             packetFactory.serializePacket(
-              new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(20), placed.length - 1])
+              new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+                getGroupID(20),
+                placed.length - 1,
+              ])
             )
           );
 
@@ -66,27 +79,37 @@ getGame()?.addPacketHandler(
 
         let filteredName: any = [];
         [...packet.data[0].name].forEach((char) => {
-          if (config.allowedMax.split("").includes(char)) filteredName.push(char);
+          if (config.allowedMax.split("").includes(char))
+            filteredName.push(char);
         });
-        filteredName = filteredName.join("").trim().slice(0, config.usernameLength.max);
+        filteredName = filteredName
+          .join("")
+          .trim()
+          .slice(0, config.usernameLength.max);
         if (newPlayer.client?.account) {
           if (filteredName.toLowerCase() == "guest")
             filteredName = newPlayer.client?.account?.username;
 
           let plraccount = getAccount(newPlayer.client.account.username);
-          plraccount.displayName = filteredName || newPlayer.client.account.username;
+          plraccount.displayName =
+            filteredName || newPlayer.client.account.username;
           newPlayer.client.account = plraccount;
           setAccount(newPlayer.client.account.username, plraccount);
 
           newPlayer.name =
-            newPlayer.client.account.displayName || newPlayer.client.account.username || "unknown";
+            newPlayer.client.account.displayName ||
+            newPlayer.client.account.username ||
+            "unknown";
         } else newPlayer.name = "Guest";
         newPlayer.skinColor = Number(packet.data[0].skin) || SkinColor.Light2;
         newPlayer.dead = false;
         newPlayer.health = 100;
 
         let bannedNames = (db.get("BANNED_NAMES") as string[]) || [];
-        if (bannedNames.includes(newPlayer.name.toLowerCase()) && newPlayer.client)
+        if (
+          bannedNames.includes(newPlayer.name.toLowerCase()) &&
+          newPlayer.client
+        )
           return game.banClient(newPlayer.client, "disconnected");
 
         let amt = packet.data[0].moofoll ? 50 : 0;
@@ -107,7 +130,10 @@ getGame()?.addPacketHandler(
           newPlayer.mode = PlayerMode.spectator;
           newPlayer.hideLeaderboard = true;
           setInterval(function () {
-            Broadcast("Game already started. In spectator mode.", newPlayer.client);
+            Broadcast(
+              "Game already started. In spectator mode.",
+              newPlayer.client
+            );
           }, 5000);
         }
 
@@ -119,7 +145,9 @@ getGame()?.addPacketHandler(
           return game.kickClient(newPlayer.client, "disconnected");
 
         client.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.PLAYER_START, [newPlayer.id]))
+          packetFactory.serializePacket(
+            new Packet(PacketType.PLAYER_START, [newPlayer.id])
+          )
         );
 
         game.sendLeaderboardUpdates();
@@ -130,9 +158,7 @@ getGame()?.addPacketHandler(
               [
                 client.id,
                 newPlayer.id,
-                newPlayer.client && newPlayer.client.admin
-                  ? `\u3010${newPlayer.id}\u3011 ${newPlayer.name}`
-                  : newPlayer.name,
+                peerName(newPlayer, newPlayer),
                 newPlayer.location.x,
                 newPlayer.location.y,
                 0,

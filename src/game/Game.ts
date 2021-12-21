@@ -10,6 +10,7 @@ import {
   Broadcast,
   testBiome,
   Biomes,
+  peerName,
 } from "../moomoo/util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
@@ -524,13 +525,7 @@ export default class Game {
                 [
                   peer.id,
                   peer.player.id,
-                  client.admin !== AdminLevel.None
-                    ? client.admin
-                      ? `\u3010${peer.player.id}\u3011 ${peer.player.name}`
-                      : peer.player.name
-                    : `\u3010${peer.player.id}\u3011 ${peer.player.name} (${
-                        peer.account?.username || "Guest"
-                      })`,
+                  peerName(client.player, peer.player),
                   peer.player.location.x,
                   peer.player.location.y,
                   0,
