@@ -213,9 +213,12 @@ Command(
 
       if (game) {
         let bool = boolSelector(args[2]);
-        if (player == source)
-          makeSpec(player, bool || (bool == undefined ? true : false));
-        else if (player instanceof Player) makeSpec(player, bool || false);
+        if (player == source) {
+          if (bool == undefined) {
+            if (player.mode == PlayerMode.spectator) makeSpec(player, false);
+            else makeSpec(player, true);
+          } else makeSpec(player, bool);
+        } else if (player instanceof Player) makeSpec(player, bool || false);
         else if (player.length) {
           player.forEach((p) => {
             makeSpec(p, bool || false);
