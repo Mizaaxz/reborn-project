@@ -1,5 +1,5 @@
 import Entity from "./Entity";
-import { SkinColor, eucDistance } from "./util";
+import { SkinColor, eucDistance, testBiome, Biomes } from "./util";
 import Vec2 from "vec2";
 import GameState from "../game/GameState";
 import Game from "../game/Game";
@@ -462,7 +462,7 @@ export default class Player extends Entity {
         ).length
       )
         return;
-      if (location.y > 6850 && location.y < 7550 && item !== ItemType.Platform)
+      if (testBiome(location) == Biomes.river && item !== ItemType.Platform)
         return;
 
       let newGameObject = new GameObject(

@@ -3,7 +3,14 @@ import Client from "../moomoo/Client";
 import Player from "../moomoo/Player";
 import NanoTimer from "nanotimer";
 import db from "enhanced.db";
-import { randomPos, chunk, stableSort, Broadcast } from "../moomoo/util";
+import {
+  randomPos,
+  chunk,
+  stableSort,
+  Broadcast,
+  testBiome,
+  Biomes,
+} from "../moomoo/util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
 import * as Physics from "../moomoo/Physics";
@@ -224,7 +231,10 @@ export default class Game {
     let sizes = gameObjectSizes[type];
     let location = new Vec2(x, y);
 
-    let damage = type == GameObjectType.Bush && location.y >= 12e3 ? 35 : 0;
+    let damage =
+      type == GameObjectType.Bush && testBiome(location) == Biomes.desert
+        ? 35
+        : 0;
     if (params == "dmg") damage = 35;
 
     if (sizes) {

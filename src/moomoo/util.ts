@@ -34,6 +34,12 @@ export enum Animals {
   moofie,
   moofieball,
 }
+export enum Biomes {
+  main,
+  snow,
+  river,
+  desert,
+}
 
 function eucDistance(a: number[], b: number[]) {
   return Math.hypot(...a.map((val, i) => val - b[i]));
@@ -143,6 +149,16 @@ function filter(text: string) {
   let allowed = config.alphabet.split("");
   let newtext = "";
   text.split("").forEach((char) => {});
+}
+
+export function testBiome(pos: Vec2): Biomes {
+  if (pos.y <= config.biomeSize && pos.x <= config.biomeSize)
+    return Biomes.snow;
+  if (pos.y < 7550 && pos.y > 6850) return Biomes.river;
+  if (pos.y >= config.mapScale - config.biomeSize && pos.x <= config.biomeSize)
+    return Biomes.desert;
+
+  return Biomes.main;
 }
 
 export {

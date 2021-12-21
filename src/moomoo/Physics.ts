@@ -16,7 +16,7 @@ import { Packet } from "../packet/Packet";
 import { PacketFactory } from "../packet/PacketFactory";
 import Projectile from "../projectiles/Projectile";
 import { getGame } from "../game/Game";
-import { Animals, Broadcast, randomPos } from "./util";
+import { Animals, Biomes, Broadcast, randomPos, testBiome } from "./util";
 import config from "../config";
 import Animal from "./Animal";
 import { PlayerMode } from "./PlayerMode";
@@ -230,22 +230,33 @@ function tryMovePlayer(
 
   // River
   if (
-    player.location.y > 6850 &&
-    player.location.y < 7550 &&
+    testBiome(player.location) == Biomes.river &&
     player.layer < 1 &&
     player.mode !== PlayerMode.spectator
   ) {
     if (getHat(player.hatID)?.waterImm) {
-      xVel *= 0.75;
-      yVel *= 0.75;
+      let vel = 0.75;
+      xVel *= vel;
+      yVel *= vel;
 
-      player.velocity.add(0.0011 * 0.4 * delta * (1 / 0.75), 0);
+      player.velocity.add(0.0011 * 0.4 * delta * (1 / vel), 0);
     } else {
-      xVel *= 0.33;
-      yVel *= 0.33;
+      let vel = 0.33;
+      xVel *= vel;
+      yVel *= vel;
 
-      player.velocity.add(0.0011 * delta * (1 / 0.33), 0);
+      player.velocity.add(0.0011 * delta * (1 / vel), 0);
     }
+  }
+
+  if (
+    testBiome(player.location) == Biomes.snow &&
+    player.mode !== PlayerMode.spectator &&
+    !getHat(player.hatID)?.coldM
+  ) {
+    let vel = 0.66;
+    xVel *= vel;
+    yVel *= vel;
   }
 
   newLocation.clamp(
@@ -401,11 +412,7 @@ function tryMoveAnimal(
   if (inTrap && animal.type !== Animals.quack) return;
 
   // River
-  if (
-    animal.location.y > 6850 &&
-    animal.location.y < 7550 &&
-    animal.layer < 1
-  ) {
+  if (testBiome(animal.location) == Biomes.river && animal.layer < 1) {
     xVel *= 0.33;
     yVel *= 0.33;
 
