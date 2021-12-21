@@ -192,7 +192,10 @@ export default class Game {
       : 0;
   }
 
-  public bossLoc = new Vec2(3333, 13155);
+  public bossLoc = new Vec2(
+    config.biomeSize / 2,
+    config.mapScale - config.biomeSize / 2
+  );
 
   generateStructure(
     objType: string,
