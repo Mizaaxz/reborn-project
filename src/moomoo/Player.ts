@@ -333,6 +333,7 @@ export default class Player extends Entity {
     return this._points;
   }
   public set points(newPoints: number) {
+    newPoints = Math.ceil(newPoints);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
       packetFactory.serializePacket(
