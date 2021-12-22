@@ -11,6 +11,11 @@ function log(data: string) {
 }
 function initLogs() {
   logFilePath = `data/server.log`;
+  if (fs.existsSync(logFilePath))
+    fs.renameSync(
+      logFilePath,
+      logFilePath.replace("server", `server_${Date.now()}`)
+    );
   fs.writeFileSync(logFilePath, `[${getDate()}] Server Started.`);
 }
 function returnLogs(lines: number) {
