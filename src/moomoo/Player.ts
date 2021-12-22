@@ -38,6 +38,7 @@ export default class Player extends Entity {
   public skinColor: SkinColor;
   private _health: number = 100;
   public game: Game;
+  public lastMessage = Date.now();
 
   public lastPing: number = 0;
   public lastDot = 0;

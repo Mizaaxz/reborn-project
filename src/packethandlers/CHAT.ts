@@ -10,10 +10,14 @@ import * as consoleTS from "../console";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CHAT),
   (game, packetFactory, client, packet) => {
-    if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
+    if (!client.player || client.player.dead)
+      Broadcast("Error: CHATTING_WHILE_DEAD", client);
 
     if (packet.data[0].startsWith("/") && client.admin)
-      return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
+      return consoleTS.runCommand(
+        packet.data[0].substring(1),
+        client.player || undefined
+      );
 
     packet.data[0] = String([...packet.data[0]].slice(0, 50).join("").trim());
     if (!packet.data[0]) return;
@@ -23,16 +27,27 @@ getGame()?.addPacketHandler(
     );
 
     if (
-      ["!crash", "lcrash", "icrash", ".crash", "!cr", ".cr"].includes(packet.data[0].toLowerCase())
+      ["!crash", "lcrash", "icrash", ".crash", "!cr", ".cr"].includes(
+        packet.data[0].toLowerCase()
+      )
     )
-      return game.kickClient(client, 'crashed <span style="font-size: 16px;">xd</span>');
+      return game.kickClient(
+        client,
+        'crashed <span style="font-size: 16px;">xd</span>'
+      );
 
     if (packet.data[0].toLowerCase() == "kill me") return client.player?.die();
+
+    if (Date.now() - (client.player?.lastMessage || 0) < 80)
+      return game.kickClient(client, "quit spamming");
 
     for (let badWord of config.badWords) {
       if (packet.data[0].includes(badWord))
         packet.data[0] = packet.data[0].replace(
-          new RegExp(`\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`, "g"),
+          new RegExp(
+            `\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`,
+            "g"
+          ),
           "M" + "o".repeat(badWord.length - 1)
         );
     }
