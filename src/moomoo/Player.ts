@@ -621,10 +621,12 @@ export default class Player extends Entity {
 
   public lastDeath: number = 0;
   die() {
-    this.deathCrate(Animals.crateWood, { wood: this.wood });
-    this.deathCrate(Animals.crateStone, { stone: this.stone });
-    this.deathCrate(Animals.crateFood, { food: this.food });
-    this.deathCrate(Animals.crateGold, { gold: this.points });
+    if (this.mode !== PlayerMode.spectator) {
+      this.deathCrate(Animals.crateWood, { wood: this.wood });
+      this.deathCrate(Animals.crateStone, { stone: this.stone });
+      this.deathCrate(Animals.crateFood, { food: this.food });
+      this.deathCrate(Animals.crateGold, { gold: this.points });
+    }
 
     let packetFactory = PacketFactory.getInstance();
 
