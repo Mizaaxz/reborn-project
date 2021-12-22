@@ -610,7 +610,10 @@ export default class Player extends Entity {
       a.velocity.add(vel(), vel());
       Object.keys(drops).forEach((dr) => {
         let dro = drops[dr as keyof Drops];
-        if (dro) drops[dr as keyof Drops] = dro * 0.33;
+        if (dro) {
+          if (dro == Infinity) dro = 10000;
+          drops[dr as keyof Drops] = dro * 0.33;
+        }
       });
       a.drops = drops;
     }
