@@ -27,7 +27,7 @@ getGame()?.addPacketHandler(
     );
 
     if (
-      ["!crash", "lcrash", "icrash", ".crash", "!cr", ".cr"].includes(
+      ["!crash", "lcrash", "icrash", ".crash", "!cr", ".cr", "!autoq"].includes(
         packet.data[0].toLowerCase()
       )
     )
