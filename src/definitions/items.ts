@@ -36,7 +36,13 @@ type ItemsMap = {
   teleport?: boolean;
   bossImmune?: boolean;
 };
-type ItemMap = { group: number; place: boolean; limit?: number; layer: Layer; items: ItemsMap[] };
+type ItemMap = {
+  group: number;
+  place: boolean;
+  limit?: number;
+  layer: Layer;
+  items: ItemsMap[];
+};
 const items: ItemMap[] = [
   {
     group: 0,
@@ -241,7 +247,7 @@ const items: ItemMap[] = [
   {
     group: 4,
     place: true,
-    limit: 1,
+    limit: 2,
     layer: Layer.Player,
     items: [
       {
