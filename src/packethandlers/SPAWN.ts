@@ -107,9 +107,13 @@ getGame()?.addPacketHandler(
         newPlayer.dead = false;
         newPlayer.health = 100;
 
-        let bannedNames = (db.get("BANNED_NAMES") as string[]) || [];
+        let bannedNames = ((db.get("BANNED_NAMES") as string[]) || []).map(
+          (n) => n.toLowerCase()
+        );
         if (
-          bannedNames.includes(newPlayer.name.toLowerCase()) &&
+          bannedNames.includes(
+            newPlayer.client?.account?.username?.toLowerCase() || "bdafx3"
+          ) &&
           newPlayer.client
         )
           return game.banClient(newPlayer.client, "disconnected");
