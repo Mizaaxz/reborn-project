@@ -1,5 +1,5 @@
 import Entity from "./Entity";
-import { SkinColor, eucDistance, testBiome, Biomes } from "./util";
+import { SkinColor, eucDistance, testBiome, Biomes, Animals } from "./util";
 import Vec2 from "vec2";
 import GameState from "../game/GameState";
 import Game from "../game/Game";
@@ -31,6 +31,7 @@ import config from "../config";
 import { getAccessory } from "./Accessories";
 import { PlayerMode } from "./PlayerMode";
 import { setAccount } from "./Account";
+import Animal, { Drops } from "./Animal";
 
 export default class Player extends Entity {
   public name: string;
@@ -593,8 +594,31 @@ export default class Player extends Entity {
     return gameObjects;
   }
 
+  deathCrate(type: Animals, drops: Drops) {
+    if (Object.values(drops).reduce((a, b) => a + b)) {
+      let a = this.game.state.addAnimal(
+        this.game.genAnimalSID(),
+        this.location,
+        type,
+        " "
+      );
+      let vel = () => Math.random() * 2 - 1;
+      a.velocity.add(vel(), vel());
+      Object.keys(drops).forEach((dr) => {
+        let dro = drops[dr as keyof Drops];
+        if (dro) drops[dr as keyof Drops] = dro * 0.33;
+      });
+      a.drops = drops;
+    }
+  }
+
   public lastDeath: number = 0;
   die() {
+    this.deathCrate(Animals.crateWood, { wood: this.wood });
+    this.deathCrate(Animals.crateStone, { stone: this.stone });
+    this.deathCrate(Animals.crateFood, { food: this.food });
+    this.deathCrate(Animals.crateGold, { gold: this.points });
+
     let packetFactory = PacketFactory.getInstance();
 
     this.dead = true;

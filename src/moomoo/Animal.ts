@@ -7,7 +7,7 @@ import { Animals, eucDistance } from "./util";
 import config from "../config";
 import Player from "./Player";
 
-interface Drops {
+export interface Drops {
   wood?: number;
   stone?: number;
   food?: number;
@@ -58,7 +58,7 @@ export default class Animal extends Entity {
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
     this.data = animals.find((a) => a.id == this.type) || {};
     this.size =
-      Math.floor(((this.data.scale || 0) * (this.data.big ? 1.5 : 1)) / 1.5) ||
+      Math.floor(((this.data.scale || 0) * (this.data.big ? 1.75 : 1)) / 1.5) ||
       30;
 
     if (drops) this.drops = drops;

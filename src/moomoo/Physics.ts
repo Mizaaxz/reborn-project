@@ -475,6 +475,12 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
       collideCircles(p.location, 30, animal.location, animal.size) &&
       p.mode !== PlayerMode.spectator
     ) {
+      if (animal.data.crate) {
+        animal.giveDrops(p);
+        state.game.killAnimal(animal);
+        return;
+      }
+
       let dis = animal.location.distance(p.location);
       let angle = Math.atan2(
         p.location.y - animal.location.y,
