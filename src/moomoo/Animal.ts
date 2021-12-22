@@ -5,6 +5,14 @@ import { getGame } from "../game/Game";
 import GameState from "../game/GameState";
 import { Animals, eucDistance } from "./util";
 import config from "../config";
+import Player from "./Player";
+
+interface Drops {
+  wood?: number;
+  stone?: number;
+  food?: number;
+  gold?: number;
+}
 
 export default class Animal extends Entity {
   public name: string = "Steph";
@@ -12,11 +20,12 @@ export default class Animal extends Entity {
   public moving: boolean = false;
   public data: { [key: string]: any };
   public runTimer: NodeJS.Timeout | undefined;
+  public drops: Drops = {};
+
   private _health: number;
   public get health(): number {
     return this._health;
   }
-
   public set health(newHealth: number) {
     this._health = newHealth;
 
@@ -35,14 +44,30 @@ export default class Animal extends Entity {
   public size = 30;
   public inTrap = false;
 
-  constructor(sid: number, location: Vec2, type: number, name: string) {
+  constructor(
+    sid: number,
+    location: Vec2,
+    type: number,
+    name: string,
+    drops?: Drops
+  ) {
     super(sid, location, 0, new Vec2(0, 0));
 
     this.name = name;
     this.type = type;
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
     this.data = animals.find((a) => a.id == this.type) || {};
-    this.size = Math.floor((this.data.scale || 0) / 1.5) || 30;
+    this.size =
+      Math.floor(((this.data.scale || 0) * (this.data.big ? 1.5 : 1)) / 1.5) ||
+      30;
+
+    if (drops) this.drops = drops;
+    else {
+      this.drops = {
+        food: this.data.drop || 0,
+        gold: this.data.killScore || 0,
+      };
+    }
 
     let a = this;
     this.moveRandomly = setInterval(function () {
@@ -80,6 +105,14 @@ export default class Animal extends Entity {
     } else {
       this.maxBleedAmt = -1;
     }
+  }
+
+  public giveDrops(player: Player) {
+    player.wood += this.drops.wood || 0;
+    player.stone += this.drops.stone || 0;
+    player.food += this.drops.food || 0;
+    player.points += this.drops.gold || 0;
+    player.score += this.drops.gold || 0;
   }
 
   getNearbyPlayers(state: GameState, range?: number) {

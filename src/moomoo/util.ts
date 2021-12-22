@@ -34,6 +34,10 @@ export enum Animals {
   treasure,
   moofie,
   moofieball,
+  crateWood,
+  crateStone,
+  crateFood,
+  crateGold,
 }
 export enum Biomes {
   main,

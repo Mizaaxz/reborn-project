@@ -289,108 +289,107 @@ function tryMoveAnimal(
 
   for (let gameObj of animal.getNearbyGameObjects(state)) {
     if (collideAnimalGameObject(animal, gameObj)) {
-      if (gameObj.isPlayerGameObject()) {
-        if (gameObj.data == ItemType.Platform) animal.layer = 1;
-        if (
-          gameObj.data == ItemType.SpawnPad &&
-          animal.type == Animals.moofieball &&
-          getGame()?.mode.includes(GameModes.moofieball)
-        ) {
-          let game = getGame();
-          if (!game) return;
-          let teamWon = gameObj.ownerSID == -66 ? "a" : "b";
-          if (teamWon == "a") game.winsA++;
-          else game.winsB++;
-          genBallArena(game, false);
-          Broadcast(
-            `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${
-              game.winsB
-            }`,
-            undefined
-          );
-        }
+      if (animal.health != -1) {
+        if (gameObj.isPlayerGameObject()) {
+          if (gameObj.data == ItemType.Platform) animal.layer = 1;
+          if (
+            gameObj.data == ItemType.SpawnPad &&
+            animal.type == Animals.moofieball &&
+            getGame()?.mode.includes(GameModes.moofieball)
+          ) {
+            let game = getGame();
+            if (!game) return;
+            let teamWon = gameObj.ownerSID == -66 ? "a" : "b";
+            if (teamWon == "a") game.winsA++;
+            else game.winsB++;
+            genBallArena(game, false);
+            Broadcast(
+              `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${
+                game.winsB
+              }`,
+              undefined
+            );
+          }
 
-        if (
-          gameObj.health != -1 &&
-          getGameObjLayer(gameObj.data) > Layer.Pad &&
-          animal.data.weapon
-        )
-          animal.isAttacking = true;
-
-        if (
-          !(
-            getItem(gameObj.data)?.bossImmune &&
-            animals.find((a) => a.id == animal.type)?.boss
+          if (
+            gameObj.health != -1 &&
+            getGameObjLayer(gameObj.data) > Layer.Pad &&
+            animal.data.weapon
           )
-        ) {
-          switch (gameObj.data) {
-            case ItemType.PitTrap:
-              inTrap = true;
-              break;
-            case ItemType.BoostPad:
-              animal.velocity.add(
-                Math.cos(gameObj.angle) * 0.3,
-                Math.sin(gameObj.angle) * 0.3
-              );
-              break;
-            case ItemType.HealingPad:
-              animal.padHeal += 15;
-              break;
-            case ItemType.Teleporter:
-              animal.location = randomPos(
-                14400 + 35,
-                14400 - 35,
-                getGame()?.spawnBounds
-              );
-              return;
-          }
-        }
-        if (!hasCollision(gameObj.data)) continue;
-      }
+            animal.isAttacking = true;
 
-      let dmg = gameObj.dmg;
-
-      if (dmg && !animal.spikeHit) {
-        let owner = state.players.find(
-          (player) => player.id == gameObj.ownerSID
-        );
-        animal.spikeHit = 2;
-
-        let angle = Math.atan2(
-          animal.location.y - gameObj.location.y,
-          animal.location.x - gameObj.location.x
-        );
-        animal.velocity.add(Math.cos(angle), Math.sin(angle));
-
-        if (owner) {
-          getGame()?.damageFromAnimal(animal, owner, gameObj.dmg, false);
-        } else {
-          animal.health -= gameObj.dmg;
-        }
-        animal.runFrom(gameObj.location);
-
-        if (animal.health <= 0) {
-          let type = animals[animal.type];
-          if (type && owner) {
-            owner.food += type.drop || 0;
-            owner.points += type.killScore || 0;
-            owner.score += type.killScore || 0;
-          }
-        }
-
-        state.players
-          .find((player) => player.id == gameObj.ownerSID)
-          ?.client?.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.HEALTH_CHANGE, [
-                gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
-                gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
-                dmg,
-                1,
-              ])
+          if (
+            !(
+              getItem(gameObj.data)?.bossImmune &&
+              animals.find((a) => a.id == animal.type)?.boss
             )
+          ) {
+            switch (gameObj.data) {
+              case ItemType.PitTrap:
+                inTrap = true;
+                break;
+              case ItemType.BoostPad:
+                animal.velocity.add(
+                  Math.cos(gameObj.angle) * 0.3,
+                  Math.sin(gameObj.angle) * 0.3
+                );
+                break;
+              case ItemType.HealingPad:
+                animal.padHeal += 15;
+                break;
+              case ItemType.Teleporter:
+                animal.location = randomPos(
+                  14400 + 35,
+                  14400 - 35,
+                  getGame()?.spawnBounds
+                );
+                return;
+            }
+          }
+          if (!hasCollision(gameObj.data)) continue;
+        }
+
+        let dmg = gameObj.dmg;
+
+        if (dmg && !animal.spikeHit) {
+          let owner = state.players.find(
+            (player) => player.id == gameObj.ownerSID
           );
-      }
+          animal.spikeHit = 2;
+
+          let angle = Math.atan2(
+            animal.location.y - gameObj.location.y,
+            animal.location.x - gameObj.location.x
+          );
+          animal.velocity.add(Math.cos(angle), Math.sin(angle));
+
+          if (owner) {
+            getGame()?.damageFromAnimal(animal, owner, gameObj.dmg, false);
+          } else {
+            animal.health -= gameObj.dmg;
+          }
+          animal.runFrom(gameObj.location);
+
+          if (animal.health <= 0) {
+            if (owner) animal.giveDrops(owner);
+          }
+
+          state.players
+            .find((player) => player.id == gameObj.ownerSID)
+            ?.client?.socket.send(
+              packetFactory.serializePacket(
+                new Packet(PacketType.HEALTH_CHANGE, [
+                  gameObj.location.x +
+                    Math.cos(angle) * (gameObj.realScale + 35),
+                  gameObj.location.y +
+                    Math.sin(angle) * (gameObj.realScale + 35),
+                  dmg,
+                  1,
+                ])
+              )
+            );
+        }
+      } else if (!hasCollision(gameObj.data)) continue;
 
       xVel *= 0.83;
       yVel *= 0.83;
@@ -595,7 +594,8 @@ function checkAnimalAttack(player: Player, animals: Animal[]) {
         getAttackLocation(player),
         hitAnimal.location,
         hitAnimal.data.scale || 35 * 2
-      )
+      ) &&
+      hitAnimal.health != -1
     )
       hitAnimals.push(hitAnimal);
   }
@@ -666,7 +666,10 @@ function collideProjectilePlayer(projectile: Projectile, player: Player) {
   return collideCircles(projectile.location, 10, player.location, 35);
 }
 function collideProjectileAnimal(projectile: Projectile, animal: Animal) {
-  return collideCircles(projectile.location, 10, animal.location, animal.size);
+  return (
+    collideCircles(projectile.location, 10, animal.location, animal.size) &&
+    animal.health != -1
+  );
 }
 function collideProjectileGameObject(
   projectile: Projectile,

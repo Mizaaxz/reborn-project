@@ -269,7 +269,8 @@ export default class Game {
 
   spawnAnimals() {
     outerLoop: for (let i = 0; i < 25; i++) {
-      if (this.state.animals.length >= 25) break;
+      if (this.state.animals.filter((a) => !a.data.fixedSpawn).length >= 25)
+        break;
       let location = randomPos(14400, 14400);
 
       let allowedTypes = animals.filter((a) => !a.boss && !a.static && !a.noAi);
@@ -755,7 +756,10 @@ export default class Game {
             0.01 * Math.cos(projectile.angle) * deltaTime,
             0.01 * Math.sin(projectile.angle) * deltaTime
           );
-          if (animal.health <= 0) this.killAnimal(animal);
+          if (animal.health <= 0) {
+            if (owner) animal.giveDrops(owner);
+            this.killAnimal(animal);
+          }
 
           if (owner) {
             owner.client?.socket.send(
@@ -1467,13 +1471,7 @@ export default class Game {
 
               if (hitAnimal.health <= 0) {
                 this.killAnimal(hitAnimal);
-
-                let type = animals[hitAnimal.type];
-                if (type) {
-                  player.food += type.drop || 0;
-                  player.points += type.killScore || 0;
-                  player.score += type.killScore || 0;
-                }
+                hitAnimal.giveDrops(player);
               } else {
                 let attackDetails = getWeaponAttackDetails(
                   player.selectedWeapon
