@@ -1207,7 +1207,7 @@ Command(
     });
   },
   {
-    aliases: ["lockdown", "lockserver", "ls"],
+    aliases: [],
     level: AdminLevel.Admin,
   }
 );
