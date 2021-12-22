@@ -304,6 +304,7 @@ export default class Player extends Entity {
   }
 
   public set food(newFood: number) {
+    newFood = Math.floor(newFood);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
       packetFactory.serializePacket(
@@ -320,6 +321,7 @@ export default class Player extends Entity {
   }
 
   public set stone(newStone: number) {
+    newStone = Math.floor(newStone);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
       packetFactory.serializePacket(
@@ -334,7 +336,7 @@ export default class Player extends Entity {
     return this._points;
   }
   public set points(newPoints: number) {
-    newPoints = Math.ceil(newPoints);
+    newPoints = Math.floor(newPoints);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
       packetFactory.serializePacket(
@@ -351,6 +353,7 @@ export default class Player extends Entity {
   }
   public set score(newScore: number) {
     newScore = Math.min(newScore, 1000000);
+    newScore = Math.floor(newScore);
     this._score = newScore;
     if (newScore && this.client?.account) {
       if (this.scoreSession == -1)
@@ -369,6 +372,7 @@ export default class Player extends Entity {
   }
 
   public set wood(newWood: number) {
+    newWood = Math.floor(newWood);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
       packetFactory.serializePacket(
