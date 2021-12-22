@@ -16,12 +16,14 @@ type Account = {
 
 let AccountCache: Account[] = [];
 
-export function getAccount(username: string): Account {
+export function getAccount(username: string): Account | null {
   let found = AccountCache.find((a) => a.username == username);
   if (found) return found;
   let acc = db.get(`account_${username.replace(/ /g, "+")}`) as Account;
-  AccountCache.push(acc);
-  return getAccount(username);
+  if (acc) {
+    AccountCache.push(acc);
+    return getAccount(username);
+  } else return null;
 }
 export function setAccount(username: string, acc: Account) {
   return db.set(`account_${username.replace(/ /g, "+")}`, acc);

@@ -90,7 +90,9 @@ getGame()?.addPacketHandler(
           if (filteredName.toLowerCase() == "guest")
             filteredName = newPlayer.client?.account?.username;
 
-          let plraccount = getAccount(newPlayer.client.account.username);
+          let plraccount = getAccount(
+            newPlayer.client.account.username
+          ) as Account;
           plraccount.displayName =
             filteredName || newPlayer.client.account.username;
           newPlayer.client.account = plraccount;

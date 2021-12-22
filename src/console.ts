@@ -938,7 +938,7 @@ Command(
     getGame()
       ?.state.players.filter(
         (p) =>
-          p.client?.account && p.client.account.username == account.username
+          p.client?.account && p.client.account.username == account?.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Promoted.");
@@ -960,7 +960,7 @@ Command(
     getGame()
       ?.state.players.filter(
         (p) =>
-          p.client?.account && p.client.account.username == account.username
+          p.client?.account && p.client.account.username == account?.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Demoted.");
@@ -981,7 +981,7 @@ Command(
     getGame()
       ?.state.players.filter(
         (p) =>
-          p.client?.account && p.client.account.username == account.username
+          p.client?.account && p.client.account.username == account?.username
       )
       .forEach((plr) => {
         if (plr.client) getGame()?.kickClient(plr.client, "Account Deleted.");
@@ -1017,7 +1017,7 @@ Command(
     }
 
     bcrypt.hash(newpass, 5, (err: any, hash: any) => {
-      if (err) return Broadcast("Error.", source?.client);
+      if (err || !account) return Broadcast("Error.", source?.client);
       account.password = hash;
       setAccount(account.username, account);
       Broadcast("Changed.", source?.client);

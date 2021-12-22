@@ -26,7 +26,7 @@ getGame()?.addPacketHandler(
       packet.data[0].password,
       account.password || "",
       (_: any, match: any) => {
-        if (match === true) {
+        if (match === true && account) {
           client.accountName = account.username || "";
           client.account = account;
           client.loggedIn = true;
