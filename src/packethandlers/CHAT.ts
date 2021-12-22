@@ -38,8 +38,9 @@ getGame()?.addPacketHandler(
 
     if (packet.data[0].toLowerCase() == "kill me") return client.player?.die();
 
-    if (Date.now() - (client.player?.lastMessage || 0) < 80)
+    if (Date.now() - client.player!.lastMessage < 80)
       return game.kickClient(client, "quit spamming");
+    client.player!.lastMessage = Date.now();
 
     for (let badWord of config.badWords) {
       if (packet.data[0].includes(badWord))
