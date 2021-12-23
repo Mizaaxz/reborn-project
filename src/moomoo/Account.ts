@@ -24,7 +24,7 @@ export function getAccount(username: string): Account | null {
     // @ts-ignore
     if (acc.mootuber == true) delete acc.mootuber;
     AccountCache.push(acc);
-    return getAccount(username);
+    return getAccount(acc.username);
   } else return null;
 }
 export function setAccount(username: string, acc: Account) {
