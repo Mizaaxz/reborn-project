@@ -24,7 +24,7 @@ let packetTypeMapping: PacketTypeMapping = {};
 {
 packetTypeMapping[PacketType.ATTACK] = { value: "c", side: Side.Server };
 packetTypeMapping[PacketType.AUTO_ATK] = { value: "7", side: Side.Server };
-packetTypeMapping[PacketType.CHAT] = { value: "p​acket", side: Side.Both };
+packetTypeMapping[PacketType.CHAT] = { value: "p​ackets", side: Side.Both };
 packetTypeMapping[PacketType.CLAN_ACC_JOIN] = { value: "11", side: Side.Server };
 packetTypeMapping[PacketType.DEATH] = { value: "11", side: Side.Client };
 packetTypeMapping[PacketType.CLAN_CREATE] = { value: "8", side: Side.Server };
