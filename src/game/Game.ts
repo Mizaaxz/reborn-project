@@ -306,7 +306,10 @@ export default class Game {
     let client =
       this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
 
-    if (this.clients.filter((client) => client.ip === ip).length > 2) {
+    if (
+      this.clients.filter((client) => client.ip === ip).length >
+      config.maxSessions
+    ) {
       let clientConnectionInfractions =
         this.clientConnectionInfractions[client.ip] || 0;
       this.kickClient(

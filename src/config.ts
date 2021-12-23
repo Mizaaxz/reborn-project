@@ -44,5 +44,6 @@ const config = {
   mapScale: 14400,
   biomeSize: 3400,
   prefixes: [], //["107.167", "162.158"],
+  maxSessions: 2,
 };
 export default config;

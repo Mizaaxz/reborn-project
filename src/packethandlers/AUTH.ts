@@ -4,6 +4,7 @@ import { PacketType } from "../packet/PacketType";
 import bcrypt from "bcrypt";
 import { Account, getAccount, setAccount } from "../moomoo/Account";
 import db from "enhanced.db";
+import config from "../config";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.AUTH),
@@ -27,6 +28,13 @@ getGame()?.addPacketHandler(
       account.password || "",
       (_: any, match: any) => {
         if (match === true && account) {
+          if (
+            game.clients.filter(
+              (c) => c.loggedIn && c.accountName == account?.username
+            ).length >= config.maxSessions
+          )
+            return game.kickClient(client, "Only 2 sessions per account!");
+
           client.accountName = account.username || "";
           client.account = account;
           client.loggedIn = true;
@@ -39,12 +47,12 @@ getGame()?.addPacketHandler(
               "Migrated to new admin system. Please reload."
             );
           }
-          if (account.balance == undefined) {
+          if (account.balance === undefined) {
             account.balance = 0;
             setAccount(packet.data[0].name, account);
             return game.kickClient(client, "disconnected");
           }
-          if (account.createdAt == undefined) {
+          if (account.createdAt === undefined) {
             account.createdAt = Date.now();
             setAccount(packet.data[0].name, account);
             return game.kickClient(client, "disconnected");
