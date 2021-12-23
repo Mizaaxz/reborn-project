@@ -112,7 +112,7 @@ export default class Animal extends Entity {
     player.stone += this.drops.stone || 0;
     player.food += this.drops.food || 0;
     player.points += this.drops.gold || 0;
-    player.score += this.drops.gold || 0;
+    if (!this.data.crate) player.score += this.drops.gold || 0;
   }
 
   getNearbyPlayers(state: GameState, range?: number) {
