@@ -22,7 +22,7 @@ export function getAccount(username: string): Account | null {
   let acc = db.get(`account_${username.replace(/ /g, "+")}`) as Account;
   if (acc) {
     // @ts-ignore
-    if (acc.mootuber == true) delete acc.mootuber;
+    if (acc.mootuber === true) delete acc.mootuber;
     AccountCache.push(acc);
     return getAccount(acc.username);
   } else return null;
