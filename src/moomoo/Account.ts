@@ -9,7 +9,7 @@ type Account = {
   admin?: boolean; // depreciated
   adminLevel?: AdminLevel;
   balance?: number;
-  mootuber?: boolean;
+  mootuber?: string;
   scores?: number[];
   createdAt?: number;
 };
@@ -21,6 +21,8 @@ export function getAccount(username: string): Account | null {
   if (found) return found;
   let acc = db.get(`account_${username.replace(/ /g, "+")}`) as Account;
   if (acc) {
+    // @ts-ignore
+    if (acc.mootuber == true) delete acc.mootuber;
     AccountCache.push(acc);
     return getAccount(username);
   } else return null;

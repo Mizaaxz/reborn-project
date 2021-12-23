@@ -250,6 +250,16 @@ app.get("/api/v1/players", (req, res) => {
   }
 });
 
+app.get("/api/v1/user/:name", (req, res) => {
+  let account = getAccount(req.params.name || "");
+  if (!account) return res.json({ err: 404 });
+  res.json({
+    username: account.username,
+    displayName: account.displayName || account.username,
+    yt: account.mootuber,
+  });
+});
+
 let wss = new WSServer({ noServer: true, maxPayload: 1024, backlog: 5 });
 startServer(wss);
 

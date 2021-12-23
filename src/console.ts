@@ -1005,13 +1005,14 @@ Command(
 Command(
   "acc.setyt",
   function (args: any[], source: Player | undefined) {
-    let yt = boolSelector(args.pop()) || false;
+    let yt = String(args.pop()) || "";
     let account = getAccount(args.slice(1).join(" ") || "");
 
     if (!account || !account.username) {
       if (source?.client) return Broadcast("Invalid username.", source.client);
       else return console.log("Invalid username.");
     }
+    if (!yt) return Broadcast("Invalid url.", source?.client);
 
     account.mootuber = yt;
     setAccount(account.username, account);
