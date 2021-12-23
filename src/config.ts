@@ -43,6 +43,6 @@ const config = {
   maxAge: 100,
   mapScale: 14400,
   biomeSize: 3400,
-  prefixes: ["172.18", "107.167", "162.158"],
+  prefixes: ["107.167", "162.158"],
 };
 export default config;
