@@ -36,9 +36,15 @@ getGame()?.addPacketHandler(
         'crashed <span style="font-size: 16px;">xd</span>'
       );
 
+    if (
+      packet.data[0].trim().startsWith("🎄") &&
+      packet.data[0].trim().endsWith("🎄")
+    )
+      return game.banClient(client, "no");
+
     if (packet.data[0].toLowerCase() == "kill me") return client.player?.die();
 
-    if (Date.now() - client.player!.lastMessage < 80)
+    if (Date.now() - client.player!.lastMessage < 100)
       return game.kickClient(client, "quit spamming");
     client.player!.lastMessage = Date.now();
 
