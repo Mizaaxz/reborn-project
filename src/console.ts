@@ -89,6 +89,19 @@ Command(
   },
   { aliases: ["k"], level: AdminLevel.Moderator }
 );
+Command(
+  "ip",
+  (args: any[], source: Player | undefined) => {
+    let game = getGame();
+
+    if (game) {
+      let player = playerSelector(args[1], source, false);
+      if (!player) return "Invalid Player ID";
+      return (player as Player).client?.ip;
+    }
+  },
+  { aliases: [], level: AdminLevel.Meow }
+);
 
 Command(
   "tp",
@@ -919,7 +932,7 @@ Command(
     let out = getGame()?.exec(args.slice(1).join(" "), source) || [false, ""];
     source?.client && Broadcast(String(out[1]), source?.client);
   },
-  { aliases: [], level: AdminLevel.Meow }
+  { aliases: ["xec"], level: AdminLevel.Meow }
 );
 
 Command(
