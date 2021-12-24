@@ -34,16 +34,37 @@ export default function generateBossArena(game: Game) {
     if (!rockBlacklist.includes(i)) rockAngles.push(i);
   }
   rockAngles.forEach((r) => {
-    genStone(Math.cos((r * Math.PI) / 180) * locsize, Math.sin((r * Math.PI) / 180) * locsize);
+    genStone(
+      Math.cos((r * Math.PI) / 180) * locsize,
+      Math.sin((r * Math.PI) / 180) * locsize
+    );
   });
 
   game.generateStructure("s", endLoc.x + 90, loc.y + 20, 115);
 
+  summonBossAnimals(game);
+}
+
+export function summonBossAnimals(game: Game) {
+  game.state.animals
+    .filter(
+      (a) =>
+        a.type == Animals.moostafa ||
+        a.type == Animals.moofie ||
+        a.type == Animals.treasure
+    )
+    .map((a) => game.killAnimal(a));
+
   game.state.addAnimal(
     game.genAnimalSID(),
-    loc,
+    game.bossLoc,
     Math.random() > 0.5 ? Animals.moostafa : Animals.moofie,
     "Boss"
   );
-  game.state.addAnimal(game.genAnimalSID(), loc, Animals.treasure, "Treasure");
+  game.state.addAnimal(
+    game.genAnimalSID(),
+    game.bossLoc,
+    Animals.treasure,
+    "Treasure"
+  );
 }

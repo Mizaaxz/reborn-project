@@ -1,11 +1,12 @@
 import Vec2 from "vec2";
 import animals from "../definitions/animals";
 import Entity from "./Entity";
-import { getGame } from "../game/Game";
+import Game, { getGame } from "../game/Game";
 import GameState from "../game/GameState";
 import { Animals, eucDistance } from "./util";
 import config from "../config";
 import Player from "./Player";
+import { summonBossAnimals } from "../game/generateBossArena";
 
 export interface Drops {
   wood?: number;
@@ -94,6 +95,10 @@ export default class Animal extends Entity {
     let game = getGame();
     if (game) {
       game.state.animals.splice(game.state.animals.indexOf(this), 1);
+      if (this.type == Animals.moostafa || this.type == Animals.moofie)
+        setTimeout(function () {
+          summonBossAnimals(game as Game);
+        }, 300000);
     }
     clearInterval(this.moveRandomly);
   }
