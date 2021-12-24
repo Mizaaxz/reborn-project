@@ -259,14 +259,16 @@ function tryMovePlayer(
     yVel *= vel;
   }
 
+  let out = player.mode == PlayerMode.spectator ? 500 : 0;
+
   newLocation.clamp(
     new Vec2(
-      0 + 35 + (getGame()?.spikeAdvance || 0),
-      0 + 35 + (getGame()?.spikeAdvance || 0)
+      0 - out + 35 + (getGame()?.spikeAdvance || 0),
+      0 - out + 35 + (getGame()?.spikeAdvance || 0)
     ),
     new Vec2(
-      14400 - 35 - (getGame()?.spikeAdvance || 0),
-      14400 - 35 - (getGame()?.spikeAdvance || 0)
+      14400 + out - 35 - (getGame()?.spikeAdvance || 0),
+      14400 + out - 35 - (getGame()?.spikeAdvance || 0)
     )
   );
   player.location = newLocation.add(delta * xVel, delta * yVel);
