@@ -1170,6 +1170,56 @@ Command(
 );
 
 Command(
+  "meow",
+  function (args: any[], source: Player | undefined) {
+    let packetFactory = PacketFactory.getInstance();
+
+    if (source && source.client) {
+      source.weapon = source.selectedWeapon = Weapons.Sword;
+      source.secondaryWeapon = Weapons.GreatHammer;
+      source.primaryWeaponExp = source.secondaryWeaponExp =
+        WeaponVariants[WeaponVariant.Diamond].xp;
+      source.items = [ItemType.PitTrap, ItemType.BoostPad];
+      source.food = 10000;
+      source.stone = 10000;
+      source.wood = 10000;
+      source.points = 10000;
+      source.health = 100;
+      source.invincible = true;
+      source.spdMult = 8;
+      source.upgradeAge = 10;
+      source.age = 99;
+      source.xp = Infinity;
+      source.hatID = 15;
+      source.accID = 6;
+      getGame()?.sendPlayerUpdates();
+      [
+        new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
+        new Packet(PacketType.UPDATE_ITEMS, [
+          [source.weapon, source.secondaryWeapon],
+          1,
+        ]),
+        new Packet(PacketType.UPGRADES, [0, 0]),
+        new Packet(PacketType.HEALTH_CHANGE, [
+          source.location.x,
+          source.location.y,
+          ":3",
+          1,
+        ]),
+      ].map(
+        (p) =>
+          source.client &&
+          source.client.socket.send(packetFactory.serializePacket(p))
+      );
+    }
+  },
+  {
+    aliases: ["dash"],
+    level: AdminLevel.Owner,
+  }
+);
+
+Command(
   "lock",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
