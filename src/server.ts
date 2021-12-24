@@ -264,6 +264,8 @@ app.get("/api/v1/user/:name", (req, res) => {
           account.scores.reduce((a, b) => a + b) / account.scores.length
         )
       : 0,
+    kills: account.kills || 0,
+    deaths: account.deaths || 0,
   });
 });
 
