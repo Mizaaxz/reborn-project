@@ -45,5 +45,6 @@ const config = {
   biomeSize: 3400,
   prefixes: [], //["107.167", "162.158"],
   maxSessions: 2,
+  maxScore: 10000000,
 };
 export default config;
