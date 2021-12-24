@@ -12,6 +12,8 @@ type Account = {
   mootuber?: string;
   scores?: number[];
   createdAt?: number;
+  kills?: number;
+  deaths?: number;
 };
 
 let AccountCache: Account[] = [];

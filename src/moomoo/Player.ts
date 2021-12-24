@@ -121,12 +121,16 @@ export default class Player extends Entity {
   public nextTribeCreate = Date.now();
 
   private _kills: number = 0;
+  private _deaths: number = 0;
 
   public invisible = false;
   public hideLeaderboard = false;
 
   public get kills(): number {
     return this._kills;
+  }
+  public get deaths(): number {
+    return this._deaths;
   }
 
   public set kills(newKills: number) {
@@ -136,7 +140,18 @@ export default class Player extends Entity {
         new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1])
       )
     );
+    if (this.client?.account?.kills !== undefined) {
+      this.client.account.kills += newKills - this._kills;
+      setAccount(this.client.account.username, this.client.account);
+    }
     this._kills = newKills;
+  }
+  public set deaths(newDeaths: number) {
+    if (this.client?.account?.deaths !== undefined) {
+      this.client.account.deaths += newDeaths - this._deaths;
+      setAccount(this.client.account.username, this.client.account);
+    }
+    this._deaths = newDeaths;
   }
 
   public damageOverTime() {
@@ -633,6 +648,8 @@ export default class Player extends Entity {
 
     this.dead = true;
     this.lastDeath = Date.now();
+    this.deaths += 1;
+    this._kills = 0;
     this.kills = 0;
     this.weapon = 0;
     this.secondaryWeapon = -1;
