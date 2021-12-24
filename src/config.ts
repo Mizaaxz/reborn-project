@@ -43,7 +43,7 @@ const config = {
   maxAge: 100,
   mapScale: 14400,
   biomeSize: 3400,
-  prefixes: [], //["107.167", "162.158"],
+  prefixes: [],
   maxSessions: 2,
   maxScore: 10000000,
 };
