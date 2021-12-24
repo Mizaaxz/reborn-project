@@ -1417,7 +1417,6 @@ export default class Game {
                 !hitPlayer.invincible
               ) {
                 this.killPlayer(hitPlayer);
-                player.kills++;
               } else {
                 let attackDetails = getWeaponAttackDetails(
                   player.selectedWeapon
