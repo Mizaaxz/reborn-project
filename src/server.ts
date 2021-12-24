@@ -257,6 +257,13 @@ app.get("/api/v1/user/:name", (req, res) => {
     username: account.username,
     displayName: account.displayName || account.username,
     yt: account.mootuber,
+    highScore: account.scores?.sort((a, b) => (a < b ? 1 : -1))[0] || 0,
+    totalScore: account.scores?.reduce((a, b) => a + b) || 0,
+    avgScore: account.scores
+      ? Math.floor(
+          account.scores.reduce((a, b) => a + b) / account.scores.length
+        )
+      : 0,
   });
 });
 
