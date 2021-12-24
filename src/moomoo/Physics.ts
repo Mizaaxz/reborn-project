@@ -150,11 +150,7 @@ function tryMovePlayer(
             player.padHeal += 15;
             break;
           case ItemType.Teleporter:
-            player.location = randomPos(
-              14400 + 35,
-              14400 - 35,
-              getGame()?.spawnBounds
-            );
+            player.location = randomPos(14400, 14400, 0);
             getGame()?.sendGameObjects(player);
             return;
         }
@@ -340,11 +336,7 @@ function tryMoveAnimal(
                 animal.padHeal += 15;
                 break;
               case ItemType.Teleporter:
-                animal.location = randomPos(
-                  14400 + 35,
-                  14400 - 35,
-                  getGame()?.spawnBounds
-                );
+                animal.location = randomPos(14400, 14400, 0);
                 return;
             }
           }
