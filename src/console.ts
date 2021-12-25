@@ -1255,7 +1255,12 @@ Command(
       len += 100;
       let len2 = String(len);
       let i = setInterval(function () {
-        if (source.dead) return clearInterval(i);
+        if (
+          source.dead ||
+          !source ||
+          !game?.state.players.find((p) => p.id == source.id)
+        )
+          return clearInterval(i);
         if (!p || p.dead) return;
         let ang = (source.angle * 180) / Math.PI;
         ang = (ang + 180) % 360;
