@@ -34,8 +34,6 @@ const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const VERSION = "1.14.6b";
-
 function format(timestamp: number) {
   var hours = Math.floor(timestamp / (60 * 60));
   var minutes = Math.floor((timestamp % (60 * 60)) / 60);
@@ -57,8 +55,9 @@ app.use((req, res, next) => {
 
 app.get("/status", (req, res) => {
   res.json({
-    uptime: format(process.uptime()),
-    ver: VERSION,
+    uptime: process.uptime(),
+    uptimeF: format(process.uptime()),
+    ver: config.version,
     node: process.version,
   });
 });
