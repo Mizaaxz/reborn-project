@@ -15,14 +15,8 @@ getGame()?.addPacketHandler(
     if (client.player) {
       let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
       if (!tribeName) return;
-      if (
-        tribeName.toLowerCase().includes("cum") &&
-        tribeName.toLowerCase().includes("alex")
-      )
-        return game.kickClient(client, "disconnected");
 
-      if (client.player.nextTribeCreate > Date.now())
-        return game.kickClient(client, "disconnected");
+      if (client.player.nextTribeCreate > Date.now()) return;
       client.player.nextTribeCreate = Date.now() + 3000;
       let tribe = game.state.addTribe(tribeName, client.player.id);
 
