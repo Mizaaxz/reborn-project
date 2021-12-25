@@ -1,7 +1,7 @@
 import Vec2 from "vec2";
 import { GameObjectType } from "./gameobjects";
 import Player from "../moomoo/Player";
-import { Tribe } from "../moomoo/Tribes";
+import Tribe from "../moomoo/Tribes";
 
 export default class GameObject {
   public lastShoot: number = Date.now() + 1000;
@@ -35,6 +35,7 @@ export default class GameObject {
   }
 
   isPlayerGameObject() {
+    //@ts-ignore
     return this.type === -1 && typeof this.data === "number";
   }
 
@@ -42,7 +43,10 @@ export default class GameObject {
     if (this.ownerSID === player.id) return false;
 
     for (let tribe of tribes) {
-      if (tribe.membersSIDs.includes(player.id) && tribe.membersSIDs.includes(this.ownerSID))
+      if (
+        tribe.allMemberIDs.includes(player.id) &&
+        tribe.allMemberIDs.includes(this.ownerSID)
+      )
         return false;
     }
 

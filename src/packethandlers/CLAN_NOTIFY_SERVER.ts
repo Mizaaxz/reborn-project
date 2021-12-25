@@ -6,26 +6,19 @@ import { PacketType } from "../packet/PacketType";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_NOTIFY_SERVER),
   (game, packetFactory, client, packet) => {
-    if (client.player && client.player.clanName) {
+    if (client.player && client.player.tribe) {
       if (Date.now() - client.player.lastPing > 2200) {
-        let tribe = game.state.tribes.find((tribe) => tribe.name === client.player?.clanName);
-
-        if (tribe) {
-          for (let memberSID of tribe.membersSIDs) {
-            game.state.players
-              .find((player) => player.id == memberSID)
-              ?.client?.socket.send(
-                packetFactory.serializePacket(
-                  new Packet(PacketType.CLAN_NOTIFY_CLIENT, [
-                    client.player.location.x,
-                    client.player.location.y,
-                  ])
-                )
-              );
-          }
-
-          client.player.lastPing = Date.now();
-        }
+        client.player.tribe.allMembers.forEach((m) =>
+          m.client?.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.CLAN_NOTIFY_CLIENT, [
+                client.player?.location.x || 0,
+                client.player?.location.y || 0,
+              ])
+            )
+          )
+        );
+        client.player.lastPing = Date.now();
       }
     }
   }

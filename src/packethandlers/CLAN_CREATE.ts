@@ -8,13 +8,17 @@ import { PacketType } from "../packet/PacketType";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_CREATE),
   (game, packetFactory, client, packet) => {
-    if (!client.player || client.player.dead) Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
+    if (!client.player || client.player.dead)
+      Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
     if (game.mode.includes(GameModes.royale)) return;
 
     if (client.player) {
       let tribeName = [...packet.data[0]].slice(0, 10).join("").trim();
       if (!tribeName) return;
-      if (tribeName.toLowerCase().includes("cum") && tribeName.toLowerCase().includes("alex"))
+      if (
+        tribeName.toLowerCase().includes("cum") &&
+        tribeName.toLowerCase().includes("alex")
+      )
         return game.kickClient(client, "disconnected");
 
       if (client.player.nextTribeCreate > Date.now())
@@ -23,10 +27,11 @@ getGame()?.addPacketHandler(
       let tribe = game.state.addTribe(tribeName, client.player.id);
 
       if (tribe) {
-        client.player.clanName = tribe.name;
-        client.player.isClanLeader = true;
+        client.player.tribe = tribe;
         client.socket?.send(
-          packetFactory.serializePacket(new Packet(PacketType.PLAYER_SET_CLAN, [tribe.name, true]))
+          packetFactory.serializePacket(
+            new Packet(PacketType.PLAYER_SET_CLAN, [tribe.name, true])
+          )
         );
 
         game.state.updateClanPlayers(tribe);

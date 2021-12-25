@@ -422,35 +422,6 @@ Command(
             player.accID = resourceAmount;
             break;
 
-          case "tribe":
-            let tribe = game.state.tribes.filter(
-              (t) => t.name == args.slice(3).join(" ")
-            )[0];
-            if (tribe) {
-              let tribeIndex = game.state.tribes.findIndex((t) => {
-                if (t) t.membersSIDs.includes(player?.id as number);
-              });
-              let inTribe = game.state.tribes[tribeIndex];
-
-              if (inTribe) {
-                if (inTribe.ownerSID == player.id) {
-                  console.log("owner leave");
-                  game.state.removeTribe(tribeIndex);
-                  if (player.client) player.client.tribeJoinQueue = [];
-                } else {
-                  console.log("regular leave");
-                  game.state.leaveClan(player, tribeIndex);
-                }
-              } else console.log("no tribe");
-              setTimeout(function () {
-                if (game && player) {
-                  game.state.joinClan(player, tribe);
-                  console.log("joined" + tribe.name);
-                }
-              }, 5);
-            } else player.clanName = args.slice(3).join(" ");
-            break;
-
           default:
             return "Invalid resource type " + resourceType;
         }

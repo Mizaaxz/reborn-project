@@ -46,8 +46,6 @@ export default function updateWindmills(game: Game) {
       )
         p.die();
     });
-    game.state.tribes.forEach((t) => {
-      game.state.removeTribe(game.state.tribes.indexOf(t));
-    });
+    game.state.tribes.map((t) => t.delete());
   }
 }

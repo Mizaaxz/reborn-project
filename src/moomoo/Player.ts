@@ -31,7 +31,8 @@ import config from "../config";
 import { getAccessory } from "./Accessories";
 import { PlayerMode } from "./PlayerMode";
 import { setAccount } from "./Account";
-import Animal, { Drops } from "./Animal";
+import { Drops } from "./Animal";
+import Tribe from "./Tribes";
 
 export default class Player extends Entity {
   public name: string;
@@ -116,8 +117,7 @@ export default class Player extends Entity {
     ItemType.Windmill,
   ];
 
-  public clanName: string | null = null;
-  public isClanLeader = false;
+  public tribe: Tribe | null = null;
   public nextTribeCreate = Date.now();
 
   private _kills: number = 0;
@@ -718,8 +718,8 @@ export default class Player extends Entity {
       this.selectedWeapon == this.weapon
         ? this.primaryWeaponVariant
         : this.secondaryWeaponVariant,
-      this.clanName,
-      this.isClanLeader ? 1 : 0,
+      this.tribe?.name || null,
+      this.tribe?.owner.id == this.id ? 1 : 0,
       this.hatID,
       this.accID,
       this.kills === leadKills && this.kills > 0 ? 1 : 0,

@@ -340,11 +340,9 @@ export default class Game {
           .filter((gameObj) => gameObj.ownerSID === client.player?.id)
           .forEach((gameObj) => this.state.removeGameObject(gameObj));
 
-        let tribeIndex = this.state.tribes.findIndex(
-          (tribe) => tribe.ownerSID == client.player?.id
-        );
-
-        if (tribeIndex > -1) this.state.removeTribe(tribeIndex);
+        this.state.tribes
+          .find((tribe) => tribe.owner.id == client.player?.id)
+          ?.delete();
       }
 
       let clientIndex = this.clients.indexOf(client);
@@ -387,7 +385,7 @@ export default class Game {
           {
             teams: this.state.tribes.map((tribe) => ({
               sid: tribe.name,
-              owner: tribe.ownerSID,
+              owner: tribe.owner.id,
             })),
           },
         ])
@@ -702,9 +700,7 @@ export default class Game {
         if (
           Physics.collideProjectilePlayer(projectile, player) &&
           player.id != projectile.ownerSID &&
-          !this.state.tribes
-            .find((t) => t.membersSIDs.includes(owner?.id || -1))
-            ?.membersSIDs.includes(player.id) &&
+          !owner?.tribe?.allMembers.includes(player) &&
           projectile.source?.ownerSID !== player.id
         ) {
           let dmg = projectile.damage;
@@ -1012,12 +1008,10 @@ export default class Game {
     }
 
     this.state.players.forEach((player) => {
-      let tribe = this.state.tribes.find((t) => t.name == player.clanName);
       let tribeMembers: number[] = [];
 
-      if (tribe)
-        tribeMembers = tribe.membersSIDs
-          .map((m) => this.state.players.find((p) => p.id === m))
+      if (player.tribe)
+        tribeMembers = player.tribe.allMembers
           .filter((m) => m !== player)
           .reduce<number[]>((acc, otherMember) => {
             if (!otherMember || otherMember.dead) return acc;
@@ -1070,8 +1064,8 @@ export default class Game {
             turret.ownerSID !== p.id &&
             !this.state.tribes.find(
               (t) =>
-                t.membersSIDs.includes(turret.ownerSID) &&
-                t.membersSIDs.includes(p.id)
+                t.allMemberIDs.includes(turret.ownerSID) &&
+                t.allMemberIDs.includes(p.id)
             ) &&
             p.location.distance(turret.location) < (Turret?.shootRange || 0) &&
             p.mode !== PlayerMode.spectator &&
@@ -1116,8 +1110,7 @@ export default class Game {
           (pl) =>
             p.id !== pl.id &&
             !this.state.tribes.find(
-              (t) =>
-                t.membersSIDs.includes(p.id) && t.membersSIDs.includes(pl.id)
+              (t) => t.allMembers.includes(p) && t.allMembers.includes(pl)
             ) &&
             pl.location.distance(pl.location) < (h?.turret?.range || 0)
         );
@@ -1390,8 +1383,8 @@ export default class Game {
                 : player.secondaryWeaponVariant;
             for (let hitPlayer of hitPlayers) {
               if (
-                hitPlayer.clanName == player.clanName &&
-                hitPlayer.clanName != null
+                hitPlayer.tribe?.id == player.tribe?.id &&
+                hitPlayer.tribe != null
               )
                 continue;
 

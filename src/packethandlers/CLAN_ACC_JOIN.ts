@@ -6,17 +6,16 @@ import { PacketType } from "../packet/PacketType";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_ACC_JOIN),
   (game, packetFactory, client, packet) => {
-    if (!client.player || client.player.dead) Broadcast("Error: ADD_MEMBER_WHILE_DEAD", client);
+    if (!client.player || client.player.dead)
+      Broadcast("Error: ADD_MEMBER_WHILE_DEAD", client);
 
     if (client.tribeJoinQueue.length && client.player && packet.data[1]) {
-      let tribe = game.state.tribes.find((tribe) => tribe.ownerSID === client.player?.id);
+      let tribe = client.player.tribe;
       let player = client.tribeJoinQueue[0];
 
-      if (tribe && player.clanName === null) {
-        player.clanName = tribe.name;
-
-        game.state.joinClan(player, tribe);
-
+      if (tribe && !player.tribe) {
+        player.tribe = tribe;
+        tribe.addPlayer(player);
         // for pit traps to appear
         game.sendGameObjects(player);
       }

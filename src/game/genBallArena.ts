@@ -148,12 +148,8 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
     let a = game.state.tribes.find((t) => t.name == "Team A");
     let b = game.state.tribes.find((t) => t.name == "Team B");
     if (!a || !b) return;
-    chunks[0] = a.membersSIDs.map((m) =>
-      game.state.players.find((p) => p.id == m)
-    );
-    chunks[1] = b.membersSIDs.map((m) =>
-      game.state.players.find((p) => p.id == m)
-    );
+    chunks[0] = a.allMembers;
+    chunks[1] = b.allMembers;
   }
   let playerTeams: { [key: string]: (Player | undefined)[] } = {
     a: chunks[0],
@@ -161,9 +157,7 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
   };
 
   while (game.state.tribes?.length) {
-    game.state.tribes.forEach((t) => {
-      game.state.removeTribe(game.state.tribes.indexOf(t));
-    });
+    game.state.tribes.map((t) => t.delete());
   }
 
   Object.keys(playerTeams).forEach((letter) => {
@@ -172,11 +166,9 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
       `Team ${letter.toUpperCase()}`,
       letter == "a" ? -65 : -66
     );
-    if (!tribe) return;
-    let name = tribe.name;
-    tribe.membersSIDs = players?.map((p) => {
-      if (p) {
-        p.clanName = name;
+    if (typeof tribe == "boolean") return;
+    players?.forEach((p) => {
+      if (p && typeof tribe !== "boolean") {
         p.location =
           letter == "a"
             ? centerPos.subtract(750, 0, true)
@@ -187,8 +179,8 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
         p.invincible = true;
         p.spdMult = 3.5;
         game.sendGameObjects(p);
+        tribe.addPlayer(p);
       }
-      return p?.id || -1;
     });
     game.state.updateClanPlayers(tribe);
   });
