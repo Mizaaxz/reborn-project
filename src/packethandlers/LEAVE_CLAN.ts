@@ -11,15 +11,7 @@ getGame()?.addPacketHandler(
       Broadcast("Error: TRIBE_LEAVE_WHILE_DEAD", client);
 
     if (client.player && !game.mode.includes(GameModes.moofieball)) {
-      if (
-        client.player.tribe &&
-        client.player.tribe.owner.id == client.player.id
-      ) {
-        client.player.tribe.delete();
-        client.tribeJoinQueue = [];
-      } else {
-        client.player.tribe?.removePlayer(client.player)
-      }
+      client.player.tribe?.removePlayer(client.player);
     }
   }
 );

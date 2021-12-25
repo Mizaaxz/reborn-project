@@ -340,9 +340,10 @@ export default class Game {
           .filter((gameObj) => gameObj.ownerSID === client.player?.id)
           .forEach((gameObj) => this.state.removeGameObject(gameObj));
 
-        this.state.tribes
-          .find((tribe) => tribe.owner.id == client.player?.id)
-          ?.delete();
+        let inTribe = this.state.tribes.find(
+          (tribe) => tribe.owner.id == client.player?.id
+        );
+        if (inTribe) inTribe.removePlayer(client.player);
       }
 
       let clientIndex = this.clients.indexOf(client);

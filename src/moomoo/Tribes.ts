@@ -37,6 +37,11 @@ export default class Tribe {
         new Packet(PacketType.PLAYER_SET_CLAN, [null, 0])
       )
     );
+    if (this.owner.id == player.id && this.owner.client) {
+      this.owner.client.tribeJoinQueue = [];
+      if (this.members.length) this.owner = this.members.shift() as Player;
+      else this.delete();
+    }
     this.game.state.updateClanPlayers(this);
   }
 
