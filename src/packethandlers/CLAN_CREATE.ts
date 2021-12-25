@@ -8,8 +8,7 @@ import { PacketType } from "../packet/PacketType";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_CREATE),
   (game, packetFactory, client, packet) => {
-    if (!client.player || client.player.dead)
-      Broadcast("Error: CREATING_TRIBE_WHEN_DEAD", client);
+    if (!client.player || client.player.dead) return;
     if (game.mode.includes(GameModes.royale)) return;
 
     if (client.player) {
