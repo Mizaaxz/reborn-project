@@ -32,3 +32,11 @@ const setWeaponVariant = function (player: Player, variant: any) {
     : (player.secondaryWeaponExp = WeaponVariants[wv].xp);
 };
 export { setWeaponVariant };
+
+export function timeFormat(ms: number) {
+  let seconds = Math.floor((ms / 1000) % 60),
+    minutes = Math.floor((ms / (1000 * 60)) % 60),
+    hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+
+  return `${hours.toString()}h${minutes.toString()}m${seconds.toString()}s`;
+}

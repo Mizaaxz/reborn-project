@@ -67,6 +67,11 @@ getGame()?.addPacketHandler(
             setAccount(packet.data[0].name, account);
             return game.kickClient(client, "disconnected");
           }
+          if (account.playTime === undefined) {
+            account.playTime = 0;
+            setAccount(packet.data[0].name, account);
+            return game.kickClient(client, "disconnected");
+          }
 
           if (account.adminLevel) client.admin = account.adminLevel;
         }

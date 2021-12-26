@@ -22,6 +22,7 @@ import { Account, getAccount, setAccount } from "./moomoo/Account";
 import { initLogs, log } from "./log";
 import { Socket } from "net";
 import animals from "./definitions/animals";
+import { timeFormat } from "./functions";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -34,20 +35,6 @@ const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-function format(timestamp: number) {
-  var hours = Math.floor(timestamp / (60 * 60));
-  var minutes = Math.floor((timestamp % (60 * 60)) / 60);
-  var seconds = Math.floor(timestamp % 60);
-
-  return (
-    hours.toString().padStart(2, "0") +
-    ":" +
-    minutes.toString().padStart(2, "0") +
-    ":" +
-    seconds.toString().padStart(2, "0")
-  );
-}
-
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
@@ -56,7 +43,7 @@ app.use((req, res, next) => {
 app.get("/status", (req, res) => {
   res.json({
     uptime: process.uptime(),
-    uptimeF: format(process.uptime()),
+    uptimeF: timeFormat(process.uptime()),
     ver: config.version,
     node: process.version,
   });
@@ -265,6 +252,7 @@ app.get("/api/v1/user/:name", (req, res) => {
       : 0,
     kills: account.kills || 0,
     deaths: account.deaths || 0,
+    playTime: timeFormat(account.playTime || 0),
   });
 });
 

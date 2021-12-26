@@ -87,6 +87,8 @@ getGame()?.addPacketHandler(
           .trim()
           .slice(0, config.usernameLength.max);
         if (newPlayer.client?.account) {
+          newPlayer.client.joinedAt = Date.now();
+
           if (filteredName.toLowerCase() == "guest")
             filteredName = newPlayer.client?.account?.username;
 

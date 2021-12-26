@@ -345,6 +345,7 @@ export default class Game {
         );
         if (inTribe) inTribe.removePlayer(client.player);
       }
+      client.savePlayTime();
 
       let clientIndex = this.clients.indexOf(client);
       if (clientIndex > -1) this.clients.splice(clientIndex, 1);
@@ -416,6 +417,7 @@ export default class Game {
   }
 
   kickClient(client: Client, reason: string = "Kicked from game.") {
+    client.savePlayTime();
     this.clients.splice(this.clients.indexOf(client), 1);
     console.log(`Kicked ${client.id}: ${reason}`);
 

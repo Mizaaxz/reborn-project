@@ -689,6 +689,9 @@ export default class Player extends Entity {
 
     this.scoreSession = -1;
     this.score = 0;
+
+    this.client?.savePlayTime();
+    this.client!.joinedAt = 0;
   }
 
   move(direction: number) {
