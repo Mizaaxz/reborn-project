@@ -783,7 +783,7 @@ Command(
       return false;
     } else return "Invalid GameMode.";
   },
-  { aliases: ["gm"], level: AdminLevel.Admin }
+  { aliases: ["gm"], level: AdminLevel.Staff }
 );
 
 Command(
