@@ -780,11 +780,14 @@ Command(
       .filter((m) => !!m);
     if (modes.length) {
       let game = getGame();
-      if (game) game.mode = modes;
+      if (game) {
+        game.mode = modes;
+        if(modes.includes(GameModes.moofieball)) game.ball();
+      }
       return false;
     } else return "Invalid GameMode.";
   },
-  { aliases: ["gm"], level: AdminLevel.Admin }
+  { aliases: ["gm"], level: AdminLevel.Staff }
 );
 
 Command(
