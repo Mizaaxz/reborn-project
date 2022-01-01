@@ -81,6 +81,7 @@ app.get("/api/v1/leaderboard", (req, res) => {
               (a) => a
             ) || [],
           score: acc.scores?.reduce((a, b) => a + b) || 0,
+          clan: acc.gTribe || null,
         };
       })
       .sort((a, b) => (a.score < b.score ? 1 : -1))
@@ -254,6 +255,7 @@ app.get("/api/v1/user/:name", (req, res) => {
     kills: account.kills || 0,
     deaths: account.deaths || 0,
     playTime: timeFormat(account.playTime || 0),
+    gTribe: account.gTribe || null,
   });
 });
 app.get("/api/v1/gtribe/:tag", (req, res) => {
