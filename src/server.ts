@@ -255,7 +255,7 @@ app.get("/api/v1/user/:name", (req, res) => {
     kills: account.kills || 0,
     deaths: account.deaths || 0,
     playTime: timeFormat(account.playTime || 0),
-    gTribe: account.gTribe || null,
+    gTribe: account.gTribe ? getGTribe(account.gTribe) : null,
   });
 });
 app.get("/api/v1/gtribe/:tag", (req, res) => {
