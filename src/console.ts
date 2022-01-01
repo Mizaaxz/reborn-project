@@ -34,6 +34,7 @@ import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
 import readline from "readline";
 import bcrypt from "bcrypt";
 import { PlayerMode } from "./moomoo/PlayerMode";
+import { getGTribe } from "./moomoo/GTribe";
 
 let command = "";
 let lastMessage = "";
@@ -1010,6 +1011,15 @@ Command(
   },
   { aliases: ["acc.changepass"], level: AdminLevel.Meow }
 );
+Command(
+  "acc.gtribe",
+  function (args: any[], source: Player | undefined) {
+    let gtr = getGTribe(args.pop());
+    let account = getAccount(args.slice(1).join(" ") || "");
+    if (!gtr || !account) return Broadcast("Invalid params.", source?.client);
+  },
+  { aliases: [], level: AdminLevel.Meow }
+);
 
 Command(
   "meow",
@@ -1141,7 +1151,7 @@ Command(
 );
 
 Command(
-  "meow",
+  "dashre",
   function (args: any[], source: Player | undefined) {
     let packetFactory = PacketFactory.getInstance();
 

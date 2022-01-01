@@ -41,6 +41,8 @@ const config = {
   port: PORT,
   prefix: "!",
   usernameLength: { min: 4, max: 16 },
+  gTribeTagLength: { min: 2, max: 7 },
+  gTribeNameLength: { min: 4, max: 20 },
   maxAge: 100,
   mapScale: 14400,
   biomeSize: 3400,

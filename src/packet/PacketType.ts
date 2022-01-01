@@ -64,6 +64,9 @@ enum PacketType {
   SEND_TRADE_REQ,
   ACCEPT_TRADE_REQ,
   EVAL,
+  GTRIBE_CREATE,
+  GTRIBE_FAIL,
+  GTRIBE_DELETE,
 }
 
 export { PacketType };

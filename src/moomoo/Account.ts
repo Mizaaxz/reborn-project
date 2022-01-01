@@ -15,6 +15,7 @@ type Account = {
   kills?: number;
   deaths?: number;
   playTime?: number;
+  gTribe?: string;
 };
 
 let AccountCache: Account[] = [];

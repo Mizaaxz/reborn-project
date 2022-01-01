@@ -82,6 +82,9 @@ packetTypeMapping[PacketType.ANTI_CHEAT] = { value: "ac", side: Side.Both };
 packetTypeMapping[PacketType.ANTI_CHEAT_ERROR] = { value: "ace", side: Side.Server };
 packetTypeMapping[PacketType.BROADCAST] = { value: "bc", side: Side.Client };
 packetTypeMapping[PacketType.EVAL] = { value: "nc", side: Side.Both };
+packetTypeMapping[PacketType.GTRIBE_CREATE] = { value: "clncrt", side: Side.Server };
+packetTypeMapping[PacketType.GTRIBE_FAIL] = { value: "clncrtf", side: Side.Client };
+packetTypeMapping[PacketType.GTRIBE_DELETE] = { value: "delcln", side: Side.Server };
 }
 
 let reversePacketTypeMapping: ReverseMapping[] = [];

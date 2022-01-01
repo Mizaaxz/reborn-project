@@ -23,6 +23,7 @@ import { initLogs, log } from "./log";
 import { Socket } from "net";
 import animals from "./definitions/animals";
 import { timeFormat } from "./functions";
+import { getGTribe } from "./moomoo/GTribe";
 const accessories2 = Object.values(accessories);
 const hats2 = Object.values(hats);
 const items2 = Object.values(items);
@@ -253,6 +254,18 @@ app.get("/api/v1/user/:name", (req, res) => {
     kills: account.kills || 0,
     deaths: account.deaths || 0,
     playTime: timeFormat(account.playTime || 0),
+  });
+});
+app.get("/api/v1/gtribe/:tag", (req, res) => {
+  let gtr = getGTribe(req.params.tag || "");
+  if (!gtr) return res.json({ err: 404 });
+  res.json({
+    tag: gtr.id,
+    name: gtr.name,
+    desc: gtr.description,
+    owner: gtr.leader,
+    members: gtr.members,
+    disc: gtr.discord,
   });
 });
 
