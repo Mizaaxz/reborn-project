@@ -1725,7 +1725,7 @@ export default class Game {
           speedMult *= getHat(player.hatID)?.spdMult || 1;
         }
         if (player.accID !== -1) {
-          speedMult *= getAccessory(player.hatID)?.spdMult || 1;
+          speedMult *= getAccessory(player.accID)?.spdMult || 1;
         }
 
         if (player.buildItem == -1) {
