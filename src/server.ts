@@ -194,7 +194,7 @@ app.post("/api/v1/create", (req, res) => {
       text: errCodes.create.PASSWORD_TOO_SHORT,
     });
 
-  bcrypt.hash(password, 5, (err: any, hash: any) => {
+  bcrypt.hash(password, 10, (err: any, hash: any) => {
     if (err)
       return res.json({
         error: "HASH_ERROR",
