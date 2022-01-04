@@ -33,6 +33,7 @@ import { PlayerMode } from "./PlayerMode";
 import { setAccount } from "./Account";
 import { Drops } from "./Animal";
 import Tribe from "./Tribes";
+import { GameModes } from "../game/GameMode";
 
 export default class Player extends Entity {
   public name: string;
@@ -368,6 +369,7 @@ export default class Player extends Entity {
     return this._score;
   }
   public set score(newScore: number) {
+    if (this.game.mode.includes(GameModes.sandbox)) return;
     newScore = Math.min(newScore, config.maxScore);
     newScore = Math.floor(newScore);
     this._score = newScore;
