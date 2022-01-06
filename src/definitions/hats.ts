@@ -30,6 +30,15 @@ const hats = [
     dontSell: true,
   },
   {
+    id: 61,
+    name: "Dashre Hat",
+    price: 0,
+    scale: 120,
+    longDesc: "",
+    desc: "For the best mmrb player, Dashre.",
+  },
+
+  {
     id: 45,
     name: "Shame!",
     dontSell: true,
