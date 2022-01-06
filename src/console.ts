@@ -782,7 +782,7 @@ Command(
       let game = getGame();
       if (game) {
         game.mode = modes;
-        if(modes.includes(GameModes.moofieball)) game.ball();
+        if (modes.includes(GameModes.moofieball)) game.ball();
       }
       return false;
     } else return "Invalid GameMode.";
@@ -1174,8 +1174,8 @@ Command(
       source.upgradeAge = 10;
       source.age = 99;
       source.xp = Infinity;
-      source.hatID = 15;
-      source.accID = 6;
+      source.hatID = 61;
+      source.accID = 11;
       getGame()?.sendPlayerUpdates();
       [
         new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]),
