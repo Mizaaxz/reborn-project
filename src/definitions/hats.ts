@@ -16,7 +16,7 @@ const hats = [
     price: 0,
     scale: 120,
     longDesc: "",
-    desc: "Coolest mooer around.",
+    desc: "No longer the coolest mooer around.",
   },
   {
     id: 50,
@@ -89,6 +89,14 @@ const hats = [
     scale: 120,
     longDesc: "",
     desc: "For the best mmrb player, Dashre.",
+  },
+  {
+    id: 62,
+    name: "123SMG Hat",
+    price: 0,
+    scale: 120,
+    longDesc: "",
+    desc: "Clearly the coolest mooer around.",
   },
   {
     id: 57,
