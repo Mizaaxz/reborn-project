@@ -98,7 +98,7 @@ app.post("/api/v1/login", (req, res) => {
   if (!password)
     return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
-  let account = getAccount(username);
+  let account = getAccount(username, true);
   if (!account)
     return res.json({
       error: "INVALID_USERNAME",
@@ -143,7 +143,7 @@ app.post("/api/v1/create", (req, res) => {
     });
   username = username.trim();
 
-  let exists = getAccount(username);
+  let exists = getAccount(username, true);
   if (exists)
     return res.json({
       error: "USERNAME_FOUND",
@@ -239,7 +239,7 @@ app.get("/api/v1/players", (req, res) => {
 });
 
 app.get("/api/v1/user/:name", (req, res) => {
-  let account = getAccount(req.params.name || "");
+  let account = getAccount(req.params.name || "", true);
   if (!account) return res.json({ err: 404 });
   res.json({
     username: account.username,

@@ -20,9 +20,12 @@ type Account = {
 
 let AccountCache: Account[] = [];
 
-export function getAccount(username: string): Account | null {
+export function getAccount(
+  username: string,
+  temp: boolean = false
+): Account | null {
   let found = AccountCache.find((a) => a.username == username);
-  if (found) return found;
+  if (found) return temp ? JSON.parse(JSON.stringify(found)) : found;
   let acc = db.get(`account_${username.replace(/ /g, "+")}`) as Account;
   if (acc) {
     // @ts-ignore
