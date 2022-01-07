@@ -48,6 +48,7 @@ getGame()?.addPacketHandler(
       members: [],
       description: "",
       discord: "",
+      queue: [],
     };
     setGTribe(clanTag, newGTribe);
 

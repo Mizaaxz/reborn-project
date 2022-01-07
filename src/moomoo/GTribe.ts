@@ -1,5 +1,5 @@
 import db from "enhanced.db";
-import { getAccount, setAccount } from "./Account";
+import { Account, getAccount, setAccount } from "./Account";
 
 export interface GTribe {
   id: string;
@@ -8,12 +8,15 @@ export interface GTribe {
   members: string[];
   description: string;
   discord: string;
+  queue: string[];
 }
 
-export function getGTribe(id: string) {
-  let tribe = db.get(`gtribe_${id.toLowerCase()}`);
-  if (tribe) return tribe as GTribe;
-  else return null;
+export function getGTribe(id: string, includeQueue: boolean = true) {
+  let tribe = db.get(`gtribe_${id.toLowerCase()}`) as GTribe;
+  if (tribe) {
+    if (!tribe.queue) tribe.queue = [];
+    return includeQueue ? tribe : ((tribe.queue = []), tribe);
+  } else return null;
 }
 export function setGTribe(id: string, tribe: GTribe) {
   db.set(`gtribe_${id.toLowerCase()}`, tribe);
@@ -37,4 +40,19 @@ export function getGTribeByOwner(owner: string) {
     .filter((i) => i.key.startsWith("gtribe_"))
     .find((t) => (t.value as GTribe).leader == owner);
   return gotten ? (gotten.value as GTribe) : null;
+}
+
+export function requestGTRibe(tribe: GTribe, account: Account) {}
+export function joinGTribe(tribe: GTribe, account: Account) {
+  tribe.members.push(account.username);
+  setGTribe(tribe.id, tribe);
+  account.gTribe = tribe.id;
+  setAccount(account.username, account);
+}
+
+export function leaveGTribe(tribe: GTribe, account: Account) {
+  tribe.members.splice(tribe.members.indexOf(account.username), 1);
+  setGTribe(tribe.id, tribe);
+  account.gTribe = undefined;
+  setAccount(account.username, account);
 }
