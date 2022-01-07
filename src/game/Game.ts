@@ -106,7 +106,7 @@ export default class Game {
    */
   public locked: string = "";
   public spawnAnimalsInt: NodeJS.Timeout | undefined;
-  public physDelay: number = 33;
+  public physDelay: number = 66;
   start() {
     this.started = true;
     this.lastUpdate = Date.now();
