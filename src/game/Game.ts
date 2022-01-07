@@ -1028,14 +1028,17 @@ export default class Game {
       if (player.mode == PlayerMode.spectator)
         tribeMembers = this.state.players
           .filter((m) => m !== player && m.mode !== PlayerMode.spectator)
-          .reduce<number[]>((acc, otherMember) => {
-            if (!otherMember || otherMember.dead) return acc;
+          .reduce<number[]>(
+            (acc, otherMember) => {
+              if (!otherMember || otherMember.dead) return acc;
 
-            return acc.concat([
-              otherMember?.location.x,
-              otherMember?.location.y,
-            ]);
-          }, []);
+              return acc.concat([
+                otherMember?.location.x,
+                otherMember?.location.y,
+              ]);
+            },
+            [-1, -1]
+          );
 
       let highKills = this.state.players
         .filter((p) => p.getUpdateData(this.state)[11] == 1 && p !== player)
@@ -1051,7 +1054,7 @@ export default class Game {
             tribeMembers,
             highKills,
             this.spikeAdvance > 0
-              ? [this.spikeAdvance, 14400 - this.spikeAdvance * 2]
+              ? [this.spikeAdvance, config.mapScale - this.spikeAdvance * 2]
               : [],
           ])
         )
