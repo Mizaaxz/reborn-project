@@ -33,10 +33,53 @@ const setWeaponVariant = function (player: Player, variant: any) {
 };
 export { setWeaponVariant };
 
-export function timeFormat(ms: number) {
-  let seconds = Math.floor((ms / 1000) % 60),
-    minutes = Math.floor((ms / (1000 * 60)) % 60),
-    hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+const labels = [
+  {
+    abbrev: "y",
+    value: 31536000000,
+  },
+  {
+    abbrev: "mo",
+    value: 2592000000,
+  },
+  {
+    abbrev: "w",
+    value: 604800000,
+  },
+  {
+    abbrev: "d",
+    value: 86400000,
+  },
+  {
+    abbrev: "h",
+    value: 3600000,
+  },
+  {
+    abbrev: "m",
+    value: 60000,
+  },
+  {
+    abbrev: "s",
+    value: 1000,
+  },
+  {
+    abbrev: "ms",
+    value: 1,
+  },
+];
 
-  return `${hours.toString()}h${minutes.toString()}m${seconds.toString()}s`;
+export function timeFormat(ms: number): string {
+  const units = [];
+  let tLeft = ms;
+  for (const label of labels) {
+    const newUnit = { num: Math.floor(tLeft / label.value), unit: label };
+    if (newUnit.num != 0 || (units.length == 0 && label.value == 1)) {
+      units.push(newUnit);
+      tLeft = tLeft % label.value;
+    }
+  }
+  return units
+    .slice(0, 3)
+    .map((u) => u.num + u.unit.abbrev)
+    .join("");
 }
