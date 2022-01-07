@@ -38,6 +38,7 @@ export enum Animals {
   crateStone,
   crateFood,
   crateGold,
+  sheep,
 }
 export enum Biomes {
   main,
