@@ -6,21 +6,29 @@ import { GameModes } from "./GameMode";
 
 export default function updateWindmills(game: Game) {
   game.windmillTicks++;
-  for (let windmill of game.state.gameObjects.filter(
-    (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
-  )) {
-    let player = game.state.players.find(
-      (player) => player.id == windmill.ownerSID
-    );
-
-    if (player && !player.dead) {
-      let hat = getHat(player.hatID);
-      let pps = getPPS(windmill.data) + (hat?.pps || 0);
-      player.points += pps;
-      player.xp += pps;
-      player.score += pps;
+  game.state.gameObjects
+    .filter(
+      (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
+    )
+    .forEach((windmill) => {
+      let player = game.state.players.find(
+        (player) => player.id == windmill.ownerSID
+      );
+      if (player && !player.dead) {
+        let pps = getPPS(windmill.data);
+        player.points += pps;
+        player.xp += pps;
+        player.score += pps;
+      }
+    });
+  game.state.players.forEach((plr) => {
+    let hat = getHat(plr.hatID);
+    if (!plr.dead && hat?.pps) {
+      plr.points += hat.pps;
+      plr.xp += hat.pps;
+      plr.score += hat.pps;
     }
-  }
+  });
 
   if (game.mode.includes(GameModes.random) && game.windmillTicks % 10 == 0)
     game.randomizePlayers();
