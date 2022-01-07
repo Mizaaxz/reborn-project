@@ -233,13 +233,13 @@ const animals = [
   {
     id: 14,
     src: "sheep_1",
-    killScore: 200,
-    health: 800,
+    killScore: 350,
+    health: 1000,
     weightM: 0.6,
-    speed: 0.00085,
+    speed: 0.0012,
     turnSpeed: 0.001,
     scale: 72,
-    drop: 80,
+    drop: 200,
   },
 ];
 
