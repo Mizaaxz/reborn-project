@@ -230,6 +230,17 @@ const animals = [
     big: true,
     crate: true,
   },
+  {
+    id: 14,
+    src: "sheep_1",
+    killScore: 200,
+    health: 800,
+    weightM: 0.6,
+    speed: 0.00085,
+    turnSpeed: 0.001,
+    scale: 72,
+    drop: 80,
+  },
 ];
 
 export default animals;
