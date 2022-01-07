@@ -731,6 +731,7 @@ export default class Player extends Entity {
       this.layer,
       this.invincible ? 1 : 0,
       this.invisible && exposeInvis ? 0 : 1,
+      this.client?.account?.adminLevel ? 1 : 0,
     ];
   }
 
