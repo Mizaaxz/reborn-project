@@ -17,7 +17,6 @@ import hats from "./definitions/hats";
 import items from "./definitions/items";
 import projectiles from "./definitions/projectiles";
 import weapons from "./definitions/weapons";
-import weaponVariants from "./definitions/weaponVariants";
 import { Account, getAccount, setAccount } from "./moomoo/Account";
 import { initLogs, log } from "./log";
 import { Socket } from "net";
@@ -29,7 +28,6 @@ const hats2 = Object.values(hats);
 const items2 = Object.values(items);
 const projectiles2 = Object.values(projectiles);
 const weapons2 = Object.values(weapons);
-const weaponVariants2 = Object.values(weaponVariants);
 
 const app = express();
 const server = http.createServer(app);
@@ -62,7 +60,14 @@ app.get("/api/v1/def", (req, res) => {
     items: items2,
     projectiles: projectiles2,
     weapons: weapons2,
-    weaponVariants: weaponVariants2,
+    weaponVariants: [
+      { id: 0, src: "", xp: 0, val: 1 },
+      { id: 1, src: "_g", xp: 3000, val: 1.1 },
+      { id: 2, src: "_d", xp: 7000, val: 1.18 },
+      { id: 3, src: "_r", poison: true, xp: 12000, val: 1.18 },
+      { id: 4, src: "_e", poison: true, xp: 18000, val: 1.3 },
+      { id: 5, src: "_a", poison: true, xp: 25000, val: 1.3 },
+    ],
     yt: config.featuredYT,
   });
 });

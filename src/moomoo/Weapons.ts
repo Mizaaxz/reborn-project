@@ -18,8 +18,18 @@ let WeaponVariants: {
     extraGold?: number;
   };
 } = {};
-WeaponVariants[WeaponVariant.Normal] = { xp: 0, dmgMult: 1, structDmgMult: 1, gatherMult: 1 };
-WeaponVariants[WeaponVariant.Gold] = { xp: 3000, dmgMult: 1.1, structDmgMult: 1.25, gatherMult: 1 };
+WeaponVariants[WeaponVariant.Normal] = {
+  xp: 0,
+  dmgMult: 1,
+  structDmgMult: 1,
+  gatherMult: 1,
+};
+WeaponVariants[WeaponVariant.Gold] = {
+  xp: 3000,
+  dmgMult: 1.1,
+  structDmgMult: 1.25,
+  gatherMult: 1,
+};
 WeaponVariants[WeaponVariant.Diamond] = {
   xp: 7000,
   dmgMult: 1.18,
@@ -43,7 +53,7 @@ WeaponVariants[WeaponVariant.Emerald] = {
 };
 WeaponVariants[WeaponVariant.Amethyst] = {
   xp: 25000,
-  dmgMult: 1.5,
+  dmgMult: 1.4,
   structDmgMult: 4,
   gatherMult: 4,
   poison: 13,
