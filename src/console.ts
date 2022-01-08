@@ -397,11 +397,6 @@ Command(
             player.health = resourceAmount;
             break;
 
-          case "kills":
-          case "kills":
-            player.kills = resourceAmount;
-            break;
-
           case "xp":
             player.xp = resourceAmount;
             break;
@@ -409,10 +404,6 @@ Command(
           case "age":
             player.age = resourceAmount - 1;
             player.xp = Infinity;
-            break;
-
-          case "name":
-            player.name = args.slice(3).join(" ");
             break;
 
           case "hat":
