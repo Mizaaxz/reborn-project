@@ -4,6 +4,7 @@ import { Broadcast } from "../moomoo/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
+import { getGTribe } from "../moomoo/GTribe";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_CREATE),
@@ -17,6 +18,15 @@ getGame()?.addPacketHandler(
 
       if (client.player.nextTribeCreate > Date.now()) return;
       client.player.nextTribeCreate = Date.now() + 3000;
+
+      if (
+        game.state.tribes.find(
+          (t) => t.name.toLowerCase() == tribeName.toLowerCase()
+        ) ||
+        getGTribe(tribeName.toUpperCase())
+      )
+        return;
+
       let tribe = game.state.addTribe(tribeName, client.player.id);
 
       if (tribe) {

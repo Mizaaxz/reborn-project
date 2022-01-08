@@ -189,6 +189,30 @@ getGame()?.addPacketHandler(
 
           if (seenIndex > -1) client.seenPlayers.splice(seenIndex, 1);
         }
+
+        let trname = newPlayer.client?.account?.gTribe || "";
+        if (!newPlayer.lastDeath && !newPlayer.tribe && trname) {
+          let tribe =
+            game.state.tribes.find(
+              (t) => t.name.toLowerCase() == trname.toLowerCase()
+            ) || game.state.addTribe(trname, client.player.id);
+
+          if (tribe) {
+            if (tribe.owner.id == newPlayer.id) {
+              client.player.tribe = tribe;
+              client.socket?.send(
+                packetFactory.serializePacket(
+                  new Packet(PacketType.PLAYER_SET_CLAN, [tribe.name, true])
+                )
+              );
+              game.state.updateClanPlayers(tribe);
+            } else {
+              newPlayer.tribe = tribe;
+              tribe.addPlayer(newPlayer);
+              game.sendGameObjects(newPlayer);
+            }
+          }
+        }
       }
     } else {
       game.kickClient(client, "disconnected");
