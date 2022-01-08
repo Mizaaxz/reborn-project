@@ -7,7 +7,7 @@ try {
 } catch (e) {}
 
 const config = {
-  version: "1.16.11b",
+  version: "1.14.11b",
   allowedMax:
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 !@#$%^&*()_+-=[]|:;\\\"',<.>/?`~{}",
   allowedPassword:
