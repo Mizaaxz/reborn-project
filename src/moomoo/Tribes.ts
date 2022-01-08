@@ -39,8 +39,14 @@ export default class Tribe {
     );
     if (this.owner.id == player.id && this.owner.client) {
       this.owner.client.tribeJoinQueue = [];
-      if (this.members.length) this.owner = this.members.shift() as Player;
-      else this.delete();
+      if (this.members.length) {
+        this.owner = this.members.shift() as Player;
+        this.owner.client?.socket?.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.PLAYER_SET_CLAN, [this.name, true])
+          )
+        );
+      } else this.delete();
     }
     this.game.state.updateClanPlayers(this);
   }
