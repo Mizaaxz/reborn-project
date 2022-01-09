@@ -1,4 +1,5 @@
 import { getGame } from "../game/Game";
+import { GameModes } from "../game/GameMode";
 import { WeaponModes } from "../items/items";
 import { getAccessory } from "../moomoo/Accessories";
 import { getHat } from "../moomoo/Hats";
@@ -10,8 +11,13 @@ import { PacketType } from "../packet/PacketType";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.BUY_AND_EQUIP),
   (game, packetFactory, client, packet) => {
-    if (!client.player || client.player.dead) Broadcast("Error: EQUIP_WHEN_DEAD", client);
-    if (client.player?.weaponMode == WeaponModes.NoSelect) return;
+    if (!client.player || client.player.dead)
+      Broadcast("Error: EQUIP_WHEN_DEAD", client);
+    if (
+      client.player?.weaponMode == WeaponModes.NoSelect ||
+      getGame()?.mode.includes(GameModes.random)
+    )
+      return;
 
     let isAcc = packet.data[2];
 
@@ -26,12 +32,18 @@ getGame()?.addPacketHandler(
           if (client.ownedAccs.includes(packet.data[1])) {
             Broadcast("Error: ALREADY_BOUGHT", client);
           } else {
-            if (client.player.points >= (getAccessory(packet.data[1])?.price || 0)) {
+            if (
+              client.player.points >= (getAccessory(packet.data[1])?.price || 0)
+            ) {
               client.player.points -= getAccessory(packet.data[1])?.price || 0;
               client.ownedAccs.push(packet.data[1]);
               client.socket.send(
                 packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                  new Packet(PacketType.UPDATE_STORE, [
+                    0,
+                    packet.data[1],
+                    isAcc,
+                  ])
                 )
               );
             }
@@ -46,14 +58,20 @@ getGame()?.addPacketHandler(
               client.player.accID = 0;
 
               client.socket.send(
-                packetFactory.serializePacket(new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc]))
+                packetFactory.serializePacket(
+                  new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc])
+                )
               );
             } else {
               client.player.accID = packet.data[1];
 
               client.socket.send(
                 packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                  new Packet(PacketType.UPDATE_STORE, [
+                    1,
+                    packet.data[1],
+                    isAcc,
+                  ])
                 )
               );
             }
@@ -63,7 +81,10 @@ getGame()?.addPacketHandler(
         }
       }
     } else {
-      if ((!getHat(packet.data[1]) || getHat(packet.data[1])?.dontSell) && packet.data[1] !== 0) {
+      if (
+        (!getHat(packet.data[1]) || getHat(packet.data[1])?.dontSell) &&
+        packet.data[1] !== 0
+      ) {
         game.kickClient(client, "disconnected");
         return;
       }
@@ -78,7 +99,11 @@ getGame()?.addPacketHandler(
               client.ownedHats.push(packet.data[1]);
               client.socket.send(
                 packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                  new Packet(PacketType.UPDATE_STORE, [
+                    0,
+                    packet.data[1],
+                    isAcc,
+                  ])
                 )
               );
             }
@@ -98,14 +123,20 @@ getGame()?.addPacketHandler(
               client.player.hatID = 0;
 
               client.socket.send(
-                packetFactory.serializePacket(new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc]))
+                packetFactory.serializePacket(
+                  new Packet(PacketType.UPDATE_STORE, [1, 0, isAcc])
+                )
               );
             } else {
               client.player.hatID = packet.data[1];
 
               client.socket.send(
                 packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                  new Packet(PacketType.UPDATE_STORE, [
+                    1,
+                    packet.data[1],
+                    isAcc,
+                  ])
                 )
               );
             }
