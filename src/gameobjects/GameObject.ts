@@ -6,6 +6,7 @@ import Tribe from "../moomoo/Tribes";
 export default class GameObject {
   public lastShoot: number = Date.now() + 1000;
   public hitByBoss: number = 0;
+  public lootMult: number = 1;
 
   constructor(
     public id: number = 0,

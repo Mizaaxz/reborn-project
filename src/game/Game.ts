@@ -807,24 +807,24 @@ export default class Game {
               if (gameObj.health <= 0) {
                 if (owner) {
                   let itemCost = getItemCost(gameObj.data);
-                  let costs = chunk(itemCost, 2);
+                  let costs = chunk(itemCost, 2) as [string, number][];
 
                   for (let cost of costs) {
                     switch (cost[0]) {
                       case "food":
-                        owner.food += cost[1] as number;
+                        owner.food += cost[1] * gameObj.lootMult;
                         break;
                       case "wood":
-                        owner.wood += cost[1] as number;
+                        owner.wood += cost[1] * gameObj.lootMult;
                         break;
                       case "stone":
-                        owner.stone += cost[1] as number;
+                        owner.stone += cost[1] * gameObj.lootMult;
                         break;
                     }
 
                     if (owner.selectedWeapon == owner.weapon)
-                      owner.primaryWeaponExp += cost[1] as number;
-                    else owner.secondaryWeaponExp += cost[1] as number;
+                      owner.primaryWeaponExp += cost[1] * gameObj.lootMult;
+                    else owner.secondaryWeaponExp += cost[1] * gameObj.lootMult;
                   }
                 }
 
@@ -1537,24 +1537,27 @@ export default class Game {
 
                 if (hitGameObject.health <= 0) {
                   let itemCost = getItemCost(hitGameObject.data);
-                  let costs = chunk(itemCost, 2);
+                  let costs = chunk(itemCost, 2) as [string, number][];
 
                   for (let cost of costs) {
                     switch (cost[0]) {
                       case "food":
-                        player.food += cost[1] as number;
+                        player.food += cost[1] * hitGameObject.lootMult;
                         break;
                       case "wood":
-                        player.wood += cost[1] as number;
+                        player.wood += cost[1] * hitGameObject.lootMult;
                         break;
                       case "stone":
-                        player.stone += cost[1] as number;
+                        player.stone += cost[1] * hitGameObject.lootMult;
                         break;
                     }
 
                     if (player.selectedWeapon == player.weapon)
-                      player.primaryWeaponExp += cost[1] as number;
-                    else player.secondaryWeaponExp += cost[1] as number;
+                      player.primaryWeaponExp +=
+                        cost[1] * hitGameObject.lootMult;
+                    else
+                      player.secondaryWeaponExp +=
+                        cost[1] * hitGameObject.lootMult;
                   }
 
                   if (
@@ -1779,8 +1782,16 @@ export default class Game {
 
     if (player.buildItem != -1) {
       let item = player.buildItem;
+      let buildCostMult = getHat(player.hatID)?.buildMult || 1;
 
-      if (player.useItem(item, this.state, this.getNextGameObjectID())) {
+      if (
+        player.useItem(
+          item,
+          this.state,
+          this.getNextGameObjectID(),
+          buildCostMult
+        )
+      ) {
         if (getPlaceable(item)) {
           player
             .getNearbyPlayers(this.state)
@@ -1789,18 +1800,18 @@ export default class Game {
         }
 
         let itemCost = getItemCost(item);
-        let costs = chunk(itemCost, 2);
+        let costs = chunk(itemCost, 2) as [string, number][];
 
         for (let cost of costs) {
           switch (cost[0]) {
             case "food":
-              player.food -= cost[1] as number;
+              player.food -= cost[1] * buildCostMult;
               break;
             case "wood":
-              player.wood -= cost[1] as number;
+              player.wood -= cost[1] * buildCostMult;
               break;
             case "stone":
-              player.stone -= cost[1] as number;
+              player.stone -= cost[1] * buildCostMult;
               break;
           }
         }

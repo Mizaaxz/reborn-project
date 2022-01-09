@@ -3,6 +3,7 @@ import { getGame } from "../game/Game";
 import { Broadcast, chunk } from "../moomoo/util";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
+import { getHat } from "../moomoo/Hats";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SELECT_ITEM),
@@ -27,18 +28,19 @@ getGame()?.addPacketHandler(
           return;
         let item = packet.data[0];
         let itemCost = getItemCost(item);
-        let costs = chunk(itemCost, 2);
+        let costMult = getHat(client.player.hatID)?.buildMult || 1;
+        let costs = chunk(itemCost, 2) as [string, number][];
 
         for (let cost of costs) {
           switch (cost[0]) {
             case "food":
-              if (client.player.food < cost[1]) return;
+              if (client.player.food < cost[1] * costMult) return;
               break;
             case "wood":
-              if (client.player.wood < cost[1]) return;
+              if (client.player.wood < cost[1] * costMult) return;
               break;
             case "stone":
-              if (client.player.stone < cost[1]) return;
+              if (client.player.stone < cost[1] * costMult) return;
               break;
           }
         }

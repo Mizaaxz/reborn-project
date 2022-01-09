@@ -458,7 +458,12 @@ export default class Player extends Entity {
     return base * (hat?.atkSpd || 1);
   }
 
-  public useItem(item: ItemType, gameState?: GameState, gameObjectID?: number) {
+  public useItem(
+    item: ItemType,
+    gameState?: GameState,
+    gameObjectID?: number,
+    costMult: number = 1
+  ) {
     let packetFactory = PacketFactory.getInstance();
 
     if (getPlaceable(item) && gameState && gameObjectID) {
@@ -500,6 +505,7 @@ export default class Player extends Entity {
         getGameObjHealth(item),
         getGameObjDamage(item)
       );
+      newGameObject.lootMult = costMult;
 
       for (let gameObject of gameState.gameObjects) {
         if (collideGameObjects(gameObject, newGameObject)) return false;

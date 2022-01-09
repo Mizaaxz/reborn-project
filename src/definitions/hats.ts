@@ -276,6 +276,15 @@ const hats = [
     dmgK: 0.6,
   },
   {
+    id: 64,
+    name: "Builder's Helmet",
+    price: 8000,
+    scale: 120,
+    longDesc: "",
+    desc: "Buildings cost 80% less.",
+    buildMult: 0.8,
+  },
+  {
     id: 21,
     name: "Plague Mask",
     price: 10000,
