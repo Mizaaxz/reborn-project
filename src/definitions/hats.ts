@@ -422,5 +422,14 @@ const hats = [
     desc: "For the artist Thwampus.",
     dontSell: true,
   },
+  {
+    id: 63,
+    name: "GP Hat",
+    price: 0,
+    scale: 120,
+    longDesc: "",
+    desc: "For the artist Game_Player_1.0.",
+    dontSell: true,
+  },
 ];
 export default hats;
