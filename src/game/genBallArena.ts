@@ -177,7 +177,7 @@ export default function genBallArena(game: Game, makeTeams: boolean = true) {
         p.weaponMode = WeaponModes.NoSelect;
         p.primaryWeaponExp = p.secondaryWeaponExp = 0;
         p.invincible = true;
-        p.spdMult = 3.5;
+        p.spdMult = 2.5;
         game.sendGameObjects(p);
         tribe.addPlayer(p);
       }
