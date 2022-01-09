@@ -11,7 +11,7 @@ getGame()?.addPacketHandler(
 
     let tribe = client.player?.tribe;
     if (client.player && tribe) {
-      if (tribe.owner.id !== client.player.id) return;
+      if (tribe.owner?.id !== client.player.id) return;
 
       let player = tribe.allMembers.find((m) => m.id == packet.data[0]);
       if (player) tribe.removePlayer(player);

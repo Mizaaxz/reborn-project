@@ -730,7 +730,7 @@ export default class Player extends Entity {
         ? this.primaryWeaponVariant
         : this.secondaryWeaponVariant,
       this.tribe?.name || null,
-      this.tribe?.owner.id == this.id ? 1 : 0,
+      this.tribe?.owner?.id == this.id ? 1 : 0,
       this.hatID,
       this.accID,
       this.kills === leadKills && this.kills > 0 ? 1 : 0,

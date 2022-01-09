@@ -341,7 +341,7 @@ export default class Game {
           .forEach((gameObj) => this.state.removeGameObject(gameObj));
 
         let inTribe = this.state.tribes.find(
-          (tribe) => tribe.owner.id == client.player?.id
+          (tribe) => tribe.owner?.id == client.player?.id
         );
         if (inTribe) inTribe.removePlayer(client.player);
       }
@@ -387,7 +387,7 @@ export default class Game {
           {
             teams: this.state.tribes.map((tribe) => ({
               sid: tribe.name,
-              owner: tribe.owner.id,
+              owner: tribe.owner?.id || tribe.tribeIden,
             })),
           },
         ])

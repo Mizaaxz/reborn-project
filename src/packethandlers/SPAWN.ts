@@ -198,7 +198,7 @@ getGame()?.addPacketHandler(
             ) || game.state.addTribe(trname, client.player.id);
 
           if (tribe) {
-            if (tribe.owner.id == newPlayer.id) {
+            if (tribe.owner?.id == newPlayer.id) {
               client.player.tribe = tribe;
               client.socket?.send(
                 packetFactory.serializePacket(

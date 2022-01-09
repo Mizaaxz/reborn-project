@@ -16,10 +16,10 @@ getGame()?.addPacketHandler(
 
       if (
         tribe &&
-        !tribe.owner.client?.tribeJoinQueue.includes(client.player)
+        !tribe.owner?.client?.tribeJoinQueue.includes(client.player)
       ) {
-        tribe.owner.client?.tribeJoinQueue.push(client.player);
-        tribe.owner.client?.socket.send(
+        tribe.owner?.client?.tribeJoinQueue.push(client.player);
+        tribe.owner?.client?.socket.send(
           packetFactory.serializePacket(
             new Packet(PacketType.JOIN_REQUEST, [
               client.player.id,

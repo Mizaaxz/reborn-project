@@ -141,19 +141,31 @@ export default class GameState {
   }
 
   addTribe(name: string, ownerSID: number) {
+    let packetFactory = PacketFactory.getInstance();
     let owner = this.players.find((p) => p.id == ownerSID);
+
+    if (!owner) {
+      for (let client of this.game.clients) {
+        client.socket?.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.CLAN_ADD, [{ sid: name }])
+          )
+        );
+      }
+
+      return this.tribes[
+        this.tribes.push(new Tribe(this.game, null, name, owner)) - 1
+      ];
+    }
 
     if (
       this.tribes.find(
         (tribe) =>
           tribe.name.toLowerCase() == name.toLowerCase() ||
-          tribe.owner.id == ownerSID
-      ) ||
-      !owner
+          tribe.owner?.id == ownerSID
+      )
     )
       return false;
-
-    let packetFactory = PacketFactory.getInstance();
 
     for (let client of this.game.clients) {
       client.socket?.send(

@@ -9,17 +9,20 @@ export default class Tribe {
   public id: number;
   public members: Player[] = [];
 
-  constructor(public game: Game, public owner: Player, public name: string) {
+  constructor(
+    public game: Game,
+    public owner: Player | null,
+    public name: string,
+    public tribeIden?: number
+  ) {
     this.id = tribeID += 1;
-    this.name = name;
-    this.owner = owner;
   }
 
   get allMembers() {
-    return [this.owner, ...this.members];
+    return this.owner ? [this.owner, ...this.members] : [...this.members];
   }
   get allMemberIDs() {
-    return this.allMembers.map((m) => m.id);
+    return this.allMembers.filter((m) => m != null).map((m) => m!.id);
   }
 
   addPlayer(player: Player) {
@@ -37,7 +40,7 @@ export default class Tribe {
         new Packet(PacketType.PLAYER_SET_CLAN, [null, 0])
       )
     );
-    if (this.owner.id == player.id && this.owner.client) {
+    if (this.owner?.id == player.id && this.owner?.client) {
       this.owner.client.tribeJoinQueue = [];
       if (this.members.length) {
         this.owner = this.members.shift() as Player;
