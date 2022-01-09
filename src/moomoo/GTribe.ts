@@ -41,6 +41,13 @@ export function getGTribeByOwner(owner: string) {
     .find((t) => (t.value as GTribe).leader == owner);
   return gotten ? (gotten.value as GTribe) : null;
 }
+export function getGTribeByMember(mem: string) {
+  let gotten = db
+    .all()
+    .filter((i) => i.key.startsWith("gtribe_"))
+    .find((t) => (t.value as GTribe).members.includes(mem));
+  return gotten ? (gotten.value as GTribe) : null;
+}
 
 export function requestGTRibe(tribe: GTribe, account: Account) {}
 export function joinGTribe(tribe: GTribe, account: Account) {

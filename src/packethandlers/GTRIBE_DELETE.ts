@@ -6,8 +6,10 @@ import { Packet } from "../packet/Packet";
 import {
   delGTribe,
   getGTribe,
+  getGTribeByMember,
   getGTribeByOwner,
   GTribe,
+  leaveGTribe,
   setGTribe,
 } from "../moomoo/GTribe";
 import config from "../config";
@@ -19,14 +21,23 @@ getGame()?.addPacketHandler(
     if (!client.account || !client.loggedIn) return;
 
     let gtr = getGTribeByOwner(client.account.username);
-    if (!gtr) return;
-
-    delGTribe(gtr);
-
-    client.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.GTRIBE_FAIL, ["$SUCCESSClan Deleted."])
-      )
-    );
+    if (gtr) {
+      delGTribe(gtr);
+      client.socket.send(
+        packetFactory.serializePacket(
+          new Packet(PacketType.GTRIBE_FAIL, ["$SUCCESSClan Deleted."])
+        )
+      );
+    } else {
+      gtr = getGTribeByMember(client.account.username);
+      if (gtr) {
+        leaveGTribe(gtr, client.account);
+        client.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.GTRIBE_FAIL, ["$SUCCESSClan Left."])
+          )
+        );
+      }
+    }
   }
 );
