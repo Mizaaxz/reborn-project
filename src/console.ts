@@ -1195,6 +1195,19 @@ Command(
 );
 
 Command(
+  "gphat",
+  function (args: any[], source: Player | undefined) {
+    if (source && source.client) {
+      source.hatID = 63;
+    }
+  },
+  {
+    aliases: [],
+    level: AdminLevel.Moderator,
+  }
+);
+
+Command(
   "lock",
   (args: any[], source: Player | undefined) => {
     let game = getGame();
