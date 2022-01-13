@@ -45,6 +45,7 @@ export enum Biomes {
   snow,
   river,
   desert,
+  forest,
 }
 
 function eucDistance(a: number[], b: number[]) {
@@ -163,6 +164,8 @@ export function testBiome(pos: Vec2): Biomes {
   if (pos.y < 7550 && pos.y > 6850) return Biomes.river;
   if (pos.y >= config.mapScale - config.biomeSize && pos.x <= config.biomeSize)
     return Biomes.desert;
+  if (pos.x >= config.mapScale - config.biomeSize && pos.y <= config.biomeSize)
+    return Biomes.forest;
 
   return Biomes.main;
 }
