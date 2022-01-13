@@ -45,22 +45,14 @@ export default class Animal extends Entity {
   public size = 30;
   public inTrap = false;
 
-  constructor(
-    sid: number,
-    location: Vec2,
-    type: number,
-    name: string,
-    drops?: Drops
-  ) {
+  constructor(sid: number, location: Vec2, type: number, name: string, drops?: Drops) {
     super(sid, location, 0, new Vec2(0, 0));
 
     this.name = name;
     this.type = type;
     this._health = animals.find((a) => a.id == this.type)?.health || 100;
     this.data = animals.find((a) => a.id == this.type) || {};
-    this.size =
-      Math.floor(((this.data.scale || 0) * (this.data.big ? 1.75 : 1)) / 1.5) ||
-      30;
+    this.size = Math.floor(((this.data.scale || 0) * (this.data.big ? 1.75 : 1)) / 1.5) || 30;
 
     if (drops) this.drops = drops;
     else {
@@ -128,10 +120,8 @@ export default class Animal extends Entity {
     for (let player of state.players) {
       if (!player.dead) {
         if (
-          eucDistance(
-            [this.location.x, this.location.y],
-            [player.location.x, player.location.y]
-          ) < RADIUS
+          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
+          RADIUS
         ) {
           players.push(player);
         }
@@ -148,10 +138,8 @@ export default class Animal extends Entity {
     for (let animal of state.animals) {
       if (animal !== this) {
         if (
-          eucDistance(
-            [this.location.x, this.location.y],
-            [animal.location.x, animal.location.y]
-          ) < RADIUS
+          eucDistance([this.location.x, this.location.y], [animal.location.x, animal.location.y]) <
+          RADIUS
         ) {
           animals.push(animal);
         }
@@ -161,8 +149,10 @@ export default class Animal extends Entity {
     return animals;
   }
 
-  public getNearbyGameObjects(state: GameState) {
-    const RADIUS = config.gameObjectNearbyRadius || 1250;
+  public getNearbyGameObjects(state: GameState, short = true) {
+    const RADIUS = short
+      ? config.gameObjectNearbyRadiusShort
+      : config.gameObjectNearbyRadius || 1250;
 
     let gameObjects = [];
 
@@ -184,10 +174,7 @@ export default class Animal extends Entity {
     if (this.data.static) return;
     if (this.runTimer) clearTimeout(this.runTimer);
 
-    this.angle = Math.atan2(
-      this.location.y - point.y,
-      this.location.x - point.x
-    );
+    this.angle = Math.atan2(this.location.y - point.y, this.location.x - point.x);
     this.moving = true;
 
     let anim = this;
@@ -199,10 +186,7 @@ export default class Animal extends Entity {
     if (this.data.static) return;
     if (this.runTimer) clearTimeout(this.runTimer);
 
-    this.angle = Math.atan2(
-      point.y - this.location.y,
-      point.x - this.location.x
-    );
+    this.angle = Math.atan2(point.y - this.location.y, point.x - this.location.x);
     this.moving = true;
 
     let anim = this;

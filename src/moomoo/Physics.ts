@@ -81,9 +81,7 @@ function collidePlayerGameObject(player: Player, gameObj: GameObject) {
     player.location,
     29,
     gameObj.location,
-    gameObj.data === ItemType.PitTrap
-      ? 0.3 * gameObj.realScale
-      : gameObj.realScale
+    gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
 }
 /**
@@ -96,9 +94,7 @@ function collideAnimalGameObject(animal: Animal, gameObj: GameObject) {
     animal.location,
     animal.size,
     gameObj.location,
-    gameObj.data === ItemType.PitTrap
-      ? 0.3 * gameObj.realScale
-      : gameObj.realScale
+    gameObj.data === ItemType.PitTrap ? 0.3 * gameObj.realScale : gameObj.realScale
   );
 }
 
@@ -118,14 +114,12 @@ function tryMovePlayer(
 
   let newLocation = new Vec2(player.location.x, player.location.y);
 
-  for (let gameObj of player.getNearbyGameObjects(state, true)) {
+  player.getNearbyGameObjects(state, true, true).forEach((gameObj) => {
     if (collidePlayerGameObject(player, gameObj)) {
       if (gameObj.isPlayerGameObject()) {
         if (!player.client?.seenGameObjects.includes(gameObj.id)) {
           player.client?.socket.send(
-            packetFactory.serializePacket(
-              new Packet(PacketType.LOAD_GAME_OBJ, [gameObj.getData()])
-            )
+            packetFactory.serializePacket(new Packet(PacketType.LOAD_GAME_OBJ, [gameObj.getData()]))
           );
 
           player.client?.seenGameObjects.push(gameObj.id);
@@ -134,17 +128,11 @@ function tryMovePlayer(
 
         switch (gameObj.data) {
           case ItemType.PitTrap:
-            if (
-              !getHat(player.hatID)?.trapImm &&
-              gameObj.isEnemy(player, state.tribes)
-            )
+            if (!getHat(player.hatID)?.trapImm && gameObj.isEnemy(player, state.tribes))
               inTrap = true;
             break;
           case ItemType.BoostPad:
-            player.velocity.add(
-              Math.cos(gameObj.angle) * 0.3,
-              Math.sin(gameObj.angle) * 0.3
-            );
+            player.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
             break;
           case ItemType.HealingPad:
             player.padHeal += 15;
@@ -154,21 +142,17 @@ function tryMovePlayer(
             getGame()?.sendGameObjects(player);
             return;
         }
-        if (!hasCollision(gameObj.data)) continue;
+        if (!hasCollision(gameObj.data)) return;
       }
 
       let dmg = gameObj.dmg;
 
       if (
         dmg &&
-        !(
-          gameObj.isPlayerGameObject() && !gameObj.isEnemy(player, state.tribes)
-        ) &&
+        !(gameObj.isPlayerGameObject() && !gameObj.isEnemy(player, state.tribes)) &&
         !player.spikeHit
       ) {
-        let owner = state.players.find(
-          (player) => player.id == gameObj.ownerSID
-        );
+        let owner = state.players.find((player) => player.id == gameObj.ownerSID);
         player.spikeHit = 2;
 
         let hat = getHat(player.hatID);
@@ -195,10 +179,8 @@ function tryMovePlayer(
             ?.client?.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.HEALTH_CHANGE, [
-                  gameObj.location.x +
-                    Math.cos(angle) * (gameObj.realScale + 35),
-                  gameObj.location.y +
-                    Math.sin(angle) * (gameObj.realScale + 35),
+                  gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+                  gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
                   dmg,
                   1,
                 ])
@@ -219,7 +201,7 @@ function tryMovePlayer(
         gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35)
       );
     }
-  }
+  });
 
   player.inTrap = inTrap;
   if (inTrap) return;
@@ -285,7 +267,7 @@ function tryMoveAnimal(
 
   let newLocation = new Vec2(animal.location.x, animal.location.y);
 
-  for (let gameObj of animal.getNearbyGameObjects(state)) {
+  animal.getNearbyGameObjects(state, true).forEach((gameObj) => {
     if (collideAnimalGameObject(animal, gameObj)) {
       if (animal.health != -1) {
         if (gameObj.isPlayerGameObject()) {
@@ -302,9 +284,7 @@ function tryMoveAnimal(
             else game.winsB++;
             genBallArena(game, false);
             Broadcast(
-              `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${
-                game.winsB
-              }`,
+              `The ${teamWon.toUpperCase()} team won!\nA: ${game.winsA} B: ${game.winsB}`,
               undefined
             );
           }
@@ -317,20 +297,14 @@ function tryMoveAnimal(
             animal.isAttacking = true;
 
           if (
-            !(
-              getItem(gameObj.data)?.bossImmune &&
-              animals.find((a) => a.id == animal.type)?.boss
-            )
+            !(getItem(gameObj.data)?.bossImmune && animals.find((a) => a.id == animal.type)?.boss)
           ) {
             switch (gameObj.data) {
               case ItemType.PitTrap:
                 inTrap = true;
                 break;
               case ItemType.BoostPad:
-                animal.velocity.add(
-                  Math.cos(gameObj.angle) * 0.3,
-                  Math.sin(gameObj.angle) * 0.3
-                );
+                animal.velocity.add(Math.cos(gameObj.angle) * 0.3, Math.sin(gameObj.angle) * 0.3);
                 break;
               case ItemType.HealingPad:
                 animal.padHeal += 15;
@@ -340,15 +314,13 @@ function tryMoveAnimal(
                 return;
             }
           }
-          if (!hasCollision(gameObj.data)) continue;
+          if (!hasCollision(gameObj.data)) return;
         }
 
         let dmg = gameObj.dmg;
 
         if (dmg && !animal.spikeHit) {
-          let owner = state.players.find(
-            (player) => player.id == gameObj.ownerSID
-          );
+          let owner = state.players.find((player) => player.id == gameObj.ownerSID);
           animal.spikeHit = 2;
 
           let angle = Math.atan2(
@@ -373,17 +345,15 @@ function tryMoveAnimal(
             ?.client?.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.HEALTH_CHANGE, [
-                  gameObj.location.x +
-                    Math.cos(angle) * (gameObj.realScale + 35),
-                  gameObj.location.y +
-                    Math.sin(angle) * (gameObj.realScale + 35),
+                  gameObj.location.x + Math.cos(angle) * (gameObj.realScale + 35),
+                  gameObj.location.y + Math.sin(angle) * (gameObj.realScale + 35),
                   dmg,
                   1,
                 ])
               )
             );
         }
-      } else if (!hasCollision(gameObj.data)) continue;
+      } else if (!hasCollision(gameObj.data)) return;
 
       xVel *= 0.83;
       yVel *= 0.83;
@@ -394,12 +364,11 @@ function tryMoveAnimal(
       );
 
       newLocation = new Vec2(
-        gameObj.location.x +
-          Math.cos(angle) * (gameObj.realScale + animal.size),
+        gameObj.location.x + Math.cos(angle) * (gameObj.realScale + animal.size),
         gameObj.location.y + Math.sin(angle) * (gameObj.realScale + animal.size)
       );
     }
-  }
+  });
 
   animal.inTrap = inTrap;
   if (inTrap && animal.type !== Animals.quack) return;
@@ -439,19 +408,10 @@ function movePlayer(player: Player, delta: number, state: GameState) {
       p.mode !== PlayerMode.spectator
     ) {
       let dis = player.location.distance(p.location);
-      let angle = Math.atan2(
-        p.location.y - player.location.y,
-        p.location.x - player.location.x
-      );
+      let angle = Math.atan2(p.location.y - player.location.y, p.location.x - player.location.x);
       let distanceToMove = 30 + 30 - dis;
-      p.location.add(
-        Math.cos(angle) * distanceToMove,
-        Math.sin(angle) * distanceToMove
-      );
-      player.location.add(
-        -Math.cos(angle) * distanceToMove,
-        -Math.sin(angle) * distanceToMove
-      );
+      p.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
+      player.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
       tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
       tryMovePlayer(player, delta, player.velocity.x, player.velocity.y, state);
     }
@@ -476,39 +436,22 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
       }
 
       let dis = animal.location.distance(p.location);
-      let angle = Math.atan2(
-        p.location.y - animal.location.y,
-        p.location.x - animal.location.x
-      );
+      let angle = Math.atan2(p.location.y - animal.location.y, p.location.x - animal.location.x);
       let distanceToMove = 30 + animal.size - dis;
-      p.location.add(
-        Math.cos(angle) * distanceToMove,
-        Math.sin(angle) * distanceToMove
-      );
-      animal.location.add(
-        -Math.cos(angle) * distanceToMove,
-        -Math.sin(angle) * distanceToMove
-      );
+      p.location.add(Math.cos(angle) * distanceToMove, Math.sin(angle) * distanceToMove);
+      animal.location.add(-Math.cos(angle) * distanceToMove, -Math.sin(angle) * distanceToMove);
       tryMovePlayer(p, delta, p.velocity.x, p.velocity.y, state);
       tryMoveAnimal(animal, delta, animal.velocity.x, animal.velocity.y, state);
 
       let now = Date.now();
       let game = getGame();
-      if (
-        now - animal.lastHitTime >= animal.data.hitDelay &&
-        game &&
-        !animal.data.weapon
-      ) {
+      if (now - animal.lastHitTime >= animal.data.hitDelay && game && !animal.data.weapon) {
         animal.lastHitTime = now;
 
         let dmg = game.damageFromBoss(p, animal, animal.data.dmg);
 
         if (p.health <= 0 && p.client && !p.invincible) game.killPlayer(p);
-        else
-          p.velocity.add(
-            0.6 * Math.cos(animal.angle),
-            0.6 * Math.sin(animal.angle)
-          );
+        else p.velocity.add(0.6 * Math.cos(animal.angle), 0.6 * Math.sin(animal.angle));
 
         p.client?.socket.send(
           PacketFactory.getInstance().serializePacket(
@@ -524,10 +467,7 @@ function moveAnimal(animal: Animal, delta: number, state: GameState) {
     }
   }
 
-  if (
-    animal.getNearbyPlayers(state, animal.data.hitRange * 1.2).length &&
-    animal.data.weapon
-  ) {
+  if (animal.getNearbyPlayers(state, animal.data.hitRange * 1.2).length && animal.data.weapon) {
     animal.isAttacking = true;
   }
 }
@@ -542,17 +482,15 @@ function pointCircle(point: Vec2, circlePos: Vec2, r: number) {
 
 function getAttackLocation(player: Player) {
   let range = getWeaponAttackDetails(player.selectedWeapon).attackRange;
-  return new Vec2(
-    Math.cos(player.angle) * range,
-    Math.sin(player.angle) * range
-  ).add(player.location);
+  return new Vec2(Math.cos(player.angle) * range, Math.sin(player.angle) * range).add(
+    player.location
+  );
 }
 function getAttackLocationAnimal(animal: Animal) {
   let range = animal.data.scale / 2;
-  return new Vec2(
-    Math.cos(animal.angle) * range,
-    Math.sin(animal.angle) * range
-  ).add(animal.location);
+  return new Vec2(Math.cos(animal.angle) * range, Math.sin(animal.angle) * range).add(
+    animal.location
+  );
 }
 
 function checkAttack(player: Player, players: Player[]) {
@@ -573,11 +511,7 @@ function checkAttackAnimal(animal: Animal, players: Player[]) {
 
   for (let hitPlayer of players) {
     if (
-      pointCircle(
-        getAttackLocationAnimal(animal),
-        hitPlayer.location,
-        animal.data.hitRange / 2
-      ) &&
+      pointCircle(getAttackLocationAnimal(animal), hitPlayer.location, animal.data.hitRange / 2) &&
       hitPlayer.mode !== PlayerMode.spectator
     )
       hitPlayers.push(hitPlayer);
@@ -590,11 +524,7 @@ function checkAnimalAttack(player: Player, animals: Animal[]) {
 
   for (let hitAnimal of animals) {
     if (
-      pointCircle(
-        getAttackLocation(player),
-        hitAnimal.location,
-        hitAnimal.data.scale || 35 * 2
-      ) &&
+      pointCircle(getAttackLocation(player), hitAnimal.location, hitAnimal.data.scale || 35 * 2) &&
       hitAnimal.health != -1
     )
       hitAnimals.push(hitAnimal);
@@ -618,11 +548,7 @@ function checkAttackGameObj(player: Player, gameObjects: GameObject[]) {
   let range = getWeaponAttackDetails(player.selectedWeapon).attackRange;
 
   for (let gameObject of gameObjects) {
-    if (
-      range + gameObject.scale <
-      gameObject.location.distance(player.location)
-    )
-      continue;
+    if (range + gameObject.scale < gameObject.location.distance(player.location)) continue;
 
     let angle = Math.atan2(
       gameObject.location.y - player.location.y,
@@ -642,11 +568,7 @@ function checkAttackGameObjAnimal(animal: Animal, gameObjects: GameObject[]) {
   let range = animal.data.hitRange;
 
   for (let gameObject of gameObjects) {
-    if (
-      range + gameObject.scale <
-      gameObject.location.distance(animal.location)
-    )
-      continue;
+    if (range + gameObject.scale < gameObject.location.distance(animal.location)) continue;
 
     let angle = Math.atan2(
       gameObject.location.y - animal.location.y,
@@ -667,27 +589,17 @@ function collideProjectilePlayer(projectile: Projectile, player: Player) {
 }
 function collideProjectileAnimal(projectile: Projectile, animal: Animal) {
   return (
-    collideCircles(projectile.location, 10, animal.location, animal.size) &&
-    animal.health != -1
+    collideCircles(projectile.location, 10, animal.location, animal.size) && animal.health != -1
   );
 }
-function collideProjectileGameObject(
-  projectile: Projectile,
-  gameObj: GameObject
-) {
-  let col = collideCircles(
-    projectile.location,
-    10,
-    gameObj.location,
-    gameObj.scale
-  );
+function collideProjectileGameObject(projectile: Projectile, gameObj: GameObject) {
+  let col = collideCircles(projectile.location, 10, gameObj.location, gameObj.scale);
   let objLayer = getGameObjLayer(gameObj.data);
   if (!gameObj.isPlayerGameObject()) return col;
   if (gameObj.data == ItemType.Platform) return false;
   if (objLayer == Layer.Pad) return false;
   if (objLayer == Layer.Platform) return col;
-  if (objLayer == Layer.Player && projectile.layer == Layer.Platform)
-    return false;
+  if (objLayer == Layer.Player && projectile.layer == Layer.Platform) return false;
   return col;
 }
 

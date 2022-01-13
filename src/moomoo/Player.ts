@@ -86,23 +86,19 @@ export default class Player extends Entity {
   }
 
   public set primaryWeaponExp(value) {
-    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach(
-      (v) => {
-        let va = WeaponVariants[v];
-        if (value >= va.xp) this.primaryWeaponVariant = v;
-      }
-    );
+    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach((v) => {
+      let va = WeaponVariants[v];
+      if (value >= va.xp) this.primaryWeaponVariant = v;
+    });
 
     this._primaryWeaponExp = value;
   }
 
   public set secondaryWeaponExp(value) {
-    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach(
-      (v) => {
-        let va = WeaponVariants[v];
-        if (value >= va.xp) this.secondaryWeaponVariant = v;
-      }
-    );
+    (Object.keys(WeaponVariants) as unknown[] as WeaponVariant[]).forEach((v) => {
+      let va = WeaponVariants[v];
+      if (value >= va.xp) this.secondaryWeaponVariant = v;
+    });
 
     this._secondaryWeaponExp = value;
   }
@@ -137,9 +133,7 @@ export default class Player extends Entity {
   public set kills(newKills: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1]))
     );
     if (this.client?.account?.kills !== undefined) {
       this.client.account.kills += newKills - this._kills;
@@ -264,10 +258,7 @@ export default class Player extends Entity {
 
       this.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.UPGRADES, [
-            this.age - this.upgradeAge + 1,
-            this.upgradeAge,
-          ])
+          new Packet(PacketType.UPGRADES, [this.age - this.upgradeAge + 1, this.upgradeAge])
         )
       );
     }
@@ -324,9 +315,7 @@ export default class Player extends Entity {
     newFood = Math.floor(newFood);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1]))
     );
     this._food = newFood;
   }
@@ -341,9 +330,7 @@ export default class Player extends Entity {
     newStone = Math.floor(newStone);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1]))
     );
     this._stone = newStone;
   }
@@ -356,9 +343,7 @@ export default class Player extends Entity {
     newPoints = Math.floor(newPoints);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1]))
     );
     this._points = newPoints;
   }
@@ -374,8 +359,7 @@ export default class Player extends Entity {
     newScore = Math.floor(newScore);
     this._score = newScore;
     if (newScore && this.client?.account) {
-      if (this.scoreSession == -1)
-        this.scoreSession = this.client.account.scores?.length || 0;
+      if (this.scoreSession == -1) this.scoreSession = this.client.account.scores?.length || 0;
       if (!this.client.account.scores) this.client.account.scores = [];
       this.client.account.scores[this.scoreSession] = newScore;
       setAccount(this.client.account.username, this.client.account);
@@ -393,9 +377,7 @@ export default class Player extends Entity {
     newWood = Math.floor(newWood);
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(
-        new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1])
-      )
+      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1]))
     );
     this._wood = newWood;
   }
@@ -410,9 +392,7 @@ export default class Player extends Entity {
 
       for (let client of this.game.clients) {
         client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth])
-          )
+          packetFactory.serializePacket(new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth]))
         );
       }
 
@@ -485,13 +465,11 @@ export default class Player extends Entity {
 
       if (
         gameState.gameObjects.filter(
-          (o) =>
-            o.data == ItemType.Blocker && o.location.distance(location) <= 300
+          (o) => o.data == ItemType.Blocker && o.location.distance(location) <= 300
         ).length
       )
         return;
-      if (testBiome(location) == Biomes.river && item !== ItemType.Platform)
-        return;
+      if (testBiome(location) == Biomes.river && item !== ItemType.Platform) return;
 
       let newGameObject = new GameObject(
         gameObjectID,
@@ -514,15 +492,11 @@ export default class Player extends Entity {
       gameState?.gameObjects.push(newGameObject);
       this.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.UPDATE_PLACE_LIMIT, [
-            getGroupID(item),
-            placedAmount + 1,
-          ])
+          new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(item), placedAmount + 1])
         )
       );
 
-      if (this.client && item == ItemType.SpawnPad)
-        this.client.spawnPos = location;
+      if (this.client && item == ItemType.SpawnPad) this.client.spawnPos = location;
 
       return true;
     }
@@ -593,8 +567,8 @@ export default class Player extends Entity {
     }
   }
 
-  public getNearbyGameObjects(state: GameState, includeHidden = false) {
-    const RADIUS = config.gameObjectNearbyRadius || 1250;
+  public getNearbyGameObjects(state: GameState, includeHidden = false, short = false) {
+    const RADIUS = short ? config.gameObjectNearbyRadiusShort : config.gameObjectNearbyRadius || 1250;
 
     let gameObjects = [];
 
@@ -624,12 +598,7 @@ export default class Player extends Entity {
 
   deathCrate(type: Animals, drops: Drops) {
     if (Object.values(drops).reduce((a, b) => a + b)) {
-      let a = this.game.state.addAnimal(
-        this.game.genAnimalSID(),
-        this.location,
-        type,
-        " "
-      );
+      let a = this.game.state.addAnimal(this.game.genAnimalSID(), this.location, type, " ");
       let vel = () => Math.random() * 2 - 1;
       a.velocity.add(vel(), vel());
       Object.keys(drops).forEach((dr) => {
@@ -673,12 +642,7 @@ export default class Player extends Entity {
     this.autoAttackOn = false;
     this.disableRotation = false;
     this.moveDirection = null;
-    this.items = [
-      ItemType.Apple,
-      ItemType.WoodWall,
-      ItemType.Spikes,
-      ItemType.Windmill,
-    ];
+    this.items = [ItemType.Apple, ItemType.WoodWall, ItemType.Spikes, ItemType.Windmill];
 
     this.upgradeAge = 2;
     this.maxXP = 300;
@@ -726,9 +690,7 @@ export default class Player extends Entity {
       this.angle,
       this.buildItem,
       this.selectedWeapon,
-      this.selectedWeapon == this.weapon
-        ? this.primaryWeaponVariant
-        : this.secondaryWeaponVariant,
+      this.selectedWeapon == this.weapon ? this.primaryWeaponVariant : this.secondaryWeaponVariant,
       this.tribe?.name || null,
       this.tribe?.owner?.id == this.id ? 1 : 0,
       this.hatID,
@@ -749,10 +711,8 @@ export default class Player extends Entity {
     for (let player of state.players) {
       if (player !== this && !player.dead) {
         if (
-          eucDistance(
-            [this.location.x, this.location.y],
-            [player.location.x, player.location.y]
-          ) < RADIUS
+          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
+          RADIUS
         ) {
           players.push(player);
         }
@@ -768,10 +728,8 @@ export default class Player extends Entity {
 
     for (let animal of state.animals) {
       if (
-        eucDistance(
-          [this.location.x, this.location.y],
-          [animal.location.x, animal.location.y]
-        ) < RADIUS
+        eucDistance([this.location.x, this.location.y], [animal.location.x, animal.location.y]) <
+        RADIUS
       ) {
         animals.push(animal);
       }
