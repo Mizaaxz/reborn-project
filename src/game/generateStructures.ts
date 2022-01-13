@@ -6,32 +6,28 @@ import { Biomes, randomPos, testBiome } from "../moomoo/util";
 import Game from "./Game";
 import generateBossArena from "./generateBossArena";
 
-export default function generateStructures(game: Game) {
-  const gameObjectTypes = [
-    GameObjectType.Tree,
-    GameObjectType.Bush,
-    GameObjectType.Mine,
-    GameObjectType.GoldMine,
-  ];
-  const desertGameObjectTypes = [
-    GameObjectType.Bush,
-    GameObjectType.Mine,
-    GameObjectType.GoldMine,
-  ];
-  const riverGameObjectTypes = [GameObjectType.Mine];
+let gameObjectTypes: { [key: number]: GameObjectType[] } = {};
+gameObjectTypes[Biomes.main] = gameObjectTypes[Biomes.snow] = [
+  GameObjectType.Tree,
+  GameObjectType.Bush,
+  GameObjectType.Mine,
+  GameObjectType.GoldMine,
+];
+gameObjectTypes[Biomes.desert] = [
+  GameObjectType.Bush,
+  GameObjectType.Mine,
+  GameObjectType.GoldMine,
+];
+gameObjectTypes[Biomes.river] = [GameObjectType.Mine];
+gameObjectTypes[Biomes.forest] = [GameObjectType.Tree];
 
+export default function generateStructures(game: Game) {
   outerLoop: for (let i = 0; i < 400; i++) {
     let location = randomPos(14400, 14400);
+    let allowedTypes =
+      gameObjectTypes[testBiome(location)] || gameObjectTypes[Biomes.main];
     let gameObjectType =
-      testBiome(location) == Biomes.desert
-        ? desertGameObjectTypes[
-            Math.floor(Math.random() * desertGameObjectTypes.length)
-          ]
-        : testBiome(location) == Biomes.river
-        ? riverGameObjectTypes[
-            Math.floor(Math.random() * riverGameObjectTypes.length)
-          ]
-        : gameObjectTypes[Math.floor(Math.random() * gameObjectTypes.length)];
+      allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
     let sizes = gameObjectSizes[gameObjectType];
 
     if (gameObjectType == GameObjectType.GoldMine && Math.random() < 0.6) {
