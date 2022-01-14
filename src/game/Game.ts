@@ -2034,6 +2034,15 @@ export default class Game {
         )
       );
     });
+
+    /*this.state.gameObjects.forEach((g) => {
+      this.state.removeGameObject(g);
+    });
+    this.state.animals.forEach((a) => {
+      this.state.animals.splice(this.state.animals.indexOf(a), 1);
+    });
+    generateStructures(this);
+    this.spawnAnimals();*/
   }
 
   /**
