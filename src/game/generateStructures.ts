@@ -22,7 +22,7 @@ gameObjectTypes[Biomes.river] = [GameObjectType.Mine];
 gameObjectTypes[Biomes.forest] = [GameObjectType.Tree];
 
 export default function generateStructures(game: Game) {
-  outerLoop: for (let i = 0; i < 400; i++) {
+  outerLoop: for (let i = 0; i < config.gameObjectCount; i++) {
     let location = randomPos(config.mapScale, config.mapScale);
     let allowedTypes =
       gameObjectTypes[testBiome(location)] || gameObjectTypes[Biomes.main];

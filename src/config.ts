@@ -17,7 +17,6 @@ const config = {
   alphabet:
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+={}[]|\\\"':;,<.>/?`~",
   badWords: ["fag", "faggot", "nigger", "nigga"],
-  defaultSpeed: 1.5,
   featuredYT: [
     {
       name: "Meow",
@@ -44,11 +43,14 @@ const config = {
   usernameLength: { min: 4, max: 16 },
   gTribeTagLength: { min: 2, max: 7 },
   gTribeNameLength: { min: 4, max: 20 },
+  defaultSpeed: 1.5,
   maxAge: 100,
-  mapScale: 14400,
-  biomeSize: 3400,
+  mapScale: 28800,
+  biomeSize: 0,
   prefixes: [],
   maxSessions: 2,
   maxScore: 10000000,
+  gameObjectCount: 750,
 };
+config.biomeSize = config.mapScale / 3;
 export default config;

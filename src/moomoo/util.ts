@@ -161,7 +161,11 @@ function filter(text: string) {
 export function testBiome(pos: Vec2): Biomes {
   if (pos.y <= config.biomeSize && pos.x <= config.biomeSize)
     return Biomes.snow;
-  if (pos.y < 7550 && pos.y > 6850) return Biomes.river;
+  if (
+    pos.y < config.mapScale / 2 + config.biomeSize / 8 &&
+    pos.y > config.mapScale / 2 - config.biomeSize / 8
+  )
+    return Biomes.river;
   if (pos.y >= config.mapScale - config.biomeSize && pos.x <= config.biomeSize)
     return Biomes.desert;
   if (pos.x >= config.mapScale - config.biomeSize && pos.y <= config.biomeSize)
