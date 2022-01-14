@@ -150,7 +150,7 @@ function tryMovePlayer(
             player.padHeal += 15;
             break;
           case ItemType.Teleporter:
-            player.location = randomPos(14400, 14400, 0);
+            player.location = randomPos(config.mapScale, config.mapScale, 0);
             getGame()?.sendGameObjects(player);
             return;
         }
@@ -263,8 +263,8 @@ function tryMovePlayer(
       0 - out + 35 + (getGame()?.spikeAdvance || 0)
     ),
     new Vec2(
-      14400 + out - 35 - (getGame()?.spikeAdvance || 0),
-      14400 + out - 35 - (getGame()?.spikeAdvance || 0)
+      config.mapScale + out - 35 - (getGame()?.spikeAdvance || 0),
+      config.mapScale + out - 35 - (getGame()?.spikeAdvance || 0)
     )
   );
   player.location = newLocation.add(delta * xVel, delta * yVel);
@@ -336,7 +336,11 @@ function tryMoveAnimal(
                 animal.padHeal += 15;
                 break;
               case ItemType.Teleporter:
-                animal.location = randomPos(14400, 14400, 0);
+                animal.location = randomPos(
+                  config.mapScale,
+                  config.mapScale,
+                  0
+                );
                 return;
             }
           }
@@ -418,8 +422,8 @@ function tryMoveAnimal(
       0 + animal.size + (getGame()?.spikeAdvance || 0)
     ),
     new Vec2(
-      14400 - animal.size - (getGame()?.spikeAdvance || 0),
-      14400 - animal.size - (getGame()?.spikeAdvance || 0)
+      config.mapScale - animal.size - (getGame()?.spikeAdvance || 0),
+      config.mapScale - animal.size - (getGame()?.spikeAdvance || 0)
     )
   );
   animal.location = newLocation.add(delta * xVel, delta * yVel);

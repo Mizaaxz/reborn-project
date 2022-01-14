@@ -271,7 +271,7 @@ export default class Game {
     outerLoop: for (let i = 0; i < 25; i++) {
       if (this.state.animals.filter((a) => !a.data.fixedSpawn).length >= 25)
         break;
-      let location = randomPos(14400, 14400);
+      let location = randomPos(config.mapScale, config.mapScale);
 
       let allowedTypes = animals.filter((a) => !a.boss && !a.static && !a.noAi);
       let type =
@@ -1930,20 +1930,23 @@ export default class Game {
     }
 
     let currentPos = new Vec2(0 + this.spikeAdvance, 0 + this.spikeAdvance);
-    while (currentPos.x < 14400 - this.spikeAdvance) {
-      gens.push([currentPos.x, currentPos.y]);
-      currentPos.add(addAmt, 0);
-    }
-    currentPos = new Vec2(0 + this.spikeAdvance, 14400 - this.spikeAdvance);
-    while (currentPos.x < 14400 - this.spikeAdvance + addAmt) {
+    while (currentPos.x < config.mapScale - this.spikeAdvance) {
       gens.push([currentPos.x, currentPos.y]);
       currentPos.add(addAmt, 0);
     }
     currentPos = new Vec2(
-      14400 - this.spikeAdvance,
+      0 + this.spikeAdvance,
+      config.mapScale - this.spikeAdvance
+    );
+    while (currentPos.x < config.mapScale - this.spikeAdvance + addAmt) {
+      gens.push([currentPos.x, currentPos.y]);
+      currentPos.add(addAmt, 0);
+    }
+    currentPos = new Vec2(
+      config.mapScale - this.spikeAdvance,
       0 + addAmt + this.spikeAdvance
     );
-    while (currentPos.y < 14400 - this.spikeAdvance) {
+    while (currentPos.y < config.mapScale - this.spikeAdvance) {
       gens.push([currentPos.x, currentPos.y]);
       currentPos.add(0, addAmt);
     }
@@ -1951,7 +1954,7 @@ export default class Game {
       0 + this.spikeAdvance,
       0 + addAmt + this.spikeAdvance
     );
-    while (currentPos.y < 14400 - this.spikeAdvance) {
+    while (currentPos.y < config.mapScale - this.spikeAdvance) {
       gens.push([currentPos.x, currentPos.y]);
       currentPos.add(0, addAmt);
     }
@@ -2017,7 +2020,7 @@ export default class Game {
 
   public windmillTicks = 0;
   public spikeAdvance = 0;
-  public spawnBounds = 14400;
+  public spawnBounds = config.mapScale;
 
   /**
    * Handles packets from the client

@@ -1,4 +1,5 @@
 import Vec2 from "vec2";
+import config from "../config";
 import GameObject from "../gameobjects/GameObject";
 import {
   getGameObjDamage,
@@ -14,7 +15,7 @@ import { Animals } from "../moomoo/util";
 import Game from "./Game";
 
 export default function genBallArena(game: Game, makeTeams: boolean = true) {
-  let loc = new Vec2(14400 / 2, 14400 / 2 - 1000);
+  let loc = new Vec2(config.mapScale / 2, config.mapScale / 2 - 1000);
   let wallPos = 0;
   let lastWallPos = 0;
   let wallCount = 0;
