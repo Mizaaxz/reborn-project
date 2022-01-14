@@ -2022,6 +2022,20 @@ export default class Game {
   public spikeAdvance = 0;
   public spawnBounds = config.mapScale;
 
+  public resizeMap(newSize: number) {
+    config.mapScale = newSize;
+    config.biomeSize = config.mapScale / 3;
+    this.spawnBounds = config.mapScale;
+
+    this.state.players.forEach((plr) => {
+      plr.client?.socket.send(
+        PacketFactory.getInstance().serializePacket(
+          new Packet(PacketType.MAP_SIZE, [newSize])
+        )
+      );
+    });
+  }
+
   /**
    * Handles packets from the client
    * @param client the client sending the message
