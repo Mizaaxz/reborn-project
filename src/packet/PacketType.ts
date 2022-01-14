@@ -67,6 +67,7 @@ enum PacketType {
   GTRIBE_CREATE,
   GTRIBE_FAIL,
   GTRIBE_DELETE,
+  MAP_SIZE,
 }
 
 export { PacketType };
