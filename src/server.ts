@@ -292,7 +292,7 @@ app.get("/api/v1/gtribe/:tag", async (req, res) => {
     owner: gtr.leader,
     members: gtr.members,
     disc: gtr.discord,
-    queue: ["Meow", "Dashre", "123SMG"], //gtr.queue || [],
+    queue: gtr.queue || [],
   });
 });
 

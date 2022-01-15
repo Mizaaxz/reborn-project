@@ -18,7 +18,7 @@ import { setAccount } from "../moomoo/Account";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.GTRIBE_DELETE),
   (game, packetFactory, client, packet) => {
-    if (!client.account || !client.loggedIn) return;
+    if (!client.account || !client.loggedIn || !packet.data[0]) return;
 
     let gtr = getGTribeByOwner(client.account.username);
     if (gtr) {
@@ -37,6 +37,19 @@ getGame()?.addPacketHandler(
             new Packet(PacketType.GTRIBE_FAIL, ["$SUCCESSClan Left."])
           )
         );
+      } else {
+        gtr = getGTribe(String(packet.data[0]));
+        if (gtr && !gtr.queue.includes(client.account.username)) {
+          gtr.queue.push(client.account.username);
+          setGTribe(gtr.id, gtr);
+          client.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.GTRIBE_FAIL, [
+                "$SUCCESS-Successfully requested to join clan!",
+              ])
+            )
+          );
+        }
       }
     }
   }
