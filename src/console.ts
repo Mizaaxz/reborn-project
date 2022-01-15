@@ -773,7 +773,9 @@ Command(
       let game = getGame();
       if (game) {
         game.mode = modes;
+        game.physBounds = [0, config.mapScale];
         if (modes.includes(GameModes.moofieball)) game.ball();
+        if (modes.includes(GameModes.survival)) game.survivalMode();
       }
       return false;
     } else return "Invalid GameMode.";

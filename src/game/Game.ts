@@ -70,6 +70,7 @@ import updateWindmills from "./updateWindmills";
 import generateStructures from "./generateStructures";
 import { AdminLevel } from "../moomoo/Admin";
 import genBallArena from "./genBallArena";
+import genSurvivalArena from "./genSurvivalArena";
 
 let currentGame: Game | null = null;
 
@@ -159,6 +160,10 @@ export default class Game {
   ball() {
     this.mode = [GameModes.moofieball];
     genBallArena(this, true);
+  }
+  survivalMode() {
+    this.mode = [GameModes.survival];
+    genSurvivalArena(this);
   }
 
   exec(code: string, source: Player | undefined) {
@@ -2021,11 +2026,13 @@ export default class Game {
   public windmillTicks = 0;
   public spikeAdvance = 0;
   public spawnBounds = config.mapScale;
+  public physBounds = [0, config.mapScale];
 
   public resizeMap(newSize: number) {
     config.mapScale = newSize;
     config.biomeSize = config.mapScale / 3;
     this.spawnBounds = config.mapScale;
+    this.physBounds = [0, config.mapScale];
 
     this.state.players.forEach((plr) => {
       plr.client?.socket.send(

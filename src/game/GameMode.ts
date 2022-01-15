@@ -5,4 +5,5 @@ export enum GameModes {
   random = "random",
   randomroyale = "randomroyale",
   moofieball = "moofieball",
+  survival = "survival",
 }

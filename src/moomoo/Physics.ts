@@ -256,15 +256,16 @@ function tryMovePlayer(
   }
 
   let out = player.mode == PlayerMode.spectator ? 500 : 0;
+  let bounds = getGame()?.physBounds || [0, config.mapScale];
 
   newLocation.clamp(
     new Vec2(
-      0 - out + 35 + (getGame()?.spikeAdvance || 0),
-      0 - out + 35 + (getGame()?.spikeAdvance || 0)
+      bounds[0] - out + 35 + (getGame()?.spikeAdvance || 0),
+      bounds[0] - out + 35 + (getGame()?.spikeAdvance || 0)
     ),
     new Vec2(
-      config.mapScale + out - 35 - (getGame()?.spikeAdvance || 0),
-      config.mapScale + out - 35 - (getGame()?.spikeAdvance || 0)
+      bounds[1] + out - 35 - (getGame()?.spikeAdvance || 0),
+      bounds[1] + out - 35 - (getGame()?.spikeAdvance || 0)
     )
   );
   player.location = newLocation.add(delta * xVel, delta * yVel);
@@ -416,14 +417,15 @@ function tryMoveAnimal(
     animal.velocity.add(0.0011 * delta * (1 / 0.33), 0);
   }
 
+  let bounds = getGame()?.physBounds || [0, config.mapScale];
   newLocation.clamp(
     new Vec2(
-      0 + animal.size + (getGame()?.spikeAdvance || 0),
-      0 + animal.size + (getGame()?.spikeAdvance || 0)
+      bounds[0] + animal.size + (getGame()?.spikeAdvance || 0),
+      bounds[0] + animal.size + (getGame()?.spikeAdvance || 0)
     ),
     new Vec2(
-      config.mapScale - animal.size - (getGame()?.spikeAdvance || 0),
-      config.mapScale - animal.size - (getGame()?.spikeAdvance || 0)
+      bounds[1] - animal.size - (getGame()?.spikeAdvance || 0),
+      bounds[1] - animal.size - (getGame()?.spikeAdvance || 0)
     )
   );
   animal.location = newLocation.add(delta * xVel, delta * yVel);

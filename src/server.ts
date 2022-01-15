@@ -263,9 +263,28 @@ app.get("/api/v1/user/:name", (req, res) => {
     gTribe: account.gTribe ? getGTribe(account.gTribe) : null,
   });
 });
-app.get("/api/v1/gtribe/:tag", (req, res) => {
+app.get("/api/v1/gtribe/:tag", async (req, res) => {
   let gtr = getGTribe(req.params.tag || "");
   if (!gtr) return res.json({ err: 404 });
+
+  let requestingAccount: Account;
+  try {
+    let token = Buffer.from(String(req.query.auth), "base64").toString("utf8");
+    let username = token.split(":")[0];
+    let password = token.split(":")[1];
+    if (username && password) {
+      let account = getAccount(username, true);
+      console.log(account?.username);
+
+      if (account) {
+        let success = await bcrypt.compare(password, account.password || "");
+        if (success) {
+          console.log("auth");
+        }
+      }
+    }
+  } catch (e) {}
+
   res.json({
     tag: gtr.id,
     name: gtr.name,
