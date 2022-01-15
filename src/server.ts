@@ -274,12 +274,11 @@ app.get("/api/v1/gtribe/:tag", async (req, res) => {
     let password = token.split(":")[1];
     if (username && password) {
       let account = getAccount(username, true);
-      console.log(account?.username);
 
       if (account) {
         let success = await bcrypt.compare(password, account.password || "");
         if (success) {
-          console.log("auth");
+          //console.log("auth");
         }
       }
     }
