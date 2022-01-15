@@ -45,7 +45,7 @@ const config = {
   gTribeNameLength: { min: 4, max: 20 },
   defaultSpeed: 1.5,
   maxAge: 100,
-  mapScale: 28800,
+  mapScale: 20000,
   biomeSize: 0,
   prefixes: [],
   maxSessions: 2,
