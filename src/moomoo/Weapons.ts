@@ -32,20 +32,20 @@ WeaponVariants[WeaponVariant.Gold] = {
 };
 WeaponVariants[WeaponVariant.Diamond] = {
   xp: 7000,
-  dmgMult: 1.18,
+  dmgMult: 1.15,
   structDmgMult: 1.5,
   gatherMult: 2,
 };
 WeaponVariants[WeaponVariant.Ruby] = {
   xp: 12000,
-  dmgMult: 1.2,
+  dmgMult: 1.18,
   structDmgMult: 2,
   gatherMult: 2.5,
   poison: 5,
 };
 WeaponVariants[WeaponVariant.Emerald] = {
   xp: 18000,
-  dmgMult: 1.3,
+  dmgMult: 1.2,
   structDmgMult: 3,
   gatherMult: 3,
   poison: 10,
@@ -53,12 +53,22 @@ WeaponVariants[WeaponVariant.Emerald] = {
 };
 WeaponVariants[WeaponVariant.Amethyst] = {
   xp: 25000,
-  dmgMult: 1.4,
+  dmgMult: 1.25,
   structDmgMult: 4,
   gatherMult: 4,
   poison: 13,
   lifeSteal: 0.5,
   extraGold: 1,
 };
+
+/*
+  xp: amount of xp for variant
+  dmgMult: damage multiplier
+  structDmgMult: structure damage multiplier
+  gatherMult: gather multiplier
+  poison: poison time in seconds
+  lifeSteal: life steal percentage of damage done
+  extraGold: extra gold per resource gathered
+*/
 
 export { WeaponVariant, WeaponVariants };
