@@ -39,13 +39,26 @@ getGame()?.addPacketHandler(
         );
       } else {
         gtr = getGTribe(String(packet.data[0]));
-        if (gtr && !gtr.queue.includes(client.account.username)) {
+        if (
+          gtr &&
+          !gtr.queue.includes(client.account.username) &&
+          !gtr.members.includes(client.account.username) &&
+          gtr.leader !== client.account.username
+        ) {
           gtr.queue.push(client.account.username);
           setGTribe(gtr.id, gtr);
           client.socket.send(
             packetFactory.serializePacket(
               new Packet(PacketType.GTRIBE_FAIL, [
                 "$SUCCESS-Successfully requested to join clan!",
+              ])
+            )
+          );
+        } else {
+          client.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.GTRIBE_FAIL, [
+                "$SUCCESS-You have already requested to join this clan.",
               ])
             )
           );
