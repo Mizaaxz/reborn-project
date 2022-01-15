@@ -267,7 +267,7 @@ app.get("/api/v1/gtribe/:tag", async (req, res) => {
   let gtr = getGTribe(req.params.tag || "");
   if (!gtr) return res.json({ err: 404 });
 
-  let requestingAccount: Account;
+  let requestingAccount: Account | null = null;
   try {
     let token = Buffer.from(String(req.query.auth), "base64").toString("utf8");
     let username = token.split(":")[0];
@@ -277,12 +277,13 @@ app.get("/api/v1/gtribe/:tag", async (req, res) => {
 
       if (account) {
         let success = await bcrypt.compare(password, account.password || "");
-        if (success) {
-          //console.log("auth");
-        }
+        if (success) requestingAccount = account;
       }
     }
   } catch (e) {}
+  if (requestingAccount && requestingAccount.gTribe == gtr.id)
+    gtr = getGTribe(gtr.id, true);
+  if (!gtr) return res.json({ err: 404 });
 
   res.json({
     tag: gtr.id,
@@ -291,6 +292,7 @@ app.get("/api/v1/gtribe/:tag", async (req, res) => {
     owner: gtr.leader,
     members: gtr.members,
     disc: gtr.discord,
+    queue: ["Meow", "Dashre", "123SMG"], //gtr.queue || [],
   });
 });
 
