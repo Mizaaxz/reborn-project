@@ -150,7 +150,11 @@ function tryMovePlayer(
             player.padHeal += 15;
             break;
           case ItemType.Teleporter:
-            player.location = randomPos(config.mapScale, config.mapScale, 0);
+            newLocation = player.location = randomPos(
+              config.mapScale,
+              config.mapScale,
+              0
+            );
             getGame()?.sendGameObjects(player);
             return;
         }
@@ -337,7 +341,7 @@ function tryMoveAnimal(
                 animal.padHeal += 15;
                 break;
               case ItemType.Teleporter:
-                animal.location = randomPos(
+                newLocation = animal.location = randomPos(
                   config.mapScale,
                   config.mapScale,
                   0
