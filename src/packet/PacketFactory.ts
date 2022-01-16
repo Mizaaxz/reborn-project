@@ -86,6 +86,7 @@ packetTypeMapping[PacketType.GTRIBE_CREATE] = { value: "clncrt", side: Side.Serv
 packetTypeMapping[PacketType.GTRIBE_FAIL] = { value: "clncrtf", side: Side.Client };
 packetTypeMapping[PacketType.GTRIBE_DELETE] = { value: "delcln", side: Side.Server };
 packetTypeMapping[PacketType.MAP_SIZE] = { value: "msze", side: Side.Client };
+packetTypeMapping[PacketType.GTR_REQUEST] = { value: "gtrq", side: Side.Server };
 }
 
 let reversePacketTypeMapping: ReverseMapping[] = [];
