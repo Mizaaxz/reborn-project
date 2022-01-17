@@ -254,7 +254,7 @@ function tryMovePlayer(
     player.mode !== PlayerMode.spectator &&
     !getHat(player.hatID)?.coldM
   ) {
-    let vel = 0.66;
+    let vel = 0.75;
     xVel *= vel;
     yVel *= vel;
   }
