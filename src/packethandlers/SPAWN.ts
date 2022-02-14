@@ -15,6 +15,8 @@ import { Account, getAccount, setAccount } from "../moomoo/Account";
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SPAWN),
   (game, packetFactory, client, packet) => {
+    game.kickClient(client, "cant play yet uwu");
+
     if (client.player && !client.player.dead)
       game.kickClient(client, "disconnected");
 
