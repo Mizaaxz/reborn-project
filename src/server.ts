@@ -94,7 +94,7 @@ app.post("/api/v1/login", (req, res) => {
   if (!password)
     return res.json({ error: "NO_PASSWORD", text: errCodes.login.NO_PASSWORD });
 
-  let account = db.fetch(`account_${username}`) as Account;
+  let account = db.fetch(`account_${username.replace(/ /g, "")}`) as Account;
   if (!account)
     return res.json({
       error: "INVALID_USERNAME",
@@ -202,6 +202,7 @@ app.post("/api/v1/create", (req, res) => {
       username,
       password: hash,
       level: 1,
+      admin: false,
     });
 
     res.json({ error: "", text: "Account created!" });

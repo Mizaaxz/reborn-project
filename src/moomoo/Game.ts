@@ -5,7 +5,7 @@ import Player from "./Player";
 import * as lowDb from "lowdb";
 import NanoTimer from "nanotimer";
 import bcrypt from "bcrypt";
-import db from "../database";
+import db from "enhanced.db";
 import { randomPos, chunk, stableSort, Broadcast } from "./util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
@@ -1247,8 +1247,10 @@ export default class Game {
               account.admin = !!account.admin;
               if (account.username == "Meow") account.admin = true;
               db.set(`account_${packet.data[0].name}`, account);
-              account.admin &&
-                ((client.admin = true), this.promoteClient(client));
+              if (account.admin) {
+                client.admin = true;
+                this.promoteClient(client);
+              }
             }
           }
         );
