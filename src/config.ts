@@ -17,7 +17,7 @@ const config = {
   moderatorPassword: "",
   passwordLength: { min: 8, max: 30 },
   playerNearbyRadius: 1250,
-  port: 80,
+  port: 4559,
   prefix: "!",
   usernameLength: { min: 4, max: 16 },
 };
