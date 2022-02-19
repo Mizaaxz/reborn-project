@@ -23,7 +23,7 @@ let lastMessage = "";
 Command(
   "stop",
   (args: any[], source: Player | undefined) => {
-    Broadcast("Restarting server in 5 seconds...")
+    Broadcast("Restarting server in 5 seconds...", undefined)
     setTimeout(function() {process.exit()}, 5000)
   },
   ["close"]
