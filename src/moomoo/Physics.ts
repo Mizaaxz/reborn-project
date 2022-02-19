@@ -17,6 +17,7 @@ import Projectile from "../projectiles/Projectile";
 import { getGame } from "./Game";
 import { randomPos } from "./util";
 import config from "../config";
+import { Layer } from "../projectiles/projectiles";
 
 function collideCircles(pos1: Vec2, r1: number, pos2: Vec2, r2: number) {
   return pos1.distance(pos2) <= r1 + r2;
@@ -311,9 +312,14 @@ function collideProjectileGameObject(
     gameObj.location,
     gameObj.scale
   );
-  return !gameObj.data
-    ? projectile.layer >= getGameObjLayer(gameObj.data) && col
-    : col;
+  let objLayer = getGameObjLayer(gameObj.data);
+  if (!gameObj.isPlayerGameObject()) return col;
+  if (gameObj.data == ItemType.Platform) return false;
+  if (objLayer == Layer.Pad) return false;
+  if (objLayer == Layer.Platform) return col;
+  if (objLayer == Layer.Player && projectile.layer == Layer.Platform)
+    return false;
+  return col;
 }
 
 export {
