@@ -1342,6 +1342,9 @@ export default class Game {
         if (client.player && !client.player.dead)
           this.kickClient(client, "Kicked for hacks. SpawnPacket error.");
 
+        if (!client.loggedIn)
+          return this.kickClient(client, "Create an account or log in.");
+
         if (
           "name" in packet.data[0] &&
           "moofoll" in packet.data[0] &&
