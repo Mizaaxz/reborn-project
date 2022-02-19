@@ -564,7 +564,10 @@ export default class Game {
     }
   }
 
-  updateProjectiles(deltaTime: number) {
+  public projectileDelta: number = Date.now();
+  updateProjectiles() {
+    let deltaTime = Date.now() - this.projectileDelta;
+    this.projectileDelta = Date.now();
     let packetFactory = PacketFactory.getInstance();
 
     this.state.projectiles.forEach((projectile) => {
@@ -574,20 +577,16 @@ export default class Game {
       );
       projectile.distance += projectile.speed * deltaTime;
 
-      this.state.getPlayersNearProjectile(projectile).forEach((player) => {
-        player.client?.socket.send(
-          packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_PROJECTILES, [
-              projectile.id,
-              projectile.distance,
-            ])
-          )
-        );
-      });
+      if (projectile.distance > (getProjectileRange(projectile.type) || 1000))
+        this.state.removeProjectile(projectile);
 
       let owner = this.state.players.find(
         (player) => player.id == projectile.ownerSID
       );
+      if (!owner)
+        owner = this.state.players.find(
+          (p) => p.id == projectile.source?.ownerSID
+        );
 
       this.state.getPlayersNearProjectile(projectile).forEach((player) => {
         if (
@@ -613,13 +612,17 @@ export default class Game {
         }
         if (
           Physics.collideProjectilePlayer(projectile, player) &&
-          player.id != projectile.ownerSID
+          player.id != projectile.ownerSID &&
+          !this.state.tribes
+            .find((t) => t.membersSIDs.includes(owner?.id || -1))
+            ?.membersSIDs.includes(player.id) &&
+          projectile.source?.ownerSID !== player.id
         ) {
           if (owner) this.damageFrom(player, owner, projectile.damage, false);
 
           player.velocity.add(
-            0.3 * Math.cos(projectile.angle) * deltaTime,
-            0.3 * Math.sin(projectile.angle) * deltaTime
+            0.0075 * Math.cos(projectile.angle) * deltaTime,
+            0.0075 * Math.sin(projectile.angle) * deltaTime
           );
           if (player.health <= 0) this.killPlayer(player);
 
@@ -629,25 +632,32 @@ export default class Game {
                 new Packet(PacketType.HEALTH_CHANGE, [
                   player.location.x,
                   player.location.y,
-                  projectile.damage,
+                  player.invincible ? "Invincible!" : projectile.damage,
                   1,
                 ])
               )
             );
           }
-          this.state.projectiles.splice(
-            this.state.projectiles.indexOf(projectile),
-            1
+          player.client?.socket.send(
+            packetFactory.serializePacket(
+              new Packet(PacketType.HEALTH_CHANGE, [
+                player.location.x,
+                player.location.y,
+                player.invincible ? "Invincible!" : projectile.damage,
+                1,
+              ])
+            )
           );
+          this.state.removeProjectile(projectile);
         }
       });
 
       this.state.gameObjects.forEach((gameObj) => {
-        if (Physics.collideProjectileGameObject(projectile, gameObj)) {
-          this.state.projectiles.splice(
-            this.state.projectiles.indexOf(projectile),
-            1
-          );
+        if (
+          Physics.collideProjectileGameObject(projectile, gameObj) &&
+          projectile.source?.id !== gameObj.id
+        ) {
+          this.state.removeProjectile(projectile);
 
           for (let nearbyPlayer of this.state.getPlayersNearProjectile(
             projectile
@@ -789,7 +799,7 @@ export default class Game {
           player.lastHitTime = now;
 
           if (isRangedWeapon(player.selectedWeapon)) {
-            let projectileDistance = 25 / 2;
+            let projectileDistance = 25 / 1.5;
 
             this.state.addProjectile(
               getProjectileType(player.selectedWeapon),
@@ -798,7 +808,9 @@ export default class Game {
                 projectileDistance * Math.sin(player.angle),
                 true
               ),
-              player
+              player,
+              player.angle,
+              player.layer
             );
 
             let recoilAngle = (player.angle + Math.PI) % (2 * Math.PI);
@@ -1094,7 +1106,7 @@ export default class Game {
 
   physUpdate() {
     this.update();
-    this.updateProjectiles(0.1);
+    this.updateProjectiles();
   }
 
   /**

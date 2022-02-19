@@ -5,6 +5,7 @@ import {
   getWeaponAttackDetails,
   hasCollision,
   getGameObjDamage,
+  getGameObjLayer,
 } from "../items/items";
 import GameState from "./GameState";
 import { ItemType } from "../items/UpgradeItems";
@@ -304,12 +305,15 @@ function collideProjectileGameObject(
   projectile: Projectile,
   gameObj: GameObject
 ) {
-  return collideCircles(
+  let col = collideCircles(
     projectile.location,
     10,
     gameObj.location,
     gameObj.scale
   );
+  return !gameObj.data
+    ? projectile.layer >= getGameObjLayer(gameObj.data) && col
+    : col;
 }
 
 export {

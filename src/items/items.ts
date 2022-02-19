@@ -56,6 +56,10 @@ function getProjectileType(weapon: Weapons) {
   return projType;
 }
 
+function getGameObjLayer(item: ItemType) {
+  return items[item]?.group?.layer || 0;
+}
+
 function getRecoil(weapon: Weapons) {
   return weapons[weapon].rec || 0;
 }
@@ -211,4 +215,5 @@ export {
   getProjectileType,
   getWeaponLength,
   getRecoil,
+  getGameObjLayer,
 };
