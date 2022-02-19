@@ -188,11 +188,11 @@ server.on("upgrade", function upgrade(request, socket, head) {
   const pathname = url.parse(request.url||"").pathname?.replace(/\/$/, "");
 
   if (pathname === "/uptimeWS") {
-    uptimeServer.handleUpgrade(request, socket, head, function done(ws) {
+    uptimeServer.handleUpgrade(request, socket as any, head, function done(ws) {
       uptimeServer.emit("connection", ws, request);
     });
   } else if (pathname === "/moomoo") {
-    wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.handleUpgrade(request, socket as any, head, function done(ws) {
       wss.emit("connection", ws, request);
     });
   } else {
