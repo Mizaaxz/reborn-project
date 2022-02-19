@@ -185,7 +185,7 @@ let uptimeServer = new WSServer({ noServer: true });
 new UptimeWSServer(uptimeServer);
 
 server.on("upgrade", function upgrade(request, socket, head) {
-  const pathname = url.parse(request.url).pathname?.replace(/\/$/, "");
+  const pathname = url.parse(request.url||"").pathname?.replace(/\/$/, "");
 
   if (pathname === "/uptimeWS") {
     uptimeServer.handleUpgrade(request, socket, head, function done(ws) {
