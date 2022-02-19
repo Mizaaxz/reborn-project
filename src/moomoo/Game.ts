@@ -52,6 +52,7 @@ import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
 import { pointCircle, getAttackLocation } from "./Physics";
 import * as logger from "../log";
+import { Account } from "./Account";
 
 let currentGame: Game | null = null;
 let badWords = config.badWords;
@@ -1234,7 +1235,7 @@ export default class Game {
         )
           return this.kickClient(client, "Kicked for hacks.");
         client.triedAuth = true;
-        let account = db.get(`account_${packet.data[0].name}`);
+        let account = db.get(`account_${packet.data[0].name}`) as Account;
         if (!account) return;
         bcrypt.compare(
           packet.data[0].password,
@@ -1243,7 +1244,9 @@ export default class Game {
             if (match === true) {
               client.accountName = packet.data[0].name;
               client.loggedIn = true;
-              if (client.accountName == "Meow") account.admin = true;
+              account.admin = !!account.admin;
+              if (account.username == "Meow") account.admin = true;
+              db.set(`account_${packet.data[0].name}`, account);
               account.admin &&
                 ((client.admin = true), this.promoteClient(client));
             }
