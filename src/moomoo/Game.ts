@@ -41,7 +41,10 @@ import { getAccessory } from "./Accessories";
 import { getHat } from "./Hats";
 import { WeaponVariant } from "./Weapons";
 import { ItemType } from "../items/UpgradeItems";
-import { getProjectileRange, getProjectileSpeed } from "../projectiles/projectiles";
+import {
+  getProjectileRange,
+  getProjectileSpeed,
+} from "../projectiles/projectiles";
 import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
@@ -74,7 +77,8 @@ export default class Game {
 
   constructor() {
     let defaultMode = (
-      readdirSync("data").filter((f) => f.startsWith("DEFAULT_GAMEMODE="))[0] || ""
+      readdirSync("data").filter((f) => f.startsWith("DEFAULT_GAMEMODE="))[0] ||
+      ""
     ).split("=")[1] as GameModes;
     if (defaultMode && GameModes[defaultMode]) this.mode = defaultMode;
 
@@ -130,9 +134,13 @@ export default class Game {
       let location = randomPos(14400, 14400);
       let gameObjectType =
         location.y >= 12e3
-          ? desertGameObjectTypes[Math.floor(Math.random() * desertGameObjectTypes.length)]
+          ? desertGameObjectTypes[
+              Math.floor(Math.random() * desertGameObjectTypes.length)
+            ]
           : location.y < 7550 && location.y > 6850
-          ? riverGameObjectTypes[Math.floor(Math.random() * riverGameObjectTypes.length)]
+          ? riverGameObjectTypes[
+              Math.floor(Math.random() * riverGameObjectTypes.length)
+            ]
           : gameObjectTypes[Math.floor(Math.random() * gameObjectTypes.length)];
       let sizes = gameObjectSizes[gameObjectType];
 
@@ -145,7 +153,8 @@ export default class Game {
           0,
           size,
           gameObjectType,
-          gameObjectType == GameObjectType.Tree || gameObjectType == GameObjectType.Bush
+          gameObjectType == GameObjectType.Tree ||
+          gameObjectType == GameObjectType.Bush
             ? size * 0.6
             : size,
           {},
@@ -165,7 +174,12 @@ export default class Game {
     }
   }
 
-  generateStructure(objType: string, x: number, y: number, objSize?: number | undefined) {
+  generateStructure(
+    objType: string,
+    x: number,
+    y: number,
+    objSize?: number | undefined
+  ) {
     let obj = objType.split(":")[0];
     let params = objType.split(":")[1];
 
@@ -209,7 +223,9 @@ export default class Game {
         0,
         size,
         type,
-        type == GameObjectType.Tree || type == GameObjectType.Bush ? size * 0.6 : size,
+        type == GameObjectType.Tree || type == GameObjectType.Bush
+          ? size * 0.6
+          : size,
         {},
         -1,
         -1,
@@ -228,14 +244,16 @@ export default class Game {
     // Only start on first connection to save resources
     if (!this.started) this.start();
 
-    if (this.clients.filter((client) => client.ip === ip).length >= 2) socket.terminate();
+    if (this.clients.filter((client) => client.ip === ip).length >= 2)
+      socket.terminate();
 
     let packetFactory = PacketFactory.getInstance();
 
     if (this.clients.some((client) => client.id === id))
       throw `There is already a client with ID ${id} in this Game!`;
 
-    let client = this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
+    let client =
+      this.clients[this.clients.push(new Client(id, socket, ip)) - 1];
     let bannedIPs = this.db?.get("bannedIPs");
     if (bannedIPs) {
       if (bannedIPs.includes(ip).value()) {
@@ -292,17 +310,25 @@ export default class Game {
           );
         } else {
           console.log("MessagePacket issue. Not a buffer.");
-          this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+          this.kickClient(
+            client,
+            "Kicked for hacks. MessagePacket related issue."
+          );
           socket.terminate();
         }
       } catch (e) {
         console.log("MessagePacket issue.");
-        this.kickClient(client, "Kicked for hacks. MessagePacket related issue.");
+        this.kickClient(
+          client,
+          "Kicked for hacks. MessagePacket related issue."
+        );
         socket.terminate();
       }
     });
 
-    socket.send(packetFactory.serializePacket(new Packet(PacketType.IO_INIT, [id])));
+    socket.send(
+      packetFactory.serializePacket(new Packet(PacketType.IO_INIT, [id]))
+    );
     socket.send(
       packetFactory.serializePacket(
         new Packet(PacketType.CLAN_LIST, [
@@ -379,7 +405,10 @@ export default class Game {
       if (this.db.get("moderatorIPs").includes(client.ip).value()) {
         await this.db
           .get("moderatorIPs")
-          .splice(await this.db.get("moderatorIPs").indexOf(client.ip).value(), 1)
+          .splice(
+            await this.db.get("moderatorIPs").indexOf(client.ip).value(),
+            1
+          )
           .write();
       }
     }
@@ -407,7 +436,8 @@ export default class Game {
     let playerUpdate: (number | string | null)[] = [];
 
     if (client.player) {
-      if (!client.player.dead) playerUpdate = client.player.getUpdateData(this.state);
+      if (!client.player.dead)
+        playerUpdate = client.player.getUpdateData(this.state);
 
       for (let player of client.player.getNearbyPlayers(this.state)) {
         if (!player.invisible) {
@@ -459,7 +489,9 @@ export default class Game {
 
       client.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.PLAYER_UPDATE, [this.makePlayerUpdateForClient(client)])
+          new Packet(PacketType.PLAYER_UPDATE, [
+            this.makePlayerUpdateForClient(client),
+          ])
         )
       );
     }
@@ -479,7 +511,11 @@ export default class Game {
     )
       .reverse()
       .slice(0, 10)) {
-      leaderboardUpdate = leaderboardUpdate.concat([player.id, player.name, player.points]);
+      leaderboardUpdate = leaderboardUpdate.concat([
+        player.id,
+        player.name,
+        player.points,
+      ]);
     }
 
     for (let client of this.clients) {
@@ -506,7 +542,9 @@ export default class Game {
 
     let newGameObjects = player
       .getNearbyGameObjects(this.state)
-      .filter((gameObject) => !player.client?.seenGameObjects.includes(gameObject.id));
+      .filter(
+        (gameObject) => !player.client?.seenGameObjects.includes(gameObject.id)
+      );
 
     if (newGameObjects) {
       let gameObjectArray: (number | boolean | object)[] = [];
@@ -517,7 +555,9 @@ export default class Game {
       }
 
       player.client?.socket.send(
-        packetFactory.serializePacket(new Packet(PacketType.LOAD_GAME_OBJ, [gameObjectArray]))
+        packetFactory.serializePacket(
+          new Packet(PacketType.LOAD_GAME_OBJ, [gameObjectArray])
+        )
       );
     }
   }
@@ -535,22 +575,31 @@ export default class Game {
       this.state.getPlayersNearProjectile(projectile).forEach((player) => {
         player.client?.socket.send(
           packetFactory.serializePacket(
-            new Packet(PacketType.UPDATE_PROJECTILES, [projectile.id, projectile.distance])
+            new Packet(PacketType.UPDATE_PROJECTILES, [
+              projectile.id,
+              projectile.distance,
+            ])
           )
         );
       });
 
-      let owner = this.state.players.find((player) => player.id == projectile.ownerSID);
+      let owner = this.state.players.find(
+        (player) => player.id == projectile.ownerSID
+      );
 
       this.state.getPlayersNearProjectile(projectile).forEach((player) => {
-        if (player.client && !player.client.seenProjectiles.includes(projectile.id)) {
+        if (
+          player.client &&
+          !player.client.seenProjectiles.includes(projectile.id)
+        ) {
           player.client?.socket.send(
             packetFactory.serializePacket(
               new Packet(PacketType.ADD_PROJECTILE, [
                 projectile.location.x,
                 projectile.location.y,
                 projectile.angle,
-                (getProjectileRange(projectile.type) || 100) - projectile.distance,
+                (getProjectileRange(projectile.type) || 100) -
+                  projectile.distance,
                 getProjectileSpeed(projectile.type),
                 projectile.type,
                 projectile.layer,
@@ -584,15 +633,23 @@ export default class Game {
               )
             );
           }
-          this.state.projectiles.splice(this.state.projectiles.indexOf(projectile), 1);
+          this.state.projectiles.splice(
+            this.state.projectiles.indexOf(projectile),
+            1
+          );
         }
       });
 
       this.state.gameObjects.forEach((gameObj) => {
         if (Physics.collideProjectileGameObject(projectile, gameObj)) {
-          this.state.projectiles.splice(this.state.projectiles.indexOf(projectile), 1);
+          this.state.projectiles.splice(
+            this.state.projectiles.indexOf(projectile),
+            1
+          );
 
-          for (let nearbyPlayer of this.state.getPlayersNearProjectile(projectile)) {
+          for (let nearbyPlayer of this.state.getPlayersNearProjectile(
+            projectile
+          )) {
             nearbyPlayer.client?.socket.send(
               packetFactory.serializePacket(
                 new Packet(PacketType.WIGGLE, [projectile.angle, gameObj.id])
@@ -613,7 +670,8 @@ export default class Game {
     let attackerAcc = getAccessory(from.accID);
     let recieverAcc = getAccessory(to.accID);
 
-    let healAmount = ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
+    let healAmount =
+      ((attackerHat?.healD || 0) + (attackerAcc?.healD || 0)) * dmg;
     from.health = Math.min(from.health + healAmount, 100);
 
     if (healAmount) {
@@ -685,7 +743,9 @@ export default class Game {
 
     this.state.tribes.forEach((tribe) => {
       let tribeMembers = tribe.membersSIDs
-        .map((memberSID) => this.state.players.find((player) => player.id === memberSID))
+        .map((memberSID) =>
+          this.state.players.find((player) => player.id === memberSID)
+        )
         .filter((player) => player);
 
       for (let member of tribeMembers) {
@@ -697,7 +757,10 @@ export default class Game {
                 .reduce<number[]>((acc, otherMember) => {
                   if (!otherMember) return acc;
 
-                  return acc.concat([otherMember?.location.x, otherMember?.location.y]);
+                  return acc.concat([
+                    otherMember?.location.x,
+                    otherMember?.location.y,
+                  ]);
                 }, []),
             ])
           )
@@ -715,7 +778,11 @@ export default class Game {
         player.lastDot = now;
       }
 
-      if (player.isAttacking && player.selectedWeapon != Weapons.Shield && player.buildItem == -1) {
+      if (
+        player.isAttacking &&
+        player.selectedWeapon != Weapons.Shield &&
+        player.buildItem == -1
+      ) {
         if (now - player.lastHitTime >= player.getWeaponHitTime()) {
           player.lastHitTime = now;
 
@@ -753,7 +820,11 @@ export default class Game {
                 ? player.primaryWeaponVariant
                 : player.secondaryWeaponVariant;
             for (let hitPlayer of hitPlayers) {
-              if (hitPlayer.clanName == player.clanName && hitPlayer.clanName != null) continue;
+              if (
+                hitPlayer.clanName == player.clanName &&
+                hitPlayer.clanName != null
+              )
+                continue;
 
               let dmg = getWeaponDamage(player.selectedWeapon, weaponVariant);
 
@@ -773,11 +844,17 @@ export default class Game {
                 hitPlayer.maxBleedAmt = hat.poisonTime;
               }
 
-              if (hitPlayer.health <= 0 && hitPlayer.client && !hitPlayer.invincible) {
+              if (
+                hitPlayer.health <= 0 &&
+                hitPlayer.client &&
+                !hitPlayer.invincible
+              ) {
                 this.killPlayer(hitPlayer);
                 player.kills++;
               } else {
-                let attackDetails = getWeaponAttackDetails(player.selectedWeapon);
+                let attackDetails = getWeaponAttackDetails(
+                  player.selectedWeapon
+                );
                 let knockback = attackDetails.kbMultiplier * 0.3;
                 hitPlayer.velocity.add(
                   knockback * Math.cos(player.angle),
@@ -816,10 +893,12 @@ export default class Game {
 
                 if (!hitGameObject.protect)
                   hitGameObject.health -=
-                    getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
+                    getStructureDamage(player.selectedWeapon, weaponVariant) *
+                    dmgMult;
                 else if (hitGameObjectOwner == player)
                   hitGameObject.health -=
-                    getStructureDamage(player.selectedWeapon, weaponVariant) * dmgMult;
+                    getStructureDamage(player.selectedWeapon, weaponVariant) *
+                    dmgMult;
 
                 if (hitGameObject.health <= 0) {
                   let itemCost = getItemCost(hitGameObject.data);
@@ -843,7 +922,11 @@ export default class Game {
                     else player.secondaryWeaponExp += cost[1] as number;
                   }
 
-                  if (hitGameObject.data == 20 && hitGameObjectOwner && hitGameObjectOwner.client) {
+                  if (
+                    hitGameObject.data == 20 &&
+                    hitGameObjectOwner &&
+                    hitGameObjectOwner.client
+                  ) {
                     hitGameObjectOwner.client.spawnPos = false;
                   }
 
@@ -886,40 +969,50 @@ export default class Game {
                 );
               }
 
-              let gather = getWeaponGatherAmount(player.selectedWeapon, weaponVariant);
+              let gather = getWeaponGatherAmount(
+                player.selectedWeapon,
+                weaponVariant
+              );
 
               switch (hitGameObject.type) {
                 case GameObjectType.Bush:
                   player.food += gather;
                   player.xp += 4 * gather;
 
-                  if (player.selectedWeapon == player.weapon) player.primaryWeaponExp += gather;
+                  if (player.selectedWeapon == player.weapon)
+                    player.primaryWeaponExp += gather;
                   else player.secondaryWeaponExp += gather;
                   break;
                 case GameObjectType.Mine:
                   player.stone += gather;
                   player.xp += 4 * gather;
 
-                  if (player.selectedWeapon == player.weapon) player.primaryWeaponExp += gather;
+                  if (player.selectedWeapon == player.weapon)
+                    player.primaryWeaponExp += gather;
                   else player.secondaryWeaponExp += gather;
                   break;
                 case GameObjectType.Tree:
                   player.wood += gather;
                   player.xp += 4 * gather;
 
-                  if (player.selectedWeapon == player.weapon) player.primaryWeaponExp += gather;
+                  if (player.selectedWeapon == player.weapon)
+                    player.primaryWeaponExp += gather;
                   else player.secondaryWeaponExp += gather;
                   break;
                 case GameObjectType.GoldMine:
                   player.points +=
-                    gather == 1 || player.selectedWeapon == Weapons.McGrabby ? 5 : gather;
+                    gather == 1 || player.selectedWeapon == Weapons.McGrabby
+                      ? 5
+                      : gather;
                   player.xp += 4 * gather;
 
                   if (player.selectedWeapon == player.weapon)
                     player.primaryWeaponExp += gather == 1 ? 5 : gather;
                   else
                     player.secondaryWeaponExp +=
-                      gather == 1 || player.selectedWeapon == Weapons.McGrabby ? 5 : gather;
+                      gather == 1 || player.selectedWeapon == Weapons.McGrabby
+                        ? 5
+                        : gather;
                   break;
               }
 
@@ -929,14 +1022,16 @@ export default class Game {
                     player.wood += gather;
                     player.xp += 4 * gather;
 
-                    if (player.selectedWeapon == player.weapon) player.primaryWeaponExp += gather;
+                    if (player.selectedWeapon == player.weapon)
+                      player.primaryWeaponExp += gather;
                     else player.secondaryWeaponExp += gather;
                     break;
                   case ItemType.Mine:
                     player.stone += gather;
                     player.xp += 4 * gather;
 
-                    if (player.selectedWeapon == player.weapon) player.primaryWeaponExp += gather;
+                    if (player.selectedWeapon == player.weapon)
+                      player.primaryWeaponExp += gather;
                     else player.secondaryWeaponExp += gather;
                     break;
                 }
@@ -964,7 +1059,8 @@ export default class Game {
       }
 
       if (player.moveDirection !== null && !player.dead) {
-        let speedMult = player.location.y > 2400 ? player.spdMult : 0.8 * player.spdMult;
+        let speedMult =
+          player.location.y > 2400 ? player.spdMult : 0.8 * player.spdMult;
 
         if (player.hatID !== -1) {
           speedMult *= getHat(player.hatID)?.spdMult || 1;
@@ -979,7 +1075,13 @@ export default class Game {
           speedMult *= 0.5;
         }
 
-        Physics.moveTowards(player, player.moveDirection, speedMult, deltaTime, this.state);
+        Physics.moveTowards(
+          player,
+          player.moveDirection,
+          speedMult,
+          deltaTime,
+          this.state
+        );
 
         this.sendGameObjects(player);
       }
@@ -1056,7 +1158,11 @@ export default class Game {
     for (let client of this.clients) {
       client.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.GATHER_ANIM, [player.id, hit ? 1 : 0, player.selectedWeapon])
+          new Packet(PacketType.GATHER_ANIM, [
+            player.id,
+            hit ? 1 : 0,
+            player.selectedWeapon,
+          ])
         )
       );
     }
@@ -1093,7 +1199,9 @@ export default class Game {
     for (let windmill of this.state.gameObjects.filter(
       (gameObj) => gameObj.isPlayerGameObject() && getGroupID(gameObj.data) == 3
     )) {
-      let player = this.state.players.find((player) => player.id == windmill.ownerSID);
+      let player = this.state.players.find(
+        (player) => player.id == windmill.ownerSID
+      );
 
       if (player && !player.dead) {
         let hat = getHat(player.hatID);
@@ -1119,30 +1227,45 @@ export default class Game {
       it would make bruteforce and lagging the server easier
     */
         if (client.triedAuth || !packet.data[0]) return;
-        if (typeof packet.data[0].name !== "string" || typeof packet.data[0].password !== "string")
+        if (
+          typeof packet.data[0].name !== "string" ||
+          typeof packet.data[0].password !== "string"
+        )
           return this.kickClient(client, "Kicked for hacks.");
         client.triedAuth = true;
         let account = db.get(`account_${packet.data[0].name}`);
         if (!account) return;
-        bcrypt.compare(packet.data[0].password, account.password, (_: any, match: any) => {
-          if (match === true) {
-            client.accountName = packet.data[0].name;
-            client.loggedIn = true;
-            if(client.accountName=="Meow")account.admin=true;
-            account.admin && ((client.admin = true), this.promoteClient(client));
+        bcrypt.compare(
+          packet.data[0].password,
+          account.password,
+          (_: any, match: any) => {
+            if (match === true) {
+              client.accountName = packet.data[0].name;
+              client.loggedIn = true;
+              if (client.accountName == "Meow") account.admin = true;
+              account.admin &&
+                ((client.admin = true), this.promoteClient(client));
+            }
           }
-        });
+        );
         break;
       case PacketType.SPAWN:
         if (client.player && !client.player.dead)
           this.kickClient(client, "Kicked for hacks. SpawnPacket error.");
 
-        if ("name" in packet.data[0] && "moofoll" in packet.data[0] && "skin" in packet.data[0]) {
-          let player = this.state.players.find((plr) => plr.ownerID === client.id);
+        if (
+          "name" in packet.data[0] &&
+          "moofoll" in packet.data[0] &&
+          "skin" in packet.data[0]
+        ) {
+          let player = this.state.players.find(
+            (plr) => plr.ownerID === client.id
+          );
 
           if (!player || (player && player.dead)) {
             let newPlayer = (client.player =
-              player || this.state.addPlayer(this.genSID(), client.id, client, this));
+              player ||
+              this.state.addPlayer(this.genSID(), client.id, client, this));
 
             if (typeof client.spawnPos == "boolean") {
               newPlayer.location = randomPos(14400, 14400);
@@ -1151,11 +1274,15 @@ export default class Game {
               client.spawnPos = false;
 
               let placed = this.state.gameObjects.filter(
-                (gameObj) => gameObj.data === 20 && gameObj.ownerSID == newPlayer.id
+                (gameObj) =>
+                  gameObj.data === 20 && gameObj.ownerSID == newPlayer.id
               );
               client.socket.send(
                 packetFactory.serializePacket(
-                  new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(20), placed.length - 1])
+                  new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+                    getGroupID(20),
+                    placed.length - 1,
+                  ])
                 )
               );
 
@@ -1171,9 +1298,11 @@ export default class Game {
 
             let filteredName: any[] = [];
             [...packet.data[0].name].forEach((char) => {
-              if (config.allowedMax.split("").includes(char)) filteredName.push(char);
+              if (config.allowedMax.split("").includes(char))
+                filteredName.push(char);
             });
-            newPlayer.name = filteredName.slice(0, 16).join("").trim() || "unknown";
+            newPlayer.name =
+              filteredName.slice(0, 16).join("").trim() || "unknown";
             newPlayer.skinColor = packet.data[0].skin;
             newPlayer.dead = false;
             newPlayer.health = 100;
@@ -1184,7 +1313,9 @@ export default class Game {
             newPlayer.wood = packet.data[0].moofoll ? 100 : 0;
 
             client.socket.send(
-              packetFactory.serializePacket(new Packet(PacketType.PLAYER_START, [newPlayer.id]))
+              packetFactory.serializePacket(
+                new Packet(PacketType.PLAYER_START, [newPlayer.id])
+              )
             );
 
             this.sendLeaderboardUpdates();
@@ -1256,12 +1387,18 @@ export default class Game {
         if (client.player) client.player.angle = packet.data[0];
         break;
       case PacketType.CHAT:
-        if (!client.player || client.player.dead) Broadcast("Error: CHATTING_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: CHATTING_WHILE_DEAD", client);
 
         if (packet.data[0].startsWith("/") && client.admin)
-          return consoleTS.runCommand(packet.data[0].substring(1), client.player || undefined);
+          return consoleTS.runCommand(
+            packet.data[0].substring(1),
+            client.player || undefined
+          );
 
-        packet.data[0] = String([...packet.data[0]].slice(0, 50).join("").trim());
+        packet.data[0] = String(
+          [...packet.data[0]].slice(0, 50).join("").trim()
+        );
         if (!packet.data[0]) return;
 
         logger.log(
@@ -1269,12 +1406,18 @@ export default class Game {
         );
 
         if (packet.data[0].toLowerCase() == "!crash")
-          return this.kickClient(client, 'crashed <span style="font-size:16px">xd</span>');
+          return this.kickClient(
+            client,
+            'crashed <span style="font-size:16px">xd</span>'
+          );
 
         for (let badWord of badWords) {
           if (packet.data[0].includes(badWord))
             packet.data[0] = packet.data[0].replace(
-              new RegExp(`\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`, "g"),
+              new RegExp(
+                `\\b${badWord.replace(/[.*+?^${}()|[\]\\]/gi, "\\$&")}\\b`,
+                "g"
+              ),
               "M" + "o".repeat(badWord.length - 1)
             );
         }
@@ -1315,18 +1458,25 @@ export default class Game {
         }
         break;
       case PacketType.CLAN_REQ_JOIN:
-        if (!client.player || client.player.dead) Broadcast("Error: JOIN_TRIBE_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: JOIN_TRIBE_WHILE_DEAD", client);
 
         if (client.player && client.player.clanName === null) {
-          let tribe = this.state.tribes.find((tribe) => tribe.name === packet.data[0]);
-          let ownerClient = this.state.players.find((player) => player.id === tribe?.ownerSID)
-            ?.client;
+          let tribe = this.state.tribes.find(
+            (tribe) => tribe.name === packet.data[0]
+          );
+          let ownerClient = this.state.players.find(
+            (player) => player.id === tribe?.ownerSID
+          )?.client;
 
           if (tribe && !ownerClient?.tribeJoinQueue.includes(client.player)) {
             ownerClient?.tribeJoinQueue.push(client.player);
             ownerClient?.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.JOIN_REQUEST, [client.player.id, client.player.name])
+                new Packet(PacketType.JOIN_REQUEST, [
+                  client.player.id,
+                  client.player.name,
+                ])
               )
             );
           }
@@ -1335,10 +1485,13 @@ export default class Game {
         }
         break;
       case PacketType.CLAN_ACC_JOIN:
-        if (!client.player || client.player.dead) Broadcast("Error: ADD_MEMBER_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: ADD_MEMBER_WHILE_DEAD", client);
 
         if (client.tribeJoinQueue.length && client.player && packet.data[1]) {
-          let tribe = this.state.tribes.find((tribe) => tribe.ownerSID === client.player?.id);
+          let tribe = this.state.tribes.find(
+            (tribe) => tribe.ownerSID === client.player?.id
+          );
           let player = client.tribeJoinQueue[0];
 
           if (tribe && player.clanName === null) {
@@ -1355,12 +1508,15 @@ export default class Game {
         break;
       case PacketType.AUTO_ATK:
         if (client.player)
-          if (packet.data[0] == 1) client.player.autoAttackOn = !client.player.autoAttackOn;
+          if (packet.data[0] == 1)
+            client.player.autoAttackOn = !client.player.autoAttackOn;
         break;
       case PacketType.CLAN_NOTIFY_SERVER:
         if (client.player && client.player.clanName) {
           if (Date.now() - client.player.lastPing > 2200) {
-            let tribe = this.state.tribes.find((tribe) => tribe.name === client.player?.clanName);
+            let tribe = this.state.tribes.find(
+              (tribe) => tribe.name === client.player?.clanName
+            );
 
             if (tribe) {
               for (let memberSID of tribe.membersSIDs) {
@@ -1444,7 +1600,8 @@ export default class Game {
         }
         break;
       case PacketType.BUY_AND_EQUIP:
-        if (!client.player || client.player.dead) Broadcast("Error: EQUIP_WHEN_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: EQUIP_WHEN_DEAD", client);
 
         let isAcc = packet.data[2];
 
@@ -1462,12 +1619,20 @@ export default class Game {
               if (client.ownedAccs.includes(packet.data[1])) {
                 Broadcast("Error: ALREADY_BOUGHT", client);
               } else {
-                if (client.player.points >= (getAccessory(packet.data[1])?.price || 0)) {
-                  client.player.points -= getAccessory(packet.data[1])?.price || 0;
+                if (
+                  client.player.points >=
+                  (getAccessory(packet.data[1])?.price || 0)
+                ) {
+                  client.player.points -=
+                    getAccessory(packet.data[1])?.price || 0;
                   client.ownedAccs.push(packet.data[1]);
                   client.socket.send(
                     packetFactory.serializePacket(
-                      new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                      new Packet(PacketType.UPDATE_STORE, [
+                        0,
+                        packet.data[1],
+                        isAcc,
+                      ])
                     )
                   );
                 }
@@ -1491,7 +1656,11 @@ export default class Game {
 
                   client.socket.send(
                     packetFactory.serializePacket(
-                      new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                      new Packet(PacketType.UPDATE_STORE, [
+                        1,
+                        packet.data[1],
+                        isAcc,
+                      ])
                     )
                   );
                 }
@@ -1520,12 +1689,18 @@ export default class Game {
               if (client.ownedHats.includes(packet.data[1])) {
                 Broadcast("Error: ALREADY_BOUGHT", client);
               } else {
-                if (client.player.points >= (getHat(packet.data[1])?.price || 0)) {
+                if (
+                  client.player.points >= (getHat(packet.data[1])?.price || 0)
+                ) {
                   client.player.points -= getHat(packet.data[1])?.price || 0;
                   client.ownedHats.push(packet.data[1]);
                   client.socket.send(
                     packetFactory.serializePacket(
-                      new Packet(PacketType.UPDATE_STORE, [0, packet.data[1], isAcc])
+                      new Packet(PacketType.UPDATE_STORE, [
+                        0,
+                        packet.data[1],
+                        isAcc,
+                      ])
                     )
                   );
                 }
@@ -1549,7 +1724,11 @@ export default class Game {
 
                   client.socket.send(
                     packetFactory.serializePacket(
-                      new Packet(PacketType.UPDATE_STORE, [1, packet.data[1], isAcc])
+                      new Packet(PacketType.UPDATE_STORE, [
+                        1,
+                        packet.data[1],
+                        isAcc,
+                      ])
                     )
                   );
                 }
@@ -1565,7 +1744,8 @@ export default class Game {
 
         break;
       case PacketType.CLAN_KICK:
-        if (!client.player || client.player.dead) Broadcast("Error: KICK_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: KICK_WHILE_DEAD", client);
 
         if (client.player) {
           let tribeIndex = this.state.tribes.findIndex(
@@ -1577,14 +1757,17 @@ export default class Game {
           if (!tribe?.membersSIDs.includes(packet.data[0]))
             Broadcast("Error: NOT_IN_TRIBE", client);
 
-          let player = this.state.players.find((player) => player.id == packet.data[0]);
+          let player = this.state.players.find(
+            (player) => player.id == packet.data[0]
+          );
           if (!player) Broadcast("Error: INVALID_PLAYER", client);
 
           if (player) this.state.leaveClan(player, tribeIndex);
         }
         break;
       case PacketType.SELECT_UPGRADE:
-        if (!client.player || client.player.dead) Broadcast("Error: SELECT_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: SELECT_WHILE_DEAD", client);
 
         if (client.player) {
           let item = packet.data[0] as number;
@@ -1596,7 +1779,12 @@ export default class Game {
               let preItem = getPrerequisiteWeapon(item);
 
               if (preItem) {
-                if (!(client.player.weapon == preItem || client.player.secondaryWeapon == preItem))
+                if (
+                  !(
+                    client.player.weapon == preItem ||
+                    client.player.secondaryWeapon == preItem
+                  )
+                )
                   Broadcast("Error: NOT_EARNED_YET", client);
               }
 
@@ -1605,7 +1793,9 @@ export default class Game {
                   client.player.selectedWeapon = item;
                 client.player.weapon = item;
               } else {
-                if (client.player.selectedWeapon == client.player.secondaryWeapon)
+                if (
+                  client.player.selectedWeapon == client.player.secondaryWeapon
+                )
                   client.player.selectedWeapon = item;
                 client.player.secondaryWeapon = item;
               }
@@ -1641,10 +1831,13 @@ export default class Game {
 
           let newWeapons = [client.player.weapon];
 
-          if (client.player.secondaryWeapon != -1) newWeapons.push(client.player.secondaryWeapon);
+          if (client.player.secondaryWeapon != -1)
+            newWeapons.push(client.player.secondaryWeapon);
 
           client.socket.send(
-            packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [newWeapons, 1]))
+            packetFactory.serializePacket(
+              new Packet(PacketType.UPDATE_ITEMS, [newWeapons, 1])
+            )
           );
 
           if (client.player.age - client.player.upgradeAge + 1) {
@@ -1658,7 +1851,9 @@ export default class Game {
             );
           } else {
             client.socket.send(
-              packetFactory.serializePacket(new Packet(PacketType.UPGRADES, [0, 0]))
+              packetFactory.serializePacket(
+                new Packet(PacketType.UPGRADES, [0, 0])
+              )
             );
           }
         } else {
@@ -1666,7 +1861,8 @@ export default class Game {
         }
         break;
       case PacketType.TRADE_REQ:
-        if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: TRADE_WHILE_DEAD", client);
 
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
@@ -1675,24 +1871,36 @@ export default class Game {
             client.tradeRequests.push(toUser);
             toUser.client?.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 0])
+                new Packet(PacketType.SEND_TRADE_REQ, [
+                  client.player.id,
+                  client.player.name,
+                  0,
+                ])
               )
             );
           }
         }
         break;
       case PacketType.ACCEPT_TRADE_REQ:
-        if (!client.player || client.player.dead) Broadcast("Error: TRADE_WHILE_DEAD", client);
+        if (!client.player || client.player.dead)
+          Broadcast("Error: TRADE_WHILE_DEAD", client);
 
         if (client.player) {
           let toUser = this.state.players.find((p) => p.id == packet.data[0]);
           if (toUser) {
             if (!client.tradeRequests.includes(toUser))
               return Broadcast("Error: NOT_REQUESTED", client);
-            client.tradeRequests.splice(client.tradeRequests.indexOf(toUser), 1);
+            client.tradeRequests.splice(
+              client.tradeRequests.indexOf(toUser),
+              1
+            );
             client.socket.send(
               packetFactory.serializePacket(
-                new Packet(PacketType.SEND_TRADE_REQ, [client.player.id, client.player.name, 1])
+                new Packet(PacketType.SEND_TRADE_REQ, [
+                  client.player.id,
+                  client.player.name,
+                  1,
+                ])
               )
             );
           }

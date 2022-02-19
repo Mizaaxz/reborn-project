@@ -22,7 +22,8 @@ export default class UptimeWSServer {
 
   constructor(uptimeServer: WSServer) {
     uptimeServer.addListener("connection", (socket) => {
-      if (!this.sendInterval) this.sendInterval = setInterval(this.sendUptime.bind(this), 10);
+      if (!this.sendInterval)
+        this.sendInterval = setInterval(this.sendUptime.bind(this), 10);
 
       this.sockets.push(socket);
 

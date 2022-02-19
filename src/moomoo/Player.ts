@@ -118,7 +118,9 @@ export default class Player extends Entity {
   public set kills(newKills: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1]))
+      packetFactory.serializePacket(
+        new Packet(PacketType.UPDATE_STATS, ["kills", newKills, 1])
+      )
     );
     this._kills = newKills;
   }
@@ -231,7 +233,10 @@ export default class Player extends Entity {
 
       this.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.UPGRADES, [this.age - this.upgradeAge + 1, this.upgradeAge])
+          new Packet(PacketType.UPGRADES, [
+            this.age - this.upgradeAge + 1,
+            this.upgradeAge,
+          ])
         )
       );
     }
@@ -277,7 +282,9 @@ export default class Player extends Entity {
   public set food(newFood: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1]))
+      packetFactory.serializePacket(
+        new Packet(PacketType.UPDATE_STATS, ["food", newFood, 1])
+      )
     );
     this._food = newFood;
   }
@@ -291,7 +298,9 @@ export default class Player extends Entity {
   public set stone(newStone: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1]))
+      packetFactory.serializePacket(
+        new Packet(PacketType.UPDATE_STATS, ["stone", newStone, 1])
+      )
     );
     this._stone = newStone;
   }
@@ -305,7 +314,9 @@ export default class Player extends Entity {
   public set points(newPoints: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1]))
+      packetFactory.serializePacket(
+        new Packet(PacketType.UPDATE_STATS, ["points", newPoints, 1])
+      )
     );
     this._points = newPoints;
     this.game.sendLeaderboardUpdates();
@@ -320,7 +331,9 @@ export default class Player extends Entity {
   public set wood(newWood: number) {
     let packetFactory = PacketFactory.getInstance();
     this.client?.socket.send(
-      packetFactory.serializePacket(new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1]))
+      packetFactory.serializePacket(
+        new Packet(PacketType.UPDATE_STATS, ["wood", newWood, 1])
+      )
     );
     this._wood = newWood;
   }
@@ -335,7 +348,9 @@ export default class Player extends Entity {
 
       for (let client of this.game.clients) {
         client?.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth]))
+          packetFactory.serializePacket(
+            new Packet(PacketType.HEALTH_UPDATE, [this.id, newHealth])
+          )
         );
       }
 
@@ -418,11 +433,15 @@ export default class Player extends Entity {
       gameState?.gameObjects.push(newGameObject);
       this.client?.socket.send(
         packetFactory.serializePacket(
-          new Packet(PacketType.UPDATE_PLACE_LIMIT, [getGroupID(item), placedAmount + 1])
+          new Packet(PacketType.UPDATE_PLACE_LIMIT, [
+            getGroupID(item),
+            placedAmount + 1,
+          ])
         )
       );
 
-      if (this.client && item == ItemType.SpawnPad) this.client.spawnPos = location;
+      if (this.client && item == ItemType.SpawnPad)
+        this.client.spawnPos = location;
 
       return true;
     }
@@ -541,7 +560,12 @@ export default class Player extends Entity {
     this.autoAttackOn = false;
     this.disableRotation = false;
     this.moveDirection = null;
-    this.items = [ItemType.Apple, ItemType.WoodWall, ItemType.Spikes, ItemType.Windmill];
+    this.items = [
+      ItemType.Apple,
+      ItemType.WoodWall,
+      ItemType.Spikes,
+      ItemType.Windmill,
+    ];
 
     this.upgradeAge = 2;
     this.maxXP = 300;
@@ -554,7 +578,9 @@ export default class Player extends Entity {
     this.bleedAmt = 0;
     this.maxBleedAmt = -1;
 
-    this.client?.socket.send(packetFactory.serializePacket(new Packet(PacketType.DEATH, [])));
+    this.client?.socket.send(
+      packetFactory.serializePacket(new Packet(PacketType.DEATH, []))
+    );
   }
 
   move(direction: number) {
@@ -581,7 +607,9 @@ export default class Player extends Entity {
       this.angle,
       this.buildItem,
       this.selectedWeapon,
-      this.selectedWeapon == this.weapon ? this.primaryWeaponVariant : this.secondaryWeaponVariant,
+      this.selectedWeapon == this.weapon
+        ? this.primaryWeaponVariant
+        : this.secondaryWeaponVariant,
       this.clanName,
       this.isClanLeader ? 1 : 0,
       this.hatID,
@@ -600,8 +628,10 @@ export default class Player extends Entity {
     for (let player of state.players) {
       if (player !== this && !player.dead) {
         if (
-          eucDistance([this.location.x, this.location.y], [player.location.x, player.location.y]) <
-          RADIUS
+          eucDistance(
+            [this.location.x, this.location.y],
+            [player.location.x, player.location.y]
+          ) < RADIUS
         ) {
           players.push(player);
         }

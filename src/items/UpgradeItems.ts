@@ -70,4 +70,12 @@ type ItemType =
   | Age8Items
   | Age9Items;
 
-export { Age3Items, Age4Items, Age5Items, Age7Items, Age8Items, Age9Items, ItemType };
+export {
+  Age3Items,
+  Age4Items,
+  Age5Items,
+  Age7Items,
+  Age8Items,
+  Age9Items,
+  ItemType,
+};

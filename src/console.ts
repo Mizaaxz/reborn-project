@@ -4,7 +4,12 @@ import { getGame } from "./moomoo/Game";
 import { PacketFactory } from "./packets/PacketFactory";
 import { Packet, Side } from "./packets/Packet";
 import { PacketType } from "./packets/PacketType";
-import { boolSelector, Command, GetCommand, playerSelector } from "./commandHandler";
+import {
+  boolSelector,
+  Command,
+  GetCommand,
+  playerSelector,
+} from "./commandHandler";
 import Player from "./moomoo/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
@@ -23,8 +28,10 @@ let lastMessage = "";
 Command(
   "stop",
   (args: any[], source: Player | undefined) => {
-    Broadcast("Restarting server in 5 seconds...", undefined)
-    setTimeout(function() {process.exit()}, 5000)
+    Broadcast("Restarting server in 5 seconds...", undefined);
+    setTimeout(function () {
+      process.exit();
+    }, 5000);
   },
   ["close"]
 );
@@ -109,7 +116,8 @@ Command(
       if (game) {
         let bool = boolSelector(args[2]);
         let bool1 = boolSelector(args[1]);
-        if (player == source) player.invisible = bool1 == null ? !player.invisible : bool1;
+        if (player == source)
+          player.invisible = bool1 == null ? !player.invisible : bool1;
         else if (player instanceof Player)
           player.invisible = bool == null ? !player.invisible : bool;
         else if (player.length) {
@@ -136,7 +144,8 @@ Command(
       if (game) {
         let bool = boolSelector(args[2]);
         let bool1 = boolSelector(args[1]);
-        if (player == source) player.invincible = bool1 == null ? !player.invincible : bool1;
+        if (player == source)
+          player.invincible = bool1 == null ? !player.invincible : bool1;
         else if (player instanceof Player)
           player.invincible = bool == null ? !player.invincible : bool;
         else if (player.length) {
@@ -223,7 +232,9 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = game.state.players.find(
+        (player: { id: any }) => player.id == playerSID
+      );
 
       if (player && player.client && !player.client.admin) {
         game.banClient(player.client);
@@ -241,7 +252,9 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = game.state.players.find(
+        (player: { id: any }) => player.id == playerSID
+      );
 
       if (player && player.client) {
         game.addModerator(player.client);
@@ -258,7 +271,9 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = game.state.players.find(
+        (player: { id: any }) => player.id == playerSID
+      );
 
       if (player && player.client) {
         game.remModerator(player.client);
@@ -277,7 +292,9 @@ Command(
 
     if (game) {
       let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+        game.state.players.find(
+          (player: { id: any }) => player.id == playerSID
+        ) || source;
 
       if (player) {
         player.points = 1000000;
@@ -304,7 +321,9 @@ Command(
     let game = getGame();
 
     if (game) {
-      let player = game.state.players.find((player: { id: any }) => player.id == playerSID);
+      let player = game.state.players.find(
+        (player: { id: any }) => player.id == playerSID
+      );
 
       if (player) {
         switch (resourceType) {
@@ -355,7 +374,9 @@ Command(
             break;
 
           case "tribe":
-            let tribe = game.state.tribes.filter((t) => t.name == args.slice(3).join(" "))[0];
+            let tribe = game.state.tribes.filter(
+              (t) => t.name == args.slice(3).join(" ")
+            )[0];
             if (tribe) {
               let tribeIndex = game.state.tribes.findIndex((t) => {
                 if (t) t.membersSIDs.includes(player?.id as number);
@@ -513,8 +534,16 @@ Command(
     game.state.gameObjects
       .filter(
         (o) =>
-          between(o.location.x, pos.topleft.x - removeRadius, pos.topright.x + removeRadius) &&
-          between(o.location.y, pos.topleft.y - removeRadius, pos.bottomright.y + removeRadius)
+          between(
+            o.location.x,
+            pos.topleft.x - removeRadius,
+            pos.topright.x + removeRadius
+          ) &&
+          between(
+            o.location.y,
+            pos.topleft.y - removeRadius,
+            pos.bottomright.y + removeRadius
+          )
       )
       .forEach((o) => {
         if (game && o && !o.protect) game.state.removeGameObject(o);
@@ -524,11 +553,31 @@ Command(
       game?.generateStructure("stone:normal", wall[0], wall[1], 90);
     });
 
-    game.generateStructure("tree:normal", pos.topleft.x + 270, pos.topleft.y + 140, 120);
-    game.generateStructure("stone:normal", pos.topleft.x + 200, pos.topleft.y + 200, 90);
+    game.generateStructure(
+      "tree:normal",
+      pos.topleft.x + 270,
+      pos.topleft.y + 140,
+      120
+    );
+    game.generateStructure(
+      "stone:normal",
+      pos.topleft.x + 200,
+      pos.topleft.y + 200,
+      90
+    );
 
-    game.generateStructure("tree:normal", pos.topright.x - 270, pos.topright.y + 140, 120);
-    game.generateStructure("stone:normal", pos.topright.x - 200, pos.topright.y + 200, 90);
+    game.generateStructure(
+      "tree:normal",
+      pos.topright.x - 270,
+      pos.topright.y + 140,
+      120
+    );
+    game.generateStructure(
+      "stone:normal",
+      pos.topright.x - 200,
+      pos.topright.y + 200,
+      90
+    );
 
     //TODO: make this automatic
     game.generateStructure("food:normal", loc.x - 210, pos.topleft.y + 100, 70);
@@ -583,7 +632,9 @@ Command(
 
     if (game) {
       let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+        game.state.players.find(
+          (player: { id: any }) => player.id == playerSID
+        ) || source;
       if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
           if (!game) return;
@@ -641,7 +692,9 @@ Command(
 
     if (game) {
       let player =
-        game.state.players.find((player: { id: any }) => player.id == playerSID) || source;
+        game.state.players.find(
+          (player: { id: any }) => player.id == playerSID
+        ) || source;
       if (args[1] == "*" || args[1] == "**") {
         game.state.players.forEach((p) => {
           if (!game) return;
@@ -737,7 +790,9 @@ Command(
 
       if (source.client)
         source.client.socket.send(
-          packetFactory.serializePacket(new Packet(PacketType.UPDATE_ITEMS, [source.items, 0]))
+          packetFactory.serializePacket(
+            new Packet(PacketType.UPDATE_ITEMS, [source.items, 0])
+          )
         );
     }
   },
@@ -754,7 +809,9 @@ Command(
 );
 
 function logMethod(text: string) {
-  process.stdout.write(ansiEscapes.eraseLines(lastMessage.split("\n").length) + text);
+  process.stdout.write(
+    ansiEscapes.eraseLines(lastMessage.split("\n").length) + text
+  );
   lastMessage = text;
 }
 
@@ -787,7 +844,9 @@ function runCommand(command: string, source?: Player) {
     if (err && source?.client) Broadcast(err, source.client);
     console.log(`Ran "${command}" from ${source?.name} (${source?.id}).`);
     logger.log(
-      `Player "${source?.name || "CONSOLE"}" (ID: ${source?.id || 0}) ran command "${command}".`
+      `Player "${source?.name || "CONSOLE"}" (ID: ${
+        source?.id || 0
+      }) ran command "${command}".`
     );
   } catch (_) {
     if (source?.client) Broadcast(`Error: ${_}`, source.client);

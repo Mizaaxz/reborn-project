@@ -15,7 +15,12 @@ class Projectile extends Entity {
     public ownerSID: number,
     public damage: number = getProjectileDamage(type)
   ) {
-    super(id, location, angle, new Vec2(speed * Math.cos(angle), speed * Math.sin(angle)));
+    super(
+      id,
+      location,
+      angle,
+      new Vec2(speed * Math.cos(angle), speed * Math.sin(angle))
+    );
   }
 }
 

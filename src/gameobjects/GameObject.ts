@@ -32,6 +32,7 @@ export default class GameObject {
   }
 
   isPlayerGameObject() {
+    //@ts-ignore
     return this.type === -1 && typeof this.data === "number";
   }
 
@@ -39,7 +40,10 @@ export default class GameObject {
     if (this.ownerSID === player.id) return false;
 
     for (let tribe of tribes) {
-      if (tribe.membersSIDs.includes(player.id) && tribe.membersSIDs.includes(this.ownerSID))
+      if (
+        tribe.membersSIDs.includes(player.id) &&
+        tribe.membersSIDs.includes(this.ownerSID)
+      )
         return false;
     }
 

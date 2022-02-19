@@ -78,11 +78,17 @@ function Broadcast(text: string, to: Client | undefined) {
   if (game) {
     if (!to) {
       for (let client of game.clients) {
-        client.socket.send(packetFactory.serializePacket(new Packet(PacketType.BROADCAST, [text])));
+        client.socket.send(
+          packetFactory.serializePacket(
+            new Packet(PacketType.BROADCAST, [text])
+          )
+        );
       }
     } else {
       let client = to;
-      client.socket.send(packetFactory.serializePacket(new Packet(PacketType.BROADCAST, [text])));
+      client.socket.send(
+        packetFactory.serializePacket(new Packet(PacketType.BROADCAST, [text]))
+      );
     }
   }
 }
@@ -91,11 +97,17 @@ function GetSessions() {
   let game = getGame();
 
   if (game) {
-    let clients: { clientIPHash: string; playerName: string; playerID: number }[] = [];
+    let clients: {
+      clientIPHash: string;
+      playerName: string;
+      playerID: number;
+    }[] = [];
 
     for (let client of game.clients) {
       clients.push({
-        clientIPHash: arrayBufferToHex(SHA256(new TextEncoder().encode(client.ip))),
+        clientIPHash: arrayBufferToHex(
+          SHA256(new TextEncoder().encode(client.ip))
+        ),
         playerName: client.player?.name || "unknown",
         playerID: client.player?.id || -1,
       });
@@ -110,4 +122,12 @@ function filter(text: string) {
   text.split("").forEach((char) => {});
 }
 
-export { SkinColor, eucDistance, randomPos, chunk, stableSort, Broadcast, GetSessions };
+export {
+  SkinColor,
+  eucDistance,
+  randomPos,
+  chunk,
+  stableSort,
+  Broadcast,
+  GetSessions,
+};

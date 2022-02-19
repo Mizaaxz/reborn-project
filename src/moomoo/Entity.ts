@@ -6,7 +6,12 @@ export default class Entity {
   public angle: number;
   public velocity: Vec2;
 
-  constructor(id: number, location: Vec2, angle: number = 0, velocity: Vec2 = new Vec2(0, 0)) {
+  constructor(
+    id: number,
+    location: Vec2,
+    angle: number = 0,
+    velocity: Vec2 = new Vec2(0, 0)
+  ) {
     this.id = id;
     this.location = location;
     this.angle = angle;

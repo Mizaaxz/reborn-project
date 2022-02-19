@@ -12,7 +12,11 @@ function getID(game: Game | null = null) {
   function randString() {
     return new Array(10)
       .fill(0)
-      .reduce((acc, _item) => acc + alphabet[Math.floor(Math.random() * alphabet.length)], "");
+      .reduce(
+        (acc, _item) =>
+          acc + alphabet[Math.floor(Math.random() * alphabet.length)],
+        ""
+      );
   }
 
   let id = randString();
@@ -33,16 +37,19 @@ function getID(game: Game | null = null) {
 export function startServer(server: WSServer) {
   let game = new Game();
 
-  server.addListener("connection", (socket: WebSocket, req: IncomingMessage) => {
-    let ip = "";
+  server.addListener(
+    "connection",
+    (socket: WebSocket, req: IncomingMessage) => {
+      let ip = "";
 
-    if (process.env.BEHIND_PROXY) {
-      // not sure
-      ip = (req.headers["x-forwarded-for"] as string).split(/\s*,\s*/)[0];
-    } else if (req.socket.remoteAddress) {
-      ip = req.socket.remoteAddress;
+      if (process.env.BEHIND_PROXY) {
+        // not sure
+        ip = (req.headers["x-forwarded-for"] as string).split(/\s*,\s*/)[0];
+      } else if (req.socket.remoteAddress) {
+        ip = req.socket.remoteAddress;
+      }
+
+      game.addClient(getID(game), socket, ip);
     }
-
-    game.addClient(getID(game), socket, ip);
-  });
+  );
 }
