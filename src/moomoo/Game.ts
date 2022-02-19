@@ -34,6 +34,7 @@ import {
   getProjectileType,
   getWeaponLength,
   getRecoil,
+  SecondaryWeapons,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
 import { getUpgrades, getWeaponUpgrades } from "./Upgrades";
@@ -1829,8 +1830,11 @@ export default class Game {
             )
           );
 
-          let newWeapons = [client.player.weapon];
+          let newWeapons: (PrimaryWeapons | SecondaryWeapons)[] = [
+            client.player.weapon,
+          ];
 
+          //@ts-ignore
           if (client.player.secondaryWeapon != -1)
             newWeapons.push(client.player.secondaryWeapon);
 
