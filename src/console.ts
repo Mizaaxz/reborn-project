@@ -272,7 +272,7 @@ Command(
 );
 
 Command(
-  "_god",
+  "god",
   (args: any[], source: Player | undefined) => {
     let playerSID = Number(args[1]);
     let game = getGame();
@@ -294,7 +294,7 @@ Command(
       } else return "You need to be in the game to run this command!";
     }
   },
-  []
+  ["g"]
 );
 
 Command(
@@ -434,8 +434,8 @@ Command(
   ["gen"]
 );
 
-/*Command(
-  "_generatebase",
+Command(
+  "generatebase",
   (args: any[], source: Player | undefined) => {
     if (!source) return "You must be in the game to run this command.";
     let game = getGame();
@@ -573,8 +573,8 @@ Command(
     game.generateStructure("gold:normal", loc.x + 450, pos.topleft.y + 650, 65);
     game.generateStructure("gold:normal", loc.x + 400, pos.topleft.y + 650, 65);
   },
-  ["_genbase", "_base"]
-);*/
+  ["genbase", "base"]
+);
 
 Command(
   "trap",
