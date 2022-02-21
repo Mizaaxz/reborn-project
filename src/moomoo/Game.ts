@@ -670,7 +670,7 @@ export default class Game {
             );
           }
 
-          if (gameObj.isPlayerGameObject()) {
+          if (gameObj.isPlayerGameObject() && gameObj.health !== -1) {
             let gameObjOwner = this.state.players.find(
               (p) => p.id == gameObj.ownerSID
             );
