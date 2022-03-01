@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import config from "./config";
 import * as console from "./console";
 import { Server as WSServer } from "ws";
-import { startServer } from "./sanctuary/moomoo";
+import { startServer } from "./sanctuary/sanc";
 import errCodes from "./definitions/errorCodes";
 import db from "enhanced.db";
 import b64 from "./base64";
