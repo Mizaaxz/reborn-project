@@ -49,7 +49,7 @@ app.get("/status", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("https://moomooreborn.io");
+  res.redirect("https://moomoo.io");
 });
 
 app.get("/api/v1/def", (req, res) => {
@@ -303,7 +303,7 @@ server.on("upgrade", function upgrade(request, socket, head) {
   if (!request.url) return;
   const pathname = url.parse(request.url).pathname?.replace(/\/$/, "");
 
-  if (pathname === "/moomoo") {
+  if (pathname === "/game") {
     wss.handleUpgrade(request, socket as Socket, head, function done(ws) {
       wss.emit("connection", ws, request);
     });

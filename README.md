@@ -22,3 +22,7 @@ Commands are documented in src/console.ts
 - `ID,ID,etc` - selects all players matching the IDs
 
 Use `+` as a replacement for spaces in player names.
+
+# Packets & Data
+
+The websocket URL is `/game`.
