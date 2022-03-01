@@ -2,7 +2,7 @@ import ansiEscapes from "ansi-escapes";
 import chalk from "chalk";
 import { getGame } from "./game/Game";
 import { PacketFactory } from "./packet/PacketFactory";
-import { Packet, Side } from "./packet/Packet";
+import { Packet } from "./packet/Packet";
 import { PacketType } from "./packet/PacketType";
 import {
   boolSelector,

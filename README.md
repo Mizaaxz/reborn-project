@@ -8,6 +8,8 @@ The Reborn Project utilizes a heavily modified version of [sanctuary](https://gi
 
 This (as well as sanctuary) is licensed under WTFPL, go crazy. The [classic](https://github.com/itzTheMeow/reborn-project/tree/classic) branch is older and aligns with the current state of the game a bit better.
 
+_More docs will come soon when i have the time to do so. I won't be adding new features, but i will attempt to document this mess as best as i can so that its easier for someone else to work with._
+
 ### How do I Use It?
 
 You can't really play this currently, as there's no client. You'll need to make a client or adapt it to use the same packets and data as moomoo.
