@@ -6,6 +6,8 @@ This is the server-side code for MMRB. I am not going to release the clientside 
 
 The Reborn Project utilizes a heavily modified version of [sanctuary](https://github.com/Picoseconds/sanctuary).
 
+This (as well as sanctuary) is licensed under WTFPL, go crazy.
+
 ### How do I Use It?
 
 You can't really play this currently, as there's no client. You'll need to make a client or adapt it to use the same packets and data as moomoo.
