@@ -1,3 +1,9 @@
+# DISCLAIMER
+
+## I AM NOT RESPONSIBLE FOR ANY COPYRIGHT ISSUES YOU MAY HAVE WHEN USING THIS TO CLONE MOOMOO.IO
+
+### THIS REPOSITORY IS MEANT TO HELP PEOPLE MAKE NEW GAMES (BY SEEING CODE SNIPPETS), NOT TO COPY MOOMOO
+
 # The Reborn Project
 
 MooMoo Reborn was a reborn version of moomoo.io. It was shut down in January 2022 due to copyright issues.
