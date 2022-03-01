@@ -1,7 +1,7 @@
 {
-  "name": "sanctuary-server",
-  "version": "1.1.0",
-  "description": "A private server with administration interface for the popular online game MooMoo.io",
+  "name": "the-reborn-project",
+  "version": "1.-.0",
+  "description": "A server based on moomoo.io.",
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node --max_old_space_size=4096 lib/server.js",
@@ -10,13 +10,11 @@
     "gconf": "git config --global credential.helper store"
   },
   "keywords": [],
-  "author": "Picoseconds",
+  "author": "Meow",
   "license": "WTFPL",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/node": "^14.0.24",
-    "cz-conventional-changelog": "3.2.0",
-    "standard-version": "^9.1.1",
     "typescript": "^3.9.2"
   },
   "dependencies": {
@@ -55,10 +53,5 @@
   },
   "engines": {
     "node": ">=10.x"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
