@@ -1,6 +1,6 @@
 import WebSocket from "ws";
-import Client from "../moomoo/Client";
-import Player from "../moomoo/Player";
+import Client from "../sanctuary/Client";
+import Player from "../sanctuary/Player";
 import NanoTimer from "nanotimer";
 import db from "enhanced.db";
 import {
@@ -11,10 +11,10 @@ import {
   testBiome,
   Biomes,
   peerName,
-} from "../moomoo/util";
+} from "../sanctuary/util";
 import msgpack from "msgpack-lite";
 import GameState from "./GameState";
-import * as Physics from "../moomoo/Physics";
+import * as Physics from "../sanctuary/Physics";
 import { Packet, Side } from "../packet/Packet";
 import GameObject from "../gameobjects/GameObject";
 import { PacketType } from "../packet/PacketType";
@@ -41,9 +41,9 @@ import {
   getGameObjDamage,
 } from "../items/items";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
-import { getAccessory } from "../moomoo/Accessories";
-import { getHat } from "../moomoo/Hats";
-import { WeaponVariants } from "../moomoo/Weapons";
+import { getAccessory } from "../sanctuary/Accessories";
+import { getHat } from "../sanctuary/Hats";
+import { WeaponVariants } from "../sanctuary/Weapons";
 import { ItemType } from "../items/UpgradeItems";
 import {
   getProjectileCosts,
@@ -56,19 +56,19 @@ import config from "../config";
 import Vec2 from "vec2";
 import { GameModes } from "./GameMode";
 import { readdirSync } from "fs";
-import Animal from "../moomoo/Animal";
+import Animal from "../sanctuary/Animal";
 import animals from "../definitions/animals";
 import items from "../definitions/items";
 import ms from "ms";
 import weapons from "../definitions/weapons";
 import hats from "../definitions/hats";
 import accessories from "../definitions/accessories";
-import { PlayerMode } from "../moomoo/PlayerMode";
+import { PlayerMode } from "../sanctuary/PlayerMode";
 import { PacketHandler, PacketHandlerCallback } from "../packet/PacketHandler";
 import initPacketHandlers from "../packethandlers";
 import updateWindmills from "./updateWindmills";
 import generateStructures from "./generateStructures";
-import { AdminLevel } from "../moomoo/Admin";
+import { AdminLevel } from "../sanctuary/Admin";
 import genBallArena from "./genBallArena";
 import genSurvivalArena from "./genSurvivalArena";
 

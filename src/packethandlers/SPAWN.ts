@@ -3,14 +3,14 @@ import { GameModes } from "../game/GameMode";
 import { getGroupID, WeaponModes } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
 import { getGame } from "../game/Game";
-import { PlayerMode } from "../moomoo/PlayerMode";
-import { Broadcast, peerName, randomPos, SkinColor } from "../moomoo/util";
+import { PlayerMode } from "../sanctuary/PlayerMode";
+import { Broadcast, peerName, randomPos, SkinColor } from "../sanctuary/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 import db from "enhanced.db";
-import { AdminLevel } from "../moomoo/Admin";
-import { Account, getAccount, setAccount } from "../moomoo/Account";
+import { AdminLevel } from "../sanctuary/Admin";
+import { Account, getAccount, setAccount } from "../sanctuary/Account";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SPAWN),

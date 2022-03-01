@@ -9,9 +9,9 @@ import {
   Weapons,
 } from "../items/items";
 import { ItemType } from "../items/UpgradeItems";
-import Animal from "../moomoo/Animal";
-import Player from "../moomoo/Player";
-import { Animals } from "../moomoo/util";
+import Animal from "../sanctuary/Animal";
+import Player from "../sanctuary/Player";
+import { Animals } from "../sanctuary/util";
 import Game from "./Game";
 
 export default function genBallArena(game: Game, makeTeams: boolean = true) {

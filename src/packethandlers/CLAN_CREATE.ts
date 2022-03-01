@@ -1,10 +1,10 @@
 import { GameModes } from "../game/GameMode";
 import { getGame } from "../game/Game";
-import { Broadcast } from "../moomoo/util";
+import { Broadcast } from "../sanctuary/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
-import { getGTribe } from "../moomoo/GTribe";
+import { getGTribe } from "../sanctuary/GTribe";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.CLAN_CREATE),

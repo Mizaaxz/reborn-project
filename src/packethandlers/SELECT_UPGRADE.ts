@@ -6,8 +6,8 @@ import {
   getPrerequisiteWeapon,
   PrimaryWeapons,
 } from "../items/items";
-import { getUpgrades, getWeaponUpgrades } from "../moomoo/Upgrades";
-import { Broadcast } from "../moomoo/util";
+import { getUpgrades, getWeaponUpgrades } from "../sanctuary/Upgrades";
+import { Broadcast } from "../sanctuary/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";

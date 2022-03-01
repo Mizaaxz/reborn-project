@@ -1,7 +1,7 @@
 import weapons from "../definitions/weapons";
 import items from "../definitions/items";
 import { ItemType } from "./UpgradeItems";
-import { WeaponVariant, WeaponVariants } from "../moomoo/Weapons";
+import { WeaponVariant, WeaponVariants } from "../sanctuary/Weapons";
 import { getGame } from "../game/Game";
 import { GameModes } from "../game/GameMode";
 

@@ -11,7 +11,7 @@ import {
   GetCommand,
   playerSelector,
 } from "./commandHandler";
-import Player from "./moomoo/Player";
+import Player from "./sanctuary/Player";
 import { setWeaponVariant } from "./functions";
 import config from "./config";
 import Vec2 from "vec2";
@@ -24,17 +24,17 @@ import {
   Weapons,
 } from "./items/items";
 import { ItemType } from "./items/UpgradeItems";
-import { Animals, Broadcast } from "./moomoo/util";
+import { Animals, Broadcast } from "./sanctuary/util";
 import { GameModes } from "./game/GameMode";
 import db from "enhanced.db";
 import * as logger from "./log";
-import { Account, getAccount, setAccount } from "./moomoo/Account";
-import { AdminLevel } from "./moomoo/Admin";
-import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
+import { Account, getAccount, setAccount } from "./sanctuary/Account";
+import { AdminLevel } from "./sanctuary/Admin";
+import { WeaponVariant, WeaponVariants } from "./sanctuary/Weapons";
 import readline from "readline";
 import bcrypt from "bcrypt";
-import { PlayerMode } from "./moomoo/PlayerMode";
-import { getGTribe } from "./moomoo/GTribe";
+import { PlayerMode } from "./sanctuary/PlayerMode";
+import { getGTribe } from "./sanctuary/GTribe";
 
 let command = "";
 let lastMessage = "";

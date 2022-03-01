@@ -1,5 +1,5 @@
 import { getGame } from "../game/Game";
-import { Broadcast } from "../moomoo/util";
+import { Broadcast } from "../sanctuary/util";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 

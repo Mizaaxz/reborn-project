@@ -1,8 +1,8 @@
 import config from "../config";
 import GameObject from "../gameobjects/GameObject";
 import { gameObjectSizes, GameObjectType } from "../gameobjects/gameobjects";
-import { collideGameObjects } from "../moomoo/Physics";
-import { Biomes, randomPos, testBiome } from "../moomoo/util";
+import { collideGameObjects } from "../sanctuary/Physics";
+import { Biomes, randomPos, testBiome } from "../sanctuary/util";
 import Game from "./Game";
 import generateBossArena from "./generateBossArena";
 

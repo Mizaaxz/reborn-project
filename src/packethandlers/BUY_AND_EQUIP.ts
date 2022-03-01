@@ -1,9 +1,9 @@
 import { getGame } from "../game/Game";
 import { GameModes } from "../game/GameMode";
 import { WeaponModes } from "../items/items";
-import { getAccessory } from "../moomoo/Accessories";
-import { getHat } from "../moomoo/Hats";
-import { Broadcast } from "../moomoo/util";
+import { getAccessory } from "../sanctuary/Accessories";
+import { getHat } from "../sanctuary/Hats";
+import { Broadcast } from "../sanctuary/util";
 import { Packet } from "../packet/Packet";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";

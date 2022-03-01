@@ -8,9 +8,9 @@ import {
   getGTribeByOwner,
   GTribe,
   setGTribe,
-} from "../moomoo/GTribe";
+} from "../sanctuary/GTribe";
 import config from "../config";
-import { setAccount } from "../moomoo/Account";
+import { setAccount } from "../sanctuary/Account";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.GTRIBE_CREATE),

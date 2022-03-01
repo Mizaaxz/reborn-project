@@ -2,7 +2,7 @@ import { getGame } from "../game/Game";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
 import bcrypt from "bcrypt";
-import { Account, getAccount, setAccount } from "../moomoo/Account";
+import { Account, getAccount, setAccount } from "../sanctuary/Account";
 import db from "enhanced.db";
 import config from "../config";
 

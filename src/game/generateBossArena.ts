@@ -1,4 +1,4 @@
-import { Animals } from "../moomoo/util";
+import { Animals } from "../sanctuary/util";
 import Game from "./Game";
 
 export default function generateBossArena(game: Game) {

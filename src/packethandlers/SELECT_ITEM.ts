@@ -1,9 +1,9 @@
 import { getItemCost, WeaponModes } from "../items/items";
 import { getGame } from "../game/Game";
-import { Broadcast, chunk } from "../moomoo/util";
+import { Broadcast, chunk } from "../sanctuary/util";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
-import { getHat } from "../moomoo/Hats";
+import { getHat } from "../sanctuary/Hats";
 
 getGame()?.addPacketHandler(
   new PacketHandler(PacketType.SELECT_ITEM),

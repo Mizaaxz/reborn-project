@@ -1,8 +1,8 @@
 import { getGame } from "../game/Game";
 import { PacketHandler } from "../packet/PacketHandler";
 import { PacketType } from "../packet/PacketType";
-import { getGTribeByOwner, joinGTribe, setGTribe } from "../moomoo/GTribe";
-import { getAccount } from "../moomoo/Account";
+import { getGTribeByOwner, joinGTribe, setGTribe } from "../sanctuary/GTribe";
+import { getAccount } from "../sanctuary/Account";
 import { Packet } from "../packet/Packet";
 
 getGame()?.addPacketHandler(

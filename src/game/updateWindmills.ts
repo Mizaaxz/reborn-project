@@ -1,6 +1,6 @@
 import { getGroupID, getPPS } from "../items/items";
-import { getHat } from "../moomoo/Hats";
-import { PlayerMode } from "../moomoo/PlayerMode";
+import { getHat } from "../sanctuary/Hats";
+import { PlayerMode } from "../sanctuary/PlayerMode";
 import Game from "./Game";
 import { GameModes } from "./GameMode";
 

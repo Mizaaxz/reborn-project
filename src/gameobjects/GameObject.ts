@@ -1,7 +1,7 @@
 import Vec2 from "vec2";
 import { GameObjectType } from "./gameobjects";
-import Player from "../moomoo/Player";
-import Tribe from "../moomoo/Tribes";
+import Player from "../sanctuary/Player";
+import Tribe from "../sanctuary/Tribes";
 
 export default class GameObject {
   public lastShoot: number = Date.now() + 1000;

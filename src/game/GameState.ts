@@ -1,8 +1,8 @@
 import Vec2 from "vec2";
-import Player from "../moomoo/Player";
+import Player from "../sanctuary/Player";
 import Game from "./Game";
-import Client from "../moomoo/Client";
-import Tribe from "../moomoo/Tribes";
+import Client from "../sanctuary/Client";
+import Tribe from "../sanctuary/Tribes";
 import { Packet } from "../packet/Packet";
 import { PacketFactory } from "../packet/PacketFactory";
 import GameObject from "../gameobjects/GameObject";
@@ -13,7 +13,7 @@ import {
   getProjectileRange,
 } from "../projectiles/projectiles";
 import config from "../config";
-import Animal from "../moomoo/Animal";
+import Animal from "../sanctuary/Animal";
 
 export default class GameState {
   public game: Game;

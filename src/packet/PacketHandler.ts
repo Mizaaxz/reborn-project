@@ -1,5 +1,5 @@
 import { PacketType } from "./PacketType";
-import Client from "../moomoo/Client";
+import Client from "../sanctuary/Client";
 import { Packet } from "./Packet";
 import { PacketFactory } from "./PacketFactory";
 import Game, { getGame } from "../game/Game";

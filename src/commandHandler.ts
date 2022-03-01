@@ -1,6 +1,6 @@
-import { AdminLevel } from "./moomoo/Admin";
+import { AdminLevel } from "./sanctuary/Admin";
 import { getGame } from "./game/Game";
-import Player from "./moomoo/Player";
+import Player from "./sanctuary/Player";
 
 interface cmdIndex {
   [key: string]: any | undefined;

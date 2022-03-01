@@ -1,5 +1,5 @@
-import Player from "./moomoo/Player";
-import { WeaponVariant, WeaponVariants } from "./moomoo/Weapons";
+import Player from "./sanctuary/Player";
+import { WeaponVariant, WeaponVariants } from "./sanctuary/Weapons";
 const setWeaponVariant = function (player: Player, variant: any) {
   let wv = WeaponVariant.Normal;
   switch (variant) {

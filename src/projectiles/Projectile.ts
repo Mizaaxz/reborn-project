@@ -1,6 +1,6 @@
 import Vec2 from "vec2";
 import GameObject from "../gameobjects/GameObject";
-import Entity from "../moomoo/Entity";
+import Entity from "../sanctuary/Entity";
 import { ProjectileType, Layer, getProjectileDamage } from "./projectiles";
 
 class Projectile extends Entity {
