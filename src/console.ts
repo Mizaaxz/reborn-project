@@ -39,15 +39,18 @@ import { getGTribe } from "./moomoo/GTribe";
 let command = "";
 let lastMessage = "";
 
+// stop [reasob] [seconds]
 Command(
   "stop",
   (args: any[], source: Player | undefined) => {
     let timeout = Number(args[args.length - 1]) ? Number(args.pop()) : 10;
     let message = args.slice(1).join(" ");
+    
     getGame()?.close(message, timeout || 0);
   },
   { aliases: ["close", "exit"], level: AdminLevel.Staff }
 );
+// cancelclose
 Command(
   "cancelclose",
   () => {
@@ -55,7 +58,7 @@ Command(
   },
   { aliases: ["stopclose", "cclose"], level: AdminLevel.Admin }
 );
-
+// broadcast [message]
 Command(
   "broadcast",
   (args: any[]) => {
@@ -70,7 +73,7 @@ Command(
   },
   { aliases: ["bc", "send", "echo"], level: AdminLevel.Helper }
 );
-
+// kill [playerSelector]
 Command(
   "kill",
   (args: any[], source: Player | undefined) => {
@@ -90,6 +93,8 @@ Command(
   },
   { aliases: ["k"], level: AdminLevel.Moderator }
 );
+// ip [playerSelector]
+// smh this command is for debugging
 Command(
   "ip",
   (args: any[], source: Player | undefined) => {
@@ -103,7 +108,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Meow }
 );
-
+// tp [playerSelector] <playerSelector>
 Command(
   "tp",
   (args: any[], source: Player) => {
@@ -140,7 +145,7 @@ Command(
   },
   { aliases: ["teleport"], level: AdminLevel.Helper }
 );
-
+// invisible <playerSelector>
 Command(
   "invisible",
   (args: any[], source: Player | undefined) => {
@@ -173,7 +178,7 @@ Command(
   },
   { aliases: ["invis", "vanish", "v"], level: AdminLevel.Moderator }
 );
-
+// invincible <playerSelector>
 Command(
   "invincible",
   (args: any[], source: Player | undefined) => {
@@ -200,7 +205,7 @@ Command(
   },
   { aliases: ["invinc", "nokill", "iv"], level: AdminLevel.Helper }
 );
-
+// spectator <playerSelector>
 Command(
   "spectator",
   (args: any[], source: Player | undefined) => {
@@ -243,7 +248,7 @@ Command(
   },
   { aliases: ["sp", "spec"], level: AdminLevel.Moderator }
 );
-
+// speed <playerSelector> [amount]
 Command(
   "speed",
   (args: any[], source: Player | undefined) => {
@@ -288,7 +293,7 @@ Command(
     })
   )
 );*/
-
+// weaponvariant [variant] <playerSelector>
 Command(
   "weaponvariant",
   (args: any[], source: Player | undefined) => {
@@ -309,7 +314,7 @@ Command(
   },
   { aliases: ["variant", "wv"], level: AdminLevel.Moderator }
 );
-
+// ban [playerSelector] <reason>
 Command(
   "ban",
   (args: any[], source: Player | undefined) => {
@@ -326,7 +331,7 @@ Command(
   },
   { aliases: ["b"], level: AdminLevel.Staff }
 );
-
+// god <playerSelector>
 Command(
   "god",
   (args: any[], source: Player | undefined) => {
@@ -353,7 +358,7 @@ Command(
   },
   { aliases: ["g", "_god"], level: AdminLevel.Staff }
 );
-
+// set [playerID] [resource] [amount]
 Command(
   "set",
   (args: any[]) => {
@@ -422,7 +427,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Helper }
 );
-
+// kick [playerSelector] <reason>
 Command(
   "kick",
   (args: any[], source: Player | undefined) => {
@@ -451,7 +456,7 @@ Command(
   },
   { aliases: ["k"], level: AdminLevel.Moderator }
 );
-
+// generate [typr] <size/'dmg'>
 Command(
   "generate",
   (args: any[], source: Player | undefined) => {
@@ -471,7 +476,7 @@ Command(
   },
   { aliases: ["gen"], level: AdminLevel.Staff }
 );
-
+// bass
 Command(
   "bass",
   (args: any[], source: Player | undefined) => {
@@ -641,7 +646,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Owner }
 );
-
+// trap <playerSelector>
 Command(
   "trap",
   (args: any[], source: Player | undefined) => {
@@ -701,7 +706,7 @@ Command(
   },
   { aliases: ["rap", "t", "trp", "tr"], level: AdminLevel.Staff }
 );
-
+// pad <playerSelector>
 Command(
   "pad",
   (args: any[], source: Player | undefined) => {
@@ -761,7 +766,7 @@ Command(
   },
   { aliases: ["p", "ad", "speedpad"], level: AdminLevel.Staff }
 );
-
+// gamemode [mode]
 Command(
   "gamemode",
   function (args: any[]) {
@@ -782,7 +787,7 @@ Command(
   },
   { aliases: ["gm"], level: AdminLevel.Staff }
 );
-
+// cr
 Command(
   "cr",
   function (args: any[], source: Player | undefined) {
@@ -825,7 +830,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Staff }
 );
-
+// summon [animalID]
 Command(
   "summon",
   function (args: any[], source: Player | undefined) {
@@ -844,7 +849,7 @@ Command(
   },
   { aliases: ["an", "spawn"], level: AdminLevel.Admin }
 );
-
+// inspect
 Command(
   "inspect",
   function (args: any[], source: Player | undefined) {
@@ -855,6 +860,7 @@ Command(
   },
   { aliases: ["ins"], level: AdminLevel.Helper }
 );
+// onetap
 Command(
   "onetap",
   function (args: any[], source: Player | undefined) {
@@ -865,6 +871,7 @@ Command(
   },
   { aliases: ["ot"], level: AdminLevel.Admin }
 );
+// supershot
 Command(
   "supershot",
   function (args: any[], source: Player | undefined) {
@@ -875,6 +882,7 @@ Command(
   },
   { aliases: ["supers"], level: AdminLevel.Admin }
 );
+// bigshot
 Command(
   "bigshot",
   function (args: any[], source: Player | undefined) {
@@ -885,7 +893,7 @@ Command(
   },
   { aliases: ["bigs"], level: AdminLevel.Admin }
 );
-
+// logs
 Command(
   "logs",
   function (args: any[], source: Player | undefined) {
@@ -894,6 +902,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Admin }
 );
+// exec [js]
 Command(
   "exec",
   function (args: any[], source: Player | undefined) {
@@ -902,7 +911,7 @@ Command(
   },
   { aliases: ["xec"], level: AdminLevel.Meow }
 );
-
+// acc.promote [accountName] [adminLevel]
 Command(
   "acc.promote",
   function (args: any[], source: Player | undefined) {
@@ -927,6 +936,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Meow }
 );
+// acc.demote [accountName]
 Command(
   "acc.demote",
   function (args: any[], source: Player | undefined) {
@@ -949,6 +959,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Meow }
 );
+// acc.delete [accountName]
 Command(
   "acc.delete",
   function (args: any[], source: Player | undefined) {
@@ -970,6 +981,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Owner }
 );
+// acc.setyt [accountName] [url]
 Command(
   "acc.setyt",
   function (args: any[], source: Player | undefined) {
@@ -987,6 +999,7 @@ Command(
   },
   { aliases: ["acc.setyoutube"], level: AdminLevel.Admin }
 );
+// acc.setpass [accountName] [password]
 Command(
   "acc.setpass",
   function (args: any[], source: Player | undefined) {
@@ -1007,6 +1020,8 @@ Command(
   },
   { aliases: ["acc.changepass"], level: AdminLevel.Meow }
 );
+// acc.gtribe
+// does nothing lmao
 Command(
   "acc.gtribe",
   function (args: any[], source: Player | undefined) {
@@ -1016,7 +1031,7 @@ Command(
   },
   { aliases: [], level: AdminLevel.Meow }
 );
-
+// meow
 Command(
   "meow",
   function (args: any[], source: Player | undefined) {
@@ -1076,7 +1091,7 @@ Command(
     level: AdminLevel.Meow,
   }
 );
-
+// thwampus
 Command(
   "thwampus",
   function (args: any[], source: Player | undefined) {
@@ -1145,7 +1160,7 @@ Command(
     level: AdminLevel.Owner,
   }
 );
-
+// dashre
 Command(
   "dashre",
   function (args: any[], source: Player | undefined) {
@@ -1195,7 +1210,7 @@ Command(
     level: AdminLevel.Owner,
   }
 );
-
+// gphat
 Command(
   "gphat",
   function (args: any[], source: Player | undefined) {
@@ -1208,7 +1223,7 @@ Command(
     level: AdminLevel.Moderator,
   }
 );
-
+// lock [password]
 Command(
   "lock",
   (args: any[], source: Player | undefined) => {
@@ -1229,7 +1244,7 @@ Command(
     level: AdminLevel.Admin,
   }
 );
-
+// snake [playerSelector]
 Command(
   "snake",
   (args: any[], source: Player | undefined) => {
