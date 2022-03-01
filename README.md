@@ -6,7 +6,7 @@ This is the server-side code for MMRB. I am not going to release the clientside 
 
 The Reborn Project utilizes a heavily modified version of [sanctuary](https://github.com/Picoseconds/sanctuary).
 
-This (as well as sanctuary) is licensed under WTFPL, go crazy.
+This (as well as sanctuary) is licensed under WTFPL, go crazy. The [classic](https://github.com/itzTheMeow/reborn-project/tree/classic) branch is older and aligns with the current state of the game a bit better.
 
 ### How do I Use It?
 
